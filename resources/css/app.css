@@ -1,0 +1,121 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --color-primary: #0A353E;
+    --color-primary-hover: #0E4B57;
+    --color-primary-subtle: #F0F7F7;
+    --color-surface: #FFFFFF;
+    --color-surface-subtle: #F9FAFB;
+    --color-surface-muted: #F3F4F6;
+    --color-border: #E5E7EB;
+    --color-border-dark: #D1D5DB;
+    --color-text-main: #111827;
+    --color-text-muted: #6B7280;
+    --color-success: #065F46;
+    --color-success-bg: #ECFDF5;
+    --color-danger: #991B1B;
+    --color-danger-bg: #FEF2F2;
+
+    /* Brand: Amber #DE7119 — race ramp */
+    --color-race-50: #FDF3E9;
+    --color-race-100: #FAE3CD;
+    --color-race-200: #F5C79B;
+    --color-race-300: #EFA96A;
+    --color-race-400: #E58F42;
+    --color-race-500: #DE7119;
+    --color-race-600: #B2590F;
+    --color-race-700: #A0520C;
+    --color-race-800: #7D400E;
+    --color-race-900: #5D320C;
+
+    /* Brand: Teal ramp (overrides Tailwind defaults) */
+    --color-teal-50: #F0F7F7;
+    --color-teal-100: #DBEFEF;
+    --color-teal-200: #B6DFDF;
+    --color-teal-300: #8ACFCF;
+    --color-teal-400: #4CBCBC;
+    --color-teal-500: #18B0B0;
+    --color-teal-600: #0E7C7E;
+    --color-teal-700: #116979;
+    --color-teal-800: #0E4B57;
+    --color-teal-900: #0A353E;
+
+    /* Warm neutral ink ramp */
+    --color-velomuted: #5f6a70;
+    --color-velomutedlight: #556066;
+    --color-velosurface: #dee3e2;
+    --color-velosurfacealt: #f1f4f4;
+    --color-veloborder: #d5d9d8;
+    --color-veloborderstrong: #b8bfbe;
+    --color-velogreen: #065F46;
+}
+
+/* Livewire progress bar (wire:navigate & request) — brand oren, default #29d */
+:root {
+    --livewire-progress-bar-color: #DE7119;
+}
+
+/* Custom architectural utilities */
+.card-outer {
+    background-color: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 1px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-inner {
+    background-color: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 3px;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0A353E;
+    color: #FFFFFF;
+    font-weight: 500;
+    border: 1px solid #0A353E;
+    border-radius: 1px;
+    padding: 0.625rem 1.25rem;
+    transition: all 0.15s ease-in-out;
+}
+.btn-primary:hover {
+    background-color: #0E4B57;
+    border-color: #0E4B57;
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFFFF;
+    color: #111827;
+    font-weight: 500;
+    border: 1px solid #D1D5DB;
+    border-radius: 1px;
+    padding: 0.625rem 1.25rem;
+    transition: all 0.15s ease-in-out;
+}
+.btn-secondary:hover {
+    background-color: #F9FAFB;
+    border-color: #9CA3AF;
+}
+
+.badge-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.55rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    border-radius: 3px;
+}
