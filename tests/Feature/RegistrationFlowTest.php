@@ -242,7 +242,7 @@ class RegistrationFlowTest extends TestCase
             ->assertSet('categoryId', $category->id);
     }
 
-    public function test_paid_registration_redirects_to_ticket_page_on_mount(): void
+    public function test_paid_registration_stays_on_step_one_on_mount(): void
     {
         $user = User::factory()->create(['role' => 'peserta']);
         $event = $this->makeEvent();
@@ -254,7 +254,49 @@ class RegistrationFlowTest extends TestCase
         Livewire::test(Checkout::class, [
             'eventSlug' => $event->slug,
             'categoryId' => $category->id,
-        ])->assertRedirect('/ticket/'.$registration->id);
+        ])
+            ->assertSet('step', 1)
+            ->assertSet('resumed', false)
+            ->assertSee('Anda sudah terdaftar di kategori ini')
+            ->assertSee('Lihat E-Ticket');
+    }
+
+    public function test_paid_category_blocks_to_step_two_with_error(): void
+    {
+        $user = User::factory()->create(['role' => 'peserta']);
+        $event = $this->makeEvent();
+        $category = $this->makeCategory($event);
+        $this->paidRegistration($user, $category);
+
+        $this->actingAs($user);
+
+        $component = Livewire::test(Checkout::class, [
+            'eventSlug' => $event->slug,
+            'categoryId' => $category->id,
+        ]);
+
+        $component->call('toStep2')
+            ->assertSet('step', 1)
+            ->assertSee('Anda sudah terdaftar di kategori ini');
+    }
+
+    public function test_pending_resume_banner_can_reset_to_start(): void
+    {
+        $user = User::factory()->create(['role' => 'peserta']);
+        $event = $this->makeEvent();
+        $category = $this->makeCategory($event);
+        $this->pendingRegistration($user, $category);
+
+        $this->actingAs($user);
+
+        $component = Livewire::test(Checkout::class, ['eventSlug' => $event->slug])
+            ->assertSet('step', 3)
+            ->assertSet('resumed', true)
+            ->assertSee('Melanjutkan pendaftaran yang belum selesai')
+            ->call('resetToStart')
+            ->assertSet('step', 1)
+            ->assertSet('resumed', false)
+            ->assertSet('registrationId', null);
     }
 
     public function test_full_quota_blocks_progress_at_step_two(): void
@@ -376,7 +418,7 @@ class RegistrationFlowTest extends TestCase
 
         $this->get('/events/'.$event->slug)
             ->assertOk()
-            ->assertSee('openRoleWarning()', false)
+            ->assertSee('roleWarning = true', false)
             ->assertSee('AKUN TIDAK SESUAI')
             ->assertDontSee('id="checkout-cta"', false);
     }
@@ -391,13 +433,13 @@ class RegistrationFlowTest extends TestCase
         $this->get('/events/'.$event->slug)
             ->assertOk()
             ->assertSee('id="checkout-cta"', false)
-            ->assertDontSee('openRoleWarning()', false);
+            ->assertDontSee('roleWarning = true', false);
 
         $this->flushSession();
         $this->app['auth']->forgetGuards();
         $this->get('/events/'.$event->slug)
             ->assertOk()
             ->assertSee('id="checkout-cta"', false)
-            ->assertDontSee('openRoleWarning()', false);
+            ->assertDontSee('roleWarning = true', false);
     }
 }

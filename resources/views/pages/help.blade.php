@@ -22,7 +22,7 @@
                 </div>
                 <div>
                     <div class="text-xs font-bold text-teal-900">{{ $c['name'] }}</div>
-                    <div class="text-[11px] text-[#5f6a70] mt-0.5">{{ $c['info'] }}</div>
+                    <div class="text-[11px] text-velomuted mt-0.5">{{ $c['info'] }}</div>
                     <div class="text-[11px] font-semibold text-race-700 mt-1">{{ $c['value'] }}</div>
                 </div>
             </div>
@@ -50,9 +50,9 @@ $faqGroups = $content->faq_groups ?? [];
                 <details class="group border border-veloborder velo-box-1 bg-white">
                     <summary class="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none text-sm font-bold text-teal-900 hover:bg-velosurfacealt transition-colors">
                         <span>{{ $q['q'] }}</span>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-[#5f6a70] shrink-0 transition-transform group-open:rotate-180"></i>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-velomuted shrink-0 transition-transform group-open:rotate-180"></i>
                     </summary>
-                    <p class="px-5 pb-4 text-xs text-[#556066] leading-relaxed">{{ $q['a'] }}</p>
+                    <p class="px-5 pb-4 text-xs text-velomutedlight leading-relaxed">{{ $q['a'] }}</p>
                 </details>
                 @endforeach
             </div>
@@ -66,7 +66,7 @@ $faqGroups = $content->faq_groups ?? [];
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-5">
         <div>
             <h2 class="text-xl font-extrabold text-teal-900 tracking-tight">{{ $content->cta_title }}</h2>
-            <p class="text-xs text-[#556066] mt-1">{{ $content->cta_desc }}</p>
+            <p class="text-xs text-velomutedlight mt-1">{{ $content->cta_desc }}</p>
         </div>
         <a href="{{ $content->cta_url }}" class="inline-flex items-center justify-center bg-race-500 hover:bg-race-600 text-white font-semibold px-6 py-3.5 text-xs tracking-wider uppercase velo-box-1 transition shrink-0">
             <span>{{ $content->cta_label }}</span>

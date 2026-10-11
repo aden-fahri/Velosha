@@ -41,7 +41,7 @@ class RiwayatPageTest extends TestCase
     {
         $this->get('/riwayat')
             ->assertOk()
-            ->assertSee('Riwayat Balap')
+            ->assertSee('Race History')
             ->assertSee('Race Selesai')
             ->assertSee('Masuk untuk melihat riwayat')
             ->assertDontSee('Event Diikuti');
@@ -115,7 +115,7 @@ class RiwayatPageTest extends TestCase
             ->assertOk()
             ->assertSee($event->title)
             ->assertSee('VLS-GF-0001')
-            ->assertSee('LUNAS')
+            ->assertSee('TERKONFIRMASI')
             ->assertSee('Event Diikuti');
     }
 }

@@ -8,7 +8,7 @@
                 <span>Kembali ke Beranda</span>
             </a>
             <h2 class="text-xl font-extrabold text-teal-900 tracking-tight">Atur Ulang Kata Sandi</h2>
-            <p class="text-xs text-[#556066] mt-1 mb-6">
+            <p class="text-xs text-velomutedlight mt-1 mb-6">
                 Buat kata sandi baru untuk akun Velosha Anda.
             </p>
 
@@ -39,7 +39,7 @@
                 </button>
             </form>
 
-            <div class="mt-6 pt-4 border-t border-veloborder text-xs text-[#556066]">
+            <div class="mt-6 pt-4 border-t border-veloborder text-xs text-velomutedlight">
                 <a href="{{ route('login') }}" class="text-race-600 font-semibold hover:underline">Kembali masuk</a>
             </div>
         </div>

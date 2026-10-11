@@ -135,7 +135,7 @@ class SiteContentCrudTest extends TestCase
     {
         $this->get('/')
             ->assertOk()
-            ->assertSee('h-44 sm:h-48 mb-10', false);
+            ->assertSee('aspect-[1215/323]', false);
     }
 
     public function test_admin_can_open_race_banner_resource(): void

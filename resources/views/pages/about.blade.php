@@ -18,7 +18,7 @@
             <div class="lg:col-span-7">
                 <div class="w-10 h-1 bg-teal-500 velo-box-1 mb-3"></div>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-teal-900 tracking-tight mb-6">{{ $content->manifesto_title }}</h2>
-                <div class="space-y-4 text-sm text-[#4b555b] leading-relaxed">
+                <div class="space-y-4 text-sm text-velomutedlight leading-relaxed">
                     @foreach (preg_split('/\R{2,}/', trim((string) $content->manifesto_body)) as $para)
                     <p>{{ $para }}</p>
                     @endforeach
@@ -36,7 +36,7 @@
                             </div>
                             <div>
                                 <div class="text-xs font-bold text-teal-900">{{ $v['title'] }}</div>
-                                <p class="text-[11px] text-[#556066] leading-relaxed mt-0.5">{{ $v['desc'] }}</p>
+                                <p class="text-[11px] text-velomutedlight leading-relaxed mt-0.5">{{ $v['desc'] }}</p>
                             </div>
                         </div>
                         @endforeach
@@ -52,7 +52,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-5">
         <div>
             <h2 class="text-xl font-extrabold text-teal-900 tracking-tight">{{ $content->cta_title }}</h2>
-            <p class="text-xs text-[#556066] mt-1">{{ $content->cta_desc }}</p>
+            <p class="text-xs text-velomutedlight mt-1">{{ $content->cta_desc }}</p>
         </div>
         <a href="{{ $content->cta_url }}" class="inline-flex items-center justify-center bg-race-500 hover:bg-race-600 text-white font-semibold px-6 py-3.5 text-xs tracking-wider uppercase velo-box-1 transition shrink-0">
             <span>{{ $content->cta_label }}</span>

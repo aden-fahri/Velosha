@@ -15,9 +15,7 @@
                  class="absolute inset-0 w-full h-full object-cover object-left z-10 pointer-events-none">
 
             <div class="absolute bottom-8 left-8 right-8 z-10">
-                <div class="w-9 h-9 bg-race-500 text-white flex items-center justify-center font-black text-sm velo-box-1 mb-4 shadow-sm">
-                    V
-                </div>
+                <img src="/images/logo-velosha.png" alt="Velosha" class="h-10 w-auto object-contain invert mb-4" />
                 <h3 class="text-lg font-black text-white leading-tight">
                     Satu Akun untuk Seluruh Kalender Balap Anda.
                 </h3>
@@ -39,7 +37,7 @@
                     <h2 class="text-xl font-extrabold text-teal-900 tracking-tight">
                         {{ $tab === 'register' ? 'Daftar Akun Baru' : 'Masuk ke Velosha' }}
                     </h2>
-                    <p class="text-xs text-[#556066] mt-1">
+                    <p class="text-xs text-velomutedlight mt-1">
                         {{ $tab === 'register'
                             ? 'Mulai petualangan maraton sepeda Anda bersama Velosha'
                             : 'Akses tiket dan data pendaftaran Anda' }}
@@ -47,11 +45,11 @@
                 </div>
                 <div class="flex border border-veloborderstrong velo-box-3 p-0.5 bg-velosurfacealt text-xs">
                     <a href="{{ route('login') }}"
-                       class="px-3 py-1 velo-box-3 {{ $tab === 'login' ? 'bg-white text-race-600 font-bold shadow-xs' : 'font-medium text-[#556066] hover:text-race-600' }}">
+                       class="px-3 py-1 velo-box-3 {{ $tab === 'login' ? 'bg-white text-race-600 font-bold shadow-xs' : 'font-medium text-velomutedlight hover:text-race-600' }}">
                         Masuk
                     </a>
                     <a href="{{ route('register') }}"
-                       class="px-3 py-1 velo-box-3 {{ $tab === 'register' ? 'bg-white text-race-600 font-bold shadow-xs' : 'font-medium text-[#556066] hover:text-race-600' }}">
+                       class="px-3 py-1 velo-box-3 {{ $tab === 'register' ? 'bg-white text-race-600 font-bold shadow-xs' : 'font-medium text-velomutedlight hover:text-race-600' }}">
                         Daftar
                     </a>
                 </div>
@@ -91,7 +89,7 @@
                     <div class="flex items-center">
                         <input id="remember" type="checkbox" name="remember" value="1"
                                class="h-3.5 w-3.5 text-teal-900 focus:ring-race-500 border-veloborderstrong rounded-[1px]">
-                        <label for="remember" class="ml-2 block text-xs text-[#4b555b]">Ingat sesi saya di perangkat ini</label>
+                        <label for="remember" class="ml-2 block text-xs text-velomutedlight">Ingat sesi saya di perangkat ini</label>
                     </div>
 
                     <button type="submit" class="w-full bg-race-600 hover:bg-race-700 text-white font-semibold py-2.5 text-xs velo-box-1 shadow-sm transition">
@@ -150,7 +148,7 @@
                         </div>
                     </div>
 
-                    <div class="text-[11px] text-[#556066] pt-1">
+                    <div class="text-[11px] text-velomutedlight pt-1">
                         Dengan mendaftar, Anda menyetujui Ketentuan Penyelenggaraan Balap dan Kebijakan Privasi Velosha.
                     </div>
 
@@ -164,7 +162,7 @@
             <div class="relative my-4">
                 <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-veloborder"></div></div>
                 <div class="relative flex justify-center text-xs">
-                    <span class="px-2 bg-white text-[#5f6a70]">atau lanjutkan dengan</span>
+                    <span class="px-2 bg-white text-velomuted">atau lanjutkan dengan</span>
                 </div>
             </div>
 

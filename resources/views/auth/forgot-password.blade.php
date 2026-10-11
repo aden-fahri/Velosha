@@ -8,7 +8,7 @@
                 <span>Kembali ke Beranda</span>
             </a>
             <h2 class="text-xl font-extrabold text-teal-900 tracking-tight">Lupa Kata Sandi</h2>
-            <p class="text-xs text-[#556066] mt-1 mb-6">
+            <p class="text-xs text-velomutedlight mt-1 mb-6">
                 Masukkan email akun Anda. Kami kirimkan tautan reset kata sandi.
             </p>
 
@@ -35,7 +35,7 @@
                 </button>
             </form>
 
-            <div class="mt-6 pt-4 border-t border-veloborder text-xs text-[#556066]">
+            <div class="mt-6 pt-4 border-t border-veloborder text-xs text-velomutedlight">
                 Ingat sandi Anda?
                 <a href="{{ route('login') }}" class="text-race-600 font-semibold hover:underline">Kembali masuk</a>
             </div>

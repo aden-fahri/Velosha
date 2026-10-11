@@ -2,27 +2,27 @@
 @extends('layouts.app', ['title' => 'E-Ticket Resmi Peserta — Velosha'])
 
 @section('content')
-<div class="bg-velosurfacealt py-12 min-h-[calc(100vh-140px)]">
+<div class="bg-velosurfacealt pb-12 min-h-[calc(100vh-140px)]">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
         @if ($registration === null || $registration->category === null || $registration->category->event === null)
 
             <!-- Belum ada pendaftaran -->
             <div class="text-center mb-8">
-                <div class="w-12 h-12 bg-velosurface text-[#556066] flex items-center justify-center velo-box-1 mx-auto mb-3 border border-veloborderstrong">
+                <div class="w-12 h-12 bg-velosurface text-velomutedlight flex items-center justify-center velo-box-1 mx-auto mb-3 border border-veloborderstrong">
                     <i data-lucide="ticket" class="w-6 h-6"></i>
                 </div>
-                <span class="text-xs uppercase tracking-widest text-[#5f6a70] font-bold">Belum Ada E-Ticket</span>
+                <span class="text-xs uppercase tracking-widest text-velomuted font-bold">Belum Ada E-Ticket</span>
                 <h1 class="text-2xl sm:text-3xl font-extrabold text-teal-900 tracking-tight mt-1">
                     Anda Belum Terdaftar pada Race Manapun.
                 </h1>
-                <p class="text-xs text-[#556066] mt-2">
+                <p class="text-xs text-velomutedlight mt-2">
                     E-Ticket dan nomor BIB akan terbit otomatis setelah Anda menyelesaikan pendaftaran.
                 </p>
             </div>
 
             <div class="bg-white border border-veloborder velo-box-1 p-8 text-center">
-                <p class="text-xs text-[#556066] mb-5">
+                <p class="text-xs text-velomutedlight mb-5">
                     Jelajahi kalender balap Velosha dan temukan kategori jarak yang sesuai dengan target Anda.
                 </p>
                 <a href="{{ route('events.index') }}" class="inline-flex items-center justify-center bg-race-600 hover:bg-race-700 text-white font-semibold px-6 py-3 text-xs velo-box-1 shadow-sm transition">
@@ -33,42 +33,43 @@
 
         @elseif (! $registration->isPaid())
 
-            <!-- Menunggu pembayaran -->
-            <div class="text-center mb-8">
-                <div class="w-12 h-12 bg-amber-100 text-amber-800 flex items-center justify-center velo-box-1 mx-auto mb-3 border border-amber-300">
-                    <i data-lucide="clock" class="w-6 h-6"></i>
-                </div>
-                <span class="text-xs uppercase tracking-widest text-amber-800 font-bold">Menunggu Pembayaran</span>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-teal-900 tracking-tight mt-1">
-                    Pendaftaran Anda Belum Lunas.
-                </h1>
-                <p class="text-xs text-[#556066] mt-2">
-                    Selesaikan pembayaran untuk menerbitkan E-Ticket dan nomor BIB resmi Anda.
-                </p>
-            </div>
+            {{-- Header abu-abu + kontur topo horizontal --}}
+            <x-page-header
+                size="compact"
+                width="max-w-3xl"
+                eyebrow="Menunggu Pembayaran"
+                title="Pendaftaran Anda Belum Lunas."
+                description="Selesaikan pembayaran untuk menerbitkan E-Ticket dan nomor BIB resmi Anda."
+                :meta="'REG-'.str_pad((string) $registration->id, 6, '0', STR_PAD_LEFT)"
+                :chips="[
+                    ['icon' => 'flag', 'label' => $registration->category->event->title],
+                    ['icon' => 'calendar', 'label' => P::tanggalLengkap($registration->category->event->event_date)],
+                    ['icon' => 'map-pin', 'label' => $registration->category->event->location_name],
+                ]"
+            />
 
-            <div class="bg-white border-2 border-amber-400 velo-box-1 shadow-sm p-6">
+            <div class="bg-white border-2 border-race-400 velo-box-1 shadow-sm p-6 mt-6">
                 <dl class="space-y-3 text-xs">
                     <div class="flex justify-between gap-4">
-                        <dt class="text-[#556066]">Nama Peserta</dt>
+                        <dt class="text-velomutedlight">Nama Peserta</dt>
                         <dd class="font-semibold text-teal-900 text-right">{{ $registration->participant_name }}</dd>
                     </div>
                     <div class="flex justify-between gap-4">
-                        <dt class="text-[#556066]">Kategori Jarak</dt>
+                        <dt class="text-velomutedlight">Kategori Jarak</dt>
                         <dd class="font-semibold text-teal-900 text-right">{{ $registration->category->name }} ({{ P::distance($registration->category->distance_km) }})</dd>
                     </div>
                     <div class="flex justify-between gap-4">
-                        <dt class="text-[#556066]">Event</dt>
+                        <dt class="text-velomutedlight">Event</dt>
                         <dd class="font-semibold text-teal-900 text-right">{{ $registration->category->event->title }}</dd>
                     </div>
                     <div class="flex justify-between gap-4">
-                        <dt class="text-[#556066]">Nomor Pendaftaran</dt>
+                        <dt class="text-velomutedlight">Nomor Pendaftaran</dt>
                         <dd class="font-mono font-semibold text-teal-900 text-right">REG-{{ str_pad((string) $registration->id, 6, '0', STR_PAD_LEFT) }}</dd>
                     </div>
                     <div class="flex justify-between gap-4">
-                        <dt class="text-[#556066]">Status</dt>
+                        <dt class="text-velomutedlight">Status</dt>
                         <dd>
-                            <span class="inline-block text-[10px] font-bold px-2 py-0.5 velo-box-3 bg-amber-50 text-amber-800 border border-amber-300">PENDING</span>
+                            <span class="inline-block text-[10px] font-bold px-2 py-0.5 velo-box-3 bg-race-50 text-race-800 border border-race-300">PENDING</span>
                         </dd>
                     </div>
                 </dl>
@@ -100,123 +101,120 @@
                 $scanCode = strtoupper(substr(hash('sha256', $qrData !== '' ? $qrData : (string) $registration->id), 0, 4)).'-'.$bibSuffix.'-VLS';
             @endphp
 
-            <!-- Success Banner -->
-            <div class="text-center mb-8">
-                <div class="w-12 h-12 bg-emerald-100 text-emerald-800 flex items-center justify-center velo-box-1 mx-auto mb-3 border border-emerald-300 shadow-xs">
-                    <i data-lucide="check" class="w-6 h-6 stroke-[3]"></i>
-                </div>
-                <span class="text-xs uppercase tracking-widest text-emerald-800 font-bold">
-                    {{ $registration->status === \App\Models\Registration::STATUS_CHECKED_IN ? 'Sudah Check-In di Race Pack Collection' : 'Pembayaran Terverifikasi Lunas' }}
-                </span>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-teal-900 tracking-tight mt-1">
-                    Pendaftaran Berhasil! Sampai Jumpa di Pelataran Start.
-                </h1>
-                <p class="text-xs text-[#556066] mt-2">
-                    Simpan E-Ticket ini di ponsel Anda. Tunjukkan QR Code pada panitia Race Pack Collection untuk penukaran nomor dada dan RFID chip.
-                </p>
-            </div>
+            <!-- Header abu-abu + kontur topo horizontal -->
+            <x-page-header
+                size="compact"
+                width="max-w-3xl"
+                eyebrow="{{ $registration->status === \App\Models\Registration::STATUS_CHECKED_IN ? 'Sudah Check-In di Race Pack Collection' : 'Pembayaran Terverifikasi Lunas' }}"
+                title="Pendaftaran Berhasil! Sampai Jumpa di Pelataran Start."
+                description="Simpan E-Ticket ini di ponsel Anda. Tunjukkan QR Code pada panitia Race Pack Collection untuk penukaran nomor dada dan RFID chip."
+                :meta="'ORDER: #VLS-REG-'.str_pad((string) $registration->id, 6, '0', STR_PAD_LEFT)"
+                :chips="[
+                    ['icon' => 'flag', 'label' => $event->title],
+                    ['icon' => 'calendar', 'label' => P::tanggalLengkap($event->event_date)],
+                    ['icon' => 'map-pin', 'label' => $event->location_name],
+                    ['icon' => 'timer', 'label' => P::distance($category->distance_km).' · '.$category->name],
+                ]"
+            />
 
             <!-- Official E-Ticket Card -->
-            <div class="bg-white border-2 border-teal-800 velo-box-1 shadow-lg overflow-hidden relative">
+            <div class="bg-white border-2 border-teal-900 velo-box-1 shadow-md overflow-hidden relative">
 
                 <!-- Top Header Ticket -->
-                <div class="bg-[#2E343B] text-white p-6 border-b border-white/10 flex justify-between items-start">
+                <div class="bg-[#0A353E] text-white p-6 sm:p-8 border-b border-teal-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <div class="flex items-center space-x-2 mb-2">
-                            <span class="w-5 h-5 bg-race-500 text-white font-black text-xs flex items-center justify-center velo-box-1">V</span>
-                            <span class="text-xs font-extrabold tracking-widest uppercase text-[#d1d5db]">VELOSHA OFFICIAL E-TICKET</span>
+                        <div class="flex items-center space-x-2.5 mb-2">
+                            <img src="/images/logo-velosha.png" alt="Velosha" class="h-7 w-auto object-contain brightness-125" />
+                            <span class="text-[10px] font-black tracking-widest uppercase bg-race-600 text-white px-2 py-0.5 velo-box-3">OFFICIAL RACE PASS</span>
                         </div>
                         <h2 class="text-xl sm:text-2xl font-black tracking-tight text-white">
                             {{ $event->title }}
                         </h2>
-                        <div class="text-xs text-[#d1d5db] mt-1 flex items-center space-x-3 flex-wrap">
-                            <span>{{ P::tanggalLengkap($event->event_date) }}</span>
+                        <div class="text-xs text-teal-100/90 mt-1.5 flex items-center space-x-3 flex-wrap font-medium">
+                            <span><i data-lucide="calendar" class="w-3.5 h-3.5 inline text-race-400"></i> {{ P::tanggalLengkap($event->event_date) }}</span>
                             @if ($waveTime !== '')
                             <span>&bull;</span>
-                            <span>Start: {{ $waveTime }}</span>
+                            <span>Start: {{ $waveTime }} WIB</span>
                             @endif
                             <span>&bull;</span>
-                            <span>{{ $event->location_name }}</span>
+                            <span><i data-lucide="map-pin" class="w-3.5 h-3.5 inline text-race-400"></i> {{ $event->location_name }}</span>
                         </div>
                     </div>
 
-                    <!-- Status Badge -->
-                    <div class="text-right">
-                        <span class="inline-flex items-center px-2.5 py-1 text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 velo-box-3">
-                            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-1.5"></span>
-                            {{ $registration->status === \App\Models\Registration::STATUS_CHECKED_IN ? 'CHECKED-IN' : 'CONFIRMED / PAID' }}
-                        </span>
-                        <div class="text-[10px] font-mono text-white/60 mt-2">ORDER: #VLS-REG-{{ str_pad((string) $registration->id, 6, '0', STR_PAD_LEFT) }}</div>
+                    <div class="text-left sm:text-right shrink-0">
+                        <div class="text-[10px] font-mono text-teal-300 font-bold">REGISTRATION ID</div>
+                        <div class="text-xs font-mono font-black text-white bg-teal-950 px-3 py-1.5 velo-box-3 border border-teal-800 mt-1">
+                            #VLS-REG-{{ str_pad((string) $registration->id, 6, '0', STR_PAD_LEFT) }}
+                        </div>
                     </div>
                 </div>
 
                 <!-- Ticket Core: BIB & QR Code Centerpiece -->
-                <div class="p-6 sm:p-8 bg-white grid grid-cols-1 md:grid-cols-12 gap-6 items-center border-b border-dashed border-veloborderstrong relative">
+                <div class="p-6 sm:p-8 bg-white grid grid-cols-1 md:grid-cols-12 gap-6 items-center border-b border-dashed border-veloborder">
 
                     <!-- BIB Display (Left / 7 cols) -->
                     <div class="md:col-span-7 space-y-4">
                         <div>
-                            <span class="text-[11px] uppercase tracking-wider font-bold text-[#5f6a70] block">Nomor BIB Resmi</span>
+                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-velomuted block">Nomor BIB RFID Resmi</span>
                             <div class="text-4xl sm:text-5xl font-black tracking-tight text-teal-900 font-mono mt-1">
                                 {{ $registration->bib_number }}
                             </div>
                         </div>
 
                         <!-- Participant Details Grid -->
-                        <div class="grid grid-cols-2 gap-3 text-xs pt-2">
+                        <div class="grid grid-cols-2 gap-4 text-xs pt-2 border-t border-veloborder">
                             <div>
-                                <span class="text-[#5f6a70] block text-[10px] uppercase font-semibold">Nama Peserta</span>
-                                <span class="font-bold text-teal-900 text-sm">{{ $registration->participant_name }}</span>
+                                <span class="text-velomutedlight block text-[10px] uppercase font-bold">Nama Peserta</span>
+                                <span class="font-extrabold text-teal-900 text-sm">{{ $registration->participant_name }}</span>
                             </div>
                             <div>
-                                <span class="text-[#5f6a70] block text-[10px] uppercase font-semibold">Kategori Jarak</span>
-                                <span class="font-bold text-teal-900 text-sm">{{ $category->name }} ({{ P::distance($category->distance_km) }})</span>
+                                <span class="text-velomutedlight block text-[10px] uppercase font-bold">Kategori Jarak</span>
+                                <span class="font-extrabold text-teal-900 text-sm">{{ $category->name }} ({{ P::distance($category->distance_km) }})</span>
                             </div>
                             <div>
-                                <span class="text-[#5f6a70] block text-[10px] uppercase font-semibold">Gelombang Start (Corral)</span>
-                                <span class="font-bold text-teal-900">{{ $waveName }}</span>
+                                <span class="text-velomutedlight block text-[10px] uppercase font-bold">Gelombang Start</span>
+                                <span class="font-extrabold text-teal-900">{{ $waveName }}</span>
                             </div>
                             <div>
-                                <span class="text-[#5f6a70] block text-[10px] uppercase font-semibold">Golongan Darah</span>
-                                <span class="font-bold text-red-700 bg-red-50 px-1.5 py-0.5 velo-box-3 border border-red-200">Golongan {{ $registration->blood_type }}</span>
+                                <span class="text-velomutedlight block text-[10px] uppercase font-bold">Golongan Darah</span>
+                                <span class="font-bold text-red-700 bg-red-50 px-2 py-0.5 velo-box-3 border border-red-200">Gol. {{ $registration->blood_type }}</span>
                             </div>
                             <div>
-                                <span class="text-[#5f6a70] block text-[10px] uppercase font-semibold">Klub Sepeda</span>
-                                <span class="font-medium text-teal-700">{{ $registration->club ?? 'Umum / Independen' }}</span>
+                                <span class="text-velomutedlight block text-[10px] uppercase font-bold">Klub Sepeda</span>
+                                <span class="font-bold text-teal-800">{{ $registration->club ?? 'Umum / Independen' }}</span>
                             </div>
                             <div>
-                                <span class="text-[#5f6a70] block text-[10px] uppercase font-semibold">Kontak Darurat</span>
-                                <span class="font-medium text-teal-700">{{ $registration->emergency_contact_name }} ({{ $registration->emergency_contact_phone }})</span>
+                                <span class="text-velomutedlight block text-[10px] uppercase font-bold">Kontak Darurat</span>
+                                <span class="font-bold text-teal-800">{{ $registration->emergency_contact_name }} ({{ $registration->emergency_contact_phone }})</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- QR Code Box (Right / 5 cols) -->
-                    <div class="md:col-span-5 flex flex-col items-center justify-center p-4 bg-velosurfacealt border border-veloborder velo-box-3 text-center">
-                        <div class="p-2 bg-white border border-veloborderstrong velo-box-1 shadow-xs">
-                            <!-- Dynamic QR Code generator for ticket verification -->
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data={{ rawurlencode($qrData) }}"
+                    <div class="md:col-span-5 flex flex-col items-center justify-center p-5 bg-[#f1f4f4] border border-veloborder velo-box-1 text-center shadow-xs">
+                        <div class="p-3 bg-white border border-veloborderstrong velo-box-1 shadow-xs">
+                            <img src="{{ \App\Support\QrCodeService::uri($qrData) }}"
                                  alt="QR Code Tiket Peserta"
                                  class="w-36 h-36">
                         </div>
-                        <div class="text-[10px] font-mono text-[#556066] mt-2">
+                        <div class="text-[10px] font-mono text-teal-900 font-bold mt-3 bg-white px-2.5 py-1 velo-box-3 border border-veloborder">
                             SCAN CODE: {{ $scanCode }}
                         </div>
-                        <div class="text-[10px] text-[#5f6a70] mt-0.5">
-                            Tunjukkan saat pengambilan Race Pack
+                        <div class="text-[10px] text-velomutedlight font-medium mt-1">
+                            Tunjukkan saat penukaran Race Pack (RPC)
                         </div>
                     </div>
 
                 </div>
 
                 <!-- Ticket Footer Notes -->
-                <div class="p-4 bg-velosurfacealt flex flex-col sm:flex-row sm:items-center justify-between text-xs text-[#556066] gap-2">
+                <div class="p-4 bg-[#f1f4f4] flex flex-col sm:flex-row sm:items-center justify-between text-xs text-velomutedlight gap-2">
                     <div class="flex items-center space-x-2">
-                        <i data-lucide="mail-check" class="w-4 h-4 text-emerald-600"></i>
-                        <span>Salinan PDF dikirim ke <strong>{{ $registration->user?->email ?? $event->user?->email }}</strong></span>
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
+                        <span>Status: <strong>{{ $registration->status === \App\Models\Registration::STATUS_CHECKED_IN ? 'Sudah Check-In' : 'Terverifikasi Lunas' }}</strong></span>
                     </div>
-                    <div class="font-mono text-[11px] text-[#5f6a70]">
-                        DIKELUARKAN: {{ $ticket?->created_at ? strtoupper($ticket->created_at->format('d M Y')) : '—' }} &middot; {{ $ticket?->created_at ? $ticket->created_at->format('H:i') : '—' }} WIB
+                    <div class="font-mono text-[11px] text-velomuted">
+                        TERBIT: {{ $ticket?->created_at ? strtoupper($ticket->created_at->format('d M Y')) : '—' }} &middot; {{ $ticket?->created_at ? $ticket->created_at->format('H:i') : '—' }} WIB
                     </div>
                 </div>
 
@@ -224,28 +222,25 @@
 
             <!-- Action Buttons (Calendar, PDF, Share, Portal) -->
             <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 no-print">
-                <!-- Google Calendar Direct URL API -->
                 <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text={{ rawurlencode('Velosha '.$event->title) }}&dates={{ $event->event_date->format('Ymd') }}T050000Z/{{ $event->event_date->format('Ymd') }}T130000Z&details={{ rawurlencode('Maraton Sepeda '.P::distance($category->distance_km).' Velosha. Nomor BIB: '.($registration->bib_number ?? '-')) }}&location={{ rawurlencode($event->location_name) }}"
                    target="_blank"
-                   class="flex items-center justify-center px-4 py-3 bg-white hover:bg-velosurfacealt text-teal-800 border border-veloborderstrong velo-box-1 text-xs font-semibold shadow-xs transition">
+                   class="flex items-center justify-center px-4 py-3 bg-white hover:bg-[#f1f4f4] text-teal-900 border border-veloborderstrong velo-box-1 text-xs font-extrabold shadow-xs transition">
                     <i data-lucide="calendar" class="w-4 h-4 mr-2 text-teal-900"></i>
                     <span>Simpan di Google Calendar</span>
                 </a>
 
-                <!-- Download PDF Button -->
-                <button onclick="window.print()" class="flex items-center justify-center px-4 py-3 bg-white hover:bg-velosurfacealt text-teal-800 border border-veloborderstrong velo-box-1 text-xs font-semibold shadow-xs transition">
-                    <i data-lucide="download" class="w-4 h-4 mr-2 text-teal-900"></i>
-                    <span>Unduh E-Ticket (PDF)</span>
+                <button onclick="window.print()" class="flex items-center justify-center px-4 py-3 bg-white hover:bg-[#f1f4f4] text-teal-900 border border-veloborderstrong velo-box-1 text-xs font-extrabold shadow-xs transition">
+                    <i data-lucide="printer" class="w-4 h-4 mr-2 text-teal-900"></i>
+                    <span>Cetak E-Ticket (PDF)</span>
                 </button>
 
-                <!-- Dashboard / Panel Link -->
                 @if (Auth::user()?->isAdmin() || Auth::user()?->isPenyelenggara())
-                <a href="/admin/registrations" class="flex items-center justify-center px-4 py-3 bg-race-600 hover:bg-race-700 text-white velo-box-1 text-xs font-semibold shadow-xs transition">
+                <a href="/admin/registrations" class="flex items-center justify-center px-4 py-3 bg-race-600 hover:bg-race-700 text-white velo-box-1 text-xs font-extrabold shadow-xs transition">
                     <span>Kembali ke Panel Pengelola</span>
                     <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                 </a>
                 @else
-                <a href="{{ route('dashboard') }}" class="flex items-center justify-center px-4 py-3 bg-race-600 hover:bg-race-700 text-white velo-box-1 text-xs font-semibold shadow-xs transition">
+                <a href="{{ route('dashboard') }}" class="flex items-center justify-center px-4 py-3 bg-race-600 hover:bg-race-700 text-white velo-box-1 text-xs font-extrabold shadow-xs transition">
                     <span>Buka Dashboard Peserta</span>
                     <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                 </a>

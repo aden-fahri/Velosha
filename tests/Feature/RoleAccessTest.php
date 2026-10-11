@@ -111,7 +111,7 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get('/admin')
             ->assertForbidden()
-            ->assertSee('Akses Ditolak')
+            ->assertSee('Akses Jalur Khusus')
             ->assertSee('Ke Dashboard Saya');
     }
 

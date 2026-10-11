@@ -6,14 +6,13 @@
     eyebrow="Hasil Balapan"
     title="Ranking & Leaderboard"
     description="Hasil resmi dari setiap event, dicatat dengan timing chip RFID dan diverifikasi oleh Race Comisaris sebelum dipublikasikan."
-    meta="Diperbarui · 30 September 2026"
 />
 
 <!-- Filter Event -->
 <section class="py-8 bg-white border-b border-veloborder sticky top-20 z-30">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center gap-4 overflow-x-auto">
-            <span class="text-[11px] font-bold uppercase tracking-wider text-[#5f6a70] shrink-0">Pilih Event</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-velomuted shrink-0">Pilih Event</span>
             <div class="flex items-center gap-2">
                 @foreach(['Gran Fondo Borobudur 130KM', 'Bromo Summit 95KM', 'Bali Sunrise 75KM'] as $e)
                 <span class="px-4 py-2 text-xs font-medium border border-veloborderstrong velo-box-1 whitespace-nowrap transition-colors {{ $loop->first ? 'bg-race-300 text-race-900 font-bold' : 'bg-white text-teal-700' }}">{{ $e }}</span>
@@ -31,7 +30,7 @@
                 <div class="w-10 h-1 bg-race-500 velo-box-1 mb-3"></div>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-teal-900 tracking-tight">Podium 130KM</h2>
             </div>
-            <div class="text-xs text-[#556066] font-semibold">10 Juni 2026 · Selesai</div>
+            <div class="text-xs text-velomutedlight font-semibold">10 Juni 2026 · Selesai</div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -44,7 +43,7 @@
                 <div class="w-12 h-12 {{ $p[5] === 'text-white' ? 'bg-race-400 text-[#2E343B]' : 'bg-race-500 text-white' }} text-sm font-black flex items-center justify-center velo-box-1 mb-4">{{ $p[0] }}</div>
                 <div class="text-sm font-extrabold mb-1">{{ $p[1] }}</div>
                 <div class="font-mono text-xl font-black {{ $p[5] === 'text-white' ? 'text-race-400' : 'text-race-700' }}">{{ $p[2] }}</div>
-                <div class="text-[11px] {{ $p[5] === 'text-white' ? 'text-teal-100' : 'text-[#556066]' }} mt-2">Rata-rata {{ $p[3] }}</div>
+                <div class="text-[11px] {{ $p[5] === 'text-white' ? 'text-teal-100' : 'text-velomutedlight' }} mt-2">Rata-rata {{ $p[3] }}</div>
             </div>
             @endforeach
         </div>
@@ -60,7 +59,7 @@
         <div class="border border-veloborder velo-box-1 overflow-hidden">
             <div class="bg-velosurface px-5 py-3 border-b border-veloborder flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-teal-700">
                 <span>Gran Fondo Borobudur 130KM</span>
-                <span class="font-mono text-[#556066] normal-case">842 finishers</span>
+                <span class="font-mono text-velomutedlight normal-case">842 finishers</span>
             </div>
 
             <div class="overflow-x-auto">
@@ -68,7 +67,7 @@
                     <thead class="bg-white border-b border-veloborder">
                         <tr>
                             @foreach(['Pos', 'Rider', 'Kategori', 'Waktu', 'Avg Speed'] as $th)
-                            <th class="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-[#5f6a70]">{{ $th }}</th>
+                            <th class="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-velomuted">{{ $th }}</th>
                             @endforeach
                         </tr>
                     </thead>
@@ -94,7 +93,7 @@
                                 <span class="text-[10px] font-bold uppercase tracking-wider text-teal-700 border border-veloborder px-2 py-0.5 velo-box-1">{{ $row[2] }}</span>
                             </td>
                             <td class="px-5 py-3.5 font-mono text-xs font-bold text-race-700">{{ $row[3] }}</td>
-                            <td class="px-5 py-3.5 text-xs text-[#556066]">{{ $row[4] }}</td>
+                            <td class="px-5 py-3.5 text-xs text-velomutedlight">{{ $row[4] }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -102,7 +101,7 @@
             </div>
         </div>
 
-        <p class="text-[11px] text-[#5f6a70] mt-6 leading-relaxed">
+        <p class="text-[11px] text-velomuted mt-6 leading-relaxed">
             Hasil bersifat provisional sampai Race Comisaris menyelesaikan verifikasi. Koreksi waktu dapat dilakukan
             maksimal 7 hari setelah event. Kecepatan rata-rata dihitung dari jarak resmi dibagi waktu tempuh.
         </p>
@@ -114,7 +113,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-5">
         <div>
             <h2 class="text-xl font-extrabold text-teal-900 tracking-tight">Ingin masuk leaderboard?</h2>
-            <p class="text-xs text-[#556066] mt-1">Daftar event berikutnya sebelum kuota kelas habis.</p>
+            <p class="text-xs text-velomutedlight mt-1">Daftar event berikutnya sebelum kuota kelas habis.</p>
         </div>
         <a href="/events" class="inline-flex items-center justify-center bg-race-500 hover:bg-race-600 text-white font-semibold px-6 py-3.5 text-xs tracking-wider uppercase velo-box-1 transition shrink-0">
             <span>Lihat Semua Race</span>
