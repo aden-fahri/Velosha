@@ -312,10 +312,14 @@ Menggunakan **Inter** dari Google Fonts yang dirancang khusus untuk keterbacaan 
 - **Checklist Fisik Marshall:**
   - 3 kotak centang wajib sebelum peserta meninggalkan meja registrasi: (1) Nomor BIB fisik + peniti, (2) Stiker RFID seatpost, (3) Buku panduan & voucher makan siang.
 
-### 4.11 Floating AI Cycling Assistant
+### 4.11 Floating AI Cycling Assistant — "Tanya Mizu"
 - **Widget Melayang Pojok Kanan Bawah:**
-  - Tombol oranye berikon pesan *"Tanya Aide"*.
-  - Membuka popover chat responsif (radius luar 1px, bubble chat dalam 3px) yang terhubung ke Gemini / Groq API untuk menjawab konsultasi strategi balap, cut-off time, dan regulasi sepeda.
+  - Tombol pemicu berlabel *"Tanya Mizu"* (bukan capsule, `velo-box-1`).
+  - Membuka popover chat responsif (radius luar 1px, bubble chat dalam 3px).
+  - Terhubung ke **Google Gemini API** (Free Tier, `gemini-3.1-flash-lite`) untuk menjawab konsultasi pendaftaran, Race Pack, cut-off time, dan regulasi sepeda.
+  - Basis pengetahuan disusun dari konten situs di database (Help Center, Rule Center, Paket Tiket, About) sehingga otomatis sinkron dengan pembaruan oleh pengelola.
+  - Widget hanya tampil ketika `GEMINI_API_KEY` terisi pada `.env`.
+  - Dibuka untuk seluruh pengunjung (tanpa login), dengan pembatasan jumlah pesan per sesi agar kuota free tier tetap terkendali.
 
 ---
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>403 — Akses Ditolak | Velosha</title>
+    <title>403 — Akses Jalur Khusus | Velosha</title>
     <style>
         * {
             margin: 0;
@@ -17,8 +17,8 @@
             align-items: center;
             justify-content: center;
             padding: 24px;
-            background: #0a1f24;
-            color: #111827;
+            background: #2e343b;
+            color: #0a353e;
             font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
         }
 
@@ -26,21 +26,21 @@
             width: 100%;
             max-width: 440px;
             background: #ffffff;
-            border: 1px solid #d1d5db;
-            border-radius: 3px;
+            border: 1px solid #b8bfbe;
+            border-radius: 1px;
             padding: 32px;
             box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
         }
 
         .code {
             display: inline-block;
-            background: #1e242b;
-            color: #f59e0b;
+            background: #0a353e;
+            color: #e58f42;
             font-size: 12px;
             font-weight: 800;
             letter-spacing: 0.18em;
             padding: 6px 10px;
-            border-radius: 3px;
+            border-radius: 1px;
         }
 
         h1 {
@@ -71,28 +71,28 @@
             font-size: 13px;
             font-weight: 700;
             border: 1px solid transparent;
-            border-radius: 3px;
+            border-radius: 1px;
             text-decoration: none;
             cursor: pointer;
         }
 
         .btn-primary {
-            background: #0f766e;
+            background: #b2590f;
             color: #ffffff;
         }
 
         .btn-primary:hover {
-            background: #115e59;
+            background: #a0520c;
         }
 
         .btn-ghost {
             background: transparent;
-            color: #1e242b;
-            border-color: #d1d5db;
+            color: #0a353e;
+            border-color: #b8bfbe;
         }
 
         .btn-ghost:hover {
-            background: #f3f4f6;
+            background: #f1f4f4;
         }
 
         .btn-danger {
@@ -109,14 +109,14 @@
         .hint {
             margin-top: 18px;
             font-size: 12px;
-            color: #9ca3af;
+            color: #5f6a70;
         }
     </style>
 </head>
 <body>
     <main class="card">
         <span class="code">403</span>
-        <h1>Akses Ditolak</h1>
+        <h1>Akses Jalur Khusus</h1>
         <p class="lead">
             Halaman ini tidak dapat dibuka oleh akun Anda. Kemungkinan halaman tersebut
             khusus peran lain, atau resource bukan milik Anda.

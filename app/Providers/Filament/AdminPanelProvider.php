@@ -33,6 +33,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('Velosha')
+            ->brandLogo('/images/logo-velosha.png')
+            ->favicon('/images/logo-velosha.png')
             ->colors([
                 'primary' => Color::Amber,
             ])

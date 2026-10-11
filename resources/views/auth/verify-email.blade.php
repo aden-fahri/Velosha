@@ -8,7 +8,7 @@
                 <span>Kembali ke Beranda</span>
             </a>
             <h2 class="text-xl font-extrabold text-teal-900 tracking-tight">Verifikasi Alamat Email</h2>
-            <p class="text-xs text-[#556066] mt-1 mb-6">
+            <p class="text-xs text-velomutedlight mt-1 mb-6">
                 Sebelum melanjutkan, mohon verifikasi alamat email Anda dengan mengeklik tautan yang kami kirim.
             </p>
 

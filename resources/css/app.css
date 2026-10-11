@@ -45,6 +45,7 @@
     --color-teal-700: #116979;
     --color-teal-800: #0E4B57;
     --color-teal-900: #0A353E;
+    --color-teal-950: #051C22;
 
     /* Warm neutral ink ramp */
     --color-velomuted: #5f6a70;
@@ -119,3 +120,133 @@
     text-transform: uppercase;
     border-radius: 3px;
 }
+
+/* ===== Base body (dipindahkan dari layouts/app.blade.php) ===== */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #0A353E;
+    background-color: #dee3e2;
+    background-image: url("/images/patterns/topo.svg");
+    background-size: 480px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Progress bar wire:navigate — lebih tebal, oranye brand */
+html #nprogress .bar {
+    height: 4px;
+}
+
+/* Strict Design Rules: Outer 1px, Nested Inner 3px, No Capsules */
+.velo-box-1 {
+    border-radius: 1px !important;
+}
+.velo-box-3 {
+    border-radius: 3px !important;
+}
+
+/* Scrollbar warm gray */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #dee3e2;
+}
+::-webkit-scrollbar-thumb {
+    background: #b8bfbe;
+    border-radius: 1px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #93a0a1;
+}
+
+/* Reveal on scroll: fade + slide-up per section */
+.velo-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+.velo-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Modal enter: fade + zoom (pengganti plugin tailwindcss-animate) */
+@keyframes veloModalEnter {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+.velo-modal-enter {
+    animation: veloModalEnter 0.15s ease-out;
+}
+
+/* Page transition: blur antar halaman (wire:navigate) */
+@keyframes veloPageLeave {
+    from { opacity: 1; filter: blur(0); }
+    to { opacity: 0.3; filter: blur(6px); }
+}
+@keyframes veloPageEnter {
+    from { opacity: 0.3; filter: blur(6px); }
+    to { opacity: 1; filter: blur(0); }
+}
+body.velo-nav-leaving > header,
+body.velo-nav-leaving > main,
+body.velo-nav-leaving > footer {
+    animation: veloPageLeave 0.25s ease-in forwards;
+}
+body.velo-nav-entering > header,
+body.velo-nav-entering > main,
+body.velo-nav-entering > footer {
+    animation: veloPageEnter 0.35s ease-out;
+}
+
+/* Korden banner abu bertekstur — muncul sesaat selama pindah halaman */
+body.velo-nav-leaving::before,
+body.velo-nav-entering::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    pointer-events: none;
+    background: #dee3e2 url("/images/patterns/topo.svg") repeat;
+    background-size: 480px;
+    opacity: 0;
+}
+body.velo-nav-leaving::before {
+    animation: veloCurtainIn 0.25s ease-in forwards;
+}
+body.velo-nav-entering::before {
+    animation: veloCurtainOut 0.35s ease-out forwards;
+}
+@keyframes veloCurtainIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes veloCurtainOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .velo-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+    body.velo-nav-leaving > header,
+    body.velo-nav-leaving > main,
+    body.velo-nav-leaving > footer,
+    body.velo-nav-entering > header,
+    body.velo-nav-entering > main,
+    body.velo-nav-entering > footer,
+    .velo-modal-enter {
+        animation: none;
+    }
+    body.velo-nav-leaving::before,
+    body.velo-nav-entering::before {
+        animation: none;
+        opacity: 0;
+    }
+}
+
+[x-cloak] { display: none !important; }

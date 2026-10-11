@@ -33,6 +33,12 @@ class Checkout extends Component
 
     public string $error = '';
 
+    /** True ketika sesi ini melanjutkan pendaftaran pending lama (banner + Mulai dari Awal). */
+    public bool $resumed = false;
+
+    /** category_id => registration_id lunas/check-in pada event ini (mencegah pendaftaran ganda). */
+    public array $paidTicketMap = [];
+
     // Langkah 2: data diri & kontak darurat
     public string $participant_name = '';
 
@@ -85,18 +91,19 @@ class Checkout extends Component
             ->latest()
             ->first();
 
-        if ($existing instanceof Registration) {
-            if ($existing->isPaid() && $this->categoryId === $existing->event_category_id) {
-                $this->redirect('/ticket/'.$existing->id);
+        $this->paidTicketMap = $user->registrations()
+            ->whereHas('category', fn ($query) => $query->where('event_id', $event->id))
+            ->whereIn('status', [Registration::STATUS_PAID, Registration::STATUS_CHECKED_IN])
+            ->get()
+            ->unique('event_category_id')
+            ->mapWithKeys(fn (Registration $reg) => [(int) $reg->event_category_id => (int) $reg->id])
+            ->all();
 
-                return;
-            }
-
-            if ($existing->status === Registration::STATUS_PENDING) {
-                $this->categoryId = $existing->event_category_id;
-                $this->registrationId = $existing->id;
-                $this->step = 3;
-            }
+        if ($existing instanceof Registration && $existing->status === Registration::STATUS_PENDING) {
+            $this->categoryId = $existing->event_category_id;
+            $this->registrationId = $existing->id;
+            $this->step = 3;
+            $this->resumed = true;
         }
 
         if ($this->categoryId === null) {
@@ -125,6 +132,22 @@ class Checkout extends Component
         $this->resetValidation();
     }
 
+    /** Mulai ulang dari langkah 1 — membatalkan resume pendaftaran pending lama. */
+    public function resetToStart(): void
+    {
+        $this->step = 1;
+        $this->registrationId = null;
+        $this->resumed = false;
+        $this->error = '';
+        $this->resetValidation();
+    }
+
+    /** Apakah kategori ini sudah pernah dibayar user pada event ini? */
+    public function isCategoryPaid(int $categoryId): bool
+    {
+        return isset($this->paidTicketMap[$categoryId]);
+    }
+
     public function toStep2(): void
     {
         $category = $this->category();
@@ -148,7 +171,7 @@ class Checkout extends Component
             ->first();
 
         if ($paid instanceof Registration) {
-            $this->redirect('/ticket/'.$paid->id);
+            $this->error = 'Anda sudah terdaftar di kategori ini. Lihat E-Ticket Anda untuk detail lomba.';
 
             return;
         }
@@ -209,7 +232,7 @@ class Checkout extends Component
             ->first();
 
         if ($registration instanceof Registration && $registration->isPaid()) {
-            $this->redirect('/ticket/'.$registration->id);
+            $this->error = 'Anda sudah terdaftar di kategori ini. Lihat E-Ticket Anda untuk detail lomba.';
 
             return;
         }
@@ -256,7 +279,7 @@ class Checkout extends Component
 
     public function selectPaymentMethod(string $method): void
     {
-        if (in_array($method, ['qris', 'bca_va', 'mandiri'], true)) {
+        if (in_array($method, ['qris', 'bca_va', 'mandiri', 'bri_va', 'bni_va'], true)) {
             $this->paymentMethod = $method;
         }
     }

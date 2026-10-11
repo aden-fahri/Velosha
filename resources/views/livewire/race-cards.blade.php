@@ -43,12 +43,12 @@
                     if ($dims) { $raceBannerDims = [$dims[0], $dims[1]]; }
                 }
             @endphp
-            {{-- Tanpa gambar: slot placeholder tetap; dengan gambar: HP bingkai contain (tanpa crop), ≥640px tinggi natural --}}
-            <div class="relative w-full {{ $raceBanner ? 'h-44 sm:h-auto' : 'h-44 sm:h-48' }} mb-10 overflow-hidden velo-box-1 border border-veloborderstrong"
+            {{-- Dengan gambar: proporsional ringkas; tanpa gambar: slot placeholder --}}
+            <div class="relative w-full h-36 sm:h-40 md:h-44 mb-10 overflow-hidden velo-box-1 border border-veloborderstrong"
                  style="background-color:#0A353E;background-image:url('/images/patterns/topo.svg'),linear-gradient(135deg,#0E4B57 0%,#0A353E 100%);background-size:480px,auto;box-shadow:inset 0 -3px 0 #DE7119">
                 @if ($raceBanner)
                     <img src="{{ asset($raceBanner) }}" alt="Banner race" width="{{ $raceBannerDims[0] }}" height="{{ $raceBannerDims[1] }}" loading="lazy"
-                         class="block w-full h-full object-contain sm:h-auto">
+                         class="block w-full h-full object-cover">
                 @endif
                 <div class="absolute inset-x-0 bottom-0 z-10 bg-race-500" style="height:3px" aria-hidden="true"></div>
             </div>
@@ -68,9 +68,9 @@
                     </div>
 
                     <div class="p-5 flex-grow flex flex-col">
-                        <div class="flex items-center text-[11px] text-[#556066] gap-2 mb-2">
+                        <div class="flex items-center text-[11px] text-velomutedlight gap-2 mb-2">
                             <span class="flex items-center">
-                                <i data-lucide="calendar" class="w-3 h-3 mr-1 text-[#5f6a70]"></i>{{ $race['date'] }}
+                                <i data-lucide="calendar" class="w-3 h-3 mr-1 text-velomuted"></i>{{ $race['date'] }}
                             </span>
                             <span class="text-[#b8bfbe]">|</span>
                             <span class="truncate">{{ $race['loc'] }}</span>
@@ -81,7 +81,7 @@
                         <div class="mt-4 pt-4 border-t border-velosurface grid grid-cols-3 gap-2 text-center">
                             @foreach($race['specs'] as $label => $value)
                             <div class="bg-velosurfacealt p-2 velo-box-3 border border-velosurface">
-                                <div class="text-[10px] text-[#5f6a70] uppercase font-semibold">{{ $label }}</div>
+                                <div class="text-[10px] text-velomuted uppercase font-semibold">{{ $label }}</div>
                                 <div class="text-[11px] font-bold text-teal-800 mt-0.5">{{ $value }}</div>
                             </div>
                             @endforeach
@@ -89,7 +89,7 @@
 
                         <div class="mt-auto pt-5 flex items-end justify-between">
                             <div>
-                                <div class="text-[10px] uppercase tracking-wider text-[#5f6a70] font-semibold">Mulai</div>
+                                <div class="text-[10px] uppercase tracking-wider text-velomuted font-semibold">Mulai</div>
                                 <div class="text-base font-extrabold text-teal-900">Rp {{ $race['price'] }}</div>
                             </div>
                             <a href="{{ $race['url'] }}" wire:navigate class="inline-flex items-center text-xs font-semibold text-white bg-race-600 hover:bg-race-700 px-4 py-2.5 velo-box-1 transition">
@@ -101,11 +101,11 @@
                 </article>
                 @empty
                 <div class="col-span-full border border-veloborder velo-box-1 bg-white px-6 py-16 text-center">
-                    <div class="w-12 h-12 mx-auto mb-4 bg-white text-[#5f6a70] border border-veloborder velo-box-1 flex items-center justify-center">
+                    <div class="w-12 h-12 mx-auto mb-4 bg-white text-velomuted border border-veloborder velo-box-1 flex items-center justify-center">
                         <i data-lucide="calendar-x" class="w-6 h-6"></i>
                     </div>
                     <h3 class="text-base font-bold text-teal-900 mb-1.5">Belum ada race di kategori ini</h3>
-                    <p class="text-xs text-[#556066] max-w-sm mx-auto mb-6">Jadwal untuk kategori tersebut sedang disiapkan. Lihat kalender lengkap untuk race lainnya.</p>
+                    <p class="text-xs text-velomutedlight max-w-sm mx-auto mb-6">Jadwal untuk kategori tersebut sedang disiapkan. Lihat kalender lengkap untuk race lainnya.</p>
                     <a href="/events" wire:navigate class="inline-flex items-center text-xs font-semibold text-white bg-race-600 hover:bg-race-700 px-4 py-2.5 velo-box-1 transition">
                         <span>Lihat Semua Race</span>
                         <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>

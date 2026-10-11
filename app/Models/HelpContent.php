@@ -42,7 +42,7 @@ class HelpContent extends Model
             'contacts' => [
                 ['icon' => 'message-circle', 'name' => 'WhatsApp', 'info' => 'Respon 09.00–18.00 WIB', 'value' => '+62 812 3456 7890'],
                 ['icon' => 'mail', 'name' => 'Email', 'info' => 'Balasan maksimal 1×24 jam', 'value' => 'cs@velosha.id'],
-                ['icon' => 'help-circle', 'name' => 'Tanya Aide', 'info' => 'Panel di kanan bawah setiap halaman', 'value' => 'Mode pratinjau'],
+                ['icon' => 'bot', 'name' => 'Tanya Mizu', 'info' => 'Asisten AI di panel kanan bawah setiap halaman', 'value' => 'Siap membantu'],
             ],
             'faq_groups' => [
                 [

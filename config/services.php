@@ -28,11 +28,28 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'slack' => [
+'slack' => [
         'notifications' => [
-            'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
+            'bot_user_oauth_token' => env('SLACK_BOT_OAUTH_TOKEN'),
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Google Gemini (Asisten AI "Tanya Mizu")
+    |--------------------------------------------------------------------------
+    |
+    | Free tier resmi Google AI Studio — tanpa kartu kredit. Ambil API key di
+    | https://aistudio.google.com > Get API key, lalu tempel ke GEMINI_API_KEY
+    | pada file .env (file ini tidak masuk repository).
+    |
+    */
+
+    'gemini' => [
+        'key' => env('GEMINI_API_KEY'),
+        'model' => env('GEMINI_MODEL', 'gemini-3.1-flash-lite'),
+        'url' => env('GEMINI_API_URL', 'https://generativelanguage.googleapis.com/v1beta/models'),
     ],
 
 ];
