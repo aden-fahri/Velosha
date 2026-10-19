@@ -90,4 +90,15 @@
     </div>
 </section>
 
+<!-- Sticky CTA (HP only) -->
+<div class="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-veloborder px-4 py-3 flex items-center justify-between gap-3" style="padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));">
+    <div>
+        <div class="text-[10px] uppercase font-bold tracking-wider text-velomuted">Harga mulai</div>
+        <div class="text-lg font-extrabold text-teal-900">Rp {{ $lowestPrice === null ? '—' : \App\Support\EventCardPresenter::angka((float) $lowestPrice) }}</div>
+    </div>
+    <a href="#daftar" class="inline-flex items-center justify-center bg-race-600 hover:bg-race-700 text-white font-semibold px-5 py-3 text-xs tracking-wider uppercase velo-box-1 shadow-sm transition min-h-[44px]">
+        Daftar Sekarang
+    </a>
+</div>
+
 @endsection
