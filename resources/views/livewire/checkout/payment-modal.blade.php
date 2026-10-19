@@ -1,6 +1,6 @@
 @use('App\Support\EventCardPresenter', 'P')
 {{-- Modal konfirmasi pembayaran simulasi Midtrans Snap (metode dipilih di sidebar) --}}
-@if ($showPaymentModal && $registration !== null)
+@if (config('payments.simulation') && $showPaymentModal && $registration !== null)
 <div class="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" wire:click="closePayment">
     <div class="bg-white max-w-md w-full velo-box-1 border border-veloborderstrong shadow-2xl overflow-hidden velo-modal-enter" @click.stop>
         <!-- Snap Header -->

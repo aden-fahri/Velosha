@@ -125,6 +125,8 @@ class RegistrationFlowTest extends TestCase
         $this->assertSame($user->id, $registration->user_id);
         $this->assertSame($category->id, $registration->event_category_id);
 
+        config(['payments.simulation' => true]);
+
         $component->call('openPayment')
             ->assertSet('showPaymentModal', true)
             ->call('simulatePaid');
@@ -150,6 +152,8 @@ class RegistrationFlowTest extends TestCase
 
     public function test_payment_method_can_switch_inside_simulation_modal(): void
     {
+        config(['payments.simulation' => true]);
+
         $user = User::factory()->create(['role' => 'peserta']);
         $event = $this->makeEvent();
         $category = $this->makeCategory($event);
@@ -331,6 +335,8 @@ class RegistrationFlowTest extends TestCase
             'categoryId' => $category->id,
         ]);
 
+        config(['payments.simulation' => true]);
+
         $component->assertSet('step', 3)->call('simulatePaid');
 
         $registration->refresh();
@@ -353,7 +359,7 @@ class RegistrationFlowTest extends TestCase
         $this->get('/ticket/'.$registration->id)
             ->assertOk()
             ->assertSee($registration->bib_number)
-            ->assertSee($owner->email);
+            ->assertSee($registration->participant_name);
 
         $this->get('/ticket')->assertOk()->assertSee($registration->bib_number);
 
@@ -403,9 +409,9 @@ class RegistrationFlowTest extends TestCase
 
         $this->get('/dashboard')
             ->assertOk()
-            ->assertSee('Tiket Saya')
+            ->assertSee('Tiket & BIB Saya')
             ->assertSee($registration->bib_number)
-            ->assertSee('1 lunas');
+            ->assertSee('Lunas & Aktif');
     }
 
     public function test_event_detail_cta_opens_role_warning_for_admin(): void

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\RegistrationStatus;
+use App\Models\BibCounter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -40,6 +41,9 @@ class Registration extends Model
 
     protected $casts = [
         'birth_date' => 'date',
+        'identity_number' => 'encrypted',
+        'emergency_contact_phone' => 'encrypted',
+        'medical_notes' => 'encrypted',
     ];
 
     public function user(): BelongsTo
@@ -106,17 +110,15 @@ class Registration extends Model
      */
     public static function generateBibNumber(EventCategory $category): string
     {
-        $last = static::query()
-            ->whereHas('category', function (Builder $query) use ($category): void {
-                $query->where('code', $category->code);
-            })
-            ->whereNotNull('bib_number')
-            ->orderByDesc('id')
-            ->lockForUpdate()
-            ->value('bib_number');
+        $code = $category->code;
 
-        $sequence = $last ? ((int) substr($last, -4)) + 1 : 1;
+        // Pastikan baris counter ada (idempoten, aman dari race create).
+        BibCounter::insertOrIgnore(['code' => $code, 'counter' => 0, 'created_at' => now(), 'updated_at' => now()]);
 
-        return sprintf('VLS-%s-%04d', $category->code, $sequence);
+        $counter = BibCounter::query()->where('code', $code)->lockForUpdate()->first();
+        $counter->increment('counter');
+        $counter->refresh();
+
+        return sprintf('VLS-%s-%04d', $code, $counter->counter);
     }
 }

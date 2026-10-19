@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Support\MizuAiService;
+use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -46,6 +47,17 @@ class MizuChatWidget extends Component
 
     protected function pushAndReply(string $text): void
     {
+        $id = auth()->id() ?: request()->ip();
+        $minKey = 'mizu-min:'.$id;
+        $dayKey = 'mizu-day:'.$id;
+        if (RateLimiter::tooManyAttempts($minKey, 10) || RateLimiter::tooManyAttempts($dayKey, 50)) {
+            $this->notice = 'Terlalu banyak permintaan ke Mizu. Coba lagi nanti.';
+
+            return;
+        }
+        RateLimiter::hit($minKey, 60);
+        RateLimiter::hit($dayKey, 86400);
+
         if (count($this->messages) >= self::MESSAGE_LIMIT) {
             $this->messages = [];
             $this->notice = 'Sesi obrolan sudah panjang, Mizu memulai dari awal.';

@@ -20,6 +20,7 @@ class DemoSocialController extends Controller
 
     public function __invoke(string $provider): RedirectResponse
     {
+        abort_unless(config('app.demo_login'), 404);
         abort_unless(in_array($provider, self::PROVIDERS, true), 404);
 
         $user = User::firstOrCreate(

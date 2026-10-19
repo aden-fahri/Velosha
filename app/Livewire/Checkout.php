@@ -10,7 +10,9 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class Checkout extends Component
@@ -18,10 +20,12 @@ class Checkout extends Component
     /** Biaya layanan tetap (simulasi Midtrans Snap). */
     public const SERVICE_FEE = 4500;
 
+    #[Locked]
     public string $eventSlug = '';
 
     public ?int $categoryId = null;
 
+    #[Locked]
     public ?int $registrationId = null;
 
     public int $step = 1;
@@ -37,6 +41,7 @@ class Checkout extends Component
     public bool $resumed = false;
 
     /** category_id => registration_id lunas/check-in pada event ini (mencegah pendaftaran ganda). */
+    #[Locked]
     public array $paidTicketMap = [];
 
     // Langkah 2: data diri & kontak darurat
@@ -190,6 +195,14 @@ class Checkout extends Component
 
     public function toStep3(): void
     {
+        $key = 'checkout:'.(auth()->id() ?: request()->ip());
+        if (RateLimiter::tooManyAttempts($key, 10)) {
+            $this->error = 'Terlalu banyak permintaan. Coba lagi sebentar.';
+
+            return;
+        }
+        RateLimiter::hit($key, 60);
+
         $category = $this->category();
 
         if (! $category instanceof EventCategory) {
@@ -217,7 +230,6 @@ class Checkout extends Component
 
         $user = auth()->user();
         $user->fill([
-            'email' => $validated['email'],
             'phone' => $validated['phone'],
         ]);
         $user->save();
@@ -262,6 +274,14 @@ class Checkout extends Component
 
     public function openPayment(): void
     {
+        $key = 'checkout:'.(auth()->id() ?: request()->ip());
+        if (RateLimiter::tooManyAttempts($key, 10)) {
+            $this->error = 'Terlalu banyak permintaan. Coba lagi sebentar.';
+
+            return;
+        }
+        RateLimiter::hit($key, 60);
+
         if ($this->registrationId === null) {
             $this->error = 'Lengkapi langkah data diri sebelum melakukan pembayaran.';
 
@@ -290,6 +310,16 @@ class Checkout extends Component
      */
     public function simulatePaid(): void
     {
+        abort_unless(config('payments.simulation'), 403);
+
+        $key = 'checkout:'.(auth()->id() ?: request()->ip());
+        if (RateLimiter::tooManyAttempts($key, 10)) {
+            $this->error = 'Terlalu banyak permintaan. Coba lagi sebentar.';
+
+            return;
+        }
+        RateLimiter::hit($key, 60);
+
         $this->showPaymentModal = false;
         $this->error = '';
 
@@ -344,7 +374,10 @@ class Checkout extends Component
             return null;
         }
 
-        return Registration::query()->with('category')->find($this->registrationId);
+        return Registration::query()
+            ->where('user_id', auth()->id())
+            ->with('category')
+            ->find($this->registrationId);
     }
 
     public function total(): int

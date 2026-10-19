@@ -63,7 +63,6 @@ class RegistrationsTable
                     }),
                 TextColumn::make('identity_number')
                     ->label('NIK / Paspor')
-                    ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('gender')
                     ->label('Gender')

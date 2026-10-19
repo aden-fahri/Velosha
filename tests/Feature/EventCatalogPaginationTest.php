@@ -76,6 +76,6 @@ class EventCatalogPaginationTest extends TestCase
     {
         $this->get('/events')
             ->assertOk()
-            ->assertSee('bg-[#2E343B]', false);
+            ->assertSee('bg-[#0A353E]', false);
     }
 }

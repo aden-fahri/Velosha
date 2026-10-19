@@ -34,7 +34,7 @@ class StaticContentPagesTest extends TestCase
         $response->assertOk();
         $response->assertSee('Aturan Balap');
         $response->assertSee('Kendaraan');
-        $response->assertSee('Sanksi Pelanggaran');
+        $response->assertSee('Diskualifikasi Pelanggaran');
         $response->assertSee('Seluruh keputusan Race Comisaris');
     }
 
