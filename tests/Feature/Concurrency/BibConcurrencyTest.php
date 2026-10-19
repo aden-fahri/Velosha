@@ -37,9 +37,8 @@ class BibConcurrencyTest extends TestCase
         }
 
         $barrier = sys_get_temp_dir().DIRECTORY_SEPARATOR.'conc_barrier_'.uniqid();
-        foreach ($ids as $id) {
-            // no-op
-        }
+        $readyDir = sys_get_temp_dir().DIRECTORY_SEPARATOR.'conc_ready_'.uniqid();
+        mkdir($readyDir);
 
         $processes = [];
         foreach ($ids as $id) {
@@ -49,10 +48,13 @@ class BibConcurrencyTest extends TestCase
                 [
                     'APP_ENV' => 'testing',
                     'APP_DEBUG' => 'false',
+                    'APP_KEY' => (string) env('APP_KEY'),
                     'DB_CONNECTION' => 'mysql',
                     'DB_DATABASE' => 'velosha_test',
                     'PAYMENT_SIMULATION' => 'true',
                     'CONCURRENCY_BARRIER' => $barrier,
+                    'CONCURRENCY_READY_DIR' => $readyDir,
+                    'CONCURRENCY_ID' => (string) $id,
                 ]
             );
             $p->setTimeout(120);
@@ -62,12 +64,23 @@ class BibConcurrencyTest extends TestCase
         foreach ($processes as $p) {
             $p->start();
         }
+
+        // beri waktu boot (maks 20 detik)
+        $deadline = time() + 20;
+        while (count(glob($readyDir.DIRECTORY_SEPARATOR.'ready_*')) < count($ids) && time() < $deadline) {
+            usleep(50000);
+        }
+
         // release barrier
         touch($barrier);
         foreach ($processes as $p) {
             $p->wait();
         }
         @unlink($barrier);
+        foreach (glob($readyDir.DIRECTORY_SEPARATOR.'ready_*') as $f) {
+            @unlink($f);
+        }
+        @rmdir($readyDir);
 
         foreach ($processes as $p) {
             $this->assertContains($p->getExitCode(), [0, 1], $p->getErrorOutput().$p->getOutput());

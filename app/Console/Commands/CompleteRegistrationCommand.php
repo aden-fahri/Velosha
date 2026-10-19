@@ -17,6 +17,13 @@ class CompleteRegistrationCommand extends Command
         abort_unless(config('payments.simulation'), 403);
 
         $barrier = getenv('CONCURRENCY_BARRIER');
+        $readyDir = getenv('CONCURRENCY_READY_DIR');
+        $id = getenv('CONCURRENCY_ID');
+
+        if ($readyDir && $id) {
+            touch($readyDir.DIRECTORY_SEPARATOR.'ready_'.$id);
+        }
+
         if ($barrier) {
             $deadline = time() + 30;
             while (! file_exists($barrier) && time() < $deadline) {
