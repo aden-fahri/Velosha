@@ -10,13 +10,13 @@
                     <input type="text"
                            wire:model.live.debounce.400ms="search"
                            placeholder="Cari event, kota, atau provinsi..."
-                           class="w-full pl-9 pr-3 py-2 text-xs border border-veloborderstrong velo-box-1 focus:outline-none focus:border-race-500 bg-white">
+                           class="w-full pl-9 pr-3 py-2 text-sm min-h-[44px] border border-veloborderstrong velo-box-1 focus:outline-none focus:border-race-500 bg-white">
                 </div>
 
                 <!-- Filter Kategori Jarak -->
                 <div class="relative">
                     <select wire:model.live="type"
-                            class="w-full px-3 py-2 text-xs border border-veloborderstrong velo-box-1 focus:outline-none focus:border-race-500 bg-white text-teal-800">
+                            class="w-full px-3 py-2 text-sm min-h-[44px] border border-veloborderstrong velo-box-1 focus:outline-none focus:border-race-500 bg-white text-teal-800">
                         @foreach ($typeOptions as $key => $label)
                             <option value="{{ $key }}">{{ $label }}</option>
                         @endforeach
@@ -26,7 +26,7 @@
                 <!-- Filter Bulan / Waktu -->
                 <div class="relative">
                     <select wire:model.live="month"
-                            class="w-full px-3 py-2 text-xs border border-veloborderstrong velo-box-1 focus:outline-none focus:border-race-500 bg-white text-teal-800">
+                            class="w-full px-3 py-2 text-sm min-h-[44px] border border-veloborderstrong velo-box-1 focus:outline-none focus:border-race-500 bg-white text-teal-800">
                         <option value="">Semua Bulan</option>
                         @foreach ($monthOptions as $key => $label)
                             <option value="{{ $key }}">{{ $label }}</option>
@@ -37,7 +37,7 @@
                 <!-- Sorting -->
                 <div class="relative">
                     <select wire:model.live="sort"
-                            class="w-full px-3 py-2 text-xs border border-veloborderstrong velo-box-1 focus:outline-none focus:border-race-500 bg-white text-teal-800">
+                            class="w-full px-3 py-2 text-sm min-h-[44px] border border-veloborderstrong velo-box-1 focus:outline-none focus:border-race-500 bg-white text-teal-800">
                         <option value="date-asc">Urutkan: tanggal terdekat</option>
                         <option value="popular">Paling Populer</option>
                         <option value="distance-desc">Jarak terjauh</option>
