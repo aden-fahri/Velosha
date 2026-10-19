@@ -16,6 +16,14 @@ class CompleteRegistrationCommand extends Command
     {
         abort_unless(config('payments.simulation'), 403);
 
+        $barrier = getenv('CONCURRENCY_BARRIER');
+        if ($barrier) {
+            $deadline = time() + 30;
+            while (! file_exists($barrier) && time() < $deadline) {
+                usleep(10000);
+            }
+        }
+
         $registration = Registration::find($this->argument('registrationId'));
 
         if (! $registration instanceof Registration) {
@@ -32,7 +40,7 @@ class CompleteRegistrationCommand extends Command
             return self::FAILURE;
         }
 
-        $this->info('OK DB:'.config('database.connections.mysql.database'));
+        $this->info('OK DB:'.\Illuminate\Support\Facades\DB::connection()->getDatabaseName());
 
         return self::SUCCESS;
     }

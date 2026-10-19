@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Security;
 
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -11,9 +12,15 @@ class ProductionSeedTest extends TestCase
 
     public function test_no_demo_accounts_in_production_seed(): void
     {
-        // simulasi: DatabaseSeeder melewati demo seeder di production
-        $this->app['env'] = 'production';
-        // hanya cek bahwa DemoUserSeeder tidak dipanggil: akun demo tidak ada
+        putenv('ADMIN_EMAIL=admin@velosha.id');
+        putenv('ADMIN_PASSWORD=SuperSecretPass123!');
+        app()->detectEnvironment(fn () => 'production');
+        config(['app.env' => 'production']);
+
+        (new DatabaseSeeder())->run();
+
         $this->assertDatabaseMissing('users', ['email' => 'google.demo@velosha.id']);
+        $this->assertDatabaseHas('users', ['email' => 'admin@velosha.id']);
+        $this->assertDatabaseCount('registrations', 0);
     }
 }
