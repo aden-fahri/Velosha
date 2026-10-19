@@ -46,25 +46,25 @@
             </div>
         </div>
 
-        <!-- Metrics -->
-        <div class="mt-16 pt-6 border-t border-white/15 grid grid-cols-4 gap-3 sm:gap-6 text-white max-w-3xl">
-            <div>
-                <div class="text-lg sm:text-2xl lg:text-3xl font-black tracking-tight">12</div>
-                <div class="text-[10px] sm:text-[11px] leading-tight text-white/70 uppercase tracking-wider mt-0.5">Race Resmi</div>
-            </div>
-            <div>
-                <div class="text-lg sm:text-2xl lg:text-3xl font-black tracking-tight">8.500+</div>
-                <div class="text-[10px] sm:text-[11px] leading-tight text-white/70 uppercase tracking-wider mt-0.5">Cyclist Terdaftar</div>
-            </div>
-            <div>
-                <div class="text-lg sm:text-2xl lg:text-3xl font-black tracking-tight">1.820</div>
-                <div class="text-[10px] sm:text-[11px] leading-tight text-white/70 uppercase tracking-wider mt-0.5">KM Total Rute</div>
-            </div>
-            <div>
-                <div class="text-lg sm:text-2xl lg:text-3xl font-black tracking-tight">100%</div>
-                <div class="text-[10px] sm:text-[11px] leading-tight text-white/70 uppercase tracking-wider mt-0.5">RFID &amp; Tim Medis</div>
+        <!-- Strip Race Terdekat -->
+        @if ($featured)
+        <div class="mt-10 pt-6 border-t border-white/15 max-w-3xl">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                <div class="flex-1">
+                    <div class="text-[11px] uppercase tracking-wider text-white/70 mb-1">Race Terdekat</div>
+                    <div class="text-lg font-black tracking-tight">{{ $featured->title }}</div>
+                    <div class="text-xs text-white/70 mt-0.5">{{ $featured->event_date?->format('d M Y') }} · {{ $featured->categories->sum('remaining') }} slot tersisa</div>
+                </div>
+                <a href="{{ route('events.show', $featured->slug) }}" wire:navigate class="inline-flex items-center justify-center bg-race-600 hover:bg-race-700 text-white font-semibold px-5 py-3 text-xs tracking-wider uppercase velo-box-1 shadow-sm transition">
+                    Daftar Sekarang
+                </a>
             </div>
         </div>
+        @else
+        <div class="mt-10 pt-6 border-t border-white/15 max-w-3xl text-sm text-white/70">
+            Belum ada race mendatang. Cek kalender race untuk jadwal terbaru.
+        </div>
+        @endif
     </div>
 </section>
 
@@ -94,30 +94,31 @@
             </div>
         </div>
 
-        {{-- Kartu fitur: grid 2 kolom mobile, 4 kolom desktop, aksen atas berwarna --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            @foreach (($paket->features ?? []) as $i => $f)
-            <div class="relative bg-white border border-veloborder velo-box-1 overflow-hidden group hover:shadow-xl hover:border-teal-700 hover:-translate-y-1 transition-all duration-300">
-                <div class="h-1.5 {{ $paketAccents[$i % count($paketAccents)] }} w-full" aria-hidden="true"></div>
-                <div class="p-6">
-                    {{-- Numbered badge --}}
-                    <div class="flex items-center justify-between mb-4">
-                        @if (isset($paketImages[$f['icon'] ?? '']))
-                            <img src="{{ asset('images/' . $paketImages[$f['icon']]) }}"
-                                 alt="{{ $f['title'] ?? '' }}" width="80" height="80" loading="lazy"
-                                 class="w-16 h-16 object-contain">
-                        @else
-                            <div class="w-14 h-14 bg-velosurface text-teal-700 border border-veloborder velo-box-1 flex items-center justify-center">
-                                <i data-lucide="{{ $f['icon'] ?? 'check' }}" class="w-6 h-6"></i>
-                            </div>
-                        @endif
-                        <span class="text-4xl font-black text-velosurface select-none">0{{ $i + 1 }}</span>
+        {{-- Stub tiket contoh --}}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white border border-veloborder velo-box-1 p-6">
+                <div class="text-[10px] uppercase tracking-wider text-velomutedlight mb-3">Contoh tiket (ilustrasi)</div>
+                <div class="border border-dashed border-veloborderstrong velo-box-3 p-4">
+                    <div class="flex items-center justify-between">
+                        <div class="font-mono text-sm font-bold text-teal-900">VLS-GF-0001</div>
+                        <span class="text-[10px] text-velomutedlight">CONTOH</span>
                     </div>
-                    <h4 class="text-sm font-bold text-teal-900 mb-2 group-hover:text-race-600 transition leading-snug">{!! $f['title'] ?? '' !!}</h4>
-                    <p class="text-xs text-velomutedlight leading-relaxed">{!! $f['desc'] ?? '' !!}</p>
+                    <div class="mt-3 h-24 bg-velosurfacealt velo-box-3 flex items-center justify-center text-[11px] text-velomutedlight">
+                        QR (contoh)
+                    </div>
                 </div>
             </div>
-            @endforeach
+            <div class="bg-white border border-veloborder velo-box-1 p-6">
+                <div class="text-[10px] uppercase tracking-wider text-velomutedlight mb-3">Termasuk</div>
+                <ul class="space-y-2 text-sm text-teal-900">
+                    @foreach (($paket->features ?? []) as $f)
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-race-600 shrink-0 mt-0.5"></i>
+                        <span>{!! \Illuminate\Support\Str::limit($f['title'] ?? '', 60) !!}</span>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
 
         {{-- Benefit: header gelap, grid 3 kolom, fasilitas resmi --}}
@@ -172,33 +173,28 @@
                 </div>
             </div>
 
-            {{-- Kanan: 2x2 Horizontal Guide Cards --}}
-            <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                @php
-                    $infoCards = [
-                        ['url' => '/about', 'cta' => 'Pelajari', 'icon' => 'info', 'title' => 'Tentang Velosha', 'desc' => 'Platform kurasi resmi maraton sepeda &amp; Gran Fondo Indonesia berstandar RFID.', 'bg' => 'bg-teal-50 text-teal-800'],
-                        ['url' => '/rule', 'cta' => 'Aturan Race', 'icon' => 'shield-check', 'title' => 'Aturan & Kode Etik', 'desc' => 'Regulasi keselamatan helm, etika peloton, penalti, dan sanksi diskualifikasi.', 'bg' => 'bg-race-50 text-race-700'],
-                        ['url' => '/riwayat', 'cta' => 'Lihat History', 'icon' => 'history', 'title' => 'Arsip Race History', 'desc' => 'Arsip balapan yang diselenggarakan lengkap dengan jumlah rider dan data kelas.', 'bg' => 'bg-teal-50 text-teal-800'],
-                        ['url' => '/ranking', 'cta' => 'Leaderboard', 'icon' => 'trophy', 'title' => 'Ranking & Podium', 'desc' => 'Catatan waktu resmi per checkpoint RFID dan daftar podium juara per kategori.', 'bg' => 'bg-race-50 text-race-700'],
-                    ];
-                @endphp
-                @foreach ($infoCards as $c)
-                <a href="{{ $c['url'] }}" wire:navigate class="group bg-white border border-veloborder velo-box-1 p-5 flex flex-col justify-between hover:border-teal-700 hover:-translate-y-1 transition-all duration-200 shadow-xs">
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <div class="w-10 h-10 {{ $c['bg'] }} velo-box-3 border border-veloborder flex items-center justify-center">
-                                <i data-lucide="{{ $c['icon'] }}" class="w-5 h-5"></i>
-                            </div>
-                            <span class="text-[11px] font-extrabold text-teal-800 group-hover:text-race-600 transition flex items-center gap-1">
-                                {{ $c['cta'] }}
-                                <i data-lucide="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
-                            </span>
+            {{-- Kanan: daftar editorial bernomor --}}
+            <div class="lg:col-span-7">
+                <ol class="space-y-3">
+                    @foreach ([
+                        ['url' => '/about', 'title' => 'Tentang Velosha', 'fact' => 'Platform resmi maraton sepeda & Gran Fondo Indonesia berstandar RFID.'],
+                        ['url' => '/rule', 'title' => 'Aturan & Kode Etik', 'fact' => 'Helm wajib, etika peloton, penalti, dan sanksi diskualifikasi.'],
+                        ['url' => '/riwayat', 'title' => 'Arsip Race History', 'fact' => 'Daftar balapan yang pernah diselenggarakan.'],
+                        ['url' => '/ranking', 'title' => 'Ranking & Podium', 'fact' => 'Catatan waktu resmi per checkpoint RFID.'],
+                    ] as $i => $c)
+                    <li class="flex items-start gap-3 border-b border-veloborder pb-3">
+                        <span class="text-[11px] font-mono text-velomutedlight w-6 shrink-0">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                        <div class="flex-1">
+                            <a href="{{ $c['url'] }}" wire:navigate class="text-sm font-extrabold text-teal-900 hover:text-race-600 transition">{{ $c['title'] }}</a>
+                            <p class="text-xs text-velomutedlight mt-0.5">{{ \Illuminate\Support\Str::limit($c['fact'], 80) }}</p>
                         </div>
-                        <h3 class="text-sm font-extrabold text-teal-900 group-hover:text-race-600 transition">{{ $c['title'] }}</h3>
-                        <p class="text-xs text-velomutedlight leading-relaxed">{!! $c['desc'] !!}</p>
-                    </div>
+                    </li>
+                    @endforeach
+                </ol>
+                <a href="/help" wire:navigate class="mt-4 inline-flex items-center text-xs font-extrabold text-race-600 hover:text-race-700">
+                    Buka Pusat Bantuan
+                    <i data-lucide="arrow-right" class="w-3 h-3 ml-1.5"></i>
                 </a>
-                @endforeach
             </div>
 
         </div>
