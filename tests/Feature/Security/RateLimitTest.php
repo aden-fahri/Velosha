@@ -31,6 +31,21 @@ class RateLimitTest extends TestCase
             'categoryId' => $category->id,
         ]);
 
+        $component->set([
+            'participant_name' => 'Arif Rahman Wibowo',
+            'identity_number' => '3308012408980002',
+            'birth_date' => '1998-08-24',
+            'gender' => 'male',
+            'blood_type' => 'O',
+            'email' => $user->email,
+            'phone' => '081223344556',
+            'club' => 'Menoreh Peloton CC',
+            'emergency_contact_name' => 'Siti Handayani',
+            'emergency_contact_relation' => 'Istri / Suami',
+            'emergency_contact_phone' => '081987654321',
+            'medical_notes' => 'Tidak ada riwayat asma',
+        ]);
+
         for ($i = 0; $i < 11; $i++) {
             $component->call('toStep3');
         }

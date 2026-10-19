@@ -32,7 +32,7 @@ class CompleteRegistrationCommand extends Command
             return self::FAILURE;
         }
 
-        $this->info('OK');
+        $this->info('OK DB:'.config('database.connections.mysql.database'));
 
         return self::SUCCESS;
     }
