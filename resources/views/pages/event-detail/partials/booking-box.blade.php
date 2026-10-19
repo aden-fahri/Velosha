@@ -1,6 +1,6 @@
 @use('App\Support\EventCardPresenter', 'P')
 {{-- Sticky booking box: pilihan kategori, inklusi paket, CTA checkout --}}
-<div class="lg:col-span-4 sticky top-24" x-data="{ selected: '{{ $categories->first()?->id }}', roleWarning: false }">
+<div id="daftar" class="lg:col-span-4 sticky top-24" x-data="{ selected: '{{ $categories->first()?->id }}', roleWarning: false }">
     <div class="bg-white border border-veloborderstrong p-6 velo-box-1 shadow-md">
 
         <div class="pb-4 border-b border-veloborder flex justify-between items-baseline">
