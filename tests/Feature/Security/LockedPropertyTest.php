@@ -40,11 +40,18 @@ class LockedPropertyTest extends TestCase
             'categoryId' => $category->id,
         ]);
 
+        $threw = false;
         try {
             $component->set('registrationId', $regB->id);
-            $this->fail('Expected locked exception');
-        } catch (\Throwable $e) {
-            $this->assertTrue(true);
+        } catch (\Throwable) {
+            $threw = true;
         }
+        $this->assertTrue($threw, 'registrationId harus terkunci');
+
+        // registration() ter-scope: ID milik B tidak terbaca oleh A
+        $this->actingAs($userA);
+        $checkout = app(\App\Livewire\Checkout::class);
+        $checkout->registrationId = $regB->id;
+        $this->assertNull($checkout->registration());
     }
 }

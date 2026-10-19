@@ -31,6 +31,11 @@ class EncryptSensitiveRegistrations extends Command
                         continue;
                     }
 
+                    if (str_starts_with($value, 'eyJpdiI6')) {
+                        // sudah terenkripsi (payload Crypt), lewati
+                        continue;
+                    }
+
                     try {
                         Crypt::decryptString($value);
                         // sudah terenkripsi, lewati
