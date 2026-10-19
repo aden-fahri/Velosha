@@ -47,5 +47,6 @@ class EmailUnchangedTest extends TestCase
         ])->call('toStep3');
 
         $this->assertSame('rider@velosha.id', $user->fresh()->email);
+        $this->assertSame('081223344556', $user->fresh()->phone);
     }
 }
