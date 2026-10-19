@@ -17,14 +17,14 @@ class DatabaseSeeder extends Seeder
         if (! app()->environment('production')) {
             $this->call(DemoUserSeeder::class);
             $this->call(DemoPesertaSeeder::class);
+            $this->call(EventSeeder::class);
+            $this->call(ExtraEventSeeder::class);
+            $this->call(RegistrationSeeder::class);
         } else {
             $this->call(ProductionAdminSeeder::class);
         }
-        $this->call(EventSeeder::class);
-        $this->call(ExtraEventSeeder::class);
         $this->call(AboutContentSeeder::class);
         $this->call(RuleContentSeeder::class);
         $this->call(HelpContentSeeder::class);
-        $this->call(RegistrationSeeder::class);
     }
 }

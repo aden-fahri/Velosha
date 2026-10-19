@@ -36,6 +36,11 @@ class BibConcurrencyTest extends TestCase
             $ids[] = $reg->id;
         }
 
+        $barrier = sys_get_temp_dir().DIRECTORY_SEPARATOR.'conc_barrier_'.uniqid();
+        foreach ($ids as $id) {
+            // no-op
+        }
+
         $processes = [];
         foreach ($ids as $id) {
             $p = new Process(
@@ -47,6 +52,7 @@ class BibConcurrencyTest extends TestCase
                     'DB_CONNECTION' => 'mysql',
                     'DB_DATABASE' => 'velosha_test',
                     'PAYMENT_SIMULATION' => 'true',
+                    'CONCURRENCY_BARRIER' => $barrier,
                 ]
             );
             $p->setTimeout(120);
@@ -56,9 +62,12 @@ class BibConcurrencyTest extends TestCase
         foreach ($processes as $p) {
             $p->start();
         }
+        // release barrier
+        touch($barrier);
         foreach ($processes as $p) {
             $p->wait();
         }
+        @unlink($barrier);
 
         foreach ($processes as $p) {
             $this->assertContains($p->getExitCode(), [0, 1], $p->getErrorOutput().$p->getOutput());
@@ -90,7 +99,7 @@ class BibConcurrencyTest extends TestCase
         ]);
         config(['payments.simulation' => true]);
         app(\App\Actions\CompleteRegistrationAction::class)->execute($reg);
-        $this->assertNotNull($reg->fresh()->bib_number);
+        $this->assertSame('VLS-GF-0006', $reg->fresh()->bib_number);
 
         // cleanup
         \Illuminate\Support\Facades\DB::table('registrations')->delete();
