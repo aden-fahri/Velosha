@@ -250,3 +250,11 @@ body.velo-nav-entering::before {
 }
 
 [x-cloak] { display: none !important; }
+
+/* Fase 9.1: token tipografi fluid + utilitas */
+@theme { --text-fluid-sm: clamp(0.875rem, 0.8rem + 0.25vw, 1rem); --text-fluid-base: clamp(1rem, 0.9rem + 0.35vw, 1.125rem); --text-fluid-lg: clamp(1.125rem, 1rem + 0.5vw, 1.375rem); }
+.scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scroll-snap-x { scroll-snap-type: x mandatory; }
+.scroll-snap-x > * { scroll-snap-align: start; }
+
