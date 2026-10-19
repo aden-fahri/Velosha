@@ -41,6 +41,8 @@ return [
 
     'debug' => (bool) env('APP_DEBUG', false),
 
+    'demo_login' => (bool) env('APP_DEMO_LOGIN', true) && in_array(env('APP_ENV', 'production'), ['local', 'testing'], true),
+
     /*
     |--------------------------------------------------------------------------
     | Application URL

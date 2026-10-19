@@ -43,7 +43,7 @@ class RiwayatPageTest extends TestCase
             ->assertOk()
             ->assertSee('Race History')
             ->assertSee('Race Selesai')
-            ->assertSee('Masuk untuk melihat riwayat')
+            ->assertSee('Belum ada balap yang selesai')
             ->assertDontSee('Event Diikuti');
     }
 
@@ -90,7 +90,7 @@ class RiwayatPageTest extends TestCase
             ->assertDontSee('/qualification');
     }
 
-    public function test_logged_in_peserta_sees_their_registrations(): void
+    public function test_logged_in_peserta_sees_archive_only_without_ticket_content(): void
     {
         $user = User::factory()->create(['role' => User::ROLE_PESERTA]);
         $event = Event::factory()->create(['event_date' => now()->addDays(20)->toDateString()]);
@@ -113,9 +113,9 @@ class RiwayatPageTest extends TestCase
 
         $this->actingAs($user)->get('/riwayat')
             ->assertOk()
-            ->assertSee($event->title)
-            ->assertSee('VLS-GF-0001')
-            ->assertSee('TERKONFIRMASI')
-            ->assertSee('Event Diikuti');
+            ->assertSee('Race History')
+            ->assertDontSee('Event Diikuti')
+            ->assertDontSee('VLS-GF-0001')
+            ->assertDontSee('TERKONFIRMASI');
     }
 }

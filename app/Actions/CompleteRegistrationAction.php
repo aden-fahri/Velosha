@@ -53,6 +53,8 @@ class CompleteRegistrationAction
             }
 
             if ($category->remaining <= 0) {
+                $reg->status = RegistrationStatus::CANCELLED->value;
+                $reg->save();
                 $quotaFull = true;
 
                 return $reg;
@@ -73,7 +75,6 @@ class CompleteRegistrationAction
         });
 
         if ($quotaFull) {
-            $reg->update(['status' => RegistrationStatus::CANCELLED->value]);
             throw new RuntimeException('Slot kategori sudah penuh. Pendaftaran Anda dibatalkan.');
         }
 

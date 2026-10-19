@@ -14,8 +14,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(DemoUserSeeder::class);
-        $this->call(DemoPesertaSeeder::class);
+        if (! app()->environment('production')) {
+            $this->call(DemoUserSeeder::class);
+            $this->call(DemoPesertaSeeder::class);
+        } else {
+            $this->call(ProductionAdminSeeder::class);
+        }
         $this->call(EventSeeder::class);
         $this->call(ExtraEventSeeder::class);
         $this->call(AboutContentSeeder::class);
