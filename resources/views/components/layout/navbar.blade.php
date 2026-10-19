@@ -77,7 +77,7 @@
             <a href="{{ $url }}"
                wire:navigate
                @click="mobileOpen = false"
-               class="block px-3.5 py-2.5 text-xs font-bold velo-box-3 {{ request()->routeIs($key . '*') ? 'bg-teal-900 text-white' : 'text-velomutedlight hover:bg-[#f1f4f4]' }}">
+               class="flex items-center min-h-[44px] px-3.5 py-2.5 text-xs font-bold velo-box-3 {{ request()->routeIs($key . '*') ? 'bg-teal-900 text-white' : 'text-velomutedlight hover:bg-[#f1f4f4]' }}">
                 {{ $label }}
             </a>
             @endforeach
