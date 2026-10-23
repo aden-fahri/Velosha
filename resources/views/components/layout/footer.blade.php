@@ -1,39 +1,42 @@
 @php($footer = \App\Models\FooterContent::current())
-<footer class="relative overflow-hidden bg-teal-900 text-teal-100 border-t border-teal-800 mt-20">
-    {{-- Kontur topo horizontal di atas latar teal gelap --}}
-    <div class="absolute inset-0 pointer-events-none opacity-[0.07]"
-         style="background-image:url('{{ asset('images/patterns/topo.svg') }}');background-size:520px auto;background-repeat:repeat"
-         aria-hidden="true"></div>
-    <div class="absolute inset-x-0 top-0 h-[3px] bg-race-500" aria-hidden="true"></div>
+<footer class="relative bg-[var(--ink)] text-[var(--paper)] border-t-[3px] border-[var(--ink)] mt-20">
+    {{-- Halftone strip dekoratif di bagian paling atas footer --}}
+    <div class="h-3 w-full bg-[var(--orange)] border-b-[3px] border-[var(--ink)]" aria-hidden="true"></div>
 
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="wrap py-14">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
 
             <!-- Brand -->
             <div class="col-span-2 md:col-span-1 space-y-4">
-                <img src="/images/logo-velosha.png" alt="Velosha" class="h-14 w-auto object-contain invert opacity-95" />
-                <p class="text-sm text-teal-100/70 leading-relaxed max-w-xs">
+                <a href="/" wire:navigate class="inline-block">
+                    <img src="/images/logo-velosha.png" alt="Velosha" class="h-12 w-auto object-contain brightness-0 invert opacity-95" />
+                </a>
+                <p class="text-sm text-[var(--paper2)]/80 leading-relaxed max-w-xs">
                     {{ $footer->brand_description }}
                 </p>
             </div>
 
             <!-- Kategori -->
             <div>
-                <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-4 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 bg-race-500 velo-box-1" aria-hidden="true"></span>
+                <h4 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4 flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 bg-[var(--orange)] rotate-45 border border-[var(--paper)]" aria-hidden="true"></span>
                     {{ $footer->kategori_title }}
                 </h4>
                 <ul class="space-y-2.5 text-sm">
                     @foreach (($footer->kategori_links ?? []) as $link)
-                        <li><a href="{{ $link['url'] }}" wire:navigate class="text-teal-100/70 hover:text-race-400 transition">{{ $link['label'] }}</a></li>
+                        <li>
+                            <a href="{{ $link['url'] }}" wire:navigate class="text-[var(--paper)]/80 hover:text-[var(--orange-l)] transition-colors">
+                                {{ $link['label'] }}
+                            </a>
+                        </li>
                     @endforeach
                 </ul>
             </div>
 
             <!-- Bantuan -->
             <div>
-                <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-4 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 bg-race-500 velo-box-1" aria-hidden="true"></span>
+                <h4 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4 flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 bg-[var(--orange)] rotate-45 border border-[var(--paper)]" aria-hidden="true"></span>
                     {{ $footer->bantuan_title }}
                 </h4>
                 <ul class="space-y-2.5 text-sm">
@@ -42,7 +45,11 @@
                             ($link['url'] === '/dashboard' && (auth()->user()->isAdmin() || auth()->user()->isPenyelenggara()))
                             || ($link['url'] === '/admin' && auth()->user()->isPeserta())
                         ))
-                        <li><a href="{{ $link['url'] }}" wire:navigate class="text-teal-100/70 hover:text-race-400 transition">{{ $link['label'] }}</a></li>
+                        <li>
+                            <a href="{{ $link['url'] }}" wire:navigate class="text-[var(--paper)]/80 hover:text-[var(--orange-l)] transition-colors">
+                                {{ $link['label'] }}
+                            </a>
+                        </li>
                         @endunless
                     @endforeach
                 </ul>
@@ -50,13 +57,15 @@
 
             <!-- Pembayaran -->
             <div>
-                <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-4 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 bg-race-500 velo-box-1" aria-hidden="true"></span>
+                <h4 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4 flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 bg-[var(--orange)] rotate-45 border border-[var(--paper)]" aria-hidden="true"></span>
                     {{ $footer->payment_title }}
                 </h4>
-                <div class="grid grid-cols-2 gap-2 text-[11px] font-semibold">
+                <div class="grid grid-cols-2 gap-2 text-[12px] font-bold">
                     @foreach (($footer->payment_methods ?? []) as $method)
-                        <div class="border border-white/15 bg-white/5 text-teal-100/85 p-2 text-center velo-box-3">{{ $method['label'] }}</div>
+                        <div class="border-[2px] border-[var(--line)] bg-[var(--paper)]/10 text-[var(--paper)] p-2.5 text-center rounded-lg">
+                            {{ $method['label'] }}
+                        </div>
                     @endforeach
                 </div>
             </div>
@@ -64,11 +73,13 @@
         </div>
 
         <!-- Bottom Subfooter -->
-        <div class="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-teal-100/60">
+        <div class="mt-12 pt-6 border-t-[2px] border-[var(--paper)]/20 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-[var(--paper)]/60">
             <p>{{ $footer->copyright }}</p>
             <div class="flex gap-6">
                 @foreach (($footer->bottom_links ?? []) as $link)
-                    <a href="{{ $link['url'] }}" wire:navigate class="hover:text-race-400 transition">{{ $link['label'] }}</a>
+                    <a href="{{ $link['url'] }}" wire:navigate class="hover:text-[var(--orange-l)] transition-colors">
+                        {{ $link['label'] }}
+                    </a>
                 @endforeach
             </div>
         </div>

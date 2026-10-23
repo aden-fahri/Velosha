@@ -1,119 +1,149 @@
 <div>
-    <!-- Category Tabs -->
-    <section class="bg-white border-b border-veloborder sticky top-20 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex items-center gap-2 overflow-x-auto" role="tablist" aria-label="Kategori race">
-                @foreach($tabs as $tab)
-                <button type="button"
-                        wire:key="tab-{{ $tab['key'] }}"
-                        wire:click="filter('{{ $tab['key'] }}')"
-                        role="tab"
-                        aria-selected="{{ $category === $tab['key'] ? 'true' : 'false' }}"
-                        class="px-4 py-2 text-xs velo-box-1 whitespace-nowrap transition-colors {{ $category === $tab['key'] ? 'bg-race-300 text-race-900 font-bold' : 'bg-white text-teal-700 hover:text-race-600 font-medium border border-veloborderstrong' }}">{{ $tab['label'] }}</button>
-                @endforeach
+    <!-- Category Filter Bar (Cartoon Style) -->
+    <section class="bg-[var(--paper)] border-b-[3px] border-[var(--ink)] sticky top-[76px] z-30 py-4">
+        <div class="wrap">
+            <div class="flex items-center justify-between gap-4 flex-wrap">
+                <div class="flex items-center gap-2.5 overflow-x-auto scrollbar-hide py-1" role="tablist" aria-label="Kategori race">
+                    @foreach($tabs as $tab)
+                    <button type="button"
+                            wire:key="tab-{{ $tab['key'] }}"
+                            wire:click="filter('{{ $tab['key'] }}')"
+                            role="tab"
+                            aria-selected="{{ $category === $tab['key'] ? 'true' : 'false' }}"
+                            class="filter {{ $category === $tab['key'] ? 'on' : '' }}">
+                        {{ $tab['label'] }}
+                    </button>
+                    @endforeach
+                </div>
+
+                <a href="/events" wire:navigate class="btn btn-sm btn-ghost hidden sm:inline-flex">
+                    <span>Lihat Semua Kalender</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Featured Races -->
-    <section class="py-16 bg-velosurfacealt border-b border-veloborder">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-end justify-between mb-6">
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-teal-900 tracking-tight">Pendaftaran Terbuka &amp; Mendatang</h2>
-                <a href="/events" wire:navigate class="inline-flex items-center text-xs font-semibold text-race-600 hover:gap-2 transition-all">
-                    <span>Lihat Semua</span>
-                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                </a>
+    <!-- Featured Races Section -->
+    <section class="py-14 bg-[var(--paper)]">
+        <div class="wrap">
+
+            <!-- Banner Velosha Bergerak dengan Animasi Sepeda .bk Sesuai Mockup -->
+            <div class="card relative h-[220px] mb-12 overflow-hidden border-[3px] border-[var(--ink)] bg-[#F6B777]">
+                <!-- Background Panorama Kartun & Gunung SVG -->
+                <svg viewBox="0 0 1136 220" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true" class="absolute inset-0">
+                    <rect width="1136" height="220" fill="#F6B777"></rect>
+                    <circle cx="930" cy="76" r="46" fill="#F4BE3F" stroke="#10282E" stroke-width="4"></circle>
+                    <path d="M560 190 L680 70 L800 190Z M740 190 L880 50 L1020 190Z M960 190 L1040 100 L1120 190Z" fill="#B2590F" stroke="#10282E" stroke-width="4" stroke-linejoin="round"></path>
+                    <path d="M845 78 L880 50 L915 78 L898 72 L880 84 L862 72Z" fill="#FBF4E6" stroke="#10282E" stroke-width="3" stroke-linejoin="round"></path>
+                    <path d="M0 170 Q200 130 420 160 T820 150 T1136 150 V220 H0Z" fill="#7DB88A" stroke="#10282E" stroke-width="4"></path>
+                    <path d="M0 196 H1136 V220 H0Z" fill="#10282E"></path>
+                    <path d="M0 208 H1136" stroke="#FBF4E6" stroke-width="3" stroke-dasharray="16 14"></path>
+                </svg>
+
+                <!-- Animasi Sepeda Kartun Melintas (3 Peloton .bk) -->
+                <div class="bk" style="animation-delay: 0s">
+                    <svg width="84" height="48" viewBox="0 0 70 40" aria-hidden="true">
+                        <circle cx="14" cy="28" r="10" fill="#FFFDF8" stroke="#10282E" stroke-width="3"></circle>
+                        <circle cx="56" cy="28" r="10" fill="#FFFDF8" stroke="#10282E" stroke-width="3"></circle>
+                        <path d="M14 28 L28 12 H44 L56 28 M28 12 L34 28 H14 M34 28 L44 12" fill="none" stroke="#10282E" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></path>
+                        <circle cx="38" cy="4" r="4.5" fill="#DE7119" stroke="#10282E" stroke-width="2.5"></circle>
+                        <path d="M30 12 L37 7 L47 11" fill="none" stroke="#DE7119" stroke-width="5" stroke-linecap="round"></path>
+                    </svg>
+                </div>
+                <div class="bk" style="animation-delay: -5s">
+                    <svg width="84" height="48" viewBox="0 0 70 40" aria-hidden="true">
+                        <circle cx="14" cy="28" r="10" fill="#FFFDF8" stroke="#10282E" stroke-width="3"></circle>
+                        <circle cx="56" cy="28" r="10" fill="#FFFDF8" stroke="#10282E" stroke-width="3"></circle>
+                        <path d="M14 28 L28 12 H44 L56 28 M28 12 L34 28 H14 M34 28 L44 12" fill="none" stroke="#10282E" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></path>
+                        <circle cx="38" cy="4" r="4.5" fill="#1F6F4A" stroke="#10282E" stroke-width="2.5"></circle>
+                        <path d="M30 12 L37 7 L47 11" fill="none" stroke="#1F6F4A" stroke-width="5" stroke-linecap="round"></path>
+                    </svg>
+                </div>
+                <div class="bk" style="animation-delay: -10s">
+                    <svg width="84" height="48" viewBox="0 0 70 40" aria-hidden="true">
+                        <circle cx="14" cy="28" r="10" fill="#FFFDF8" stroke="#10282E" stroke-width="3"></circle>
+                        <circle cx="56" cy="28" r="10" fill="#FFFDF8" stroke="#10282E" stroke-width="3"></circle>
+                        <path d="M14 28 L28 12 H44 L56 28 M28 12 L34 28 H14 M34 28 L44 12" fill="none" stroke="#10282E" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></path>
+                        <circle cx="38" cy="4" r="4.5" fill="#9B3D5A" stroke="#10282E" stroke-width="2.5"></circle>
+                        <path d="M30 12 L37 7 L47 11" fill="none" stroke="#9B3D5A" stroke-width="5" stroke-linecap="round"></path>
+                    </svg>
+                </div>
+
+                <!-- Teks Kartun Velosha Besar sesuai Mockup -->
+                <div class="relative z-10 px-8 py-6 flex flex-col justify-center h-full">
+                    <span class="chip chip-mustard w-max">Musim 2026/27</span>
+                    <div class="font-heading font-black text-6xl sm:text-8xl md:text-9xl tracking-tight text-[#FBF4E6] mt-2 select-none"
+                         style="-webkit-text-stroke: 3.5px #10282E; text-shadow: 6px 6px 0 #10282E;">
+                        VELOSHA
+                    </div>
+                </div>
             </div>
 
-            {{-- Banner di atas kartu: gambar dari admin (Panel > Banner Race), fallback public/images/race-banner.*, lalu placeholder --}}
-            @php
-                $raceBanner = null;
-                $adminBanner = \App\Models\RaceBannerContent::current()->image_path;
-                if ($adminBanner && is_file(public_path('storage/' . ltrim($adminBanner, '/')))) {
-                    $raceBanner = 'storage/' . ltrim($adminBanner, '/');
-                } else {
-                    foreach (['images/race-banner.jpg', 'images/race-banner.png', 'images/race-banner.webp'] as $rb) {
-                        if (file_exists(public_path($rb))) { $raceBanner = $rb; break; }
-                    }
-                }
-                $raceBannerDims = [1216, 192];
-                if ($raceBanner) {
-                    $dims = @getimagesize(public_path($raceBanner));
-                    if ($dims) { $raceBannerDims = [$dims[0], $dims[1]]; }
-                }
-            @endphp
-            {{-- Dengan gambar: proporsional ringkas; tanpa gambar: slot placeholder --}}
-            <div class="relative w-full h-36 sm:h-40 md:h-44 mb-10 overflow-hidden velo-box-1 border border-veloborderstrong"
-                 style="background-color:#0A353E;background-image:url('/images/patterns/topo.svg'),linear-gradient(135deg,#0E4B57 0%,#0A353E 100%);background-size:480px,auto;box-shadow:inset 0 -3px 0 #DE7119">
-                @if ($raceBanner)
-                    <img src="{{ asset($raceBanner) }}" alt="Banner race" width="{{ $raceBannerDims[0] }}" height="{{ $raceBannerDims[1] }}" loading="lazy"
-                         class="block w-full h-full object-cover">
-                @endif
-                <div class="absolute inset-x-0 bottom-0 z-10 bg-race-500" style="height:3px" aria-hidden="true"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-opacity duration-150"
+            <!-- Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-opacity duration-150"
                  wire:loading.class="opacity-50"
                  wire:target="filter">
 
                 @forelse($races as $race)
-                <article wire:key="race-{{ $loop->index }}" class="group flex flex-col bg-white border border-veloborder velo-box-1 overflow-hidden hover:shadow-lg transition-all">
-                    <div class="relative h-52 overflow-hidden bg-velosurface">
-                        <img src="{{ $race['img'] }}" alt="{{ $race['title'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute top-3 left-3 flex gap-1.5">
-                            <span class="{{ $race['catClass'] }} text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 velo-box-3">{{ $race['cat'] }}</span>
-                            <span class="bg-white/95 text-teal-800 text-[10px] font-bold px-2 py-1 velo-box-3 border border-veloborder">{{ $race['dist'] }}</span>
+                <article wire:key="race-{{ $loop->index }}" class="card card-hover flex flex-col overflow-hidden bg-[var(--card)]">
+                    {{-- Header Poster Image --}}
+                    <div class="relative h-52 overflow-hidden border-b-[2.5px] border-[var(--ink)] bg-[var(--paper2)]">
+                        <img src="{{ $race['img'] }}" alt="{{ $race['title'] }}" class="w-full h-full object-cover">
+                        <div class="absolute top-3 left-3 flex gap-2">
+                            <span class="chip chip-orange">{{ $race['cat'] }}</span>
+                            <span class="chip bg-[var(--card)]">{{ $race['dist'] }}</span>
                         </div>
                     </div>
 
+                    {{-- Card Body --}}
                     <div class="p-5 flex-grow flex flex-col">
-                        <div class="flex items-center text-[11px] text-velomutedlight gap-2 mb-2">
+                        <div class="flex items-center text-xs font-bold text-[var(--mute)] gap-2 mb-2">
                             <span class="flex items-center">
-                                <i data-lucide="calendar" class="w-3 h-3 mr-1 text-velomuted"></i>{{ $race['date'] }}
+                                <i data-lucide="calendar" class="w-3.5 h-3.5 mr-1 text-[var(--orange)]"></i>{{ $race['date'] }}
                             </span>
-                            <span class="text-[#b8bfbe]">|</span>
-                            <span class="truncate">{{ $race['loc'] }}</span>
+                            <span>•</span>
+                            <span class="truncate flex items-center">
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-1 text-[var(--orange)]"></i>{{ $race['loc'] }}
+                            </span>
                         </div>
 
-                        <h3 class="text-base font-bold text-teal-900 group-hover:text-race-600 transition-colors">{{ $race['title'] }}</h3>
+                        <h3 class="text-lg font-heading font-extrabold text-[var(--ink)] line-clamp-2 leading-tight">
+                            {{ $race['title'] }}
+                        </h3>
 
-                        <div class="mt-4 pt-4 border-t border-velosurface grid grid-cols-3 gap-2 text-center">
+                        {{-- Stats 3-Col --}}
+                        <div class="mt-4 grid grid-cols-3 gap-2 text-center">
                             @foreach($race['specs'] as $label => $value)
-                            <div class="bg-velosurfacealt p-2 velo-box-3 border border-velosurface">
-                                <div class="text-[10px] text-velomuted uppercase font-semibold">{{ $label }}</div>
-                                <div class="text-[11px] font-bold text-teal-800 mt-0.5">{{ $value }}</div>
+                            <div class="bg-[var(--paper2)] p-2 rounded-lg border-[2px] border-[var(--ink)]">
+                                <div class="text-[10px] text-[var(--mute)] uppercase font-bold tracking-wider">{{ $label }}</div>
+                                <div class="text-xs font-heading font-extrabold text-[var(--ink)] mt-0.5">{{ $value }}</div>
                             </div>
                             @endforeach
                         </div>
 
-                        <div class="mt-auto pt-5 flex items-end justify-between">
+                        {{-- Footer with Price & CTA Button --}}
+                        <div class="mt-auto pt-6 flex items-end justify-between border-t-[2px] border-dashed border-[var(--line)]">
                             <div>
-                                <div class="text-[10px] uppercase tracking-wider text-velomuted font-semibold">Mulai</div>
-                                <div class="text-base font-extrabold text-teal-900">Rp {{ $race['price'] }}</div>
+                                <div class="text-[11px] uppercase tracking-wider text-[var(--mute)] font-bold">Mulai dari</div>
+                                <div class="text-xl font-heading font-extrabold text-[var(--ink)]">Rp {{ $race['price'] }}</div>
                             </div>
-                            <a href="{{ $race['url'] }}" wire:navigate class="inline-flex items-center text-xs font-semibold text-white bg-race-600 hover:bg-race-700 px-4 py-2.5 velo-box-1 transition">
-                                <span>Daftar</span>
+                            <a href="{{ $race['url'] }}" wire:navigate class="btn btn-sm">
+                                <span>Lihat detail</span>
                                 <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </article>
                 @empty
-                <div class="col-span-full border border-veloborder velo-box-1 bg-white px-6 py-16 text-center">
-                    <div class="w-12 h-12 mx-auto mb-4 bg-white text-velomuted border border-veloborder velo-box-1 flex items-center justify-center">
-                        <i data-lucide="calendar-x" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-base font-bold text-teal-900 mb-1.5">Belum ada race di kategori ini</h3>
-                    <p class="text-xs text-velomutedlight max-w-sm mx-auto mb-6">Jadwal untuk kategori tersebut sedang disiapkan. Lihat kalender lengkap untuk race lainnya.</p>
-                    <a href="/events" wire:navigate class="inline-flex items-center text-xs font-semibold text-white bg-race-600 hover:bg-race-700 px-4 py-2.5 velo-box-1 transition">
-                        <span>Lihat Semua Race</span>
-                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
-                    </a>
+                <div class="col-span-full py-16 text-center card bg-[var(--paper2)] p-8">
+                    <p class="font-heading font-extrabold text-xl text-[var(--ink)]">Belum ada race pada kategori ini</p>
+                    <p class="text-sm text-[var(--mute)] mt-1">Coba pilih kategori balap lainnya di atas.</p>
                 </div>
                 @endforelse
 
             </div>
+
         </div>
     </section>
 </div>

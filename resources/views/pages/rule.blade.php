@@ -4,55 +4,65 @@
 
 @php $content = \App\Models\RuleContent::current(); @endphp
 
-<x-page-header
-    eyebrow="Regulasi &amp; Keselamatan"
-    title="Aturan Balap &amp; Kode Etik"
-    description="Standar keselamatan, regulasi teknis perlengkapan, etika peloton, dan tata tertib resmi musim balap Velosha."
-/>
-
 @php
 $groups = $content->groups ?? [];
 
 $statusStyle = [
-    'mandatory' => ['label' => 'Wajib', 'class' => 'bg-race-50 text-race-700 border-race-200'],
-    'allowed' => ['label' => 'Diizinkan', 'class' => 'bg-emerald-50 text-emerald-800 border-emerald-200'],
-    'forbidden' => ['label' => 'Dilarang', 'class' => 'bg-red-50 text-red-700 border-red-200'],
-    'note' => ['label' => 'Informasi', 'class' => 'bg-teal-50 text-teal-800 border-teal-200'],
+    'mandatory' => ['label' => 'WAJIB',       'bg' => 'var(--mustard)', 'color' => 'var(--ink)',   'border' => 'var(--ink)'],
+    'allowed'   => ['label' => 'DIIZINKAN',    'bg' => 'var(--pine-l)',  'color' => 'var(--pine)',  'border' => 'var(--ink)'],
+    'forbidden' => ['label' => 'DILARANG',     'bg' => 'var(--red-l)',   'color' => 'var(--red)',   'border' => 'var(--ink)'],
+    'note'      => ['label' => 'INFORMASI',    'bg' => 'var(--butter)',  'color' => 'var(--ink)',   'border' => 'var(--ink)'],
 ];
 
-$sanksiToneClass = [
-    'neutral' => 'bg-teal-50 text-teal-800 border-teal-200',
-    'race' => 'bg-race-50 text-race-700 border-race-300',
-    'danger' => 'bg-red-50 text-red-700 border-red-200',
+$sanksiColors = [
+    'neutral' => ['bg' => 'var(--pine)',    'text' => '#ffffff'],
+    'race'    => ['bg' => 'var(--mustard)', 'text' => 'var(--ink)'],
+    'danger'  => ['bg' => 'var(--red)',     'text' => '#ffffff'],
 ];
 @endphp
 
-<!-- Main Rules Section -->
-<section class="py-12 sm:py-16 bg-[#f1f4f4] border-b border-veloborder">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+<!-- 1. HERO ATURAN — Amber Background -->
+<section style="background: var(--butter); border-bottom: 3px solid var(--ink); padding: 52px 0">
+    <div class="wrap">
+        <h1 class="h2" style="font-size: 48px !important; line-height: 1.05 !important; margin-top: 0 !important; max-width: 680px">
+            Aturan balap & kode etik
+        </h1>
+        <p class="lead" style="margin-top: 14px !important; max-width: 640px">
+            Standar keselamatan, perlengkapan, etika peloton, dan tata tertib resmi musim balap Velosha.
+        </p>
+    </div>
+</section>
+
+<!-- 2. KELOMPOK ATURAN -->
+<section style="padding: 56px 0; background: var(--paper)">
+    <div class="wrap" style="display: flex; flex-direction: column; gap: 48px">
         @foreach($groups as $g)
-        <div class="bg-white border border-veloborder velo-box-1 p-6 sm:p-8 shadow-xs space-y-6">
-            <div class="flex items-center gap-3 border-b border-veloborder pb-4">
-                <div class="w-10 h-10 bg-teal-900 text-white flex items-center justify-center velo-box-3 shrink-0 shadow-xs">
-                    <i data-lucide="{{ $g['icon'] ?? 'shield-check' }}" class="w-5 h-5 text-[#EFA96A]"></i>
+        <div class="card" style="padding: 32px 28px; background: var(--card)">
+            <!-- Group Header -->
+            <div style="display: flex; align-items: center; gap: 14px; padding-bottom: 20px; border-bottom: 2.5px solid var(--line); margin-bottom: 24px">
+                <div class="sq" style="width: 48px; height: 48px; border-radius: 10px; background: var(--ink)">
+                    <i data-lucide="{{ $g['icon'] ?? 'shield-check' }}" class="w-5 h-5" style="color: var(--orange)"></i>
                 </div>
                 <div>
-                    <h2 class="text-lg sm:text-xl font-black text-teal-900 tracking-tight">{{ $g['title'] }}</h2>
-                    <p class="text-xs text-velomutedlight font-medium">Ketentuan teknis dan keselamatan kategori ini.</p>
+                    <h2 style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 22px; color: var(--ink); line-height: 1.1">{{ $g['title'] }}</h2>
+                    <p style="font-size: 13px; color: var(--mute); margin-top: 2px">Ketentuan teknis dan keselamatan kategori ini.</p>
                 </div>
             </div>
 
+            <!-- Rule Items Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @foreach($g['items'] as $item)
-                @php($st = $statusStyle[$item['status']] ?? $statusStyle['note'])
-                <div class="border border-veloborder velo-box-1 bg-[#f1f4f4] p-5 hover:border-teal-700 transition space-y-2">
-                    <div class="flex items-center justify-between gap-3">
-                        <h3 class="text-sm font-black text-teal-900">{{ $item['label'] }}</h3>
-                        <span class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 border velo-box-3 shrink-0 {{ $st['class'] }}">
+                @php $st = $statusStyle[$item['status']] ?? $statusStyle['note']; @endphp
+                <div style="border: 2.5px solid var(--ink); border-radius: 10px; background: var(--paper); padding: 20px; transition: transform 0.15s ease, box-shadow 0.15s ease"
+                     onmouseenter="this.style.transform='translate(-2px,-2px)'; this.style.boxShadow='4px 4px 0 var(--ink)'"
+                     onmouseleave="this.style.transform='none'; this.style.boxShadow='none'">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px">
+                        <h3 style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 16px; color: var(--ink)">{{ $item['label'] }}</h3>
+                        <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; padding: 4px 10px; border: 2px solid {{ $st['border'] }}; border-radius: 6px; background: {{ $st['bg'] }}; color: {{ $st['color'] }}; white-space: nowrap; flex: none">
                             {{ $st['label'] }}
                         </span>
                     </div>
-                    <p class="text-xs text-velomutedlight leading-relaxed font-medium">{{ $item['text'] }}</p>
+                    <p style="font-size: 14px; line-height: 1.6; color: var(--mute)">{{ $item['text'] }}</p>
                 </div>
                 @endforeach
             </div>
@@ -61,45 +71,56 @@ $sanksiToneClass = [
     </div>
 </section>
 
-<!-- Sanksi & Penalti Section -->
-<section class="py-16 bg-white border-b border-veloborder">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="max-w-2xl mb-10">
-            <div class="w-10 h-1 bg-race-600 velo-box-1 mb-3"></div>
-            <h2 class="text-2xl sm:text-3xl font-black text-teal-900 tracking-tight">Sanksi &amp; Diskualifikasi Pelanggaran</h2>
-            <p class="text-xs text-velomutedlight mt-2 leading-relaxed">Penegakan regulasi keselamatan demi menjaga sportivitas dan keamanan seluruh rider.</p>
+<!-- 3. SANKSI & DISKUALIFIKASI -->
+<section style="padding: 56px 0; background: var(--paper2)">
+    <div class="wrap">
+        <div style="margin-bottom: 32px">
+            <h2 class="h2" style="font-size: 36px !important">Sanksi & diskualifikasi</h2>
+            <p class="lead" style="margin-top: 10px !important; max-width: 640px">
+                Penegakan aturan demi sportivitas dan keselamatan seluruh rider.
+            </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
             @foreach($content->sanksi_items ?? [] as $s)
-            <div class="p-6 border border-veloborder velo-box-1 bg-white hover:border-teal-700 transition shadow-xs space-y-3">
-                <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 border velo-box-3 {{ $sanksiToneClass[$s['tone'] ?? 'neutral'] ?? $sanksiToneClass['neutral'] }}">
+            @php($tone = $sanksiColors[$s['tone'] ?? 'neutral'] ?? $sanksiColors['neutral'])
+            <div class="card" style="padding: 28px 24px; background: var(--card); display: flex; flex-direction: column; gap: 14px">
+                <span style="display: inline-flex; align-self: flex-start; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 14px; border: 2.5px solid var(--ink); border-radius: 6px; background: {{ $tone['bg'] }}; color: {{ $tone['text'] }}">
                     {{ $s['title'] }}
                 </span>
-                <p class="text-xs text-velomutedlight leading-relaxed font-medium">{{ $s['text'] }}</p>
+                <p style="font-size: 14px; line-height: 1.6; color: var(--mute)">{{ $s['text'] }}</p>
             </div>
             @endforeach
         </div>
 
         @if(!empty($content->sanksi_note))
-        <div class="mt-8 p-4 bg-teal-900 text-white velo-box-1 text-xs leading-relaxed font-medium border border-teal-800">
-            <span class="font-extrabold text-[#EFA96A]">Catatan Keputusan Comisaris:</span> {{ $content->sanksi_note }}
+        <div style="margin-top: 28px; padding: 18px 24px; background: var(--mustard); border: 2.5px solid var(--ink); border-radius: 10px; display: flex; align-items: flex-start; gap: 12px">
+            <i data-lucide="alert-triangle" class="w-5 h-5 flex-none" style="color: var(--ink); margin-top: 2px"></i>
+            <p style="font-size: 14px; line-height: 1.55; color: var(--ink)">
+                <strong>Catatan Keputusan Commissaire:</strong> {{ $content->sanksi_note }}
+            </p>
         </div>
         @endif
     </div>
 </section>
 
-<!-- Bottom CTA -->
-<section class="py-14 bg-[#f1f4f4]">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-5">
-        <div>
-            <h2 class="text-xl font-black text-teal-900 tracking-tight">{{ $content->cta_title ?? 'Sudah Memahami Aturan Balap?' }}</h2>
-            <p class="text-xs text-velomutedlight mt-1 font-medium">{{ $content->cta_desc ?? 'Pilih kategori jarak dan amankan slot pendaftaran Anda sekarang.' }}</p>
+<!-- 4. CTA BAWAH -->
+<section style="padding: 56px 0; background: var(--ink)">
+    <div class="wrap">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px">
+            <div>
+                <h2 style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 28px; color: var(--paper); line-height: 1.15">
+                    {{ $content->cta_title ?? 'Sudah paham aturannya?' }}
+                </h2>
+                <p style="font-size: 15px; color: var(--mute); margin-top: 6px">
+                    {{ $content->cta_desc ?? 'Lihat event yang tersedia dan pilih kategorimu.' }}
+                </p>
+            </div>
+            <a href="{{ $content->cta_url ?? '/events' }}" wire:navigate class="btn text-base">
+                <span>{{ $content->cta_label ?? 'Lihat Semua Race' }}</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
         </div>
-        <a href="{{ $content->cta_url ?? '/events' }}" wire:navigate class="inline-flex items-center justify-center bg-race-600 hover:bg-race-700 text-white font-extrabold px-6 py-3.5 text-xs tracking-wider uppercase velo-box-1 shadow-xs transition shrink-0">
-            <span>{{ $content->cta_label ?? 'Jelajahi Kalender Balap' }}</span>
-            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-        </a>
     </div>
 </section>
 
