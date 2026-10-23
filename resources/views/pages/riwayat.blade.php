@@ -19,7 +19,7 @@
         @if ($archive->isEmpty())
         <div class="text-center py-12 border border-dashed border-veloborderstrong velo-box-1">
             <p class="text-sm text-velomutedlight mb-5">Belum ada balap yang selesai. Jadwal pertama menanti di kalender balap.</p>
-            <a href="{{ route('events.index') }}" wire:navigate class="inline-flex items-center justify-center bg-race-600 hover:bg-race-700 text-white font-semibold px-5 py-2.5 text-xs velo-box-1 shadow-sm transition">
+            <a href="{{ route('events.index') }}" wire:navigate class="inline-flex items-center justify-center bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-semibold px-5 py-2.5 text-xs velo-box-1 shadow-sm transition">
                 Lihat Kalender Balap
             </a>
         </div>

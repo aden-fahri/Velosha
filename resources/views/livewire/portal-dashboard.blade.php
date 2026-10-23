@@ -28,7 +28,7 @@
                         <span>Tiket &amp; BIB Saya</span>
                     </div>
                     @if($statTotal > 0)
-                    <span class="text-[10px] font-extrabold px-2 py-0.5 velo-box-3 {{ $activeTab === 'tickets' ? 'bg-race-600 text-white' : 'bg-teal-100 text-teal-900' }}">{{ $statTotal }}</span>
+                    <span class="text-[10px] font-extrabold px-2 py-0.5 velo-box-3 {{ $activeTab === 'tickets' ? 'bg-[var(--orange)] text-[var(--ink)]' : 'bg-teal-100 text-teal-900' }}">{{ $statTotal }}</span>
                     @endif
                 </button>
 
@@ -71,7 +71,7 @@
         <!-- Footer User Profile & Logout -->
         <div class="p-4 border-t border-veloborder bg-[#f1f4f4]">
             <div class="flex items-center gap-3 mb-3">
-                <div class="w-9 h-9 velo-box-3 bg-race-600 text-white flex items-center justify-center font-black text-xs shadow-xs">
+                <div class="w-9 h-9 velo-box-3 bg-[var(--orange)] text-[var(--ink)] flex items-center justify-center font-black text-xs shadow-xs">
                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                 </div>
                 <div class="min-w-0 flex-1">
@@ -182,7 +182,7 @@
 
                     <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                         <div>
-                            <div class="inline-block text-[10px] font-extrabold tracking-wider text-white bg-race-600 px-2.5 py-1 velo-box-3 mb-3 uppercase">
+                            <div class="inline-block text-[10px] font-extrabold tracking-wider text-[var(--ink)] bg-[var(--orange)] px-2.5 py-1 velo-box-3 mb-3 uppercase">
                                 MUSIM VELOSHA 2026/2027
                             </div>
                             <h2 class="text-2xl sm:text-3xl font-black text-white mb-2 tracking-tight">
@@ -287,7 +287,7 @@
                                 </div>
 
                                 <div class="shrink-0 text-left sm:text-right">
-                                    <div class="bg-race-600 text-white font-black text-2xl sm:text-3xl px-5 py-2.5 velo-box-1 shadow-xs inline-block">
+                                    <div class="bg-[var(--orange)] text-[var(--ink)] font-black text-2xl sm:text-3xl px-5 py-2.5 velo-box-1 shadow-xs inline-block">
                                         {{ $countdown['days'] <= 0 ? 'HARI INI!' : 'H-'.$countdown['days'] }}
                                     </div>
                                     <div class="text-[10px] text-teal-300 font-extrabold uppercase tracking-wider mt-1.5">Menuju Gun Start</div>
@@ -317,7 +317,7 @@
                                     <i data-lucide="calendar-search" class="w-8 h-8"></i>
                                 </div>
                                 <p class="text-xs text-velomutedlight font-medium max-w-sm mx-auto">Kamu belum memiliki pendaftaran balap. Jelajahi kalender balap Velosha untuk mengamankan slot pertamamu!</p>
-                                <a href="{{ route('events.index') }}" wire:navigate class="inline-flex items-center gap-2 bg-race-600 hover:bg-race-700 text-white font-extrabold text-xs px-5 py-2.5 velo-box-1 shadow-xs transition">
+                                <a href="{{ route('events.index') }}" wire:navigate class="inline-flex items-center gap-2 bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-extrabold text-xs px-5 py-2.5 velo-box-1 shadow-xs transition">
                                     <i data-lucide="calendar-days" class="w-4 h-4"></i>
                                     Jelajahi Kalender Balap
                                 </a>
@@ -358,7 +358,7 @@
                                             <span class="text-[10px] font-extrabold bg-race-50 text-race-800 border border-race-200 px-2.5 py-1 velo-box-3 flex items-center gap-1">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-race-500"></span> MENUNGGU BAYAR
                                             </span>
-                                            <a href="{{ route('checkout', ['event' => $regEvent?->slug, 'category' => $reg->event_category_id]) }}" wire:navigate class="bg-race-600 hover:bg-race-700 text-white font-extrabold text-xs px-3.5 py-2 velo-box-1 transition shadow-xs">
+                                            <a href="{{ route('checkout', ['event' => $regEvent?->slug, 'category' => $reg->event_category_id]) }}" wire:navigate class="bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-extrabold text-xs px-3.5 py-2 velo-box-1 transition shadow-xs">
                                                 Bayar Sekarang
                                             </a>
                                         @else
@@ -439,7 +439,7 @@
                         <!-- Filter Tabs -->
                         <div class="flex flex-wrap gap-2">
                             <button type="button" wire:click="filterTickets('all')"
-                                    class="px-4 py-2 text-xs font-extrabold velo-box-3 transition {{ $ticketStatus === 'all' ? 'bg-race-600 text-white shadow-xs' : 'bg-white border border-veloborder text-velomutedlight hover:bg-[#f1f4f4]' }}">
+                                    class="px-4 py-2 text-xs font-extrabold velo-box-3 transition {{ $ticketStatus === 'all' ? 'bg-[var(--orange)] text-[var(--ink)] shadow-xs' : 'bg-white border border-veloborder text-velomutedlight hover:bg-[#f1f4f4]' }}">
                                 Semua Tiket ({{ $statTotal }})
                             </button>
                             <button type="button" wire:click="filterTickets('paid')"
@@ -447,7 +447,7 @@
                                 Lunas ({{ $statPaid }})
                             </button>
                             <button type="button" wire:click="filterTickets('pending')"
-                                    class="px-4 py-2 text-xs font-extrabold velo-box-3 transition {{ $ticketStatus === 'pending' ? 'bg-race-600 text-white shadow-xs' : 'bg-white border border-veloborder text-velomutedlight hover:bg-[#f1f4f4]' }}">
+                                    class="px-4 py-2 text-xs font-extrabold velo-box-3 transition {{ $ticketStatus === 'pending' ? 'bg-[var(--orange)] text-[var(--ink)] shadow-xs' : 'bg-white border border-veloborder text-velomutedlight hover:bg-[#f1f4f4]' }}">
                                 Menunggu Bayar ({{ $statPending }})
                             </button>
                             <button type="button" wire:click="filterTickets('cancelled')"
@@ -521,7 +521,7 @@
                                                 Lihat E-Ticket QR
                                             </a>
                                         @elseif($reg->status === \App\Models\Registration::STATUS_PENDING)
-                                            <a href="{{ route('checkout', ['event' => $regEvent?->slug, 'category' => $reg->event_category_id]) }}" wire:navigate class="bg-race-600 hover:bg-race-700 text-white font-extrabold text-xs px-4 py-2.5 velo-box-1 transition shadow-xs inline-flex items-center gap-2">
+                                            <a href="{{ route('checkout', ['event' => $regEvent?->slug, 'category' => $reg->event_category_id]) }}" wire:navigate class="bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-extrabold text-xs px-4 py-2.5 velo-box-1 transition shadow-xs inline-flex items-center gap-2">
                                                 <i data-lucide="credit-card" class="w-4 h-4"></i>
                                                 Bayar Sekarang
                                             </a>
@@ -569,7 +569,7 @@
                                     <div class="text-xs font-black text-teal-900">
                                         {{ $event->categories->count() }} Kategori Jarak
                                     </div>
-                                    <a href="{{ route('events.show', $event->slug) }}" wire:navigate class="bg-race-600 hover:bg-race-700 text-white font-extrabold text-xs px-4 py-2 velo-box-1 transition shadow-xs">
+                                    <a href="{{ route('events.show', $event->slug) }}" wire:navigate class="bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-extrabold text-xs px-4 py-2 velo-box-1 transition shadow-xs">
                                         Daftar Race
                                     </a>
                                 </div>
@@ -636,7 +636,7 @@
                         </div>
 
                         <div class="pt-4 border-t border-veloborder flex justify-end">
-                            <button type="submit" class="bg-race-600 hover:bg-race-700 text-white font-extrabold text-xs px-6 py-3 velo-box-1 shadow-xs transition flex items-center gap-2">
+                            <button type="submit" class="bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-extrabold text-xs px-6 py-3 velo-box-1 shadow-xs transition flex items-center gap-2">
                                 <i data-lucide="save" class="w-4 h-4"></i>
                                 Simpan Perubahan
                             </button>

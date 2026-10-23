@@ -73,14 +73,21 @@
              x-data="{
                 slide: 0,
                 timer: null,
-                start() { this.timer = setInterval(() => { this.slide = (this.slide + 1) % 3; }, 5000); },
-                stop() { clearInterval(this.timer); },
+                reduced: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+                start() {
+                    if (this.reduced || this.timer) return;
+                    this.timer = setInterval(() => { this.slide = (this.slide + 1) % 3; }, 5000);
+                },
+                stop() { clearInterval(this.timer); this.timer = null; },
                 next() { this.slide = (this.slide + 1) % 3; },
                 prev() { this.slide = (this.slide - 1 + 3) % 3; }
              }"
              x-init="start()"
              @mouseenter="stop()"
-             @mouseleave="start()">
+             @mouseleave="start()"
+             @focusin="stop()"
+             @focusout="start()"
+             @visibilitychange.window="document.hidden ? stop() : start()">
             
             <div class="card" style="position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 14px">
                 <!-- Slide 0: Matahari Terbit & Jalan Pegunungan -->
@@ -165,6 +172,7 @@
 
 <!-- 2. LIVEWIRE RACE CARDS (Katalog Event Terbuka & Mendatang) -->
 <div class="velo-reveal">
+    <h2 class="sr-only">Race mendatang</h2>
     @livewire('race-cards')
 </div>
 

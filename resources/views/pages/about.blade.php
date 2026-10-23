@@ -65,7 +65,7 @@
                 <h2 style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 28px; color: var(--paper); line-height: 1.15">
                     {{ $content->cta_title ?? 'Siap mulai musim 2026?' }}
                 </h2>
-                <p style="font-size: 15px; color: var(--mute); margin-top: 6px">
+                <p style="font-size: 15px; color: var(--paper2); margin-top: 6px">
                     {{ $content->cta_desc ?? 'Daftar sekali, kelola semua race Anda lewat satu portal.' }}
                 </p>
             </div>

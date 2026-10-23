@@ -8,7 +8,7 @@
             <img src="{{ P::photoUrl($photos->first()) }}"
                  alt="{{ $event->title }}"
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-            <div class="absolute bottom-3 left-3 bg-race-600/80 backdrop-blur-sm text-white text-[11px] px-2.5 py-1 velo-box-3 border border-white/20">
+            <div class="absolute bottom-3 left-3 bg-[var(--orange)] backdrop-blur-sm text-[var(--ink)] text-[11px] px-2.5 py-1 velo-box-3 border border-white/20">
                 {{ $event->location_name }}
             </div>
         </div>
@@ -30,7 +30,7 @@
                 <img src="{{ P::photoUrl($photos->get(5) ?? $photos->first()) }}"
                      alt="Foto {{ $event->title }}"
                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                <div class="absolute bottom-2 right-2 bg-race-600 text-white text-[10px] font-semibold px-2 py-1 velo-box-3 flex items-center">
+                <div class="absolute bottom-2 right-2 bg-[var(--orange)] text-[var(--ink)] text-[10px] font-semibold px-2 py-1 velo-box-3 flex items-center">
                     <i data-lucide="image" class="w-3 h-3 mr-1"></i>
                     <span>+{{ $photos->count() - 5 }} Foto Galeri</span>
                 </div>
@@ -41,7 +41,7 @@
     @else
     <div class="h-80 sm:h-96 overflow-hidden bg-velosurface velo-box-1 relative">
         <img src="/images/hero-peloton.jpg" alt="{{ $event->title }}" class="w-full h-full object-cover">
-        <div class="absolute bottom-3 left-3 bg-race-600/80 backdrop-blur-sm text-white text-[11px] px-2.5 py-1 velo-box-3 border border-white/20">
+        <div class="absolute bottom-3 left-3 bg-[var(--orange)] backdrop-blur-sm text-[var(--ink)] text-[11px] px-2.5 py-1 velo-box-3 border border-white/20">
             {{ $event->location_name }}
         </div>
     </div>

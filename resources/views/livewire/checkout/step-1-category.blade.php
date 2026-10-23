@@ -32,7 +32,7 @@
         <button type="button" wire:click="selectCategory({{ $cat->id }})"
             class="w-full text-left p-4 velo-box-3 flex items-center justify-between {{ $categoryId === $cat->id ? 'border-2 border-race-500 bg-race-50/40' : 'border border-veloborderstrong bg-white hover:border-[#93a0a1] cursor-pointer' }}">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 flex items-center justify-center font-bold text-xs velo-box-3 {{ $categoryId === $cat->id ? 'bg-race-600 text-white' : 'bg-velosurfacealt text-teal-700' }}">{{ $cat->code }}</div>
+                <div class="w-10 h-10 flex items-center justify-center font-bold text-xs velo-box-3 {{ $categoryId === $cat->id ? 'bg-[var(--orange)] text-[var(--ink)]' : 'bg-velosurfacealt text-teal-700' }}">{{ $cat->code }}</div>
                 <div>
                     <div class="text-sm font-bold text-teal-900">{{ $cat->name }} ({{ P::distance($cat->distance_km) }})</div>
                     <div class="text-xs text-velomutedlight">Elevasi +{{ P::angka((float) $cat->elevation_gain_m) }}m &middot; COT {{ P::jam((float) $cat->cut_off_hours) }}</div>
@@ -54,7 +54,7 @@
     </div>
 
     @if ($event->categories->isNotEmpty())
-    <button type="button" wire:click="toStep2" class="mt-5 w-full flex items-center justify-center bg-race-600 hover:bg-race-700 text-white font-semibold py-3.5 text-xs velo-box-1 shadow-sm transition">
+    <button type="button" wire:click="toStep2" class="mt-5 w-full flex items-center justify-center bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-semibold py-3.5 text-xs velo-box-1 shadow-sm transition">
         <span>Lanjutkan ke Data Diri</span>
         <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-2"></i>
     </button>
@@ -74,7 +74,7 @@
 
     <div class="border-2 border-race-500 bg-race-50/40 p-4 velo-box-3 flex items-center justify-between">
         <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-race-600 text-white flex items-center justify-center font-bold text-xs velo-box-3">
+            <div class="w-10 h-10 bg-[var(--orange)] text-[var(--ink)] flex items-center justify-center font-bold text-xs velo-box-3">
                 {{ $category->code }}
             </div>
             <div>

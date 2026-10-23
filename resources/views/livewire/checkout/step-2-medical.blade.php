@@ -108,7 +108,7 @@
         <i data-lucide="arrow-left" class="w-3.5 h-3.5 mr-1.5"></i>
         Kembali
     </button>
-    <button type="button" wire:click="toStep3" class="flex items-center justify-center bg-race-600 hover:bg-race-700 text-white font-semibold px-6 py-3 text-xs velo-box-1 shadow-sm transition">
+    <button type="button" wire:click="toStep3" class="flex items-center justify-center bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-semibold px-6 py-3 text-xs velo-box-1 shadow-sm transition">
         <span>Lanjut ke Langkah Pembayaran</span>
         <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-2"></i>
     </button>

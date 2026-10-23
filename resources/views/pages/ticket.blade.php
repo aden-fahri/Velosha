@@ -25,7 +25,7 @@
                 <p class="text-xs text-velomutedlight mb-5">
                     Jelajahi kalender balap Velosha dan temukan kategori jarak yang sesuai dengan target Anda.
                 </p>
-                <a href="{{ route('events.index') }}" class="inline-flex items-center justify-center bg-race-600 hover:bg-race-700 text-white font-semibold px-6 py-3 text-xs velo-box-1 shadow-sm transition">
+                <a href="{{ route('events.index') }}" class="inline-flex items-center justify-center bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-semibold px-6 py-3 text-xs velo-box-1 shadow-sm transition">
                     <i data-lucide="calendar-days" class="w-3.5 h-3.5 mr-2"></i>
                     <span>Jelajahi Kalender Balap</span>
                 </a>
@@ -76,7 +76,7 @@
 
                 <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <a href="{{ route('checkout', ['event' => $registration->category->event->slug, 'category' => $registration->category->id]) }}" wire:navigate
-                       class="flex items-center justify-center bg-race-600 hover:bg-race-700 text-white px-4 py-3 velo-box-1 text-xs font-semibold shadow-xs transition">
+                       class="flex items-center justify-center bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] px-4 py-3 velo-box-1 text-xs font-semibold shadow-xs transition">
                         <i data-lucide="credit-card" class="w-3.5 h-3.5 mr-2"></i>
                         <span>Bayar Sekarang</span>
                     </a>
@@ -125,7 +125,7 @@
                     <div>
                         <div class="flex items-center space-x-2.5 mb-2">
                             <img src="/images/logo-velosha.png" alt="Velosha" class="h-7 w-auto object-contain brightness-125" />
-                            <span class="text-[10px] font-black tracking-widest uppercase bg-race-600 text-white px-2 py-0.5 velo-box-3">OFFICIAL RACE PASS</span>
+                            <span class="text-[10px] font-black tracking-widest uppercase bg-[var(--orange)] text-[var(--ink)] px-2 py-0.5 velo-box-3">OFFICIAL RACE PASS</span>
                         </div>
                         <h2 class="text-xl sm:text-2xl font-black tracking-tight text-white">
                             {{ $event->title }}
@@ -235,12 +235,12 @@
                 </button>
 
                 @if (Auth::user()?->isAdmin() || Auth::user()?->isPenyelenggara())
-                <a href="/admin/registrations" class="flex items-center justify-center px-4 py-3 bg-race-600 hover:bg-race-700 text-white velo-box-1 text-xs font-extrabold shadow-xs transition">
+                <a href="/admin/registrations" class="flex items-center justify-center px-4 py-3 bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] velo-box-1 text-xs font-extrabold shadow-xs transition">
                     <span>Kembali ke Panel Pengelola</span>
                     <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                 </a>
                 @else
-                <a href="{{ route('dashboard') }}" class="flex items-center justify-center px-4 py-3 bg-race-600 hover:bg-race-700 text-white velo-box-1 text-xs font-extrabold shadow-xs transition">
+                <a href="{{ route('dashboard') }}" class="flex items-center justify-center px-4 py-3 bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] velo-box-1 text-xs font-extrabold shadow-xs transition">
                     <span>Buka Dashboard Peserta</span>
                     <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                 </a>

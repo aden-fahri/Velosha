@@ -39,7 +39,7 @@ class MizuChatTest extends TestCase
 
         $this->get('/')
             ->assertOk()
-            ->assertSee('Tanya Mizu');
+            ->assertSee('Asisten Balap Velosha');
     }
 
     public function test_widget_renders_on_help_page(): void
@@ -57,7 +57,7 @@ class MizuChatTest extends TestCase
 
         $this->get('/')
             ->assertOk()
-            ->assertDontSee('Tanya Mizu');
+            ->assertDontSee('Asisten Balap Velosha');
     }
 
     public function test_asking_a_question_sends_history_and_shows_answer(): void

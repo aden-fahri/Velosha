@@ -16,7 +16,7 @@
         @if (is_array($element))
             @foreach ($element as $page => $url)
                 @if ($page === $paginator->currentPage())
-                    <span aria-current="page" class="velo-box-1 border border-race-600 bg-race-600 text-white font-bold px-3.5 py-2">{{ $page }}</span>
+                    <span aria-current="page" class="velo-box-1 border border-race-600 bg-[var(--orange)] text-[var(--ink)] font-bold px-3.5 py-2">{{ $page }}</span>
                 @else
                     <button type="button" wire:click="gotoPage({{ $page }})" class="velo-box-1 border border-veloborderstrong bg-white text-teal-700 hover:bg-velosurfacealt px-3.5 py-2 transition">{{ $page }}</button>
                 @endif
