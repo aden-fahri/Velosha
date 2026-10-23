@@ -20,7 +20,7 @@
 
             <form action="{{ route('verification.send') }}" method="POST" class="space-y-3">
                 @csrf
-                <button type="submit" class="w-full bg-race-600 hover:bg-race-700 text-white font-semibold py-2.5 text-xs velo-box-1 shadow-sm transition">
+                <button type="submit" class="w-full bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-semibold py-2.5 text-xs velo-box-1 shadow-sm transition">
                     Kirim Ulang Email Verifikasi
                 </button>
             </form>

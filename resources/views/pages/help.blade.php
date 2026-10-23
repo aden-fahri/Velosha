@@ -94,7 +94,7 @@ $faqGroups = $content->faq_groups ?? [];
                 <h2 style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 28px; color: var(--paper); line-height: 1.15">
                     {{ $content->cta_title ?? 'Masih ada yang mengganjal?' }}
                 </h2>
-                <p style="font-size: 15px; color: var(--mute); margin-top: 6px">
+                <p style="font-size: 15px; color: var(--paper2); margin-top: 6px">
                     {{ $content->cta_desc ?? 'Tim kami siap membantu setiap hari kerja, 09.00–18.00 WIB.' }}
                 </p>
             </div>

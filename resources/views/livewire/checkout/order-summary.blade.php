@@ -34,7 +34,7 @@
                 <span class="font-medium text-emerald-700">Termasuk (Gratis)</span>
             </div>
             <div class="flex justify-between text-velomutedlight">
-                <span>Biaya Layanan Midtrans</span>
+                <span>Biaya Layanan</span>
                 <span class="font-medium text-teal-900">Rp {{ P::angka((float) \App\Livewire\Checkout::SERVICE_FEE) }}</span>
             </div>
 
@@ -74,7 +74,7 @@
             <div class="text-lg font-black font-mono text-race-600 tracking-wider" x-text="String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0')">15:00</div>
         </div>
 
-        <button type="button" wire:click="openPayment" class="mt-4 w-full flex items-center justify-center bg-race-600 hover:bg-race-700 text-white font-semibold py-3.5 text-xs velo-box-1 shadow-sm transition">
+        <button type="button" wire:click="openPayment" class="mt-4 w-full flex items-center justify-center bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-semibold py-3.5 text-xs velo-box-1 shadow-sm transition">
             <i data-lucide="lock" class="w-3.5 h-3.5 mr-2"></i>
             <span>Lanjutkan Pembayaran</span>
         </button>

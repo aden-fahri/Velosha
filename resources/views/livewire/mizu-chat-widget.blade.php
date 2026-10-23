@@ -69,7 +69,7 @@
             @foreach ($messages as $message)
                 @if ($message['role'] === 'user')
                 <div class="flex justify-end">
-                    <div class="max-w-[85%] bg-[#DE7119] text-white p-2.5 velo-box-3 text-xs leading-relaxed">
+                    <div class="max-w-[85%] bg-[#DE7119] text-[var(--ink)] p-2.5 velo-box-3 text-xs leading-relaxed">
                         {{ $message['text'] }}
                     </div>
                 </div>
@@ -131,7 +131,7 @@
     {{-- Tombol pemicu: posisi & lebar terkunci (label tetap, hanya ikon yang berubah) --}}
     <button type="button" @click="open = !open; if (open) $dispatch('mizu-opened')"
             :aria-expanded="open.toString()"
-            aria-label="Buka atau tutup asisten Mizu"
+            aria-label="Tanya Mizu"
             class="flex items-center gap-2 bg-teal-900 hover:bg-teal-800 text-white px-4 py-3 velo-box-1 shadow-lg transition hover:-translate-y-0.5 whitespace-nowrap">
         <i x-show="!open" data-lucide="bot" class="w-4 h-4"></i>
         <i x-show="open" data-lucide="x" class="w-4 h-4" x-cloak></i>

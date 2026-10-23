@@ -36,7 +36,7 @@
                 <div class="flex-1 h-0.5 mx-2 sm:mx-4 {{ $step >= $number ? 'bg-race-500' : 'bg-veloborder' }}"></div>
                 @endif
                 <div class="flex items-center gap-2.5 shrink-0">
-                    <span class="w-8 h-8 flex items-center justify-center velo-box-3 text-xs font-black transition {{ $step > $number ? 'bg-emerald-600 text-white' : ($step === $number ? 'bg-race-600 text-white ring-4 ring-race-100' : 'bg-velosurface text-velomutedlight border border-veloborder') }}">
+                    <span class="w-8 h-8 flex items-center justify-center velo-box-3 text-xs font-black transition {{ $step > $number ? 'bg-emerald-600 text-[var(--ink)]' : ($step === $number ? 'bg-[var(--orange)] text-[var(--ink)] ring-4 ring-race-100' : 'bg-velosurface text-velomutedlight border border-veloborder') }}">
                         @if ($step > $number)
                         <i data-lucide="check" class="w-4 h-4"></i>
                         @else

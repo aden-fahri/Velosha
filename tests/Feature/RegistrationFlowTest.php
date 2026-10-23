@@ -359,7 +359,8 @@ class RegistrationFlowTest extends TestCase
         $this->get('/ticket/'.$registration->id)
             ->assertOk()
             ->assertSee($registration->bib_number)
-            ->assertSee($registration->participant_name);
+            ->assertSee($registration->participant_name)
+            ->assertDontSee('/admin/registrations', false);
 
         $this->get('/ticket')->assertOk()->assertSee($registration->bib_number);
 
@@ -367,7 +368,9 @@ class RegistrationFlowTest extends TestCase
         $this->actingAs($other)->get('/ticket/'.$registration->id)->assertForbidden();
 
         $admin = User::factory()->create(['role' => 'admin']);
-        $this->actingAs($admin)->get('/ticket/'.$registration->id)->assertOk();
+        $this->actingAs($admin)->get('/ticket/'.$registration->id)
+            ->assertOk()
+            ->assertSee('/admin/registrations', false);
     }
 
     public function test_ticket_page_without_registration_shows_empty_state(): void

@@ -145,7 +145,7 @@ class AdminWidgetDataTest extends TestCase
     {
         $this->actingAs(User::factory()->create(['role' => User::ROLE_ADMIN]));
 
-        $event = Event::factory()->create();
+        $event = Event::factory()->create(['title' => 'Borobudur Gran Fondo']);
         EventCategory::create([
             'event_id' => $event->id,
             'name' => 'Medio Fondo',

@@ -18,10 +18,10 @@
 
             <!-- Kategori -->
             <div>
-                <h4 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4 flex items-center gap-2">
+                <h3 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4 flex items-center gap-2">
                     <span class="w-2.5 h-2.5 bg-[var(--orange)] rotate-45 border border-[var(--paper)]" aria-hidden="true"></span>
                     {{ $footer->kategori_title }}
-                </h4>
+                </h3>
                 <ul class="space-y-2.5 text-sm">
                     @foreach (($footer->kategori_links ?? []) as $link)
                         <li>
@@ -35,10 +35,10 @@
 
             <!-- Bantuan -->
             <div>
-                <h4 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4 flex items-center gap-2">
+                <h3 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4 flex items-center gap-2">
                     <span class="w-2.5 h-2.5 bg-[var(--orange)] rotate-45 border border-[var(--paper)]" aria-hidden="true"></span>
                     {{ $footer->bantuan_title }}
-                </h4>
+                </h3>
                 <ul class="space-y-2.5 text-sm">
                     @foreach (($footer->bantuan_links ?? []) as $link)
                         @unless (auth()->check() && (
@@ -57,10 +57,10 @@
 
             <!-- Pembayaran -->
             <div>
-                <h4 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4 flex items-center gap-2">
+                <h3 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4 flex items-center gap-2">
                     <span class="w-2.5 h-2.5 bg-[var(--orange)] rotate-45 border border-[var(--paper)]" aria-hidden="true"></span>
                     {{ $footer->payment_title }}
-                </h4>
+                </h3>
                 <div class="grid grid-cols-2 gap-2 text-[12px] font-bold">
                     @foreach (($footer->payment_methods ?? []) as $method)
                         <div class="border-[2px] border-[var(--line)] bg-[var(--paper)]/10 text-[var(--paper)] p-2.5 text-center rounded-lg">

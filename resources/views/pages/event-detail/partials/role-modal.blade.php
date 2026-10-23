@@ -8,7 +8,7 @@
      class="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white max-w-md w-full velo-box-1 border border-veloborderstrong shadow-2xl overflow-hidden"
          @click.stop>
-        <div class="bg-race-600 text-white px-5 py-3.5 flex justify-between items-center">
+        <div class="bg-[var(--orange)] text-[var(--ink)] px-5 py-3.5 flex justify-between items-center">
             <div class="flex items-center space-x-2">
                 <i data-lucide="alert-triangle" class="w-4 h-4"></i>
                 <span class="font-extrabold text-sm tracking-tight">AKUN TIDAK SESUAI</span>
@@ -27,7 +27,7 @@
                 Untuk mendaftar race, silakan keluar dan masuk kembali dengan akun Peserta Anda.
             </p>
             <div class="flex flex-col sm:flex-row gap-2 pt-1">
-                <button type="button" @click="roleWarning = false" class="flex-1 bg-race-600 hover:bg-race-700 text-white font-semibold py-3 text-xs velo-box-1 shadow-sm transition">
+                <button type="button" @click="roleWarning = false" class="flex-1 bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-semibold py-3 text-xs velo-box-1 shadow-sm transition">
                     Mengerti
                 </button>
                 <form action="{{ route('logout') }}" method="POST" class="flex-1">

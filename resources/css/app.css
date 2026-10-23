@@ -5,6 +5,30 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
+@font-face {
+    font-family: 'Bricolage Grotesque';
+    font-style: normal;
+    font-weight: 200 800;
+    font-display: swap;
+    src: url('/fonts/velosha/bricolage-grotesque-latin-wght-normal.woff2') format('woff2-variations');
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('/fonts/velosha/inter-latin-wght-normal.woff2') format('woff2-variations');
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/velosha/jetbrains-mono-latin-700-normal.woff2') format('woff2');
+}
+
 :root {
     --ink: #10282E;
     --paper: #FBF4E6;
@@ -19,9 +43,9 @@
     --pine-l: #D5EBD9;
     --berry: #9B3D5A;
     --berry-l: #F2D3DC;
-    --red: #C23B22;
+    --red: #A02F1A;
     --red-l: #F8D9D2;
-    --mute: #5B6B6F;
+    --mute: #56666A;
     --line: #E2D3B3;
 
     --livewire-progress-bar-color: #DE7119;
@@ -45,9 +69,9 @@
     --color-pine-l: #D5EBD9;
     --color-berry: #9B3D5A;
     --color-berry-l: #F2D3DC;
-    --color-red: #C23B22;
+    --color-red: #A02F1A;
     --color-red-l: #F8D9D2;
-    --color-mute: #5B6B6F;
+    --color-mute: #56666A;
     --color-line: #E2D3B3;
 
     --color-primary: #10282E;
@@ -56,10 +80,15 @@
     --color-velosurface: #FBF4E6;
     --color-velosurfacealt: #F3E7CF;
     --color-veloborder: #10282E;
-    --color-velomuted: #5B6B6F;
+    --color-velomuted: #56666A;
     --color-race-500: #DE7119;
     --color-race-600: #DE7119;
     --color-race-700: #B2590F;
+}
+
+html,
+body {
+    overflow-x: clip;
 }
 
 body {
@@ -69,6 +98,24 @@ body {
     font-family: 'Inter', system-ui, sans-serif;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+}
+
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 16px;
+    z-index: 100;
+    padding: 10px 16px;
+    border: 2.5px solid var(--ink);
+    border-radius: 8px;
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.skip-link:focus {
+    top: 16px;
 }
 
 h1, h2, h3, h4, .disp, .font-heading {
@@ -327,10 +374,20 @@ h1, h2, h3, h4, .disp, .font-heading {
     font-size: 20px;
     letter-spacing: 0.02em;
     text-transform: uppercase;
-    animation: band 28s linear infinite;
 }
-.band:hover .band-in {
+.band:hover .band-in,
+.band:focus-within .band-in {
     animation-play-state: paused;
+}
+@media (prefers-reduced-motion: no-preference) {
+    .band-in {
+        animation: band 40s linear infinite;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .band-in {
+        animation: none;
+    }
 }
 .band .sep {
     width: 12px;
@@ -384,8 +441,15 @@ h1, h2, h3, h4, .disp, .font-heading {
     from { transform: translateY(0); }
     to { transform: translateY(-8px); }
 }
-.float {
-    animation: v-bob 2.6s ease-in-out infinite alternate;
+@media (prefers-reduced-motion: no-preference) {
+    .float {
+        animation: v-bob 2.6s ease-in-out infinite alternate;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .float {
+        animation: none;
+    }
 }
 
 [x-cloak] { display: none !important; }

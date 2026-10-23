@@ -19,8 +19,8 @@ class StaticContentPagesTest extends TestCase
         $response = $this->get('/about');
 
         $response->assertOk();
-        $response->assertSee('Tentang Kami');
-        $response->assertSee('Kami Menghidupkan Budaya Sepeda di Sini');
+        $response->assertSee('Tentang Velosha');
+        $response->assertSee('Platform Registrasi Balap Sepeda Indonesia');
         $response->assertSee('Nilai Utama');
         $response->assertSee('Siap mulai musim 2026?');
         $response->assertDontSee('Sirkuit Resmi');
@@ -32,9 +32,9 @@ class StaticContentPagesTest extends TestCase
         $response = $this->get('/rule');
 
         $response->assertOk();
-        $response->assertSee('Aturan Balap');
+        $response->assertSee('Aturan balap & kode etik', false);
         $response->assertSee('Kendaraan');
-        $response->assertSee('Diskualifikasi Pelanggaran');
+        $response->assertSee('Sanksi & diskualifikasi', false);
         $response->assertSee('Seluruh keputusan Race Comisaris');
     }
 
@@ -43,8 +43,8 @@ class StaticContentPagesTest extends TestCase
         $response = $this->get('/help');
 
         $response->assertOk();
-        $response->assertSee('Help Center');
-        $response->assertSee('Pintasan Kontak');
+        $response->assertSee('Pusat bantuan');
+        $response->assertSee('WhatsApp');
         $response->assertSee('Bagaimana cara mendaftar?');
         $response->assertSee('Istilah Sepeda');
         $response->assertSee('Apa itu Cut-Off Time (COT)?');
@@ -64,6 +64,16 @@ class StaticContentPagesTest extends TestCase
         $response->assertSee('Judul Manifesto Dari Database');
         $response->assertSee('CTA Khusus Dari Database');
         $response->assertDontSee('Kami Menghidupkan Budaya Sepeda di Sini');
+    }
+
+    public function test_rule_page_renders_ampersand_as_single_escaped_entity(): void
+    {
+        $response = $this->get('/rule');
+
+        $response->assertOk();
+        $response->assertSee('Aturan Balap & Kode Etik');
+        $response->assertSee('Kendaraan & Peralatan');
+        $response->assertDontSee('&amp;amp;', false);
     }
 
     public function test_rule_page_uses_content_from_database(): void
@@ -148,13 +158,13 @@ class StaticContentPagesTest extends TestCase
         $this->assertSame('public', config('filament.default_filesystem_disk'));
     }
 
-    public function test_home_hero_shows_ellipse_haze_layers(): void
+    public function test_home_hero_uses_the_redesigned_illustration(): void
     {
         $response = $this->get('/');
 
         $response->assertOk();
-        $response->assertSee('/images/ellipse-9.png');
-        $response->assertSee('/images/ellipse-10.png');
-        $response->assertSee('/images/ellipse-11.png');
+        $response->assertSee('Siap gowes');
+        $response->assertSee('/images/hero/rider_final.png', false);
+        $response->assertSee('Cari event');
     }
 }

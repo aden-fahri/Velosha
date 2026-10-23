@@ -124,7 +124,7 @@
                                 <span class="text-[10px] uppercase tracking-wider text-velomuted font-semibold block">Mulai Dari</span>
                                 <span class="text-base font-extrabold text-teal-900">Rp {{ $card['price'] }}</span>
                             </div>
-                            <a href="{{ $card['url'] }}" wire:navigate class="inline-flex items-center text-xs font-semibold text-white bg-race-600 hover:bg-race-700 px-4 py-2.5 velo-box-1 transition">
+                            <a href="{{ $card['url'] }}" wire:navigate class="inline-flex items-center text-xs font-semibold text-[var(--ink)] bg-[var(--orange)] hover:bg-[var(--orange-l)] px-4 py-2.5 velo-box-1 transition">
                                 <span>Detail &amp; Daftar</span>
                                 <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
                             </a>
@@ -138,7 +138,7 @@
                     </div>
                     <h3 class="text-base font-bold text-teal-900 mb-1.5">Tidak ada race yang cocok</h3>
                     <p class="text-xs text-velomutedlight max-w-sm mx-auto mb-6">Coba ubah kata kunci atau filter lain, atau lihat seluruh kalender balap.</p>
-                    <button type="button" wire:click="resetFilters" class="inline-flex items-center text-xs font-semibold text-white bg-race-600 hover:bg-race-700 px-4 py-2.5 velo-box-1 transition">
+                    <button type="button" wire:click="resetFilters" class="inline-flex items-center text-xs font-semibold text-[var(--ink)] bg-[var(--orange)] hover:bg-[var(--orange-l)] px-4 py-2.5 velo-box-1 transition">
                         <span>Reset Filter</span>
                         <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 ml-1"></i>
                     </button>

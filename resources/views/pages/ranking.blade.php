@@ -40,7 +40,7 @@
                 ['3', 'Andi Saputra', '03:04:57', '22 km/h', 'bg-velosurface', 'text-teal-900'],
             ] as $p)
             <div class="border velo-box-1 p-6 flex flex-col items-center text-center {{ $p[5] === 'text-white' ? 'bg-teal-700 border-teal-800' : 'bg-white border-veloborder' }}">
-                <div class="w-12 h-12 {{ $p[5] === 'text-white' ? 'bg-race-400 text-[#2E343B]' : 'bg-race-500 text-white' }} text-sm font-black flex items-center justify-center velo-box-1 mb-4">{{ $p[0] }}</div>
+                <div class="w-12 h-12 {{ $p[5] === 'text-[var(--ink)]' ? 'bg-race-400 text-[#2E343B]' : 'bg-[var(--orange)] text-[var(--ink)]' }} text-sm font-black flex items-center justify-center velo-box-1 mb-4">{{ $p[0] }}</div>
                 <div class="text-sm font-extrabold mb-1">{{ $p[1] }}</div>
                 <div class="font-mono text-xl font-black {{ $p[5] === 'text-white' ? 'text-race-400' : 'text-race-700' }}">{{ $p[2] }}</div>
                 <div class="text-[11px] {{ $p[5] === 'text-white' ? 'text-teal-100' : 'text-velomutedlight' }} mt-2">Rata-rata {{ $p[3] }}</div>
@@ -73,7 +73,7 @@
                     </thead>
                     <tbody class="divide-y divide-velosurface">
                         @foreach([
-                            [1, 'Rizky Pratama', 'Gran Fondo', '02:58:44', '43.7 km/h', 'bg-race-500 text-white'],
+                            [1, 'Rizky Pratama', 'Gran Fondo', '02:58:44', '43.7 km/h', 'bg-[var(--orange)] text-[var(--ink)]'],
                             [2, 'Bagas Wicaksono', 'Gran Fondo', '03:01:12', '43.1 km/h', 'bg-velosurfacealt text-teal-800'],
                             [3, 'Andi Saputra', 'Gran Fondo', '03:04:57', '42.5 km/h', 'bg-velosurfacealt text-teal-800'],
                             [4, 'Dimas Anggara', 'Gran Fondo', '03:09:33', '41.9 km/h', 'bg-velosurfacealt text-teal-800'],
@@ -115,7 +115,7 @@
             <h2 class="text-xl font-extrabold text-teal-900 tracking-tight">Ingin masuk leaderboard?</h2>
             <p class="text-xs text-velomutedlight mt-1">Daftar event berikutnya sebelum kuota kelas habis.</p>
         </div>
-        <a href="/events" class="inline-flex items-center justify-center bg-race-500 hover:bg-race-600 text-white font-semibold px-6 py-3.5 text-xs tracking-wider uppercase velo-box-1 transition shrink-0">
+        <a href="/events" class="inline-flex items-center justify-center bg-[var(--orange)] hover:bg-[var(--orange)] text-[var(--ink)] font-semibold px-6 py-3.5 text-xs tracking-wider uppercase velo-box-1 transition shrink-0">
             <span>Lihat Semua Race</span>
             <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
         </a>

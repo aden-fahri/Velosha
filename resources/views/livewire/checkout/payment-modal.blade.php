@@ -4,7 +4,7 @@
 <div class="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" wire:click="closePayment">
     <div class="bg-white max-w-md w-full velo-box-1 border border-veloborderstrong shadow-2xl overflow-hidden velo-modal-enter" @click.stop>
         <!-- Snap Header -->
-        <div class="bg-race-600 text-white px-5 py-3.5 flex justify-between items-center border-b border-race-500">
+        <div class="bg-[var(--orange)] text-[var(--ink)] px-5 py-3.5 flex justify-between items-center border-b border-race-500">
             <div class="flex items-center space-x-2">
                 <span class="font-extrabold text-sm tracking-tight text-white">MIDTRANS SNAP</span>
                 <span class="text-[10px] bg-white/20 px-1.5 py-0.5 velo-box-3 font-mono">SIMULATION</span>
