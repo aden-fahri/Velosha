@@ -6,21 +6,19 @@
     <title>{{ $title ?? 'Velosha' }} — Platform Maraton & Balap Sepeda Indonesia</title>
     <meta name="description" content="Velosha adalah platform kurasi dan registrasi maraton sepeda endurance, Gran Fondo, dan cycling experience terdepan di Indonesia.">
 
-    <!-- Fonts: Inter -->
+    <!-- Fonts: Bricolage Grotesque, Inter, JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
 
-    <!-- Tailwind CSS (Vite build — single source of truth, token & keyframes di resources/css/app.css) -->
-
-    <!-- Lucide Icons (self-hosted — tanpa dependensi CDN saat render) -->
+    <!-- Lucide Icons -->
     <script src="{{ asset('js/lucide.min.js') }}"></script>
 
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
 </head>
-<body class="min-h-screen flex flex-col bg-velosurface text-teal-900 selection:bg-teal-700 selection:text-white">
+<body class="vs min-h-screen flex flex-col bg-[var(--paper)] text-[var(--ink)] selection:bg-[var(--mustard)] selection:text-[var(--ink)]">
 @php($nav = $nav ?? true)
 
     @if ($nav)

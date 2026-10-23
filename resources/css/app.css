@@ -5,256 +5,387 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-@theme {
-    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    --color-primary: #0A353E;
-    --color-primary-hover: #0E4B57;
-    --color-primary-subtle: #F0F7F7;
-    --color-surface: #FFFFFF;
-    --color-surface-subtle: #F9FAFB;
-    --color-surface-muted: #F3F4F6;
-    --color-border: #E5E7EB;
-    --color-border-dark: #D1D5DB;
-    --color-text-main: #111827;
-    --color-text-muted: #6B7280;
-    --color-success: #065F46;
-    --color-success-bg: #ECFDF5;
-    --color-danger: #991B1B;
-    --color-danger-bg: #FEF2F2;
-
-    /* Brand: Amber #DE7119 — race ramp */
-    --color-race-50: #FDF3E9;
-    --color-race-100: #FAE3CD;
-    --color-race-200: #F5C79B;
-    --color-race-300: #EFA96A;
-    --color-race-400: #E58F42;
-    --color-race-500: #DE7119;
-    --color-race-600: #B2590F;
-    --color-race-700: #A0520C;
-    --color-race-800: #7D400E;
-    --color-race-900: #5D320C;
-
-    /* Brand: Teal ramp (overrides Tailwind defaults) */
-    --color-teal-50: #F0F7F7;
-    --color-teal-100: #DBEFEF;
-    --color-teal-200: #B6DFDF;
-    --color-teal-300: #8ACFCF;
-    --color-teal-400: #4CBCBC;
-    --color-teal-500: #18B0B0;
-    --color-teal-600: #0E7C7E;
-    --color-teal-700: #116979;
-    --color-teal-800: #0E4B57;
-    --color-teal-900: #0A353E;
-    --color-teal-950: #051C22;
-
-    /* Warm neutral ink ramp */
-    --color-velomuted: #5f6a70;
-    --color-velomutedlight: #556066;
-    --color-velosurface: #dee3e2;
-    --color-velosurfacealt: #f1f4f4;
-    --color-veloborder: #d5d9d8;
-    --color-veloborderstrong: #b8bfbe;
-    --color-velogreen: #065F46;
-}
-
-/* Livewire progress bar (wire:navigate & request) — brand oren, default #29d */
 :root {
+    --ink: #10282E;
+    --paper: #FBF4E6;
+    --paper2: #F3E7CF;
+    --butter: #F8E3B5;
+    --card: #FFFDF8;
+    --orange: #DE7119;
+    --orange-d: #B2590F;
+    --orange-l: #F6B777;
+    --mustard: #F4BE3F;
+    --pine: #1F6F4A;
+    --pine-l: #D5EBD9;
+    --berry: #9B3D5A;
+    --berry-l: #F2D3DC;
+    --red: #C23B22;
+    --red-l: #F8D9D2;
+    --mute: #5B6B6F;
+    --line: #E2D3B3;
+
     --livewire-progress-bar-color: #DE7119;
 }
 
-/* Custom architectural utilities */
-.card-outer {
-    background-color: #FFFFFF;
-    border: 1px solid #E5E7EB;
-    border-radius: 1px;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+@theme {
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-heading: 'Bricolage Grotesque', 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+    --color-ink: #10282E;
+    --color-paper: #FBF4E6;
+    --color-paper2: #F3E7CF;
+    --color-butter: #F8E3B5;
+    --color-card: #FFFDF8;
+    --color-orange: #DE7119;
+    --color-orange-d: #B2590F;
+    --color-orange-l: #F6B777;
+    --color-mustard: #F4BE3F;
+    --color-pine: #1F6F4A;
+    --color-pine-l: #D5EBD9;
+    --color-berry: #9B3D5A;
+    --color-berry-l: #F2D3DC;
+    --color-red: #C23B22;
+    --color-red-l: #F8D9D2;
+    --color-mute: #5B6B6F;
+    --color-line: #E2D3B3;
+
+    --color-primary: #10282E;
+    --color-primary-hover: #1F6F4A;
+    --color-surface: #FFFDF8;
+    --color-velosurface: #FBF4E6;
+    --color-velosurfacealt: #F3E7CF;
+    --color-veloborder: #10282E;
+    --color-velomuted: #5B6B6F;
+    --color-race-500: #DE7119;
+    --color-race-600: #DE7119;
+    --color-race-700: #B2590F;
 }
 
-.card-inner {
-    background-color: #FFFFFF;
-    border: 1px solid #E5E7EB;
-    border-radius: 3px;
-}
-
-.btn-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #0A353E;
-    color: #FFFFFF;
-    font-weight: 500;
-    border: 1px solid #0A353E;
-    border-radius: 1px;
-    padding: 0.625rem 1.25rem;
-    transition: all 0.15s ease-in-out;
-}
-.btn-primary:hover {
-    background-color: #0E4B57;
-    border-color: #0E4B57;
-}
-
-.btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #FFFFFF;
-    color: #111827;
-    font-weight: 500;
-    border: 1px solid #D1D5DB;
-    border-radius: 1px;
-    padding: 0.625rem 1.25rem;
-    transition: all 0.15s ease-in-out;
-}
-.btn-secondary:hover {
-    background-color: #F9FAFB;
-    border-color: #9CA3AF;
-}
-
-.badge-tag {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.2rem 0.55rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.025em;
-    text-transform: uppercase;
-    border-radius: 3px;
-}
-
-/* ===== Base body (dipindahkan dari layouts/app.blade.php) ===== */
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    color: #0A353E;
-    background-color: #dee3e2;
-    background-image: url("/images/patterns/topo.svg");
-    background-size: 480px;
+    margin: 0;
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
 }
 
-/* Progress bar wire:navigate — lebih tebal, oranye brand */
-html #nprogress .bar {
-    height: 4px;
+h1, h2, h3, h4, .disp, .font-heading {
+    font-family: 'Bricolage Grotesque', 'Inter', sans-serif;
+    letter-spacing: -0.02em;
 }
 
-/* Strict Design Rules: Outer 1px, Nested Inner 3px, No Capsules */
-.velo-box-1 {
-    border-radius: 1px !important;
+/* Judul Seksi Kartun Screen-Print Sesuai Mockup */
+.h2 {
+    font-family: 'Bricolage Grotesque', sans-serif !important;
+    font-size: 46px !important;
+    font-weight: 800 !important;
+    line-height: 1.04 !important;
+    letter-spacing: -0.03em !important;
+    color: var(--ink);
+    margin: 0;
 }
-.velo-box-3 {
-    border-radius: 3px !important;
+.h3 {
+    font-family: 'Bricolage Grotesque', sans-serif !important;
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    line-height: 1.15 !important;
+    color: var(--ink);
+    margin: 0;
 }
-
-/* Scrollbar warm gray */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+.lead {
+    font-size: 18px !important;
+    line-height: 1.55 !important;
+    color: var(--mute);
 }
-::-webkit-scrollbar-track {
-    background: #dee3e2;
-}
-::-webkit-scrollbar-thumb {
-    background: #b8bfbe;
-    border-radius: 1px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #93a0a1;
-}
-
-/* Reveal on scroll: fade + slide-up per section */
-.velo-reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-}
-.velo-reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
+.disp {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    letter-spacing: -0.02em;
 }
 
-/* Modal enter: fade + zoom (pengganti plugin tailwindcss-animate) */
-@keyframes veloModalEnter {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-}
-.velo-modal-enter {
-    animation: veloModalEnter 0.15s ease-out;
+.mono {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
 }
 
-/* Page transition: blur antar halaman (wire:navigate) */
-@keyframes veloPageLeave {
-    from { opacity: 1; filter: blur(0); }
-    to { opacity: 0.3; filter: blur(6px); }
+.wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
 }
-@keyframes veloPageEnter {
-    from { opacity: 0.3; filter: blur(6px); }
-    to { opacity: 1; filter: blur(0); }
-}
-body.velo-nav-leaving > header,
-body.velo-nav-leaving > main,
-body.velo-nav-leaving > footer {
-    animation: veloPageLeave 0.25s ease-in forwards;
-}
-body.velo-nav-entering > header,
-body.velo-nav-entering > main,
-body.velo-nav-entering > footer {
-    animation: veloPageEnter 0.35s ease-out;
+@media (min-width: 640px) {
+    .wrap {
+        padding: 0 32px;
+    }
 }
 
-/* Korden banner abu bertekstur — muncul sesaat selama pindah halaman */
-body.velo-nav-leaving::before,
-body.velo-nav-entering::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
+/* 1. Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 52px;
+    padding: 0 24px;
+    border: 2.5px solid var(--ink);
+    border-radius: 10px;
+    background: var(--orange);
+    color: var(--ink);
+    font-family: 'Bricolage Grotesque', 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    box-shadow: 4px 4px 0 var(--ink);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    white-space: nowrap;
+}
+.btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--ink);
+}
+.btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 var(--ink);
+}
+.btn:focus-visible, a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 3px solid var(--mustard);
+    outline-offset: 2px;
+}
+.btn-sm {
+    height: 44px;
+    padding: 0 18px;
+    font-size: 14px;
+    box-shadow: 3px 3px 0 var(--ink);
+}
+.btn-pine {
+    background: var(--pine);
+    color: #ffffff;
+}
+.btn-ghost {
+    background: var(--card);
+    color: var(--ink);
+}
+.btn-ink {
+    background: var(--ink);
+    color: var(--paper);
+    box-shadow: 4px 4px 0 var(--orange);
+}
+.btn-mustard {
+    background: var(--mustard);
+    color: var(--ink);
+}
+.btn-block {
+    display: flex;
+    width: 100%;
+}
+
+/* 2. Cards */
+.card {
+    background: var(--card);
+    border: 2.5px solid var(--ink);
+    border-radius: 14px;
+    box-shadow: 5px 5px 0 var(--ink);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.card-flat {
+    background: var(--card);
+    border: 2.5px solid var(--ink);
+    border-radius: 14px;
+}
+.card-hover:hover, .racecard:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 var(--ink);
+}
+
+/* 3. Chips & Badges */
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 28px;
+    padding: 0 10px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: var(--card);
+    color: var(--ink);
+    white-space: nowrap;
+}
+.chip.o, .chip-orange { background: var(--orange); color: var(--ink); }
+.chip.m, .chip-mustard { background: var(--mustard); color: var(--ink); }
+.chip.p, .chip-pine { background: var(--pine); color: #ffffff; }
+.chip.b, .chip-berry { background: var(--berry); color: #ffffff; }
+.chip.r, .chip-red { background: var(--red-l); color: var(--red); border-color: var(--ink); }
+.chip.g, .chip-pine-l { background: var(--pine-l); color: var(--pine); }
+
+/* 4. Filters & Inputs */
+.filter {
+    display: inline-flex;
+    align-items: center;
+    height: 44px;
+    padding: 0 18px;
+    border: 2.5px solid var(--ink);
+    border-radius: 8px;
+    background: var(--card);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.filter.on, .filter.active {
+    background: var(--orange);
+    color: var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+}
+.input {
+    width: 100%;
+    height: 52px;
+    border: 2.5px solid var(--ink);
+    border-radius: 8px;
+    background: var(--card);
+    padding: 0 16px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--ink);
+}
+.input:focus {
+    outline: none;
+    box-shadow: 3px 3px 0 var(--mustard);
+}
+.label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: var(--ink);
+}
+
+/* 5. Squiggle, Icons & Halftone */
+.dots {
+    background-image: radial-gradient(rgba(16,40,46,0.16) 1.6px, transparent 2px);
+    background-size: 12px 12px;
+}
+.squig {
+    position: relative;
+    display: inline-block;
+}
+.squig svg {
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: 100%;
+    height: 14px;
+}
+.ico {
+    width: 56px;
+    height: 56px;
+    flex: none;
+    border: 2.5px solid var(--ink);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sq {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2.5px solid var(--ink);
+    border-radius: 8px;
+    background: var(--card);
+    font-weight: 700;
+    color: var(--ink);
+}
+
+/* 6. Marquee Band */
+.band {
+    background: var(--ink);
+    color: var(--paper);
+    border-top: 3px solid var(--ink);
+    border-bottom: 3px solid var(--ink);
+    overflow: hidden;
+    white-space: nowrap;
+}
+.band-in {
+    display: inline-flex;
+    align-items: center;
+    gap: 28px;
+    padding: 16px 0;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    animation: band 28s linear infinite;
+}
+.band:hover .band-in {
+    animation-play-state: paused;
+}
+.band .sep {
+    width: 12px;
+    height: 12px;
+    background: var(--orange);
+    transform: rotate(45deg);
+    flex: none;
+}
+@keyframes band {
+    to { transform: translateX(-50%); }
+}
+
+/* 7. Numbered Outline (.numo) sesuai Mockup */
+.numo {
+    font-family: 'Bricolage Grotesque', sans-serif !important;
+    font-size: 52px !important;
+    font-weight: 800 !important;
+    line-height: 0.9 !important;
+    color: transparent !important;
+    -webkit-text-stroke: 2.5px var(--ink) !important;
+}
+.card:hover .numo {
+    -webkit-text-stroke-color: var(--orange-d) !important;
+}
+
+/* 8. Pesepeda Animasi Berjalan di Banner (.bk) */
+.bk {
+    position: absolute;
+    left: -120px;
+    bottom: 10px;
+    z-index: 5;
     pointer-events: none;
-    background: #dee3e2 url("/images/patterns/topo.svg") repeat;
-    background-size: 480px;
-    opacity: 0;
 }
-body.velo-nav-leaving::before {
-    animation: veloCurtainIn 0.25s ease-in forwards;
+@keyframes v-bk {
+    from { transform: translateX(0); }
+    to { transform: translateX(1400px); }
 }
-body.velo-nav-entering::before {
-    animation: veloCurtainOut 0.35s ease-out forwards;
+@media (prefers-reduced-motion: no-preference) {
+    .bk {
+        animation: v-bk 16s linear infinite;
+    }
 }
-@keyframes veloCurtainIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-@keyframes veloCurtainOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+    .bk {
+        left: 760px;
+        animation: none;
+    }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .velo-reveal {
-        opacity: 1;
-        transform: none;
-        transition: none;
-    }
-    body.velo-nav-leaving > header,
-    body.velo-nav-leaving > main,
-    body.velo-nav-leaving > footer,
-    body.velo-nav-entering > header,
-    body.velo-nav-entering > main,
-    body.velo-nav-entering > footer,
-    .velo-modal-enter {
-        animation: none;
-    }
-    body.velo-nav-leaving::before,
-    body.velo-nav-entering::before {
-        animation: none;
-        opacity: 0;
-    }
+@keyframes v-bob {
+    from { transform: translateY(0); }
+    to { transform: translateY(-8px); }
+}
+.float {
+    animation: v-bob 2.6s ease-in-out infinite alternate;
 }
 
 [x-cloak] { display: none !important; }
-
-/* Fase 9.1: token tipografi fluid + utilitas */
-@theme { --text-fluid-sm: clamp(0.875rem, 0.8rem + 0.25vw, 1rem); --text-fluid-base: clamp(1rem, 0.9rem + 0.35vw, 1.125rem); --text-fluid-lg: clamp(1.125rem, 1rem + 0.5vw, 1.375rem); }
-.scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
-.scrollbar-hide::-webkit-scrollbar { display: none; }
-.scroll-snap-x { scroll-snap-type: x mandatory; }
-.scroll-snap-x > * { scroll-snap-align: start; }
-
