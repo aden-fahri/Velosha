@@ -21,11 +21,14 @@ class User extends Authenticatable implements FilamentUser
 
     public const ROLE_PENYELENGGARA = UserRole::PENYELENGGARA->value;
 
+    public const ROLE_OPERATOR = UserRole::OPERATOR->value;
+
     public const ROLE_ADMIN = UserRole::ADMIN->value;
 
     public const ROLES = [
         self::ROLE_PESERTA,
         self::ROLE_PENYELENGGARA,
+        self::ROLE_OPERATOR,
         self::ROLE_ADMIN,
     ];
 
@@ -82,6 +85,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->role === self::ROLE_PENYELENGGARA;
     }
 
+    public function isOperator(): bool
+    {
+        return $this->role === self::ROLE_OPERATOR;
+    }
+
     public function isPeserta(): bool
     {
         return $this->role === self::ROLE_PESERTA;
@@ -92,7 +100,15 @@ class User extends Authenticatable implements FilamentUser
      */
     public function home(): string
     {
-        return $this->isPeserta() ? '/dashboard' : '/admin';
+        if ($this->isPeserta()) {
+            return '/dashboard';
+        }
+
+        if ($this->isOperator()) {
+            return '/helpdesk';
+        }
+
+        return '/admin';
     }
 
     /**
@@ -119,6 +135,10 @@ class User extends Authenticatable implements FilamentUser
 
         if (str_starts_with($path, '/admin')) {
             return $this->isAdmin() || $this->isPenyelenggara();
+        }
+
+        if (str_starts_with($path, '/helpdesk')) {
+            return $this->isOperator() || $this->isAdmin();
         }
 
         // Halaman khusus peserta: portal rider & formulir pendaftaran race.
