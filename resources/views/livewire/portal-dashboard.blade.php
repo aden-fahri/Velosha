@@ -50,6 +50,22 @@
                     <span>Pusat Bantuan</span>
                 </button>
 
+                <a href="{{ route('helpdesk.my-tickets') }}" wire:navigate
+                   class="w-full flex items-center justify-between px-3.5 py-3 font-extrabold velo-box-1 text-teal-900 hover:bg-[#f1f4f4] transition-all">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="message-square-warning" class="w-4 h-4 text-race-600"></i>
+                        <span>Tiket Bantuan</span>
+                    </div>
+                    @php
+                        $userTicketCount = \App\Models\HelpdeskTicket::where('reporter_id', Auth::id())
+                            ->whereIn('status', [\App\Enums\TicketStatus::OPEN, \App\Enums\TicketStatus::IN_PROGRESS])
+                            ->count();
+                    @endphp
+                    @if($userTicketCount > 0)
+                    <span class="text-[10px] font-extrabold px-2 py-0.5 velo-box-3 bg-[var(--orange)] text-[var(--ink)]">{{ $userTicketCount }}</span>
+                    @endif
+                </a>
+
                 <div class="pt-6 px-3 pb-2 text-[10px] font-extrabold text-velomuted uppercase tracking-wider">Akses Publik</div>
 
                 <a href="/" wire:navigate
