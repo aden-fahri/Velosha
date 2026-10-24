@@ -44,11 +44,12 @@ class UserForm
                     ->options([
                         User::ROLE_PESERTA => 'Peserta',
                         User::ROLE_PENYELENGGARA => 'Penyelenggara',
+                        User::ROLE_OPERATOR => 'Operator Helpdesk',
                         User::ROLE_ADMIN => 'Admin',
                     ])
                     ->default(User::ROLE_PESERTA)
                     ->required()
-                    ->helperText('Peserta: rider. Penyelenggara: Race Director/Marshal. Admin: staf Velosha.'),
+                    ->helperText('Peserta: rider. Penyelenggara: Race Director/Marshal. Operator: Helpdesk. Admin: staf Velosha.'),
                 Select::make('gender')
                     ->label('Jenis Kelamin')
                     ->options(['male' => 'Laki-laki', 'female' => 'Perempuan'])
