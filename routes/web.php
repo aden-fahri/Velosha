@@ -67,7 +67,17 @@ Route::view('/dashboard', 'pages.dashboard')
     ->middleware(['auth', 'role:peserta'])
     ->name('dashboard');
 
+// 7b. Helpdesk Pelapor (Peserta di Portal Rider)
+Route::get('/dashboard/bantuan/buat', \App\Livewire\Helpdesk\CreateTicket::class)
+    ->middleware(['auth', 'role:peserta'])
+    ->name('helpdesk.create-ticket');
+
+Route::get('/dashboard/bantuan/{ticket?}', \App\Livewire\Helpdesk\MyTickets::class)
+    ->middleware(['auth', 'role:peserta'])
+    ->name('helpdesk.my-tickets');
+
 // 8. Helpdesk Operator & Admin (Antrian Tiket)
 Route::view('/helpdesk', 'pages.helpdesk.index')
     ->middleware(['auth', 'role:operator,admin'])
     ->name('helpdesk.index');
+

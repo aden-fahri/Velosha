@@ -86,6 +86,27 @@ $faqGroups = $content->faq_groups ?? [];
     </div>
 </section>
 
+<!-- 3b. KARTU BUAT TIKET BANTUAN -->
+<section style="padding: 0 0 56px 0; background: var(--paper)">
+    <div class="wrap">
+        <div class="card" style="padding: 32px; background: var(--butter); border: 2.5px solid var(--ink); border-radius: 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 4px 4px 0 var(--ink)">
+            <div>
+                <span class="chip font-bold text-xs bg-[var(--orange)] text-[var(--ink)] border border-[var(--ink)] px-2.5 py-0.5 rounded">Bantuan Langsung</span>
+                <h3 style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 24px; color: var(--ink); margin-top: 8px">
+                    Belum ketemu jawabannya? Buat tiket bantuan
+                </h3>
+                <p style="font-size: 14px; color: var(--ink); opacity: 0.85; margin-top: 4px; max-width: 600px">
+                    Sampaikan kendala pendaftaran, pembayaran, atau nomor BIB. Tim pengelola Velosha akan menangani aduanmu langsung di Portal.
+                </p>
+            </div>
+            <a href="/dashboard/bantuan/buat" wire:navigate class="btn" style="background: var(--orange); color: var(--ink); border: 2px solid var(--ink); font-weight: 800; padding: 12px 24px; box-shadow: 3px 3px 0 var(--ink)">
+                <span>Buat Tiket Bantuan</span>
+                <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
 <!-- 4. CTA BAWAH -->
 <section style="padding: 56px 0; background: var(--ink)">
     <div class="wrap">
