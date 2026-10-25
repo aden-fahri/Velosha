@@ -66,3 +66,8 @@ Route::get('/ticket/{registration?}', [TicketController::class, 'show'])
 Route::view('/dashboard', 'pages.dashboard')
     ->middleware(['auth', 'role:peserta'])
     ->name('dashboard');
+
+// 8. Helpdesk Operator & Admin (Antrian Tiket)
+Route::view('/helpdesk', 'pages.helpdesk.index')
+    ->middleware(['auth', 'role:operator,admin'])
+    ->name('helpdesk.index');
