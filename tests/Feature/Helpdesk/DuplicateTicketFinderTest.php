@@ -158,9 +158,9 @@ class DuplicateTicketFinderTest extends TestCase
         $refTicket = HelpdeskTicket::factory()->closed()->create([
             'reporter_id' => $otherReporter->id,
             'is_reference' => true,
-            'subject' => 'Panduan verifikasi e-ticket QR Code dan nomor BIB balap',
+            'subject' => 'Panduan verifikasi e-ticket QR Code dan nomor BIB balap hubungi 0812-3456-7890',
             'description' => 'Deskripsi sensitif pengguna lain dengan data pribadi seperti KTP dan nomor telepon.',
-            'solution_summary' => 'Silakan refresh portal rider pada menu Tiket & BIB untuk mengunduh QR Code resmi.',
+            'solution_summary' => 'Silakan hubungi admin@velosha.id atau refresh portal rider pada menu Tiket & BIB untuk mengunduh QR Code resmi.',
         ]);
 
         $results = $this->finder->findSimilar(
@@ -179,7 +179,9 @@ class DuplicateTicketFinderTest extends TestCase
         $this->assertFalse($found->is_own_ticket);
         $this->assertSame('', $found->description, 'Deskripsi tiket pelapor lain harus dikosongkan.');
         $this->assertFalse($found->relationLoaded('reporter'), 'Relasi reporter tidak boleh dimuat untuk menjaga privasi.');
-        $this->assertStringContainsString('Silakan refresh portal rider', $found->solution_summary);
+        $this->assertStringContainsString('Silakan hubungi', $found->solution_summary);
+        $this->assertStringContainsString('[REDACTED_PHONE]', $found->subject, 'Nomor telepon harus disanitasi.');
+        $this->assertStringContainsString('[REDACTED_EMAIL]', $found->solution_summary, 'Email harus disanitasi.');
     }
 
     /**
