@@ -86,3 +86,8 @@ Route::get('/helpdesk/tickets/{ticket}', function ($ticket) {
 })->middleware(['auth', 'role:operator,admin'])
   ->name('helpdesk.detail');
 
+Route::get('/helpdesk/operator/tickets/{ticket}', function ($ticket) {
+    return redirect()->route('helpdesk.detail', ['ticket' => $ticket]);
+})->middleware(['auth', 'role:operator,admin'])
+  ->name('helpdesk.operator.detail');
+

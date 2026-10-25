@@ -74,7 +74,7 @@
                         {{ $ticket->category?->value ?? 'Lainnya' }}
                     </span>
                     @if ($ticket->duplicate_of_id)
-                        <a href="{{ route('helpdesk.operator.detail', $ticket->duplicate_of_id) }}" wire:navigate
+                        <a href="{{ route('helpdesk.detail', $ticket->duplicate_of_id) }}" wire:navigate
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-extrabold text-xs bg-amber-200 text-amber-950 border-[1.5px] border-amber-800 hover:bg-amber-300 transition">
                             ⤹ Duplikat dari #{{ $ticket->duplicate_of_id }}
                         </a>
@@ -405,7 +405,7 @@
                                 @foreach ($potentialDuplicates as $dup)
                                     <div class="p-3 bg-[var(--paper)] rounded-lg border-[1.5px] border-[var(--ink)] space-y-2">
                                         <div class="flex items-center justify-between text-xs">
-                                            <a href="{{ route('helpdesk.operator.detail', $dup->id) }}" wire:navigate class="font-black text-[var(--ink)] underline">
+                                            <a href="{{ route('helpdesk.detail', $dup->id) }}" wire:navigate class="font-black text-[var(--ink)] underline">
                                                 #{{ $dup->id }}
                                             </a>
                                             <span class="px-1.5 py-0.5 text-[10px] font-bold rounded border {{ $dup->status === \App\Enums\TicketStatus::OPEN ? 'bg-blue-100 text-blue-900 border-blue-600' : 'bg-amber-100 text-amber-900 border-amber-600' }}">
@@ -430,7 +430,7 @@
                         @endif
                     @elseif ($ticket->duplicate_of_id !== null)
                         <div class="p-3 bg-amber-50 border border-amber-600 rounded-lg text-xs font-semibold text-amber-900">
-                            Tiket ini telah digabungkan sebagai duplikat dari <a href="{{ route('helpdesk.operator.detail', $ticket->duplicate_of_id) }}" wire:navigate class="underline font-bold">Tiket #{{ $ticket->duplicate_of_id }}</a>.
+                            Tiket ini telah digabungkan sebagai duplikat dari <a href="{{ route('helpdesk.detail', $ticket->duplicate_of_id) }}" wire:navigate class="underline font-bold">Tiket #{{ $ticket->duplicate_of_id }}</a>.
                         </div>
                     @else
                         <p class="text-xs text-[var(--mute)]">

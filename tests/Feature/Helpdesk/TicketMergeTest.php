@@ -136,6 +136,26 @@ class TicketMergeTest extends TestCase
     }
 
     /**
+     * Ditolak: tiket duplikat yang sudah memiliki duplicate_of_id tidak boleh digabungkan ulang (no re-merge).
+     */
+    public function test_merge_rejects_duplicate_that_is_already_a_duplicate(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        $target = HelpdeskTicket::factory()->create(['status' => TicketStatus::OPEN]);
+
+        $firstMaster = HelpdeskTicket::factory()->create(['status' => TicketStatus::OPEN]);
+        $alreadyMergedDuplicate = HelpdeskTicket::factory()->create([
+            'status' => TicketStatus::OPEN,
+            'duplicate_of_id' => $firstMaster->id,
+        ]);
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('Tiket duplikat tidak boleh merupakan tiket yang sudah digabungkan.');
+
+        $this->service->mergeTickets($target, $alreadyMergedDuplicate, $operator);
+    }
+
+    /**
      * Ditolak: tiket yang sudah berstatus Closed tidak boleh digabungkan sebagai duplikat.
      */
     public function test_merge_rejects_duplicate_that_is_already_closed(): void

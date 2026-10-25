@@ -366,6 +366,18 @@ class ReporterHelpdeskFlowTest extends TestCase
             'solution_summary' => 'Solusi tiket saya sendiri',
         ]);
 
+        // Mengikat fake finder sesuai panduan: untuk pengujian berbasis RefreshDatabase (transaksi),
+        // gunakan fake finder pada pengujian komponen ini.
+        $fakeFinder = $this->createMock(\App\Services\Helpdesk\DuplicateTicketFinder::class);
+        $fakeFinder->method('findSimilar')->willReturnCallback(function () use ($refTicket) {
+            $clone = clone $refTicket;
+            $clone->subject = \App\Support\Helpdesk\TicketSanitizer::clean((string) $clone->subject);
+            $clone->solution_summary = \App\Support\Helpdesk\TicketSanitizer::clean((string) $clone->solution_summary);
+            $clone->is_own_ticket = false;
+            return collect([$clone]);
+        });
+        $this->app->instance(\App\Services\Helpdesk\DuplicateTicketFinder::class, $fakeFinder);
+
         $test = Livewire::actingAs($currentReporter)
             ->test(\App\Livewire\Helpdesk\CreateTicket::class)
             ->set('subject', 'E-ticket QRIS Belum Muncul');

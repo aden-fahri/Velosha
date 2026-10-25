@@ -50,6 +50,25 @@ class DuplicateTicketFinderTest extends TestCase
         }
     }
 
+    protected function tearDown(): void
+    {
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+        foreach ($this->tablesToTruncate as $table) {
+            \Illuminate\Support\Facades\DB::table($table)->truncate();
+        }
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+
+        if (\App\Models\SlaPolicy::count() === 0) {
+            \Illuminate\Support\Facades\DB::table('sla_policies')->insert([
+                ['priority' => 'High', 'response_minutes' => 15, 'resolution_minutes' => 240, 'created_at' => now(), 'updated_at' => now()],
+                ['priority' => 'Mid', 'response_minutes' => 60, 'resolution_minutes' => 1440, 'created_at' => now(), 'updated_at' => now()],
+                ['priority' => 'Low', 'response_minutes' => 240, 'resolution_minutes' => 4320, 'created_at' => now(), 'updated_at' => now()],
+            ]);
+        }
+
+        parent::tearDown();
+    }
+
     protected function setUp(): void
     {
         parent::setUp();

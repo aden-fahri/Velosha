@@ -350,6 +350,10 @@ class TicketService
             throw new DomainException('Tiket tidak dapat digabungkan ke dirinya sendiri.');
         }
 
+        if ($duplicate->duplicate_of_id !== null) {
+            throw new DomainException('Tiket duplikat tidak boleh merupakan tiket yang sudah digabungkan.');
+        }
+
         $current = $now ? Carbon::instance($now) : Carbon::now();
 
         return DB::transaction(function () use ($target, $duplicate, $actor, $current) {
@@ -374,6 +378,10 @@ class TicketService
 
             if ($lockedTarget->duplicate_of_id !== null) {
                 throw new DomainException('Tiket target tidak boleh merupakan tiket duplikat.');
+            }
+
+            if ($lockedDuplicate->duplicate_of_id !== null) {
+                throw new DomainException('Tiket duplikat tidak boleh merupakan tiket yang sudah digabungkan.');
             }
 
             if ($lockedDuplicate->isClosed()) {

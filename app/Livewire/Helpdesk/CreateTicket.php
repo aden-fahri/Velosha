@@ -70,42 +70,6 @@ class CreateTicket extends Component
             return;
         }
 
-        if (\Illuminate\Support\Facades\DB::connection()->transactionLevel() > 0) {
-            // Fallback untuk suite pengujian berbasis RefreshDatabase (transaksi uncommitted di mana InnoDB FULLTEXT tidak melihat baris)
-            $userId = $user->id;
-            $query = HelpdeskTicket::query()
-                ->where('is_reference', true)
-                ->whereNotNull('solution_summary')
-                ->where('solution_summary', '!=', '');
-
-            if ($userId) {
-                $query->where('reporter_id', '!=', $userId);
-            }
-
-            $query->where(function ($q) use ($words) {
-                foreach ($words as $word) {
-                    if (mb_strlen($word) >= 3) {
-                        $q->orWhere('subject', 'like', "%{$word}%")
-                          ->orWhere('solution_summary', 'like', "%{$word}%");
-                    }
-                }
-            });
-
-            $results = $query->limit(3)->get();
-
-            $this->similarTickets = $results->map(function (HelpdeskTicket $ticket) {
-                return [
-                    'id' => $ticket->id,
-                    'subject' => \App\Support\Helpdesk\TicketSanitizer::clean((string) $ticket->subject),
-                    'solution_summary' => \App\Support\Helpdesk\TicketSanitizer::clean((string) $ticket->solution_summary),
-                    'is_own_ticket' => false,
-                    'is_closed' => $ticket->isClosed(),
-                    'status' => $ticket->status instanceof TicketStatus ? $ticket->status->value : (string) $ticket->status,
-                ];
-            })->toArray();
-            return;
-        }
-
         $results = app(\App\Services\Helpdesk\DuplicateTicketFinder::class)->findSimilar(
             $user,
             $this->subject,
