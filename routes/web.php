@@ -76,8 +76,13 @@ Route::get('/dashboard/bantuan/{ticket?}', function ($ticket = null) {
     return view('pages.helpdesk.my-tickets', ['ticket' => $ticket]);
 })->middleware(['auth', 'role:peserta'])->name('helpdesk.my-tickets');
 
-// 8. Helpdesk Operator & Admin (Antrian Tiket)
+// 8. Helpdesk Operator & Admin (Antrian Tiket & Detail)
 Route::view('/helpdesk', 'pages.helpdesk.index')
     ->middleware(['auth', 'role:operator,admin'])
     ->name('helpdesk.index');
+
+Route::get('/helpdesk/tickets/{ticket}', function ($ticket) {
+    return view('pages.helpdesk.detail', ['ticketId' => (int) $ticket]);
+})->middleware(['auth', 'role:operator,admin'])
+  ->name('helpdesk.detail');
 
