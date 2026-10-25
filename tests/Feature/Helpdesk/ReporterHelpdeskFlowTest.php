@@ -207,4 +207,193 @@ class ReporterHelpdeskFlowTest extends TestCase
             ->assertSee('Tiket Bantuan')
             ->assertSee('/dashboard/bantuan');
     }
+
+    /**
+     * Sesuai aturan SLA: response_due_at dan resolution_due_at harus dihitung
+     * tepat dari sla_policies berdasarkan prioritas High/Mid/Low dengan Carbon::setTestNow().
+     */
+    public function test_create_ticket_calculates_exact_sla_due_dates_per_priority(): void
+    {
+        $peserta = User::factory()->create(['role' => User::ROLE_PESERTA]);
+        $knownNow = \Carbon\Carbon::create(2026, 10, 24, 10, 0, 0);
+        \Carbon\Carbon::setTestNow($knownNow);
+
+        try {
+            // 1. High Priority: 15 menit response, 240 menit (4 jam) resolution
+            Livewire::actingAs($peserta)
+                ->test(\App\Livewire\Helpdesk\CreateTicket::class)
+                ->set('subject', 'Tiket High Priority Akut')
+                ->set('description', 'Deskripsi masalah dengan prioritas tinggi sekali.')
+                ->set('priority', 'High')
+                ->call('submit')
+                ->assertHasNoErrors();
+
+            $highTicket = HelpdeskTicket::where('subject', 'Tiket High Priority Akut')->first();
+            $this->assertNotNull($highTicket);
+            $this->assertSame('2026-10-24 10:15:00', $highTicket->response_due_at->format('Y-m-d H:i:s'));
+            $this->assertSame('2026-10-24 14:00:00', $highTicket->resolution_due_at->format('Y-m-d H:i:s'));
+
+            // 2. Mid Priority: 60 menit response, 1440 menit (24 jam) resolution
+            Livewire::actingAs($peserta)
+                ->test(\App\Livewire\Helpdesk\CreateTicket::class)
+                ->set('subject', 'Tiket Mid Priority Standar')
+                ->set('description', 'Deskripsi masalah dengan prioritas sedang menengah.')
+                ->set('priority', 'Mid')
+                ->call('submit')
+                ->assertHasNoErrors();
+
+            $midTicket = HelpdeskTicket::where('subject', 'Tiket Mid Priority Standar')->first();
+            $this->assertNotNull($midTicket);
+            $this->assertSame('2026-10-24 11:00:00', $midTicket->response_due_at->format('Y-m-d H:i:s'));
+            $this->assertSame('2026-10-25 10:00:00', $midTicket->resolution_due_at->format('Y-m-d H:i:s'));
+
+            // 3. Low Priority: 240 menit response, 4320 menit (72 jam) resolution
+            Livewire::actingAs($peserta)
+                ->test(\App\Livewire\Helpdesk\CreateTicket::class)
+                ->set('subject', 'Tiket Low Priority Santai')
+                ->set('description', 'Deskripsi masalah dengan prioritas rendah umum.')
+                ->set('priority', 'Low')
+                ->call('submit')
+                ->assertHasNoErrors();
+
+            $lowTicket = HelpdeskTicket::where('subject', 'Tiket Low Priority Santai')->first();
+            $this->assertNotNull($lowTicket);
+            $this->assertSame('2026-10-24 14:00:00', $lowTicket->response_due_at->format('Y-m-d H:i:s'));
+            $this->assertSame('2026-10-27 10:00:00', $lowTicket->resolution_due_at->format('Y-m-d H:i:s'));
+        } finally {
+            \Carbon\Carbon::setTestNow(null);
+        }
+    }
+
+    /**
+     * Rate limit: tiket ke-6 dalam 1 jam ditolak, dan counter dicatat per-user.
+     */
+    public function test_create_ticket_rate_limit_rejects_sixth_ticket_per_user(): void
+    {
+        $peserta1 = User::factory()->create(['role' => User::ROLE_PESERTA]);
+        $peserta2 = User::factory()->create(['role' => User::ROLE_PESERTA]);
+
+        \Illuminate\Support\Facades\RateLimiter::clear('helpdesk-create:' . $peserta1->id);
+        \Illuminate\Support\Facades\RateLimiter::clear('helpdesk-create:' . $peserta2->id);
+
+        // Buat 5 tiket untuk peserta 1 -> harus berhasil semua
+        for ($i = 1; $i <= 5; $i++) {
+            Livewire::actingAs($peserta1)
+                ->test(\App\Livewire\Helpdesk\CreateTicket::class)
+                ->set('subject', "Tiket Ke-{$i} Peserta Satu")
+                ->set('description', 'Deskripsi tiket pengujian batasan rate limiter.')
+                ->set('priority', 'Low')
+                ->call('submit')
+                ->assertHasNoErrors();
+        }
+
+        // Tiket ke-6 untuk peserta 1 -> HARUS DITOLAK
+        Livewire::actingAs($peserta1)
+            ->test(\App\Livewire\Helpdesk\CreateTicket::class)
+            ->set('subject', 'Tiket Ke-6 Yang Melewati Batas')
+            ->set('description', 'Deskripsi tiket ke-6 yang harusnya gagal karena limit.')
+            ->set('priority', 'Low')
+            ->call('submit')
+            ->assertHasErrors(['subject']);
+
+        $this->assertDatabaseMissing(HelpdeskTicket::TABLE_NAME, [
+            'subject' => 'Tiket Ke-6 Yang Melewati Batas',
+        ]);
+
+        // Peserta 2 belum mencapai batas -> harus tetap bisa membuat tiket (counter per user)
+        Livewire::actingAs($peserta2)
+            ->test(\App\Livewire\Helpdesk\CreateTicket::class)
+            ->set('subject', 'Tiket Pertama Peserta Dua Masih Aman')
+            ->set('description', 'Deskripsi tiket peserta 2 harus tetap berhasil dibuat.')
+            ->set('priority', 'Low')
+            ->call('submit')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas(HelpdeskTicket::TABLE_NAME, [
+            'reporter_id' => $peserta2->id,
+            'subject' => 'Tiket Pertama Peserta Dua Masih Aman',
+        ]);
+    }
+
+    /**
+     * PRIVACY LEAK PREVENTION:
+     * - Tiket non-reference In-Progress milik pengguna lain TIDAK PERNAH muncul.
+     * - Tiket rujukan (is_reference = true DAN solution_summary terisi) muncul tanpa nama pelapor/deskripsi mentah.
+     * - Tiket milik pelapor sendiri dikecualikan.
+     */
+    public function test_similar_tickets_privacy_leak_prevention(): void
+    {
+        $currentReporter = User::factory()->create(['name' => 'Budi Pelapor', 'role' => User::ROLE_PESERTA]);
+        $otherUser = User::factory()->create(['name' => 'Siti Rahasia', 'role' => User::ROLE_PESERTA]);
+
+        // Tiket 1: Tiket In-Progress biasa milik user lain (BUKAN rujukan, walau ada catatan solusi) -> JANGAN PERNAH MUNCUL
+        $leakTicket = HelpdeskTicket::factory()->create([
+            'reporter_id' => $otherUser->id,
+            'subject' => 'Kendala E-ticket QRIS Belum Muncul Siti',
+            'description' => 'Data sensitif Siti: telp 081234567890 dan no ktp rahasia.',
+            'status' => TicketStatus::IN_PROGRESS,
+            'is_reference' => false,
+            'solution_summary' => 'Solusi internal sementara staf.',
+        ]);
+
+        // Tiket 2: Tiket rujukan resmi milik user lain dengan solution_summary -> BOLEH MUNCUL (dibersihkan)
+        $refTicket = HelpdeskTicket::factory()->create([
+            'reporter_id' => $otherUser->id,
+            'subject' => 'Solusi Resmi E-ticket QRIS Hubungi 0812-3456-7890 atau admin@velosha.id',
+            'description' => 'Deskripsi mentah yang tidak boleh bocor',
+            'status' => TicketStatus::CLOSED,
+            'is_reference' => true,
+            'solution_summary' => 'Muat ulang tab Portal Rider setelah konfirmasi pembayaran dari payment@velosha.id selesai.',
+        ]);
+
+        // Tiket 2b: Tiket rujukan tetapi solution_summary KOSONG/NULL -> TIDAK BOLEH MUNCUL
+        $refTicketNoSolution = HelpdeskTicket::factory()->create([
+            'reporter_id' => $otherUser->id,
+            'subject' => 'Solusi E-ticket QRIS Rujukan Tapi Belum Ada Solusi',
+            'description' => 'Deskripsi tiket tanpa solusi',
+            'status' => TicketStatus::OPEN,
+            'is_reference' => true,
+            'solution_summary' => null,
+        ]);
+
+        // Tiket 3: Tiket milik pelapor saat ini sendiri (walau rujukan) -> HARUS DIKECUALIKAN
+        $ownRefTicket = HelpdeskTicket::factory()->create([
+            'reporter_id' => $currentReporter->id,
+            'subject' => 'Tiket E-ticket QRIS Rujukan Milik Budi Sendiri',
+            'description' => 'Deskripsi tiket saya',
+            'status' => TicketStatus::CLOSED,
+            'is_reference' => true,
+            'solution_summary' => 'Solusi tiket saya sendiri',
+        ]);
+
+        $test = Livewire::actingAs($currentReporter)
+            ->test(\App\Livewire\Helpdesk\CreateTicket::class)
+            ->set('subject', 'E-ticket QRIS Belum Muncul');
+
+        $similar = $test->get('similarTickets');
+
+        // 1. Pastikan tiket non-reference user lain tidak ada
+        $similarIds = array_column($similar, 'id');
+        $this->assertNotContains($leakTicket->id, $similarIds, 'Tiket non-reference In-Progress milik user lain tidak boleh muncul.');
+        $this->assertNotContains($refTicketNoSolution->id, $similarIds, 'Tiket rujukan tanpa solution_summary tidak boleh muncul.');
+
+        // 2. Pastikan tiket milik sendiri tidak ada
+        $this->assertNotContains($ownRefTicket->id, $similarIds, 'Tiket milik pelapor sendiri tidak boleh muncul sebagai saran.');
+
+        // 3. Pastikan tiket rujukan resmi muncul
+        $this->assertContains($refTicket->id, $similarIds, 'Tiket rujukan resmi harus muncul.');
+
+        // 4. Pastikan data tersanitasi dari PII dan tidak mengekspos nama pelapor / deskripsi mentah
+        $matched = collect($similar)->firstWhere('id', $refTicket->id);
+        $this->assertNotNull($matched);
+        $this->assertArrayNotHasKey('match', $matched, 'Match score persentase palsu harus dihilangkan.');
+        $this->assertArrayNotHasKey('snippet', $matched, 'Snippet deskripsi mentah tidak boleh diekspos.');
+        $this->assertStringNotContainsString('0812-3456-7890', $matched['subject']);
+        $this->assertStringNotContainsString('admin@velosha.id', $matched['subject']);
+        $this->assertStringNotContainsString('payment@velosha.id', $matched['solution_summary']);
+        $this->assertStringContainsString('[REDACTED_PHONE]', $matched['subject']);
+        $this->assertStringContainsString('[REDACTED_EMAIL]', $matched['subject']);
+        $this->assertStringContainsString('[REDACTED_EMAIL]', $matched['solution_summary']);
+    }
 }
+

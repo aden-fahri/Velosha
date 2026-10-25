@@ -146,11 +146,14 @@
                     @foreach($similarTickets as $sim)
                     <article class="bg-white border-2 border-[var(--ink)] p-4 rounded-xl shadow-xs">
                         <div class="flex items-center justify-between gap-2">
-                            <span class="chip text-[11px] font-bold bg-[var(--pine-l)] text-[var(--ink)] px-2 py-0.5 rounded border border-[var(--ink)]">Cocok {{ $sim['match'] }}%</span>
-                            <span class="chip text-[11px] font-bold {{ $sim['is_closed'] ? 'bg-[var(--pine-l)]' : 'bg-[var(--mustard)]' }} text-[var(--ink)] px-2 py-0.5 rounded border border-[var(--ink)]">{{ $sim['status'] }}</span>
+                            <span class="chip text-[11px] font-bold bg-[var(--pine-l)] text-[var(--ink)] px-2 py-0.5 rounded border border-[var(--ink)]">Rujukan Resmi</span>
+                            <span class="chip text-[11px] font-bold {{ $sim['is_closed'] ? 'bg-[var(--pine-l)]' : 'bg-[var(--mustard)]' }} text-[var(--ink)] px-2 py-0.5 rounded border border-[var(--ink)]">{{ $sim['is_closed'] ? 'Selesai' : 'Aktif' }}</span>
                         </div>
                         <h3 class="font-heading font-bold text-base text-[var(--ink)] mt-2.5">{{ $sim['subject'] }}</h3>
-                        <p class="text-xs text-[var(--mute)] mt-1.5 line-clamp-2 leading-relaxed">{{ $sim['snippet'] }}</p>
+                        <div class="text-xs text-[var(--ink)]/90 mt-2 p-2.5 bg-[#FFFDF8] border border-[#10282E]/20 rounded-md">
+                            <b class="text-[var(--pine)] block mb-1">Solusi Pengelola:</b>
+                            <p class="leading-relaxed">{{ $sim['solution_summary'] }}</p>
+                        </div>
                     </article>
                     @endforeach
                 </div>

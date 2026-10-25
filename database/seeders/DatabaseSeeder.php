@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         if (! app()->environment('production')) {
             $this->call(DemoUserSeeder::class);
             $this->call(DemoPesertaSeeder::class);
+            $this->call(DemoHelpdeskSeeder::class);
             $this->call(EventSeeder::class);
             $this->call(ExtraEventSeeder::class);
             $this->call(RegistrationSeeder::class);

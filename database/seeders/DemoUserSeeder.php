@@ -31,6 +31,12 @@ class DemoUserSeeder extends Seeder
                 'phone' => '081100000003',
                 'role' => User::ROLE_PESERTA,
             ],
+            [
+                'name' => 'Raka Perkasa',
+                'email' => 'operator@velosha.id',
+                'phone' => '081100000004',
+                'role' => User::ROLE_OPERATOR,
+            ],
         ];
 
         foreach ($akun as $data) {

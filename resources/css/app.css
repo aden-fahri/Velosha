@@ -453,3 +453,115 @@ h1, h2, h3, h4, .disp, .font-heading {
 }
 
 [x-cloak] { display: none !important; }
+
+/* 9. Portal & Helpdesk Components (sesuai Portal.dc.html & helpdesk.css) */
+.side a,
+.side button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 2.5px solid transparent;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    color: var(--ink);
+    margin-bottom: 4px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.5;
+}
+.side a.on,
+.side button.on {
+    background: var(--mustard);
+    border-color: var(--ink);
+}
+.side a:hover:not(.on),
+.side button:hover:not(.on) {
+    background: var(--paper2);
+}
+
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 10px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    font: 700 12px 'Inter', sans-serif;
+    white-space: nowrap;
+    background: var(--card);
+    color: var(--ink);
+}
+.pill.ok { background: var(--pine-l); }
+.pill.warn { background: var(--mustard); }
+.pill.bad { background: var(--red-l); border-color: var(--red); }
+.chip.hi { background: var(--red-l); color: var(--ink); border-color: var(--red); }
+.card.sim { padding: 20px; }
+.area { display: block; height: auto; line-height: 1.5; }
+.msg {
+    max-width: 78%;
+    padding: 14px 16px;
+    border: 2.5px solid var(--ink);
+    border-radius: 14px;
+    background: var(--card);
+    border-bottom-left-radius: 4px;
+}
+.msg.me {
+    margin-left: auto;
+    background: var(--orange-l);
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 4px;
+}
+.msg.auto {
+    background: var(--pine-l);
+    border-style: dashed;
+}
+.tl { border-radius: 14px; }
+.tl.sel { background: var(--butter); box-shadow: 4px 4px 0 var(--ink); }
+.sla-box {
+    background: var(--card);
+    border: 2.5px solid var(--ink);
+    border-radius: 10px;
+    padding: 12px 16px;
+    min-width: 170px;
+    flex: none;
+}
+.seg { display: flex; gap: 10px; }
+.seg .opt {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 14px;
+    border: 2.5px solid var(--ink);
+    border-radius: 10px;
+    background: var(--card);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.15s ease;
+}
+.seg .opt span { font: 800 17px 'Bricolage Grotesque', sans-serif; }
+.seg .opt small { font-size: 12px; color: var(--mute); }
+.seg .opt.on {
+    background: var(--orange);
+    box-shadow: 3px 3px 0 var(--ink);
+}
+.seg .opt.on small { color: var(--ink); }
+.sr {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: pointer;
+}
+

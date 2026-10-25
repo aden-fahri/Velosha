@@ -33,7 +33,7 @@ class CreateTicket extends Component
 
     public string $priority = 'Mid';
 
-    /** @var array<int, array{id: int, subject: string, snippet: string, status: string, match: int, is_closed: bool}> */
+    /** @var array<int, array{id: int, subject: string, solution_summary: string, is_closed: bool}> */
     public array $similarTickets = [];
 
     public function updatedSubject(): void
@@ -44,34 +44,46 @@ class CreateTicket extends Component
     public function searchSimilar(): void
     {
         $term = trim($this->subject);
-        $words = preg_split('/\s+/', $term);
+        $words = preg_split('/\s+/', $term, -1, PREG_SPLIT_NO_EMPTY) ?: [];
 
         if (count($words) < 3 || mb_strlen($term) < 8) {
             $this->similarTickets = [];
             return;
         }
 
-        // Cari aduan rujukan (is_reference = true) atau tiket in_progress/closed
-        // Catatan: DuplicateTicketFinder penuh akan disempurnakan di Fase 6
-        $query = HelpdeskTicket::query()
-            ->where(function ($q) {
-                $q->where('is_reference', true)
-                  ->orWhere('status', TicketStatus::IN_PROGRESS);
-            })
-            ->where(function ($q) use ($term) {
-                $q->where('subject', 'like', "%{$term}%")
-                  ->orWhere('description', 'like', "%{$term}%");
-            })
-            ->limit(3)
-            ->get();
+        $userId = Auth::id();
 
-        $this->similarTickets = $query->map(function ($ticket) {
+        // Aturan Privasi Ketat:
+        // 1. HANYA tiket rujukan (is_reference = true) DAN memiliki solution_summary terisi.
+        // 2. Tiket milik pelapor sendiri dikecualikan.
+        // 3. Tiket In-Progress biasa milik pelapor lain TIDAK PERNAH muncul.
+        // 4. Pencocokan per kata (per-word matching).
+        $query = HelpdeskTicket::query()
+            ->where('is_reference', true)
+            ->whereNotNull('solution_summary')
+            ->where('solution_summary', '!=', '');
+
+        if ($userId) {
+            $query->where('reporter_id', '!=', $userId);
+        }
+
+        // Per-word matching pada subjek atau solution_summary
+        $query->where(function ($q) use ($words) {
+            foreach ($words as $word) {
+                if (mb_strlen($word) >= 3) {
+                    $q->orWhere('subject', 'like', "%{$word}%")
+                      ->orWhere('solution_summary', 'like', "%{$word}%");
+                }
+            }
+        });
+
+        $results = $query->limit(3)->get();
+
+        $this->similarTickets = $results->map(function (HelpdeskTicket $ticket) {
             return [
                 'id' => $ticket->id,
-                'subject' => $ticket->subject,
-                'snippet' => mb_substr($ticket->description, 0, 140) . '...',
-                'status' => $ticket->status->value,
-                'match' => 85,
+                'subject' => \App\Support\Helpdesk\TicketSanitizer::clean($ticket->subject),
+                'solution_summary' => \App\Support\Helpdesk\TicketSanitizer::clean($ticket->solution_summary),
                 'is_closed' => $ticket->isClosed(),
             ];
         })->toArray();

@@ -117,4 +117,35 @@ class OperatorRbacTest extends TestCase
             $migration->up();
         }
     }
+
+    /**
+     * Pastikan akun operator demo dan tiket demo TIDAK PERNAH dibuat di environment production.
+     */
+    public function test_production_environment_never_creates_demo_operator_or_demo_tickets(): void
+    {
+        // Simulasikan environment production
+        $originalEnv = app()->environment();
+        app()->detectEnvironment(fn () => 'production');
+
+        try {
+            putenv('ADMIN_EMAIL=superadmin@velosha.id');
+            putenv('ADMIN_PASSWORD=superSecretPassword123!');
+            $this->artisan('db:seed', ['--class' => 'DatabaseSeeder', '--force' => true]);
+
+            // Di production: operator@velosha.id tidak boleh ada
+            $this->assertDatabaseMissing('users', [
+                'email' => 'operator@velosha.id',
+            ]);
+
+            // Di production: tiket demo tidak boleh ada
+            $this->assertDatabaseMissing('helpdesk_tickets', [
+                'subject' => 'Tidak bisa unduh e-ticket PDF',
+            ]);
+            $this->assertDatabaseMissing('helpdesk_tickets', [
+                'subject' => 'Refund karena cedera sebelum race',
+            ]);
+        } finally {
+            app()->detectEnvironment(fn () => $originalEnv);
+        }
+    }
 }
