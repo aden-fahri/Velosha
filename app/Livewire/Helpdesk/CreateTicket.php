@@ -108,21 +108,12 @@ class CreateTicket extends Component
 
         $priorityEnum = TicketPriority::tryFrom($this->priority) ?? TicketPriority::MID;
 
-        // Hitung tenggat SLA dari kebijakan
-        $policy = SlaPolicy::forPriority($priorityEnum);
-        $responseMinutes = $policy ? $policy->response_minutes : 60;
-        $resolutionMinutes = $policy ? $policy->resolution_minutes : 1440;
-
-        $now = now();
-        $ticket = HelpdeskTicket::create([
-            'reporter_id' => $user->id,
+        $ticketService = app(\App\Services\Helpdesk\TicketService::class);
+        $ticket = $ticketService->createTicket($user, [
             'subject' => $this->subject,
             'description' => $this->description,
             'priority' => $priorityEnum,
-            'status' => TicketStatus::OPEN,
-            'response_due_at' => (clone $now)->addMinutes($responseMinutes),
-            'resolution_due_at' => (clone $now)->addMinutes($resolutionMinutes),
-        ]);
+        ], now());
 
         RateLimiter::hit($rateKey, 3600);
 

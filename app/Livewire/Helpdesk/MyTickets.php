@@ -106,15 +106,7 @@ class MyTickets extends Component
             return;
         }
 
-        $this->validateOnly('replyMessage');
-
-        TicketResponse::create([
-            'ticket_id' => $ticket->id,
-            'responder_id' => $user->id,
-            'message' => trim($this->replyMessage),
-            'is_auto_reply' => false,
-            'created_at' => now(),
-        ]);
+        app(\App\Services\Helpdesk\TicketService::class)->addReply($ticket, $user, trim($this->replyMessage));
 
         RateLimiter::hit($rateKey, 3600);
 
