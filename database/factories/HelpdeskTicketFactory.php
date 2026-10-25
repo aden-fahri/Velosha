@@ -18,7 +18,7 @@ class HelpdeskTicketFactory extends Factory
     public function definition(): array
     {
         return [
-            'reporter_id' => User::factory(),
+            'reporter_id' => User::factory()->state(['role' => User::ROLE_PESERTA, 'is_system' => false]),
             'operator_id' => null,
             'subject' => fake()->sentence(4),
             'description' => fake()->paragraph(3),

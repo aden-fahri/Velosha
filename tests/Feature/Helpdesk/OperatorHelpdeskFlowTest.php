@@ -208,5 +208,129 @@ class OperatorHelpdeskFlowTest extends TestCase
         $this->assertNotNull($duplicate->closed_at);
         $this->assertNotNull($duplicate->resolution_time);
     }
+
+    public function test_operator_queue_page_contains_no_peserta_dashboard_link_and_shows_no_error_flash(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+
+        $response = $this->actingAs($operator)->get('/helpdesk');
+
+        $response->assertOk();
+        $response->assertSessionMissing('error');
+        $response->assertDontSee('Halaman ini hanya untuk peran peserta');
+        $response->assertDontSee(route('dashboard'));
+        $response->assertDontSee('/dashboard');
+        $response->assertDontSee('Portal Rider');
+        $response->assertSee('Antrian tiket');
+        $response->assertSee('Keluar Akun');
+    }
+
+    public function test_operator_ticket_detail_page_contains_no_peserta_dashboard_link(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        $ticket = HelpdeskTicket::factory()->create();
+
+        $response = $this->actingAs($operator)->get("/helpdesk/tickets/{$ticket->id}");
+
+        $response->assertOk();
+        $response->assertSessionMissing('error');
+        $response->assertDontSee('Halaman ini hanya untuk peran peserta');
+        $response->assertDontSee(route('dashboard'));
+        $response->assertDontSee('/dashboard');
+        $response->assertDontSee('Portal Rider');
+        $response->assertSee('Antrian tiket');
+        $response->assertSee('Keluar Akun');
+    }
+
+    public function test_operator_sidebar_follows_mockup_with_single_antrian_tiket_item(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        HelpdeskTicket::factory()->create(['status' => TicketStatus::OPEN]);
+
+        $response = $this->actingAs($operator)->get('/helpdesk');
+        $content = $response->getContent();
+
+        // Extract aside HTML
+        $this->assertMatchesRegularExpression('/<aside[^>]*>.*?<\/aside>/s', $content);
+        preg_match('/<aside[^>]*>(.*?)<\/aside>/s', $content, $matches);
+        $asideHtml = $matches[1] ?? '';
+
+        // Aside contains single "Antrian tiket" nav item and logout
+        $this->assertStringContainsString('Antrian tiket', $asideHtml);
+        $this->assertStringContainsString('Keluar Akun', $asideHtml);
+        $this->assertStringNotContainsString('Portal Rider', $asideHtml);
+
+        // Sidebar does NOT contain the duplicated filter items
+        $this->assertStringNotContainsString('Tiket Baru (Open)', $asideHtml);
+        $this->assertStringNotContainsString('Dalam Proses', $asideHtml);
+        $this->assertStringNotContainsString('Tiket Saya', $asideHtml);
+        $this->assertStringNotContainsString('Selesai (Closed)', $asideHtml);
+
+        // Page body (main) DOES contain the filter tabs
+        $this->assertStringContainsString('Semua Antrian', $content);
+        $this->assertStringContainsString('Baru (Open)', $content);
+    }
+
+    public function test_admin_retains_link_to_admin_panel_on_operator_page(): void
+    {
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+
+        $response = $this->actingAs($admin)->get('/helpdesk');
+
+        $response->assertOk();
+        $response->assertSee('/admin');
+        $response->assertSee('Admin Panel');
+        $response->assertDontSee('Portal Rider');
+    }
+
+    public function test_mizu_chat_widget_is_not_rendered_on_helpdesk_pages_or_for_operator_and_admin(): void
+    {
+        config(['services.gemini.key' => 'fake-gemini-key']);
+
+        $peserta = User::factory()->create(['role' => User::ROLE_PESERTA]);
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+        $ticket = HelpdeskTicket::factory()->create();
+
+        // 1. Guest on home page / DOES render widget
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('aria-label="Tanya Mizu"', false);
+
+        // 2. Peserta on home page / DOES render widget
+        $this->actingAs($peserta)->get('/')
+            ->assertOk()
+            ->assertSee('aria-label="Tanya Mizu"', false);
+
+        // 3. Operator on /helpdesk -> no widget
+        $this->actingAs($operator)->get('/helpdesk')
+            ->assertOk()
+            ->assertDontSee('aria-label="Tanya Mizu"', false)
+            ->assertDontSee('mizu-chat-widget');
+
+        // 4. Operator on /helpdesk/tickets/{id} -> no widget
+        $this->actingAs($operator)->get("/helpdesk/tickets/{$ticket->id}")
+            ->assertOk()
+            ->assertDontSee('aria-label="Tanya Mizu"', false)
+            ->assertDontSee('mizu-chat-widget');
+
+        // 5. Operator on home page / -> no widget
+        $this->actingAs($operator)->get('/')
+            ->assertOk()
+            ->assertDontSee('aria-label="Tanya Mizu"', false)
+            ->assertDontSee('mizu-chat-widget');
+
+        // 6. Admin on /helpdesk -> no widget
+        $this->actingAs($admin)->get('/helpdesk')
+            ->assertOk()
+            ->assertDontSee('aria-label="Tanya Mizu"', false)
+            ->assertDontSee('mizu-chat-widget');
+
+        // 7. Admin on home page / -> no widget
+        $this->actingAs($admin)->get('/')
+            ->assertOk()
+            ->assertDontSee('aria-label="Tanya Mizu"', false)
+            ->assertDontSee('mizu-chat-widget');
+    }
 }
 

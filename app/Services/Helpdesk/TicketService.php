@@ -31,6 +31,10 @@ class TicketService
      */
     public function createTicket(User $reporter, array $data, ?CarbonInterface $now = null): HelpdeskTicket
     {
+        if (! $reporter->isPeserta() || $reporter->is_system) {
+            throw new DomainException('Pelapor tiket harus merupakan pengguna dengan peran peserta dan bukan akun sistem.');
+        }
+
         $current = $now ? Carbon::instance($now) : Carbon::now();
 
         $priority = $data['priority'] instanceof TicketPriority

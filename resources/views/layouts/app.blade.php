@@ -42,8 +42,10 @@
         @yield('content', $slot ?? '')
     </main>
 
-    {{-- Tanya Mizu hanya tampil bila GEMINI_API_KEY sudah dikonfigurasi --}}
-    @if (app(\App\Support\MizuAiService::class)->isConfigured())
+    {{-- Tanya Mizu hanya tampil bila GEMINI_API_KEY sudah dikonfigurasi, bukan di halaman helpdesk*, dan bukan untuk operator/admin --}}
+    @if (app(\App\Support\MizuAiService::class)->isConfigured()
+         && ! request()->is('helpdesk*')
+         && ! (auth()->check() && (auth()->user()->isOperator() || auth()->user()->isAdmin())))
         @livewire('mizu-chat-widget')
     @endif
 
