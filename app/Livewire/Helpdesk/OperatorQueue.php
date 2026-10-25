@@ -23,6 +23,7 @@ class OperatorQueue extends Component
     use WithPagination;
 
     public string $filter = 'all'; // all, open, in_progress, closed, my_tickets
+    public string $priorityFilter = 'all'; // all, High, Mid, Low
     public string $search = '';
 
     public function mount(): void
@@ -34,6 +35,11 @@ class OperatorQueue extends Component
     }
 
     public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedPriorityFilter(): void
     {
         $this->resetPage();
     }
@@ -111,13 +117,30 @@ class OperatorQueue extends Component
             default => null,
         };
 
+        if ($this->priorityFilter !== 'all' && in_array($this->priorityFilter, ['High', 'Mid', 'Low'], true)) {
+            $query->where('priority', $this->priorityFilter);
+        }
+
+        // Urutan Antrian:
+        // 1. Tiket Aktif (Open/In-Progress) sebelum Closed
+        // 2. Prioritas High > Mid > Low
+        // 3. FIFO tertua created_at terlebih dahulu
+        // 4. ID ascending sebagai final tiebreaker
         $tickets = $query->orderByRaw("
             CASE 
-                WHEN status = 'Open' THEN 1
-                WHEN status = 'In-Progress' THEN 2
-                ELSE 3
+                WHEN status IN ('Open', 'In-Progress') THEN 0 
+                ELSE 1 
             END ASC
-        ")->latest('created_at')->paginate(10);
+        ")->orderByRaw("
+            CASE priority 
+                WHEN 'High' THEN 1 
+                WHEN 'Mid' THEN 2 
+                WHEN 'Low' THEN 3 
+                ELSE 4 
+            END ASC
+        ")->orderBy('created_at', 'asc')
+          ->orderBy('id', 'asc')
+          ->paginate(10);
 
         return view('livewire.helpdesk.operator-queue', [
             'kpiOpen' => $kpiOpen,

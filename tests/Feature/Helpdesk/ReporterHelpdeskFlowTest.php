@@ -464,6 +464,112 @@ class ReporterHelpdeskFlowTest extends TestCase
             'subject' => 'Kendala pembayaran tiket QR yang belum terjawab',
         ]);
     }
+
+    public function test_reporter_timeline_state_new_unassigned_ticket(): void
+    {
+        $peserta = User::factory()->create(['role' => User::ROLE_PESERTA]);
+        $ticket = HelpdeskTicket::factory()->create([
+            'reporter_id' => $peserta->id,
+            'operator_id' => null,
+            'status' => TicketStatus::OPEN,
+            'first_response_at' => null,
+            'closed_at' => null,
+            'created_at' => now(),
+            'response_due_at' => now()->addHours(2),
+            'resolution_due_at' => now()->addHours(8),
+        ]);
+
+        $component = Livewire::actingAs($peserta)
+            ->test(\App\Livewire\Helpdesk\MyTickets::class, ['ticket' => $ticket->id])
+            ->assertSee('Status & Progres Penanganan')
+            ->assertSee('Dibuat')
+            ->assertSee('WIB')
+            ->assertSee('Belum ditugaskan')
+            ->assertSee('Menunggu tanggapan')
+            ->assertSee('Menunggu penyelesaian')
+            ->assertDontSee('Ditugaskan ke')
+            // Assert no internal data leakage
+            ->assertDontSee('response_due_at')
+            ->assertDontSee('resolution_due_at')
+            ->assertDontSee('SLA')
+            ->assertDontSee('Mungkin Duplikat');
+    }
+
+    public function test_reporter_timeline_state_assigned_to_operator(): void
+    {
+        $peserta = User::factory()->create(['role' => User::ROLE_PESERTA]);
+        $operator = User::factory()->create([
+            'role' => User::ROLE_OPERATOR,
+            'name' => 'Bambang Operator',
+        ]);
+        $ticket = HelpdeskTicket::factory()->create([
+            'reporter_id' => $peserta->id,
+            'operator_id' => $operator->id,
+            'status' => TicketStatus::OPEN,
+            'first_response_at' => null,
+            'closed_at' => null,
+            'created_at' => now()->subHour(),
+        ]);
+
+        Livewire::actingAs($peserta)
+            ->test(\App\Livewire\Helpdesk\MyTickets::class, ['ticket' => $ticket->id])
+            ->assertSee('Dibuat')
+            ->assertSee('Ditugaskan ke Bambang Operator')
+            ->assertSee('Operator: Bambang Operator')
+            ->assertSee('WIB');
+    }
+
+    public function test_reporter_timeline_state_in_progress_or_first_reply(): void
+    {
+        $peserta = User::factory()->create(['role' => User::ROLE_PESERTA]);
+        $operator = User::factory()->create([
+            'role' => User::ROLE_OPERATOR,
+            'name' => 'Siti Support',
+        ]);
+        $ticket = HelpdeskTicket::factory()->create([
+            'reporter_id' => $peserta->id,
+            'operator_id' => $operator->id,
+            'status' => TicketStatus::IN_PROGRESS,
+            'first_response_at' => now()->subMinutes(30),
+            'closed_at' => null,
+            'created_at' => now()->subHour(),
+        ]);
+
+        Livewire::actingAs($peserta)
+            ->test(\App\Livewire\Helpdesk\MyTickets::class, ['ticket' => $ticket->id])
+            ->assertSee('Dibuat')
+            ->assertSee('Ditugaskan ke Siti Support')
+            ->assertSee('Diproses')
+            ->assertDontSee('Menunggu tanggapan')
+            ->assertSee('Menunggu penyelesaian')
+            ->assertSee('WIB');
+    }
+
+    public function test_reporter_timeline_state_closed(): void
+    {
+        $peserta = User::factory()->create(['role' => User::ROLE_PESERTA]);
+        $operator = User::factory()->create([
+            'role' => User::ROLE_OPERATOR,
+            'name' => 'Dedi Helpdesk',
+        ]);
+        $ticket = HelpdeskTicket::factory()->create([
+            'reporter_id' => $peserta->id,
+            'operator_id' => $operator->id,
+            'status' => TicketStatus::CLOSED,
+            'first_response_at' => now()->subHours(2),
+            'closed_at' => now()->subMinutes(15),
+            'created_at' => now()->subHours(3),
+        ]);
+
+        Livewire::actingAs($peserta)
+            ->test(\App\Livewire\Helpdesk\MyTickets::class, ['ticket' => $ticket->id])
+            ->assertSee('Dibuat')
+            ->assertSee('Ditugaskan ke Dedi Helpdesk')
+            ->assertSee('Diproses')
+            ->assertSee('Selesai')
+            ->assertDontSee('Menunggu penyelesaian')
+            ->assertSee('WIB');
+    }
 }
 
 

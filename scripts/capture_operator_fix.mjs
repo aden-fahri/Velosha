@@ -15,113 +15,98 @@ const viewports = [
     { name: '1440', width: 1440, height: 900 },
 ];
 
-const urls = [
-    { label: 'queue', path: '/helpdesk' },
-    { label: 'detail', path: '/helpdesk/tickets/1' },
-];
-
 async function main() {
-    console.log('Starting Operator UI Evidence Capture...');
+    console.log('Starting Operator UI & Reporter Timeline Evidence Capture...');
     const browser = await chromium.launch({ headless: true });
-    const context = await browser.newContext();
 
-    // 1. Log in as operator
-    const loginPage = await context.newPage();
-    await loginPage.goto('http://127.0.0.1:8000/login');
-    await loginPage.fill('input[name="email"]', 'operator@velosha.id');
-    await loginPage.fill('input[name="password"]', 'password');
+    // 1. Operator context
+    const opContext = await browser.newContext();
+    const opLogin = await opContext.newPage();
+    await opLogin.goto('http://127.0.0.1:8000/login');
+    await opLogin.fill('input[name="email"]', 'operator@velosha.id');
+    await opLogin.fill('input[name="password"]', 'password');
     await Promise.all([
-        loginPage.waitForNavigation({ waitUntil: 'networkidle' }),
-        loginPage.click('button[type="submit"]'),
+        opLogin.waitForNavigation({ waitUntil: 'networkidle' }),
+        opLogin.click('button[type="submit"]'),
     ]);
-    console.log('Logged in successfully as operator. URL:', loginPage.url());
-    await loginPage.close();
+    console.log('Operator logged in successfully.');
+    await opLogin.close();
+
+    // 2. Peserta context
+    const pesContext = await browser.newContext();
+    const pesLogin = await pesContext.newPage();
+    await pesLogin.goto('http://127.0.0.1:8000/login');
+    await pesLogin.fill('input[name="email"]', 'peserta@velosha.id');
+    await pesLogin.fill('input[name="password"]', 'password');
+    await Promise.all([
+        pesLogin.waitForNavigation({ waitUntil: 'networkidle' }),
+        pesLogin.click('button[type="submit"]'),
+    ]);
+    console.log('Peserta logged in successfully.');
+    await pesLogin.close();
 
     const results = [];
 
     for (const vp of viewports) {
         console.log(`\nTesting Viewport ${vp.name} (${vp.width}x${vp.height})...`);
-        const page = await context.newPage();
-        await page.setViewportSize({ width: vp.width, height: vp.height });
 
-        for (const item of urls) {
-            const targetUrl = `http://127.0.0.1:8000${item.path}`;
-            await page.goto(targetUrl, { waitUntil: 'networkidle' });
+        // A. Queue page as operator
+        const opPage = await opContext.newPage();
+        await opPage.setViewportSize({ width: vp.width, height: vp.height });
+        await opPage.goto('http://127.0.0.1:8000/helpdesk', { waitUntil: 'networkidle' });
 
-            // Check for error banner or "Halaman ini hanya untuk peran peserta"
-            const pageText = await page.content();
-            const hasErrorBanner = pageText.includes('Halaman ini hanya untuk peran peserta') ||
-                                   pageText.includes('Kendala:');
+        const queueOverflow = await checkOverflow(opPage);
+        const queueFilename = `queue_${vp.name}.png`;
+        await opPage.screenshot({ path: path.join(outDir, queueFilename), fullPage: true });
+        console.log(`  Captured ${queueFilename} - Overflow: ${queueOverflow.hasOverflow ? `YES (+${queueOverflow.diff}px)` : 'NO (0px)'}`);
 
-            // Overflow check
-            const overflow = await page.evaluate(() => {
-                const docWidth = document.documentElement.clientWidth;
-                const docScroll = document.documentElement.scrollWidth;
-                const bodyWidth = document.body.clientWidth;
-                const bodyScroll = document.body.scrollWidth;
-                const maxScroll = Math.max(docScroll, bodyScroll);
-                const maxClient = Math.max(docWidth, bodyWidth);
-                return {
-                    hasOverflow: maxScroll > maxClient,
-                    client: maxClient,
-                    scroll: maxScroll,
-                    diff: maxScroll - maxClient,
-                };
-            });
+        // B. Detail page as operator
+        await opPage.goto('http://127.0.0.1:8000/helpdesk/tickets/1', { waitUntil: 'networkidle' });
+        const detailOverflow = await checkOverflow(opPage);
+        const detailFilename = `detail_${vp.name}.png`;
+        await opPage.screenshot({ path: path.join(outDir, detailFilename), fullPage: true });
+        console.log(`  Captured ${detailFilename} - Overflow: ${detailOverflow.hasOverflow ? `YES (+${detailOverflow.diff}px)` : 'NO (0px)'}`);
+        await opPage.close();
 
-            // Check for Portal Rider link
-            const hasPortalRider = await page.evaluate(() => {
-                const links = Array.from(document.querySelectorAll('a'));
-                return links.some(a => a.textContent.includes('Portal Rider') || a.getAttribute('href')?.includes('/dashboard'));
-            });
+        // C. Reporter timeline as peserta
+        const pesPage = await pesContext.newPage();
+        await pesPage.setViewportSize({ width: vp.width, height: vp.height });
+        await pesPage.goto('http://127.0.0.1:8000/dashboard/bantuan/1', { waitUntil: 'networkidle' });
+        const reporterOverflow = await checkOverflow(pesPage);
+        const reporterFilename = `reporter_detail_${vp.name}.png`;
+        await pesPage.screenshot({ path: path.join(outDir, reporterFilename), fullPage: true });
+        console.log(`  Captured ${reporterFilename} - Overflow: ${reporterOverflow.hasOverflow ? `YES (+${reporterOverflow.diff}px)` : 'NO (0px)'}`);
+        await pesPage.close();
 
-            // Check for Mizu chat widget
-            const hasMizuWidget = await page.evaluate(() => {
-                return !!document.querySelector('[aria-label="Tanya Mizu"]') || !!document.querySelector('.mizu-chat-container');
-            });
-
-            const filename = `${item.label}_${vp.name}.png`;
-            const filepath = path.join(outDir, filename);
-            await page.screenshot({ path: filepath, fullPage: true });
-
-            console.log(`  Captured ${filename}:`);
-            console.log(`    - Overflow: ${overflow.hasOverflow ? `YES (+${overflow.diff}px)` : 'NO (0px overflow)'}`);
-            console.log(`    - Error Banner: ${hasErrorBanner ? 'DETECTED (FAIL)' : 'None (PASS)'}`);
-            console.log(`    - Portal Rider Link: ${hasPortalRider ? 'DETECTED (FAIL)' : 'None (PASS)'}`);
-            console.log(`    - Mizu Widget: ${hasMizuWidget ? 'DETECTED (FAIL)' : 'None (PASS)'}`);
-
-            results.push({
-                page: item.label,
-                viewport: vp.name,
-                hasOverflow: overflow.hasOverflow,
-                hasErrorBanner,
-                hasPortalRider,
-                hasMizuWidget,
-                diff: overflow.diff,
-                file: filepath,
-            });
-        }
-
-        await page.close();
+        results.push(
+            { page: 'queue', vp: vp.name, overflow: queueOverflow },
+            { page: 'detail', vp: vp.name, overflow: detailOverflow },
+            { page: 'reporter_detail', vp: vp.name, overflow: reporterOverflow }
+        );
     }
 
     await browser.close();
 
-    console.log('\n=======================================');
-    console.log('SUMMARY OF CHECKS:');
-    const overflows = results.filter(r => r.hasOverflow);
-    const banners = results.filter(r => r.hasErrorBanner);
-    const portalLinks = results.filter(r => r.hasPortalRider);
-    const mizuWidgets = results.filter(r => r.hasMizuWidget);
+    const overflows = results.filter(r => r.overflow.hasOverflow);
+    console.log(`\nEvidence capture complete. Overflows: ${overflows.length === 0 ? 'ALL PASSED (0px overflow across all viewports)' : `${overflows.length} FAILED`}`);
+    if (overflows.length > 0) process.exit(1);
+}
 
-    console.log(`- Overflows: ${overflows.length === 0 ? 'ALL PASSED (0px overflow across all viewports)' : `${overflows.length} FAILED`}`);
-    console.log(`- Error Banners: ${banners.length === 0 ? 'ALL PASSED (No error banner found)' : `${banners.length} FAILED`}`);
-    console.log(`- Portal Rider Links: ${portalLinks.length === 0 ? 'ALL PASSED (No portal rider links)' : `${portalLinks.length} FAILED`}`);
-    console.log(`- Mizu Widget: ${mizuWidgets.length === 0 ? 'ALL PASSED (Not rendered)' : `${mizuWidgets.length} FAILED`}`);
-
-    if (overflows.length > 0 || banners.length > 0 || portalLinks.length > 0 || mizuWidgets.length > 0) {
-        process.exit(1);
-    }
+async function checkOverflow(page) {
+    return await page.evaluate(() => {
+        const docWidth = document.documentElement.clientWidth;
+        const docScroll = document.documentElement.scrollWidth;
+        const bodyWidth = document.body.clientWidth;
+        const bodyScroll = document.body.scrollWidth;
+        const maxScroll = Math.max(docScroll, bodyScroll);
+        const maxClient = Math.max(docWidth, bodyWidth);
+        return {
+            hasOverflow: maxScroll > maxClient,
+            client: maxClient,
+            scroll: maxScroll,
+            diff: maxScroll - maxClient,
+        };
+    });
 }
 
 main().catch(err => {

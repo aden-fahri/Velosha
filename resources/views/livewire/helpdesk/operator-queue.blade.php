@@ -191,6 +191,17 @@
                         class="px-3.5 py-1.5 rounded-lg border-[2px] border-[var(--ink)] text-xs font-bold transition {{ $filter === 'closed' ? 'bg-[var(--mustard)] shadow-[2px_2px_0_var(--ink)]' : 'bg-transparent hover:bg-[var(--paper2)]' }}">
                     Selesai (Closed)
                 </button>
+
+                {{-- Priority Filter Select --}}
+                <div class="relative inline-flex items-center ml-1">
+                    <select wire:model.live="priorityFilter" aria-label="Filter Prioritas"
+                            class="px-3 py-1.5 rounded-lg border-[2px] border-[var(--ink)] text-xs font-bold bg-[var(--paper)] hover:bg-white text-[var(--ink)] focus:outline-none shadow-[2px_2px_0_var(--ink)] cursor-pointer">
+                        <option value="all">Semua Prioritas</option>
+                        <option value="High">Prioritas: High</option>
+                        <option value="Mid">Prioritas: Mid</option>
+                        <option value="Low">Prioritas: Low</option>
+                    </select>
+                </div>
             </div>
 
             {{-- Search Box --}}

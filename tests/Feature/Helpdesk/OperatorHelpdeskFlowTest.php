@@ -332,5 +332,81 @@ class OperatorHelpdeskFlowTest extends TestCase
             ->assertDontSee('aria-label="Tanya Mizu"', false)
             ->assertDontSee('mizu-chat-widget');
     }
+
+    public function test_operator_queue_orders_tickets_by_active_then_priority_then_fifo(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+
+        // Fixed fixtures: old Low, new High, old High, Mid, plus a closed High
+        $oldLow = HelpdeskTicket::factory()->create([
+            'status' => TicketStatus::OPEN,
+            'priority' => TicketPriority::LOW,
+            'created_at' => Carbon::parse('2026-10-25 08:00:00'),
+            'subject' => 'Old Low Ticket',
+        ]);
+        $newHigh = HelpdeskTicket::factory()->create([
+            'status' => TicketStatus::OPEN,
+            'priority' => TicketPriority::HIGH,
+            'created_at' => Carbon::parse('2026-10-25 09:30:00'),
+            'subject' => 'New High Ticket',
+        ]);
+        $oldHigh = HelpdeskTicket::factory()->create([
+            'status' => TicketStatus::OPEN,
+            'priority' => TicketPriority::HIGH,
+            'created_at' => Carbon::parse('2026-10-25 09:00:00'),
+            'subject' => 'Old High Ticket',
+        ]);
+        $mid = HelpdeskTicket::factory()->create([
+            'status' => TicketStatus::OPEN,
+            'priority' => TicketPriority::MID,
+            'created_at' => Carbon::parse('2026-10-25 09:15:00'),
+            'subject' => 'Mid Ticket',
+        ]);
+        $closedHigh = HelpdeskTicket::factory()->create([
+            'status' => TicketStatus::CLOSED,
+            'priority' => TicketPriority::HIGH,
+            'created_at' => Carbon::parse('2026-10-25 07:00:00'),
+            'subject' => 'Closed High Ticket',
+        ]);
+
+        $rendered = Livewire::actingAs($operator)
+            ->test(OperatorQueue::class)
+            ->viewData('tickets');
+
+        $ids = collect($rendered->items())->pluck('id')->all();
+
+        // Exact expected order:
+        // 1. Old High (High, 09:00 FIFO)
+        // 2. New High (High, 09:30)
+        // 3. Mid (Mid, 09:15)
+        // 4. Old Low (Low, 08:00)
+        // 5. Closed High (Closed comes after active)
+        $this->assertSame([$oldHigh->id, $newHigh->id, $mid->id, $oldLow->id, $closedHigh->id], $ids);
+    }
+
+    public function test_operator_queue_priority_filter_filters_tickets(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+
+        $high = HelpdeskTicket::factory()->create([
+            'priority' => TicketPriority::HIGH,
+            'subject' => 'Target High Issue',
+        ]);
+        $low = HelpdeskTicket::factory()->create([
+            'priority' => TicketPriority::LOW,
+            'subject' => 'Target Low Issue',
+        ]);
+
+        Livewire::actingAs($operator)
+            ->test(OperatorQueue::class)
+            ->assertSee('Target High Issue')
+            ->assertSee('Target Low Issue')
+            ->set('priorityFilter', 'High')
+            ->assertSee('Target High Issue')
+            ->assertDontSee('Target Low Issue')
+            ->set('priorityFilter', 'Low')
+            ->assertDontSee('Target High Issue')
+            ->assertSee('Target Low Issue');
+    }
 }
 
