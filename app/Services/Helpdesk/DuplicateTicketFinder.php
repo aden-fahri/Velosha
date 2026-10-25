@@ -55,7 +55,7 @@ class DuplicateTicketFinder
     public const INDONESIAN_STOPWORDS = [
         'yang', 'untuk', 'pada', 'ke', 'para', 'namun', 'menurut', 'antara', 'dia',
         'dua', 'ia', 'seperti', 'jika', 'sehingga', 'kembali', 'dan', 'ini', 'karena',
-        'oleh', 'saat', 'dari', 'telah', 'dalam', 'bisa', 'ada', 'tidak', 'dengan',
+        'oleh', 'saat', 'dari', 'di', 'telah', 'dalam', 'bisa', 'ada', 'tidak', 'dengan',
         'saya', 'kami', 'kita', 'kamu', 'anda', 'mereka', 'akan', 'atau', 'sudah',
         'juga', 'hanya', 'agar', 'bagi', 'bahwa', 'serta', 'tentang', 'setelah',
         'lagi', 'pun', 'adalah', 'yaitu', 'yakni', 'apakah', 'bagaimana', 'kenapa',
