@@ -48,6 +48,7 @@ class DemoHelpdeskSeeder extends Seeder
                 'priority' => TicketPriority::HIGH,
                 'status' => TicketStatus::IN_PROGRESS,
                 'operator_id' => $operator->id,
+                'created_at' => Carbon::now()->subHours(2),
                 'first_response_at' => Carbon::now()->subMinutes(15),
                 'response_due_at' => Carbon::now()->addMinutes(10),
                 'resolution_due_at' => Carbon::now()->addHours(3),
@@ -74,6 +75,7 @@ class DemoHelpdeskSeeder extends Seeder
                 'priority' => TicketPriority::HIGH,
                 'status' => TicketStatus::OPEN,
                 'operator_id' => null,
+                'created_at' => Carbon::now()->subHours(4),
                 'response_due_at' => Carbon::now()->subMinutes(30),
                 'resolution_due_at' => Carbon::now()->subHours(2),
             ]
@@ -90,6 +92,7 @@ class DemoHelpdeskSeeder extends Seeder
                 'operator_id' => $operator->id,
                 'is_reference' => true,
                 'solution_summary' => 'Nama peserta telah disesuaikan di database. Silakan muat ulang tab BIB di portal untuk melihat nomor BIB terbaru.',
+                'created_at' => Carbon::now()->subDays(3),
                 'first_response_at' => Carbon::now()->subDays(2),
                 'closed_at' => Carbon::now()->subDays(1),
                 'resolution_time' => 120,

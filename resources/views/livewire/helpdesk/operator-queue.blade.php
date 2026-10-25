@@ -32,6 +32,12 @@
             <div class="text-[11px] font-extrabold tracking-wider text-[var(--mute)] uppercase px-2 mt-6 mb-2">Navigasi Sistem</div>
             <nav class="space-y-1 text-sm font-semibold">
                 @if (auth()->user()->isAdmin())
+                    <a href="/helpdesk/analitik" wire:navigate
+                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[var(--ink)] hover:bg-[#F3E7CF] transition text-left {{ request()->is('helpdesk/analitik*') ? 'bg-[var(--mustard)] border-2 border-[var(--ink)] font-bold shadow-[2px_2px_0_var(--ink)]' : '' }}" style="text-decoration: none">
+                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                        <span>Analitik Helpdesk</span>
+                    </a>
+
                     <a href="/admin"
                        class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[var(--ink)] hover:bg-[#F3E7CF] transition text-left" style="text-decoration: none">
                         <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
