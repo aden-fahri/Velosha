@@ -73,6 +73,12 @@
                     <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-extrabold text-xs bg-purple-100 text-purple-900 border-[1.5px] border-purple-700">
                         {{ $ticket->category?->value ?? 'Lainnya' }}
                     </span>
+                    @if ($ticket->duplicate_of_id)
+                        <a href="{{ route('helpdesk.detail', $ticket->duplicate_of_id) }}" wire:navigate
+                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-extrabold text-xs bg-amber-200 text-amber-950 border-[1.5px] border-amber-800 hover:bg-amber-300 transition">
+                            ⤹ Duplikat dari #{{ $ticket->duplicate_of_id }}
+                        </a>
+                    @endif
                 </div>
 
                 <div class="text-xs text-[var(--mute)]">
@@ -372,6 +378,64 @@
                                 </div>
                             @endif
                         </div>
+                    @endif
+                </div>
+
+                {{-- Mungkin Duplikat Card --}}
+                <div class="bg-white border-[2.5px] border-[var(--ink)] rounded-xl p-5 shadow-[4px_4px_0_var(--ink)] space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-black font-heading text-sm uppercase tracking-wider text-[var(--ink)] flex items-center gap-1.5">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            Mungkin Duplikat
+                        </h3>
+                        @if ($potentialDuplicates->isNotEmpty())
+                            <span class="px-2 py-0.5 text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-600 rounded-full">
+                                {{ $potentialDuplicates->count() }} Terdeteksi
+                            </span>
+                        @endif
+                    </div>
+
+                    @if ($ticket->status !== \App\Enums\TicketStatus::CLOSED && $ticket->duplicate_of_id === null)
+                        @if ($potentialDuplicates->isEmpty())
+                            <p class="text-xs text-[var(--mute)]">
+                                Tidak ada tiket aktif lain yang terdeteksi sebagai duplikat.
+                            </p>
+                        @else
+                            <div class="space-y-3">
+                                @foreach ($potentialDuplicates as $dup)
+                                    <div class="p-3 bg-[var(--paper)] rounded-lg border-[1.5px] border-[var(--ink)] space-y-2">
+                                        <div class="flex items-center justify-between text-xs">
+                                            <a href="{{ route('helpdesk.detail', $dup->id) }}" wire:navigate class="font-black text-[var(--ink)] underline">
+                                                #{{ $dup->id }}
+                                            </a>
+                                            <span class="px-1.5 py-0.5 text-[10px] font-bold rounded border {{ $dup->status === \App\Enums\TicketStatus::OPEN ? 'bg-blue-100 text-blue-900 border-blue-600' : 'bg-amber-100 text-amber-900 border-amber-600' }}">
+                                                {{ $dup->status->value }}
+                                            </span>
+                                        </div>
+                                        <div class="text-xs font-bold text-[var(--ink)] line-clamp-2">
+                                            {{ $dup->subject }}
+                                        </div>
+                                        <div class="text-[10px] text-[var(--mute)] flex items-center justify-between">
+                                            <span>Pelapor: {{ $dup->reporter?->name ?? 'Anonim' }}</span>
+                                            <span>{{ $dup->created_at->diffForHumans() }}</span>
+                                        </div>
+                                        <button type="button" wire:click="mergeDuplicate({{ $dup->id }})"
+                                                wire:confirm="Gabungkan tiket #{{ $dup->id }} sebagai duplikat dari tiket ini? Tiket #{{ $dup->id }} akan ditutup otomatis."
+                                                class="w-full py-1.5 bg-amber-400 hover:bg-amber-300 text-[var(--ink)] font-black text-xs rounded-lg border-[1.5px] border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] transition">
+                                            Gabungkan sebagai Duplikat
+                                        </button>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    @elseif ($ticket->duplicate_of_id !== null)
+                        <div class="p-3 bg-amber-50 border border-amber-600 rounded-lg text-xs font-semibold text-amber-900">
+                            Tiket ini telah digabungkan sebagai duplikat dari <a href="{{ route('helpdesk.detail', $ticket->duplicate_of_id) }}" wire:navigate class="underline font-bold">Tiket #{{ $ticket->duplicate_of_id }}</a>.
+                        </div>
+                    @else
+                        <p class="text-xs text-[var(--mute)]">
+                            Tiket sudah ditutup. Penggabungan tiket baru dinonaktifkan.
+                        </p>
                     @endif
                 </div>
 

@@ -77,6 +77,21 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
+    protected static function booted(): void
+    {
+        static::updating(function (User $user) {
+            if ($user->getOriginal('is_system') || $user->is_system) {
+                throw new \DomainException('Akun sistem/bot tidak dapat diubah.');
+            }
+        });
+
+        static::deleting(function (User $user) {
+            if ($user->is_system) {
+                throw new \DomainException('Akun sistem/bot tidak dapat dihapus.');
+            }
+        });
+    }
+
     public function isSystem(): bool
     {
         return (bool) $this->is_system;

@@ -319,4 +319,98 @@ class TicketService
             return $lockedTicket;
         });
     }
+
+    /**
+     * Menggabungkan tiket duplikat ke dalam tiket target (tiket utama).
+     *
+     * Tiket duplikat ditutup menggunakan changeStatus() dan ditambahkan balasan penaut
+     * melalui addReply() sebagai balasan manusia (first_response_at berlaku jika belum terisi).
+     * Tidak ada penulisan langsung kolom status/closed_at/resolution_time.
+     * Kedua baris tiket dikunci dalam transaksi database dengan urutan ID menaik (ascending).
+     *
+     * @param HelpdeskTicket $target Tiket utama tujuan penggabungan
+     * @param HelpdeskTicket $duplicate Tiket yang digabungkan sebagai duplikat
+     * @param User $actor Operator atau admin yang melakukan penggabungan
+     * @param CarbonInterface|null $now Waktu simulasi (opsional untuk testing)
+     * @return HelpdeskTicket Tiket duplikat yang telah digabungkan dan ditutup
+     * @throws AuthorizationException Jika actor bukan operator atau admin
+     * @throws DomainException Jika merge ke dirinya sendiri, target merupakan duplikat, duplicate sudah Closed, atau tiket tidak ditemukan
+     */
+    public function mergeTickets(
+        HelpdeskTicket $target,
+        HelpdeskTicket $duplicate,
+        User $actor,
+        ?CarbonInterface $now = null
+    ): HelpdeskTicket {
+        if (! $actor->isOperator() && ! $actor->isAdmin()) {
+            throw new AuthorizationException('Hanya operator atau admin yang berwenang menggabungkan tiket.');
+        }
+
+        if ($target->id === $duplicate->id) {
+            throw new DomainException('Tiket tidak dapat digabungkan ke dirinya sendiri.');
+        }
+
+        if ($duplicate->duplicate_of_id !== null) {
+            throw new DomainException('Tiket duplikat tidak boleh merupakan tiket yang sudah digabungkan.');
+        }
+
+        $current = $now ? Carbon::instance($now) : Carbon::now();
+
+        return DB::transaction(function () use ($target, $duplicate, $actor, $current) {
+            $firstId = min($target->id, $duplicate->id);
+            $secondId = max($target->id, $duplicate->id);
+
+            // Kunci kedua baris tiket dalam urutan id menaik untuk mencegah deadlock
+            $locked = HelpdeskTicket::whereIn('id', [$firstId, $secondId])
+                ->orderBy('id', 'asc')
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+            /** @var HelpdeskTicket $lockedTarget */
+            $lockedTarget = $locked->get($target->id);
+            /** @var HelpdeskTicket $lockedDuplicate */
+            $lockedDuplicate = $locked->get($duplicate->id);
+
+            if (! $lockedTarget || ! $lockedDuplicate) {
+                throw new DomainException('Tiket tidak ditemukan saat penguncian transaksi.');
+            }
+
+            if ($lockedTarget->duplicate_of_id !== null) {
+                throw new DomainException('Tiket target tidak boleh merupakan tiket duplikat.');
+            }
+
+            if ($lockedDuplicate->duplicate_of_id !== null) {
+                throw new DomainException('Tiket duplikat tidak boleh merupakan tiket yang sudah digabungkan.');
+            }
+
+            if ($lockedDuplicate->isClosed()) {
+                throw new DomainException('Tiket yang sudah ditutup tidak dapat digabungkan.');
+            }
+
+            // Tautkan duplicate_of_id
+            $lockedDuplicate->duplicate_of_id = $lockedTarget->id;
+            $lockedDuplicate->save();
+
+            // Tulis balasan penaut terlebih dahulu melalui addReply() sebagai balasan operator manusia (first_response_at berlaku jika belum terisi)
+            $this->addReply(
+                $lockedDuplicate,
+                $actor,
+                'Tiket ini telah digabungkan sebagai duplikat ke tiket #' . $lockedTarget->id . '. Pembahasan dan penyelesaian dilanjutkan pada tiket utama.',
+                false,
+                $current
+            );
+
+            // Tutup tiket duplikat melalui changeStatus() (tanpa menulis langsung closed_at/resolution_time/status)
+            $this->changeStatus(
+                $lockedDuplicate,
+                TicketStatus::CLOSED,
+                $actor,
+                'Tiket digabungkan sebagai duplikat dari tiket #' . $lockedTarget->id . '.',
+                $current
+            );
+
+            return $lockedDuplicate->fresh();
+        });
+    }
 }

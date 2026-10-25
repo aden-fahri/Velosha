@@ -1,6 +1,6 @@
 <div class="vs min-h-screen bg-[var(--paper)] text-[var(--ink)] flex flex-col md:flex-row">
     <!-- SIDEBAR PORTAL RIDER -->
-    <aside class="w-full md:w-68 bg-[#FBF4E6] border-b-2 md:border-b-0 md:border-r-[3px] border-[#10282E] p-6 flex flex-col shrink-0">
+    <aside class="w-full md:w-64 bg-[#FBF4E6] border-b-2 md:border-b-0 md:border-r-[3px] border-[#10282E] p-6 flex flex-col shrink-0">
         <div class="flex items-center justify-between pb-6 mb-2 border-b border-[#10282E]/10">
             <a href="/" wire:navigate class="font-heading font-extrabold text-2xl text-[var(--ink)] tracking-tight">Velosha</a>
             <span class="chip font-bold text-xs bg-[var(--mustard)] border border-[var(--ink)] px-2 py-0.5 rounded">Portal</span>
@@ -102,7 +102,7 @@
 
                 <div class="mt-5">
                     <label for="desc" class="block font-bold text-sm text-[var(--ink)] mb-1.5">Deskripsi</label>
-                    <textarea id="desc" wire:model="description" rows="5"
+                    <textarea id="desc" wire:model.live.debounce.400ms="description" rows="5"
                               placeholder="Jelaskan detail kendala, nomor invoice/BIB, atau kendala transaksi..."
                               class="w-full bg-[var(--paper)] border-2 border-[var(--ink)] p-3.5 rounded-lg text-sm font-semibold text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--mustard)] resize-none"></textarea>
                     @error('description') <span class="text-red-700 text-xs font-bold mt-1 block">{{ $message }}</span> @enderror
@@ -140,6 +140,15 @@
 
             <!-- PANEL ADUAN SERUPA -->
             <aside class="lg:col-span-5 space-y-4" aria-label="Aduan serupa">
+                @if($feedbackMessage)
+                <div class="bg-[var(--pine-l)] border-2 border-[var(--ink)] p-4 rounded-xl shadow-xs">
+                    <div class="flex items-center gap-2 text-sm font-bold text-[var(--ink)]">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-[var(--pine)]"></i>
+                        <span>{{ $feedbackMessage }}</span>
+                    </div>
+                </div>
+                @endif
+
                 <div class="bg-[#F8E3B5] border-2 border-[var(--ink)] p-4 rounded-xl flex items-center gap-3.5 shadow-xs">
                     <div class="w-10 h-10 rounded-lg bg-[#F4BE3F] border border-[var(--ink)] flex items-center justify-center shrink-0">
                         <i data-lucide="copy" class="w-5 h-5 text-[var(--ink)]"></i>
@@ -157,20 +166,36 @@
                     @foreach($similarTickets as $sim)
                     <article class="bg-white border-2 border-[var(--ink)] p-4 rounded-xl shadow-xs">
                         <div class="flex items-center justify-between gap-2">
-                            <span class="chip text-[11px] font-bold bg-[var(--pine-l)] text-[var(--ink)] px-2 py-0.5 rounded border border-[var(--ink)]">Rujukan Resmi</span>
-                            <span class="chip text-[11px] font-bold {{ $sim['is_closed'] ? 'bg-[var(--pine-l)]' : 'bg-[var(--mustard)]' }} text-[var(--ink)] px-2 py-0.5 rounded border border-[var(--ink)]">{{ $sim['is_closed'] ? 'Selesai' : 'Aktif' }}</span>
+                            @if($sim['is_own_ticket'])
+                                <span class="chip text-[11px] font-bold bg-[var(--mustard)] text-[var(--ink)] px-2 py-0.5 rounded border border-[var(--ink)]">Tiket Anda</span>
+                            @else
+                                <span class="chip text-[11px] font-bold bg-[var(--pine-l)] text-[var(--ink)] px-2 py-0.5 rounded border border-[var(--ink)]">Rujukan Resmi</span>
+                            @endif
+                            <span class="chip text-[11px] font-bold {{ $sim['is_closed'] ? 'bg-[var(--pine-l)]' : 'bg-[var(--mustard)]' }} text-[var(--ink)] px-2 py-0.5 rounded border border-[var(--ink)]">{{ $sim['status'] }}</span>
                         </div>
                         <h3 class="font-heading font-bold text-base text-[var(--ink)] mt-2.5">{{ $sim['subject'] }}</h3>
+                        @if(!empty($sim['solution_summary']))
                         <div class="text-xs text-[var(--ink)]/90 mt-2 p-2.5 bg-[#FFFDF8] border border-[#10282E]/20 rounded-md">
                             <b class="text-[var(--pine)] block mb-1">Solusi Pengelola:</b>
                             <p class="leading-relaxed">{{ $sim['solution_summary'] }}</p>
+                        </div>
+                        @endif
+                        <div class="flex items-center gap-2 mt-3 pt-2.5 border-t border-[var(--line)]">
+                            <button type="button" wire:click="markAnswered({{ $sim['id'] }})"
+                                    class="btn bg-[var(--pine-l)] hover:bg-[#bfe2c6] text-[var(--ink)] text-xs font-bold px-3 py-1.5 rounded-lg border border-[var(--ink)] transition">
+                                Ini menjawab
+                            </button>
+                            <button type="button" wire:click="rejectAnswerAndSubmit({{ $sim['id'] }})"
+                                    class="btn bg-white hover:bg-[var(--paper2)] text-[var(--ink)] text-xs font-bold px-3 py-1.5 rounded-lg border border-[var(--ink)] transition">
+                                Tetap kirim
+                            </button>
                         </div>
                     </article>
                     @endforeach
                 </div>
                 @else
                 <div class="bg-white/60 border-2 border-dashed border-[var(--line)] p-6 rounded-xl text-center text-xs text-[var(--mute)]">
-                    Ketik subjek di samping untuk melihat aduan dan jawaban serupa secara otomatis.
+                    Ketik subjek atau deskripsi di samping untuk melihat aduan dan jawaban serupa secara otomatis.
                 </div>
                 @endif
 

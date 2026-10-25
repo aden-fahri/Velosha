@@ -1,6 +1,6 @@
 <div wire:poll.10s class="vs min-h-screen bg-[var(--paper)] text-[var(--ink)] flex flex-col md:flex-row">
     <!-- SIDEBAR PORTAL RIDER -->
-    <aside class="w-full md:w-68 bg-[#FBF4E6] border-b-2 md:border-b-0 md:border-r-[3px] border-[#10282E] p-6 flex flex-col shrink-0">
+    <aside class="w-full md:w-64 bg-[#FBF4E6] border-b-2 md:border-b-0 md:border-r-[3px] border-[#10282E] p-6 flex flex-col shrink-0">
         <div class="flex items-center justify-between pb-6 mb-2 border-b border-[#10282E]/10">
             <a href="/" wire:navigate class="font-heading font-extrabold text-2xl text-[var(--ink)] tracking-tight">Velosha</a>
             <span class="chip font-bold text-xs bg-[var(--mustard)] border border-[var(--ink)] px-2 py-0.5 rounded">Portal</span>
