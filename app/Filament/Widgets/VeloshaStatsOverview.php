@@ -60,7 +60,7 @@ class VeloshaStatsOverview extends StatsOverviewWidget
     protected function jumlahPeserta(): int
     {
         if (PanelScope::isAdmin()) {
-            return User::where('role', User::ROLE_PESERTA)->count();
+            return User::where('role', User::ROLE_PESERTA)->where('is_system', false)->count();
         }
 
         return PanelScope::registrations(Registration::query())

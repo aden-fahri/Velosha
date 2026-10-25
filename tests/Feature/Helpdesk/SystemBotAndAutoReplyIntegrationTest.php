@@ -58,9 +58,11 @@ class SystemBotAndAutoReplyIntegrationTest extends TestCase
 
     public function test_system_bot_cannot_log_in(): void
     {
-        $bot = SystemUser::get();
-        $bot->password = \Illuminate\Support\Facades\Hash::make('known-password');
-        $bot->save();
+        $bot = User::factory()->create([
+            'email' => 'bot-login-test@velosha.id',
+            'password' => \Illuminate\Support\Facades\Hash::make('known-password'),
+            'is_system' => true,
+        ]);
 
         $request = new LoginRequest();
         $request->merge([
@@ -244,5 +246,70 @@ class SystemBotAndAutoReplyIntegrationTest extends TestCase
         $ticket = HelpdeskTicket::where('reporter_id', $user->id)->latest('id')->first();
         $this->assertNotNull($ticket);
         $this->assertSame(TicketCategory::PEMBAYARAN, $ticket->category);
+    }
+
+    public function test_system_bot_cannot_be_updated_or_deleted(): void
+    {
+        $bot = SystemUser::get();
+
+        // 1. Coba update harus gagal dengan DomainException
+        try {
+            $bot->update(['name' => 'Nama Baru']);
+            $this->fail('Akun bot sistem tidak boleh dapat diubah');
+        } catch (\DomainException $e) {
+            $this->assertStringContainsString('tidak dapat diubah', $e->getMessage());
+        }
+
+        // 2. Coba delete harus gagal dengan DomainException
+        try {
+            $bot->delete();
+            $this->fail('Akun bot sistem tidak boleh dapat dihapus');
+        } catch (\DomainException $e) {
+            $this->assertStringContainsString('tidak dapat dihapus', $e->getMessage());
+        }
+
+        // Pastikan bot tetap utuh di database
+        $this->assertDatabaseHas('users', ['id' => $bot->id, 'email' => SystemUser::BOT_EMAIL]);
+    }
+
+    public function test_system_user_helper_get_is_idempotent_and_survives_protection(): void
+    {
+        $botFirst = SystemUser::get();
+        $botSecond = SystemUser::get();
+
+        $this->assertSame($botFirst->id, $botSecond->id);
+        $this->assertSame(SystemUser::BOT_EMAIL, $botSecond->email);
+        $this->assertTrue($botSecond->is_system);
+    }
+
+    public function test_system_bot_is_excluded_from_filament_user_queries_and_stats_overview(): void
+    {
+        $bot = SystemUser::get();
+        $regularUser = User::factory()->create(['role' => User::ROLE_PESERTA, 'is_system' => false]);
+
+        // 1. Filament UserResource::getEloquentQuery() mengecualikan is_system
+        $filamentUsers = \App\Filament\Resources\Users\UserResource::getEloquentQuery()->get();
+        $this->assertTrue($filamentUsers->contains('id', $regularUser->id));
+        $this->assertFalse($filamentUsers->contains('id', $bot->id));
+
+        // 2. canEdit dan canDelete bernilai false untuk bot
+        $this->assertFalse(\App\Filament\Resources\Users\UserResource::canEdit($bot));
+        $this->assertFalse(\App\Filament\Resources\Users\UserResource::canDelete($bot));
+        $this->assertTrue(\App\Filament\Resources\Users\UserResource::canEdit($regularUser));
+        $this->assertTrue(\App\Filament\Resources\Users\UserResource::canDelete($regularUser));
+
+        // 3. VeloshaStatsOverview mengecualikan bot dari jumlah peserta
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN, 'is_system' => false]);
+        $this->actingAs($admin);
+
+        $widget = new class extends \App\Filament\Widgets\VeloshaStatsOverview {
+            public function exposeJumlahPeserta(): int
+            {
+                return $this->jumlahPeserta();
+            }
+        };
+
+        // Hanya regularUser yang dihitung, bot peserta diabaikan
+        $this->assertSame(1, $widget->exposeJumlahPeserta());
     }
 }

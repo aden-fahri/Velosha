@@ -38,6 +38,21 @@ class UserResource extends Resource
         return UsersTable::configure($table);
     }
 
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()->where('is_system', false);
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return ! ($record instanceof User && $record->is_system);
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return ! ($record instanceof User && $record->is_system);
+    }
+
     public static function getRelations(): array
     {
         return [

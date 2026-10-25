@@ -31,6 +31,8 @@ class ProductionSeedTest extends TestCase
         $this->assertDatabaseMissing('users', ['email' => 'admin@velosha.id']);
         $this->assertDatabaseMissing('users', ['email' => 'penyelenggara@velosha.id']);
         $this->assertDatabaseMissing('users', ['email' => 'peserta@velosha.id']);
+        $this->assertDatabaseMissing('users', ['email' => 'system-bot@velosha.id']);
+        $this->assertDatabaseMissing('users', ['is_system' => true]);
         $this->assertDatabaseCount('registrations', 0);
     }
 }
