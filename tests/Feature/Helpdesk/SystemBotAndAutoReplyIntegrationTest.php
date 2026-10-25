@@ -59,11 +59,13 @@ class SystemBotAndAutoReplyIntegrationTest extends TestCase
     public function test_system_bot_cannot_log_in(): void
     {
         $bot = SystemUser::get();
+        $bot->password = \Illuminate\Support\Facades\Hash::make('known-password');
+        $bot->save();
 
         $request = new LoginRequest();
         $request->merge([
             'email' => $bot->email,
-            'password' => 'secret123',
+            'password' => 'known-password',
         ]);
 
         $this->expectException(ValidationException::class);
