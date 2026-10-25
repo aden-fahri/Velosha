@@ -70,6 +70,9 @@
                             ✓ Closed
                         </span>
                     @endif
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-extrabold text-xs bg-purple-100 text-purple-900 border-[1.5px] border-purple-700">
+                        {{ $ticket->category?->value ?? 'Lainnya' }}
+                    </span>
                 </div>
 
                 <div class="text-xs text-[var(--mute)]">
@@ -196,6 +199,42 @@
                         <label for="operator-reply" class="block font-black text-xs uppercase tracking-wider text-[var(--ink)]">
                             Kirim Balasan Operator
                         </label>
+
+                        {{-- Saran Balasan Operator (Templates) --}}
+                        @if ($suggestions->isNotEmpty())
+                            <div class="p-3 bg-[var(--paper)] border-[2px] border-[var(--ink)] rounded-lg space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[11px] font-black uppercase tracking-wider text-[var(--ink)] flex items-center gap-1.5">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                        Saran Balasan Cepat (Template)
+                                    </span>
+                                    <span class="text-[10px] font-bold text-[var(--mute)]">Pilih untuk isi otomatis</span>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                    @foreach ($suggestions as $sug)
+                                        <button type="button" wire:click="applyTemplate({{ $sug->id }})"
+                                                class="text-left p-2.5 rounded-lg border-[1.5px] border-[var(--ink)] bg-white hover:bg-[var(--card)] transition shadow-[2px_2px_0_var(--ink)] flex flex-col justify-between">
+                                            <div>
+                                                <div class="flex items-center justify-between gap-1 mb-1">
+                                                    <span class="px-1.5 py-0.5 text-[9px] font-extrabold bg-amber-100 text-amber-900 rounded border border-amber-500">
+                                                        {{ $sug->category?->value ?? 'Umum' }}
+                                                    </span>
+                                                    <span class="text-[9px] font-semibold text-[var(--mute)]">
+                                                        {{ $sug->use_count }}x
+                                                    </span>
+                                                </div>
+                                                <div class="text-[11px] font-bold text-[var(--ink)] line-clamp-1">
+                                                    {{ $sug->title }}
+                                                </div>
+                                            </div>
+                                            <div class="text-[10px] text-blue-800 font-extrabold mt-1.5 flex items-center gap-1">
+                                                <span>Gunakan &rarr;</span>
+                                            </div>
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
 
                         <textarea id="operator-reply" wire:model="replyMessage" rows="4"
                                   placeholder="Tulis instruksi atau informasi penyelesaian kendala di sini..."

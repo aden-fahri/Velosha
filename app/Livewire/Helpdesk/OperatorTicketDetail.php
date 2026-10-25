@@ -5,7 +5,9 @@ namespace App\Livewire\Helpdesk;
 use App\Enums\TicketPriority;
 use App\Enums\TicketStatus;
 use App\Models\HelpdeskTicket;
+use App\Models\ReplyTemplate;
 use App\Models\User;
+use App\Services\Helpdesk\AutoReplyService;
 use App\Services\Helpdesk\TicketService;
 use Carbon\Carbon;
 use DomainException;
@@ -30,6 +32,7 @@ class OperatorTicketDetail extends Component
     public string $solutionSummary = '';
     public bool $isReference = false;
     public ?int $assignOperatorId = null;
+    public ?int $selectedTemplateId = null;
 
     public function mount(int $ticketId): void
     {
@@ -91,6 +94,18 @@ class OperatorTicketDetail extends Component
         }
     }
 
+    public function applyTemplate(int $templateId): void
+    {
+        $ticket = HelpdeskTicket::findOrFail($this->ticketId);
+        $template = ReplyTemplate::find($templateId);
+
+        if ($template) {
+            $this->selectedTemplateId = $template->id;
+            $built = app(AutoReplyService::class)->build($template, $ticket);
+            $this->replyMessage = $built ?? $template->body;
+        }
+    }
+
     public function sendReply(): void
     {
         $this->validateOnly('replyMessage');
@@ -100,6 +115,13 @@ class OperatorTicketDetail extends Component
         try {
             $service = app(TicketService::class);
             $service->addReply($ticket, Auth::user(), trim($this->replyMessage));
+
+            // Naikkan use_count template secara atomik jika balasan berasal dari template
+            if ($this->selectedTemplateId) {
+                app(AutoReplyService::class)->recordTemplateUsage($this->selectedTemplateId);
+                $this->selectedTemplateId = null;
+            }
+
             $this->replyMessage = '';
             session()->flash('success', 'Balasan berhasil dikirim.');
         } catch (DomainException $e) {
@@ -153,13 +175,16 @@ class OperatorTicketDetail extends Component
         $ticket = HelpdeskTicket::with(['reporter', 'operator', 'responses.responder'])
             ->findOrFail($this->ticketId);
 
-        $operators = User::whereIn('role', [User::ROLE_OPERATOR, User::ROLE_ADMIN])
+        $operators = User::assignableOperators()
             ->orderBy('name')
             ->get();
+
+        $suggestions = app(AutoReplyService::class)->getSuggestions($ticket, 3);
 
         return view('livewire.helpdesk.operator-ticket-detail', [
             'ticket' => $ticket,
             'operators' => $operators,
+            'suggestions' => $suggestions,
         ]);
     }
 }

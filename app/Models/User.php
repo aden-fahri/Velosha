@@ -49,6 +49,7 @@ class User extends Authenticatable implements FilamentUser
         'provider',
         'provider_id',
         'role',
+        'is_system',
     ];
 
     /**
@@ -72,7 +73,22 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'birth_date' => 'date',
+            'is_system' => 'boolean',
         ];
+    }
+
+    public function isSystem(): bool
+    {
+        return (bool) $this->is_system;
+    }
+
+    /**
+     * Scope untuk mengambil operator yang dapat ditugaskan (bukan bot sistem).
+     */
+    public function scopeAssignableOperators($query)
+    {
+        return $query->whereIn('role', [self::ROLE_OPERATOR, self::ROLE_ADMIN])
+            ->where('is_system', false);
     }
 
     public function isAdmin(): bool

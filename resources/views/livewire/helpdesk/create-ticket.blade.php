@@ -81,6 +81,17 @@
                 <h2 class="font-heading font-extrabold text-2xl text-[var(--ink)]">Ceritakan kendalamu</h2>
 
                 <div class="mt-5">
+                    <label for="cat" class="block font-bold text-sm text-[var(--ink)] mb-1.5">Kategori Kendala</label>
+                    <select id="cat" wire:model="category"
+                            class="w-full bg-[var(--paper)] border-2 border-[var(--ink)] p-3 rounded-lg text-sm font-semibold text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--mustard)]">
+                        @foreach(\App\Enums\Helpdesk\TicketCategory::cases() as $cat)
+                            <option value="{{ $cat->value }}">{{ $cat->value }}</option>
+                        @endforeach
+                    </select>
+                    @error('category') <span class="text-red-700 text-xs font-bold mt-1 block">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="mt-5">
                     <label for="sub" class="block font-bold text-sm text-[var(--ink)] mb-1.5">Subjek</label>
                     <input id="sub" type="text" wire:model.live.debounce.400ms="subject"
                            placeholder="Contoh: E-ticket belum muncul setelah bayar"

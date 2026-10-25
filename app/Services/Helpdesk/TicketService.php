@@ -2,6 +2,7 @@
 
 namespace App\Services\Helpdesk;
 
+use App\Enums\Helpdesk\TicketCategory;
 use App\Enums\TicketPriority;
 use App\Enums\TicketStatus;
 use App\Models\HelpdeskTicket;
@@ -13,14 +14,17 @@ use Carbon\CarbonInterface;
 use DomainException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TicketService
 {
     /**
      * Membuat tiket baru oleh pelapor dengan nomor tiket unik dan perhitungan SLA otomatis.
+     * Mengirimkan balasan otomatis (auto-reply) jika tersedia template yang relevan.
+     * Kegagalan pada auto-reply dicatat ke log dan tidak membatalkan pembuatan tiket.
      *
      * @param User $reporter
-     * @param array{subject: string, description: string, priority: TicketPriority|string} $data
+     * @param array{subject: string, description: string, priority: TicketPriority|string, category?: TicketCategory|string} $data
      * @param CarbonInterface|null $now
      * @return HelpdeskTicket
      * @throws DomainException
@@ -32,6 +36,10 @@ class TicketService
         $priority = $data['priority'] instanceof TicketPriority
             ? $data['priority']
             : TicketPriority::tryFrom((string) $data['priority']) ?? TicketPriority::LOW;
+
+        $category = isset($data['category'])
+            ? ($data['category'] instanceof TicketCategory ? $data['category'] : TicketCategory::tryFrom((string) $data['category']) ?? TicketCategory::LAINNYA)
+            : TicketCategory::LAINNYA;
 
         $slaPolicy = SlaPolicy::where('priority', $priority->value)->first();
 
@@ -49,10 +57,11 @@ class TicketService
         $responseDueMinutes = $slaPolicy?->response_minutes ?? $defaultResponse;
         $resolutionDueMinutes = $slaPolicy?->resolution_minutes ?? $defaultResolution;
 
-        return DB::transaction(function () use ($reporter, $data, $priority, $current, $responseDueMinutes, $resolutionDueMinutes) {
+        $ticket = DB::transaction(function () use ($reporter, $data, $category, $priority, $current, $responseDueMinutes, $resolutionDueMinutes) {
             return HelpdeskTicket::create([
                 'reporter_id' => $reporter->id,
                 'operator_id' => null,
+                'category' => $category,
                 'subject' => $data['subject'],
                 'description' => $data['description'],
                 'status' => TicketStatus::OPEN,
@@ -66,6 +75,18 @@ class TicketService
                 'solution_summary' => null,
             ]);
         });
+
+        // Hook AutoReplyService::send() di sini. Kegagalan auto-reply dicatat ke log tanpa membatalkan tiket.
+        try {
+            app(AutoReplyService::class)->send($ticket);
+        } catch (\Throwable $e) {
+            Log::error('Gagal mengirim auto-reply helpdesk: ' . $e->getMessage(), [
+                'ticket_id' => $ticket->id,
+                'exception' => $e,
+            ]);
+        }
+
+        return $ticket;
     }
 
     /**
@@ -80,6 +101,10 @@ class TicketService
      */
     public function claimTicket(HelpdeskTicket $ticket, User $operator): HelpdeskTicket
     {
+        if ($operator->isSystem()) {
+            throw new DomainException('Akun sistem/bot tidak dapat mengklaim tiket.');
+        }
+
         if (! $operator->isOperator() && ! $operator->isAdmin()) {
             throw new AuthorizationException('Hanya operator atau admin yang dapat mengklaim tiket.');
         }
@@ -127,6 +152,10 @@ class TicketService
     {
         if (! $actor->isOperator() && ! $actor->isAdmin()) {
             throw new AuthorizationException('Hanya operator atau admin yang berwenang menugaskan tiket.');
+        }
+
+        if ($operator->isSystem()) {
+            throw new DomainException('Tiket tidak dapat ditugaskan kepada akun sistem/bot.');
         }
 
         if (! $operator->isOperator() && ! $operator->isAdmin()) {
