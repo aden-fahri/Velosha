@@ -75,6 +75,10 @@ class SystemBotAndAutoReplyIntegrationTest extends TestCase
     public function test_system_bot_is_excluded_from_assignable_operators(): void
     {
         $bot = SystemUser::get();
+        $botOperator = User::factory()->create([
+            'role' => User::ROLE_OPERATOR,
+            'is_system' => true,
+        ]);
 
         $operator = User::factory()->create([
             'role' => User::ROLE_OPERATOR,
@@ -85,6 +89,7 @@ class SystemBotAndAutoReplyIntegrationTest extends TestCase
 
         $this->assertTrue($assignable->contains('id', $operator->id));
         $this->assertFalse($assignable->contains('id', $bot->id));
+        $this->assertFalse($assignable->contains('id', $botOperator->id));
     }
 
     public function test_system_bot_cannot_claim_or_be_assigned_ticket(): void
