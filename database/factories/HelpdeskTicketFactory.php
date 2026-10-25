@@ -53,4 +53,21 @@ class HelpdeskTicketFactory extends Factory
             'resolution_time' => 60,
         ]);
     }
+
+    public function reference(?string $solution = 'Silakan periksa halaman terkait pada portal'): static
+    {
+        return $this->state(fn () => [
+            'is_reference' => true,
+            'solution_summary' => $solution,
+        ]);
+    }
+
+    public function overdue(): static
+    {
+        return $this->state(fn () => [
+            'status' => TicketStatus::OPEN,
+            'response_due_at' => now()->subMinutes(30),
+            'resolution_due_at' => now()->subMinutes(10),
+        ]);
+    }
 }

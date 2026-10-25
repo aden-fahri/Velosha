@@ -61,6 +61,7 @@ class HelpdeskSchemaAndPolicyTest extends TestCase
             'status',
             'duplicate_of_id',
             'is_reference',
+            'solution_summary',
             'first_response_at',
             'closed_at',
             'resolution_time',

@@ -39,7 +39,7 @@
 
     <!-- Main Content Yield -->
     <main id="main-content" tabindex="-1" class="flex-grow">
-        @yield('content')
+        @yield('content', $slot ?? '')
     </main>
 
     {{-- Tanya Mizu hanya tampil bila GEMINI_API_KEY sudah dikonfigurasi --}}
