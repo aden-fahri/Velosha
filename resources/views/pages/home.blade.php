@@ -177,13 +177,16 @@
 </div>
 
 <!-- 3. YANG KAMU DAPAT DARI SATU TIKET (Mockup Exact Match: Karcis Miring + 4 Fasilitas + Benefit Flat Card) -->
+@php
+    $paket = \App\Models\TicketPackageContent::current();
+@endphp
 <section class="sec" style="background: var(--butter); border-block: 3px solid var(--ink); padding: 80px 0">
     <div class="wrap">
         <h2 class="h2" style="max-width: 640px">
-            Yang kamu dapat dari <span class="squig">satu tiket<svg viewBox="0 0 100 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 Q14 1 26 8 T50 8 T74 8 T98 8" fill="none" stroke="#DE7119" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg></span>
+            {{ $paket->title }}
         </h2>
         <p class="lead" style="margin: 22px 0 0; max-width: 560px; color: #10282E">
-            Satu tiket, empat fasilitas resmi yang melengkapi kamu di setiap race.
+            {{ $paket->description }}
         </p>
 
         <div style="display: grid; grid-template-columns: 5fr 7fr; gap: 48px; margin-top: 48px; align-items: start">
@@ -191,7 +194,7 @@
             <div style="position: relative; transform: rotate(-2.5deg)">
                 <div class="card" style="position: relative; padding: 28px 28px 24px; border-radius: 14px">
                     <div style="display: flex; justify-content: space-between; align-items: center">
-                        <span class="chip m">Contoh tiket</span>
+                        <span class="chip m">{{ $paket->eyebrow ?? 'Contoh tiket' }}</span>
                         <span class="mono" style="font-weight: 700; font-size: 14px">VLS-GF-0001</span>
                     </div>
 
@@ -219,52 +222,32 @@
                 </div>
             </div>
 
-            <!-- Kanan: Grid 4 Fasilitas Kartun + Kartu Flat Hitam Benefit -->
+            <!-- Kanan: Grid Fitur Kartun + Kartu Flat Hitam Benefit -->
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px">
+                @php
+                    $colors = ['#F4BE3F', '#DE7119', '#D5EBD9', '#F2D3DC'];
+                @endphp
+                @foreach(($paket->features ?? []) as $idx => $f)
                 <div class="card" style="padding: 22px; display: flex; gap: 16px; align-items: center">
-                    <div style="width: 56px; height: 56px; flex: none; border: 2.5px solid #10282E; border-radius: 10px; background: #F4BE3F; display: flex; align-items: center; justify-content: center">
+                    <div style="width: 56px; height: 56px; flex: none; border: 2.5px solid #10282E; border-radius: 10px; background: {{ $colors[$idx % count($colors)] }}; display: flex; align-items: center; justify-content: center">
                         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M9 9h6v6H9zM9 2v2M15 2v2M9 20v2M15 20v2"></path></svg>
                     </div>
-                    <div><div class="h3" style="font-size: 20px">BIB &amp; chip RFID</div><div class="mute" style="font-size: 14px">Waktu tercatat otomatis</div></div>
-                </div>
-
-                <div class="card" style="padding: 22px; display: flex; gap: 16px; align-items: center">
-                    <div style="width: 56px; height: 56px; flex: none; border: 2.5px solid #10282E; border-radius: 10px; background: #DE7119; display: flex; align-items: center; justify-content: center">
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"></circle><path d="M8.5 14L7 22l5-3 5 3-1.5-8"></path></svg>
+                    <div>
+                        <div class="h3" style="font-size: 20px">{{ $f['title'] ?? '' }}</div>
+                        <div class="mute" style="font-size: 14px">{{ $f['desc'] ?? '' }}</div>
                     </div>
-                    <div><div class="h3" style="font-size: 20px">Medali finisher</div><div class="mute" style="font-size: 14px">Logam, desain per event</div></div>
                 </div>
-
-                <div class="card" style="padding: 22px; display: flex; gap: 16px; align-items: center">
-                    <div style="width: 56px; height: 56px; flex: none; border: 2.5px solid #10282E; border-radius: 10px; background: #D5EBD9; display: flex; align-items: center; justify-content: center">
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg>
-                    </div>
-                    <div><div class="h3" style="font-size: 20px">Asuransi</div><div class="mute" style="font-size: 14px">Kecelakaan selama race</div></div>
-                </div>
-
-                <div class="card" style="padding: 22px; display: flex; gap: 16px; align-items: center">
-                    <div style="width: 56px; height: 56px; flex: none; border: 2.5px solid #10282E; border-radius: 10px; background: #F2D3DC; display: flex; align-items: center; justify-content: center">
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v8a3 3 0 0 0 6 0V3M9 3v18M18 3c-2 2-3 5-3 8h3v10"></path></svg>
-                    </div>
-                    <div><div class="h3" style="font-size: 20px">Feed zone &amp; makan</div><div class="mute" style="font-size: 14px">Di rute dan di finis</div></div>
-                </div>
+                @endforeach
 
                 <!-- Kartu Flat Gelap Benefit Lain Persis Mockup -->
                 <div class="card-flat" style="grid-column: 1 / -1; padding: 22px 24px; background: #10282E; color: #FBF4E6; border-radius: 14px">
-                    <div class="disp" style="font-size: 18px; font-weight: 800; color: #F4BE3F; text-transform: uppercase; letter-spacing: .04em">Benefit lain dari satu tiket</div>
+                    <div class="disp" style="font-size: 18px; font-weight: 800; color: #F4BE3F; text-transform: uppercase; letter-spacing: .04em">{{ $paket->benefits_title }}</div>
                     <ul style="margin: 14px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 28px; font-size: 14px; line-height: 1.45">
+                        @foreach(($paket->benefits ?? []) as $b)
                         <li style="display: flex; align-items: center; gap: 8px">
-                            <span style="color: #F4BE3F">•</span> E-ticket PDF ber-QR dikirim ke email setelah lunas
+                            <span style="color: #F4BE3F">•</span> {{ $b['text'] ?? '' }}
                         </li>
-                        <li style="display: flex; align-items: center; gap: 8px">
-                            <span style="color: #F4BE3F">•</span> File rute GPX siap pakai untuk Garmin / Wahoo
-                        </li>
-                        <li style="display: flex; align-items: center; gap: 8px">
-                            <span style="color: #F4BE3F">•</span> Race pack ditukar dengan QR: BIB, peniti, stiker RFID
-                        </li>
-                        <li style="display: flex; align-items: center; gap: 8px">
-                            <span style="color: #F4BE3F">•</span> Jadwal bisa disimpan ke Google Calendar
-                        </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
