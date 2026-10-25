@@ -13,6 +13,7 @@ class MizuRateLimitTest extends TestCase
 
     public function test_mizu_rate_limit_message(): void
     {
+        \Illuminate\Support\Facades\Http::fake();
         $component = Livewire::test(MizuChatWidget::class);
 
         for ($i = 0; $i < 11; $i++) {
