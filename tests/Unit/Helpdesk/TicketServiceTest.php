@@ -228,4 +228,18 @@ class TicketServiceTest extends TestCase
             $this->assertStringContainsString('ditutup', $e->getMessage());
         }
     }
+
+    public function test_illegal_transition_from_in_progress_to_open_is_rejected(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        $ticket = HelpdeskTicket::factory()->create([
+            'status' => TicketStatus::IN_PROGRESS,
+            'operator_id' => $operator->id,
+        ]);
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('Tiket In-Progress tidak dapat dikembalikan ke status Open.');
+
+        $this->service->changeStatus($ticket, TicketStatus::OPEN, $operator);
+    }
 }

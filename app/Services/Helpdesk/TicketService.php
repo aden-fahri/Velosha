@@ -255,6 +255,10 @@ class TicketService
                 throw new DomainException('Tiket yang sudah ditutup tidak dapat diubah statusnya lagi.');
             }
 
+            if ($lockedTicket->status === TicketStatus::IN_PROGRESS && $newStatus === TicketStatus::OPEN) {
+                throw new DomainException('Tiket In-Progress tidak dapat dikembalikan ke status Open.');
+            }
+
             if ($newStatus === TicketStatus::CLOSED) {
                 $closedAt = $current;
                 $diff = (int) $lockedTicket->created_at->diffInMinutes($closedAt);
