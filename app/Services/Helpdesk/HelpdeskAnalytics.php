@@ -64,7 +64,10 @@ class HelpdeskAnalytics
      * @details
      * Atribut "per operator" diagregasikan berdasarkan `helpdesk_tickets.operator_id`.
      * Waktu respons awal diukur dari `created_at` tiket menuju `first_response_at` (hanya
-     * balasan staf/operator manusia). Akun sistem (`users.is_system = true`) dieksklusikan.
+     * balasan staf/operator manusia).
+     * Cakupan operator mencakup seluruh user dengan `role = 'operator'` (selalu disertakan),
+     * ditambah user dengan `role = 'admin'` yang pernah menangani tiket (`operator_id` minimal 1 tiket).
+     * Akun sistem (`users.is_system = true`) mutlak dieksklusikan.
      * Jika operator belum memiliki data respons, nilai numerik bernilai null dan
      * `formatted_time` menghasilkan "-".
      *
@@ -72,12 +75,14 @@ class HelpdeskAnalytics
      */
     public function getAverageResponseTimesPerOperator(): Collection
     {
-        $results = DB::table('users')
+        $query = DB::table('users')
             ->leftJoin(HelpdeskTicket::TABLE_NAME, function ($join) {
                 $join->on(HelpdeskTicket::TABLE_NAME . '.operator_id', '=', 'users.id');
-            })
-            ->where('users.role', User::ROLE_OPERATOR)
-            ->where('users.is_system', false)
+            });
+
+        $this->applyOperatorScope($query);
+
+        $results = $query
             ->selectRaw("
                 users.id as operator_id,
                 users.name as operator_name,
@@ -152,11 +157,13 @@ class HelpdeskAnalytics
         ];
 
         // 2. Agregasi Per Operator (grouped by helpdesk_tickets.operator_id)
-        $byOperator = DB::table('users')
+        $byOperatorQuery = DB::table('users')
             ->leftJoin(HelpdeskTicket::TABLE_NAME, 'helpdesk_tickets.operator_id', '=', 'users.id')
-            ->leftJoin('satisfaction_ratings', 'satisfaction_ratings.ticket_id', '=', 'helpdesk_tickets.id')
-            ->where('users.role', User::ROLE_OPERATOR)
-            ->where('users.is_system', false)
+            ->leftJoin('satisfaction_ratings', 'satisfaction_ratings.ticket_id', '=', 'helpdesk_tickets.id');
+
+        $this->applyOperatorScope($byOperatorQuery);
+
+        $byOperator = $byOperatorQuery
             ->selectRaw("
                 users.id as operator_id,
                 users.name as operator_name,
@@ -197,17 +204,20 @@ class HelpdeskAnalytics
      *
      * @details
      * Mengelompokkan berdasarkan `helpdesk_tickets.operator_id` dan mengaitkan rating.
-     * Operator dengan `is_system = true` dieksklusikan.
+     * Cakupan operator mencakup pengguna `role = 'operator'` (selalu) ditambah pengguna
+     * `role = 'admin'` yang menangani minimal 1 tiket. Akun sistem (`is_system = true`) dieksklusikan.
      *
      * @return \Illuminate\Support\Collection<int, object>
      */
     public function getTopOperators(): Collection
     {
-        $results = DB::table('users')
+        $query = DB::table('users')
             ->leftJoin(HelpdeskTicket::TABLE_NAME, 'helpdesk_tickets.operator_id', '=', 'users.id')
-            ->leftJoin('satisfaction_ratings', 'satisfaction_ratings.ticket_id', '=', 'helpdesk_tickets.id')
-            ->where('users.role', User::ROLE_OPERATOR)
-            ->where('users.is_system', false)
+            ->leftJoin('satisfaction_ratings', 'satisfaction_ratings.ticket_id', '=', 'helpdesk_tickets.id');
+
+        $this->applyOperatorScope($query);
+
+        $results = $query
             ->selectRaw("
                 users.id as operator_id,
                 users.name as operator_name,
@@ -262,5 +272,31 @@ class HelpdeskAnalytics
 
         $hours = $min / 60.0;
         return number_format($hours, 1, '.', '') . 'h';
+    }
+
+    /**
+     * @brief Menerapkan cakupan staf/operator yang menangani tiket.
+     *
+     * @details
+     * "Per operator" mencakup seluruh pengguna dengan peran operator (`users.role = 'operator'`),
+     * ditambah pengguna dengan peran admin (`users.role = 'admin'`) yang memiliki minimal 1 tiket
+     * yang ditangani (`operator_id = users.id`). Akun sistem (`users.is_system = true`) mutlak dieksklusikan.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     */
+    protected function applyOperatorScope($query): void
+    {
+        $query->where('users.is_system', false)
+            ->where(function ($q) {
+                $q->where('users.role', User::ROLE_OPERATOR)
+                    ->orWhere(function ($adminQuery) {
+                        $adminQuery->where('users.role', User::ROLE_ADMIN)
+                            ->whereExists(function ($sub) {
+                                $sub->select(DB::raw(1))
+                                    ->from(HelpdeskTicket::TABLE_NAME)
+                                    ->whereColumn(HelpdeskTicket::TABLE_NAME . '.operator_id', 'users.id');
+                            });
+                    });
+            });
     }
 }
