@@ -395,5 +395,63 @@ class ReporterHelpdeskFlowTest extends TestCase
         $this->assertStringContainsString('[REDACTED_EMAIL]', $matched['subject']);
         $this->assertStringContainsString('[REDACTED_EMAIL]', $matched['solution_summary']);
     }
+
+    /**
+     * Pelapor memilih "Ini menjawab" pada aduan serupa:
+     * - Feedback tercatat sebagai helpful = true via updateOrCreate.
+     * - Pesan terima kasih ditampilkan dan input formulir di-reset (tidak membuat tiket baru).
+     */
+    public function test_reporter_can_mark_suggestion_as_answered(): void
+    {
+        $peserta = User::factory()->create(['role' => User::ROLE_PESERTA]);
+        $ticket = HelpdeskTicket::factory()->closed()->create(['is_reference' => true, 'solution_summary' => 'Solusi']);
+
+        Livewire::actingAs($peserta)
+            ->test(\App\Livewire\Helpdesk\CreateTicket::class)
+            ->set('subject', 'Kendala pembayaran tiket QR')
+            ->set('description', 'Uraian kendala pembayaran tiket QR')
+            ->call('markAnswered', $ticket->id)
+            ->assertSee('Terima kasih atas tanggapan Anda')
+            ->assertSet('subject', '')
+            ->assertSet('description', '');
+
+        $this->assertDatabaseHas('ticket_suggestion_feedback', [
+            'ticket_id' => $ticket->id,
+            'reporter_id' => $peserta->id,
+            'helpful' => true,
+        ]);
+    }
+
+    /**
+     * Pelapor memilih "Tetap kirim" pada aduan serupa:
+     * - Feedback tercatat sebagai helpful = false via updateOrCreate.
+     * - Tiket baru berhasil disubmit dan divalidasi.
+     */
+    public function test_reporter_can_reject_suggestion_and_submit_ticket(): void
+    {
+        $peserta = User::factory()->create(['role' => User::ROLE_PESERTA]);
+        $refTicket = HelpdeskTicket::factory()->closed()->create(['is_reference' => true, 'solution_summary' => 'Solusi']);
+
+        Livewire::actingAs($peserta)
+            ->test(\App\Livewire\Helpdesk\CreateTicket::class)
+            ->set('category', 'Tiket/QR')
+            ->set('subject', 'Kendala pembayaran tiket QR yang belum terjawab')
+            ->set('description', 'Deskripsi lengkap pembayaran via transfer bank belum masuk ke panitia.')
+            ->call('rejectAnswerAndSubmit', $refTicket->id)
+            ->assertHasNoErrors()
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('ticket_suggestion_feedback', [
+            'ticket_id' => $refTicket->id,
+            'reporter_id' => $peserta->id,
+            'helpful' => false,
+        ]);
+
+        $this->assertDatabaseHas(HelpdeskTicket::TABLE_NAME, [
+            'reporter_id' => $peserta->id,
+            'subject' => 'Kendala pembayaran tiket QR yang belum terjawab',
+        ]);
+    }
 }
+
 

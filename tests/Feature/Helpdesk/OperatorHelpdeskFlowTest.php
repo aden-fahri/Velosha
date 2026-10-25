@@ -189,4 +189,24 @@ class OperatorHelpdeskFlowTest extends TestCase
         $ticket->refresh();
         $this->assertSame($operator2->id, $ticket->operator_id);
     }
+
+    public function test_operator_can_merge_duplicate_from_ticket_detail(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        $target = HelpdeskTicket::factory()->create(['status' => TicketStatus::OPEN, 'subject' => 'Target Ticket']);
+        $duplicate = HelpdeskTicket::factory()->create(['status' => TicketStatus::OPEN, 'subject' => 'Duplicate Candidate']);
+
+        Livewire::actingAs($operator)
+            ->test(OperatorTicketDetail::class, ['ticketId' => $target->id])
+            ->assertSee('Mungkin Duplikat')
+            ->call('mergeDuplicate', $duplicate->id)
+            ->assertSee('berhasil digabungkan');
+
+        $duplicate->refresh();
+        $this->assertSame(TicketStatus::CLOSED, $duplicate->status);
+        $this->assertSame($target->id, $duplicate->duplicate_of_id);
+        $this->assertNotNull($duplicate->closed_at);
+        $this->assertNotNull($duplicate->resolution_time);
+    }
 }
+

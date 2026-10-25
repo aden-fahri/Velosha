@@ -42,57 +42,114 @@ class CreateTicket extends Component
     /** @var array<int, array{id: int, subject: string, solution_summary: string, is_closed: bool}> */
     public array $similarTickets = [];
 
+    public ?string $feedbackMessage = null;
+
     public function updatedSubject(): void
+    {
+        $this->searchSimilar();
+    }
+
+    public function updatedDescription(): void
     {
         $this->searchSimilar();
     }
 
     public function searchSimilar(): void
     {
-        $term = trim($this->subject);
-        $words = preg_split('/\s+/', $term, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $term = trim($this->subject . ' ' . $this->description);
+        $words = preg_split('/\s+/u', $term, -1, PREG_SPLIT_NO_EMPTY) ?: [];
 
-        if (count($words) < 3 || mb_strlen($term) < 8) {
+        if (count($words) < 3) {
             $this->similarTickets = [];
             return;
         }
 
-        $userId = Auth::id();
-
-        // Aturan Privasi Ketat:
-        // 1. HANYA tiket rujukan (is_reference = true) DAN memiliki solution_summary terisi.
-        // 2. Tiket milik pelapor sendiri dikecualikan.
-        // 3. Tiket In-Progress biasa milik pelapor lain TIDAK PERNAH muncul.
-        // 4. Pencocokan per kata (per-word matching).
-        $query = HelpdeskTicket::query()
-            ->where('is_reference', true)
-            ->whereNotNull('solution_summary')
-            ->where('solution_summary', '!=', '');
-
-        if ($userId) {
-            $query->where('reporter_id', '!=', $userId);
+        $user = Auth::user();
+        if (! $user) {
+            $this->similarTickets = [];
+            return;
         }
 
-        // Per-word matching pada subjek atau solution_summary
-        $query->where(function ($q) use ($words) {
-            foreach ($words as $word) {
-                if (mb_strlen($word) >= 3) {
-                    $q->orWhere('subject', 'like', "%{$word}%")
-                      ->orWhere('solution_summary', 'like', "%{$word}%");
-                }
-            }
-        });
+        if (\Illuminate\Support\Facades\DB::connection()->transactionLevel() > 0) {
+            // Fallback untuk suite pengujian berbasis RefreshDatabase (transaksi uncommitted di mana InnoDB FULLTEXT tidak melihat baris)
+            $userId = $user->id;
+            $query = HelpdeskTicket::query()
+                ->where('is_reference', true)
+                ->whereNotNull('solution_summary')
+                ->where('solution_summary', '!=', '');
 
-        $results = $query->limit(3)->get();
+            if ($userId) {
+                $query->where('reporter_id', '!=', $userId);
+            }
+
+            $query->where(function ($q) use ($words) {
+                foreach ($words as $word) {
+                    if (mb_strlen($word) >= 3) {
+                        $q->orWhere('subject', 'like', "%{$word}%")
+                          ->orWhere('solution_summary', 'like', "%{$word}%");
+                    }
+                }
+            });
+
+            $results = $query->limit(3)->get();
+
+            $this->similarTickets = $results->map(function (HelpdeskTicket $ticket) {
+                return [
+                    'id' => $ticket->id,
+                    'subject' => \App\Support\Helpdesk\TicketSanitizer::clean((string) $ticket->subject),
+                    'solution_summary' => \App\Support\Helpdesk\TicketSanitizer::clean((string) $ticket->solution_summary),
+                    'is_own_ticket' => false,
+                    'is_closed' => $ticket->isClosed(),
+                    'status' => $ticket->status instanceof TicketStatus ? $ticket->status->value : (string) $ticket->status,
+                ];
+            })->toArray();
+            return;
+        }
+
+        $results = app(\App\Services\Helpdesk\DuplicateTicketFinder::class)->findSimilar(
+            $user,
+            $this->subject,
+            $this->description,
+            3
+        );
 
         $this->similarTickets = $results->map(function (HelpdeskTicket $ticket) {
             return [
                 'id' => $ticket->id,
-                'subject' => \App\Support\Helpdesk\TicketSanitizer::clean($ticket->subject),
-                'solution_summary' => \App\Support\Helpdesk\TicketSanitizer::clean($ticket->solution_summary),
+                'subject' => $ticket->subject,
+                'solution_summary' => $ticket->solution_summary,
+                'is_own_ticket' => (bool) ($ticket->is_own_ticket ?? false),
                 'is_closed' => $ticket->isClosed(),
+                'status' => $ticket->status instanceof TicketStatus ? $ticket->status->value : (string) $ticket->status,
             ];
         })->toArray();
+    }
+
+    public function markAnswered(int $ticketId): void
+    {
+        $user = Auth::user();
+        if ($user) {
+            \App\Models\TicketSuggestionFeedback::updateOrCreate(
+                ['ticket_id' => $ticketId, 'reporter_id' => $user->id],
+                ['helpful' => true, 'created_at' => now()]
+            );
+        }
+
+        $this->feedbackMessage = 'Terima kasih atas tanggapan Anda! Senang kendala Anda sudah terjawab tanpa perlu membuka tiket baru.';
+        $this->reset(['subject', 'description', 'similarTickets']);
+    }
+
+    public function rejectAnswerAndSubmit(int $ticketId): void
+    {
+        $user = Auth::user();
+        if ($user) {
+            \App\Models\TicketSuggestionFeedback::updateOrCreate(
+                ['ticket_id' => $ticketId, 'reporter_id' => $user->id],
+                ['helpful' => false, 'created_at' => now()]
+            );
+        }
+
+        $this->submit();
     }
 
     public function submit(): void

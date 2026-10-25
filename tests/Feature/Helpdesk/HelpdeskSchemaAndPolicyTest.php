@@ -248,4 +248,103 @@ class HelpdeskSchemaAndPolicyTest extends TestCase
             $migration->up();
         }
     }
+
+    /**
+     * Pastikan indeks FULLTEXT dan kolom duplicate_of_id telah ada sejak Phase 2.
+     */
+    public function test_fulltext_and_duplicate_columns_exist_from_phase_2(): void
+    {
+        $columns = DB::getSchemaBuilder()->getColumnListing(HelpdeskTicket::TABLE_NAME);
+        $this->assertContains('duplicate_of_id', $columns);
+
+        $indexes = DB::select("SHOW INDEX FROM " . HelpdeskTicket::TABLE_NAME . " WHERE Index_type = 'FULLTEXT'");
+        $this->assertNotEmpty($indexes, 'Tabel helpdesk_tickets harus memiliki indeks FULLTEXT.');
+
+        $indexedColumns = array_map(fn ($idx) => $idx->Column_name, $indexes);
+        $this->assertContains('subject', $indexedColumns);
+        $this->assertContains('description', $indexedColumns);
+    }
+
+    /**
+     * Pastikan tabel ticket_suggestion_feedback memiliki unique constraint (ticket_id, reporter_id)
+     * dan updateOrCreate memperbarui data tanpa menambah baris duplikat.
+     */
+    public function test_ticket_suggestion_feedback_has_unique_constraint_on_ticket_and_reporter(): void
+    {
+        $ticket = HelpdeskTicket::factory()->create();
+        $reporter = User::factory()->create();
+
+        TicketSuggestionFeedback::create([
+            'ticket_id' => $ticket->id,
+            'reporter_id' => $reporter->id,
+            'helpful' => true,
+            'created_at' => now(),
+        ]);
+
+        $this->expectException(QueryException::class);
+        DB::table('ticket_suggestion_feedback')->insert([
+            'ticket_id' => $ticket->id,
+            'reporter_id' => $reporter->id,
+            'helpful' => false,
+            'created_at' => now(),
+        ]);
+    }
+
+    /**
+     * Pastikan updateOrCreate pada ticket_suggestion_feedback memperbarui nilai helpful tanpa menduplikasi baris.
+     */
+    public function test_ticket_suggestion_feedback_vote_updates_cleanly_via_update_or_create(): void
+    {
+        $ticket = HelpdeskTicket::factory()->create();
+        $reporter = User::factory()->create();
+
+        $first = TicketSuggestionFeedback::updateOrCreate(
+            ['ticket_id' => $ticket->id, 'reporter_id' => $reporter->id],
+            ['helpful' => true, 'created_at' => now()]
+        );
+        $this->assertTrue($first->helpful);
+        $this->assertSame(1, TicketSuggestionFeedback::where('ticket_id', $ticket->id)->count());
+
+        $second = TicketSuggestionFeedback::updateOrCreate(
+            ['ticket_id' => $ticket->id, 'reporter_id' => $reporter->id],
+            ['helpful' => false, 'created_at' => now()]
+        );
+        $this->assertFalse($second->helpful);
+        $this->assertSame(1, TicketSuggestionFeedback::where('ticket_id', $ticket->id)->count());
+    }
+
+    /**
+     * Pastikan migrasi 06 down() dan up() berjalan mulus.
+     */
+    public function test_migration_06_unique_constraint_down_and_up_works_cleanly(): void
+    {
+        $migrationFile = database_path('migrations/2026_10_24_000006_add_unique_to_ticket_suggestion_feedback_table.php');
+        $migration = require $migrationFile;
+
+        $migration->down();
+
+        $ticket = HelpdeskTicket::factory()->create();
+        $reporter = User::factory()->create();
+
+        DB::table('ticket_suggestion_feedback')->insert([
+            'ticket_id' => $ticket->id,
+            'reporter_id' => $reporter->id,
+            'helpful' => true,
+            'created_at' => now(),
+        ]);
+
+        // Setelah down, duplicate insert dibolehkan oleh database
+        DB::table('ticket_suggestion_feedback')->insert([
+            'ticket_id' => $ticket->id,
+            'reporter_id' => $reporter->id,
+            'helpful' => false,
+            'created_at' => now(),
+        ]);
+        $this->assertSame(2, DB::table('ticket_suggestion_feedback')->where('ticket_id', $ticket->id)->count());
+
+        // Bersihkan data sebelum up() kembali
+        DB::table('ticket_suggestion_feedback')->where('ticket_id', $ticket->id)->delete();
+        $migration->up();
+    }
 }
+

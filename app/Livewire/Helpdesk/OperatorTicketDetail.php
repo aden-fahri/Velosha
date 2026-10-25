@@ -170,6 +170,22 @@ class OperatorTicketDetail extends Component
         }
     }
 
+    public function mergeDuplicate(int $duplicateTicketId): void
+    {
+        $ticket = HelpdeskTicket::findOrFail($this->ticketId);
+        $duplicate = HelpdeskTicket::findOrFail($duplicateTicketId);
+
+        try {
+            $service = app(TicketService::class);
+            $service->mergeTickets($ticket, $duplicate, Auth::user());
+            session()->flash('success', "Tiket #{$duplicate->id} berhasil digabungkan sebagai duplikat ke tiket ini.");
+        } catch (DomainException $e) {
+            session()->flash('error', $e->getMessage());
+        } catch (AuthorizationException $e) {
+            session()->flash('error', $e->getMessage());
+        }
+    }
+
     public function render()
     {
         $ticket = HelpdeskTicket::with(['reporter', 'operator', 'responses.responder'])
@@ -181,10 +197,16 @@ class OperatorTicketDetail extends Component
 
         $suggestions = app(AutoReplyService::class)->getSuggestions($ticket, 3);
 
+        $potentialDuplicates = app(\App\Services\Helpdesk\DuplicateTicketFinder::class)->findDuplicatesForTicket(
+            $ticket,
+            3
+        );
+
         return view('livewire.helpdesk.operator-ticket-detail', [
             'ticket' => $ticket,
             'operators' => $operators,
             'suggestions' => $suggestions,
+            'potentialDuplicates' => $potentialDuplicates,
         ]);
     }
 }
