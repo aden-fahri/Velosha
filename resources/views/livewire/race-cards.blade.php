@@ -28,8 +28,25 @@
     <section class="py-14 bg-[var(--paper)]">
         <div class="wrap">
 
+            @php
+                $raceBanner = null;
+                $adminBanner = \App\Models\RaceBannerContent::current()->image_path;
+                if ($adminBanner) {
+                    if (\Illuminate\Support\Facades\Storage::disk('public')->exists($adminBanner) || is_file(public_path('storage/' . ltrim($adminBanner, '/')))) {
+                        $raceBanner = 'storage/' . ltrim($adminBanner, '/');
+                    }
+                } else {
+                    foreach (['images/race-banner.jpg', 'images/race-banner.png', 'images/race-banner.webp'] as $rb) {
+                        if (file_exists(public_path($rb))) { $raceBanner = $rb; break; }
+                    }
+                }
+            @endphp
             <!-- Banner Velosha Bergerak dengan Animasi Sepeda .bk Sesuai Mockup -->
-            <div class="card relative h-[220px] mb-12 overflow-hidden border-[3px] border-[var(--ink)] bg-[#F6B777]">
+            <div data-testid="race-banner-slot" class="card relative h-[220px] mb-12 overflow-hidden border-[3px] border-[var(--ink)] bg-[#F6B777]"
+                 style="box-shadow: inset 0 -3px 0 #DE7119">
+                @if ($raceBanner)
+                    <img src="{{ asset($raceBanner) }}" alt="Banner race" class="w-full h-full object-cover">
+                @else
                 <!-- Background Panorama Kartun & Gunung SVG -->
                 <svg viewBox="0 0 1136 220" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true" class="absolute inset-0">
                     <rect width="1136" height="220" fill="#F6B777"></rect>
@@ -69,6 +86,7 @@
                         <path d="M30 12 L37 7 L47 11" fill="none" stroke="#9B3D5A" stroke-width="5" stroke-linecap="round"></path>
                     </svg>
                 </div>
+                @endif
 
                 <!-- Teks Kartun Velosha Besar sesuai Mockup -->
                 <div class="relative z-10 px-8 py-6 flex flex-col justify-center h-full">
