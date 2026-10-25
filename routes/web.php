@@ -91,3 +91,9 @@ Route::get('/helpdesk/operator/tickets/{ticket}', function ($ticket) {
 })->middleware(['auth', 'role:operator,admin'])
   ->name('helpdesk.operator.detail');
 
+// 9. Helpdesk Admin Analitik (Khusus Administrator)
+Route::view('/helpdesk/analitik', 'pages.helpdesk.analytics')
+    ->middleware(['auth', 'role:admin'])
+    ->name('helpdesk.analytics');
+
+
