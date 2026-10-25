@@ -1,5 +1,77 @@
-<div class="min-h-screen bg-[var(--paper)] text-[var(--ink)] antialiased font-sans py-8 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto space-y-6">
+<div class="vs min-h-screen bg-[var(--paper)] text-[var(--ink)] flex flex-col md:flex-row font-sans">
+
+    {{-- ==================== OPERATOR SIDEBAR ==================== --}}
+    <aside class="w-full md:w-64 bg-[#FBF4E6] border-b-2 md:border-b-0 md:border-r-[3px] border-[#10282E] p-6 flex flex-col shrink-0 justify-between">
+        <div class="space-y-6">
+            {{-- Brand Logo Header --}}
+            <div class="flex items-center justify-between pb-6 mb-2 border-b border-[#10282E]/10">
+                <a href="/" wire:navigate class="font-heading font-extrabold text-2xl text-[var(--ink)] tracking-tight" style="text-decoration: none">Velosha</a>
+                <span class="chip font-bold text-xs bg-[var(--mustard)] border border-[var(--ink)] px-2 py-0.5 rounded">
+                    {{ auth()->user()->isAdmin() ? 'Admin' : 'Operator' }}
+                </span>
+            </div>
+
+            {{-- Queue Navigation: single "Antrian tiket" item per mockup --}}
+            <div class="text-[11px] font-extrabold tracking-wider text-[var(--mute)] uppercase px-2 mb-2">Helpdesk · Operator</div>
+            <nav class="space-y-1 text-sm font-semibold" aria-label="Helpdesk">
+                <a href="{{ route('helpdesk.index') }}" wire:navigate
+                   class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg bg-[var(--mustard)] border-2 border-[var(--ink)] font-bold shadow-xs text-[var(--ink)]" style="text-decoration: none">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13l3-8h12l3 8v6H3z"></path><path d="M3 13h5l1 3h6l1-3h5"></path></svg>
+                        <span>Antrian tiket</span>
+                    </div>
+                    @if ($kpiOpen > 0)
+                        <span class="px-2 py-0.5 text-[10px] font-extrabold bg-[var(--orange)] text-[var(--ink)] border border-[var(--ink)] rounded-full">
+                            {{ $kpiOpen }}
+                        </span>
+                    @endif
+                </a>
+            </nav>
+
+            {{-- System Navigation --}}
+            <div class="text-[11px] font-extrabold tracking-wider text-[var(--mute)] uppercase px-2 mt-6 mb-2">Navigasi Sistem</div>
+            <nav class="space-y-1 text-sm font-semibold">
+                @if (auth()->user()->isAdmin())
+                    <a href="/admin"
+                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[var(--ink)] hover:bg-[#F3E7CF] transition text-left" style="text-decoration: none">
+                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                        <span>Admin Panel</span>
+                    </a>
+                @endif
+
+                <a href="/" wire:navigate
+                   class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[var(--ink)] hover:bg-[#F3E7CF] transition text-left" style="text-decoration: none">
+                    <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>Kembali ke Beranda</span>
+                </a>
+            </nav>
+        </div>
+
+        {{-- Operator Profile Card & Logout --}}
+        <div class="mt-8 pt-6 border-t border-[#10282E]/10 space-y-3">
+            <div class="bg-white border-2 border-[var(--ink)] p-3 rounded-xl flex items-center gap-3 shadow-[2px_2px_0_var(--ink)]">
+                <div class="w-9 h-9 rounded-lg bg-[var(--orange)] text-[var(--ink)] flex items-center justify-center font-extrabold text-sm border-2 border-[var(--ink)] shrink-0">
+                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="font-bold text-xs truncate text-[var(--ink)]">{{ auth()->user()->name }}</div>
+                    <div class="text-[10px] text-[var(--mute)] uppercase tracking-wider font-semibold">
+                        {{ auth()->user()->isAdmin() ? 'Administrator' : 'Operator Helpdesk' }}
+                    </div>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="w-full text-center py-2 px-3 bg-red-50 hover:bg-red-100 text-[#C23B22] border-2 border-[#C23B22] rounded-lg text-xs font-extrabold transition cursor-pointer">
+                    Keluar Akun
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    {{-- ==================== MAIN CONTENT AREA ==================== --}}
+    <main class="flex-1 p-6 md:p-8 space-y-6 min-w-0">
 
         {{-- Header Top Bar --}}
         <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-[3px] border-[var(--ink)] pb-5">
@@ -18,9 +90,11 @@
                     {{ auth()->user()->name }} ({{ strtoupper(auth()->user()->role) }})
                 </span>
 
-                <a href="{{ route('dashboard') }}" wire:navigate class="px-3.5 py-1.5 bg-[var(--paper2)] hover:bg-white text-[var(--ink)] border-[2px] border-[var(--ink)] rounded-lg text-xs font-extrabold shadow-[2px_2px_0_var(--ink)] transition">
-                    Portal Rider
-                </a>
+                @if (auth()->user()->isAdmin())
+                    <a href="/admin" class="px-3.5 py-1.5 bg-[var(--paper2)] hover:bg-white text-[var(--ink)] border-[2px] border-[var(--ink)] rounded-lg text-xs font-extrabold shadow-[2px_2px_0_var(--ink)] transition">
+                        Admin Panel
+                    </a>
+                @endif
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -117,6 +191,17 @@
                         class="px-3.5 py-1.5 rounded-lg border-[2px] border-[var(--ink)] text-xs font-bold transition {{ $filter === 'closed' ? 'bg-[var(--mustard)] shadow-[2px_2px_0_var(--ink)]' : 'bg-transparent hover:bg-[var(--paper2)]' }}">
                     Selesai (Closed)
                 </button>
+
+                {{-- Priority Filter Select --}}
+                <div class="relative inline-flex items-center ml-1">
+                    <select wire:model.live="priorityFilter" aria-label="Filter Prioritas"
+                            class="px-3 py-1.5 rounded-lg border-[2px] border-[var(--ink)] text-xs font-bold bg-[var(--paper)] hover:bg-white text-[var(--ink)] focus:outline-none shadow-[2px_2px_0_var(--ink)] cursor-pointer">
+                        <option value="all">Semua Prioritas</option>
+                        <option value="High">Prioritas: High</option>
+                        <option value="Mid">Prioritas: Mid</option>
+                        <option value="Low">Prioritas: Low</option>
+                    </select>
+                </div>
             </div>
 
             {{-- Search Box --}}
@@ -286,5 +371,5 @@
             @endif
         </div>
 
-    </div>
+    </main>
 </div>

@@ -37,7 +37,7 @@ class ReplyTemplateSeeder extends Seeder
             [
                 'title' => 'Penyelesaian Masalah Akses dan Profil Akun',
                 'category' => TicketCategory::AKUN,
-                'body' => 'Halo {{reporter_name}}, perihal tiket {{ticket_id}} terkait {{ticket_category}}, Anda dapat memperbarui data diri atau mengatur ulang kata sandi melalui menu Profil di portal rider. Untuk kendala pergantian email terdaftar, mohon lampirkan foto identitas diri resmi untuk verifikasi keamanan.',
+                'body' => 'Halo {{reporter_name}}, perihal tiket {{ticket_id}} terkait {{ticket_category}}, Anda dapat memperbarui data diri atau mengatur ulang kata sandi melalui menu Profil di portal rider.',
                 'keywords' => 'akun, password, login, email, profil, reset, lupa, sandi',
                 'keyword_triggers' => ['akun', 'password', 'login', 'email', 'profil', 'reset', 'lupa', 'sandi'],
                 'is_active' => true,

@@ -46,6 +46,43 @@ class TicketServiceTest extends TestCase
         $this->assertSame('2026-10-25 14:00:00', $ticket->resolution_due_at->format('Y-m-d H:i:s'));
     }
 
+    public function test_create_ticket_rejects_non_peserta_reporter(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+        $penyelenggara = User::factory()->create(['role' => User::ROLE_PENYELENGGARA]);
+
+        foreach ([$operator, $admin, $penyelenggara] as $nonPeserta) {
+            try {
+                $this->service->createTicket($nonPeserta, [
+                    'subject' => 'Tes Subject',
+                    'description' => 'Tes Deskripsi',
+                    'priority' => TicketPriority::LOW,
+                ]);
+                $this->fail("Pembuatan tiket oleh pengguna dengan role {$nonPeserta->role} harus melempar DomainException.");
+            } catch (DomainException $e) {
+                $this->assertStringContainsString('peserta', strtolower($e->getMessage()));
+            }
+        }
+    }
+
+    public function test_create_ticket_rejects_system_user_reporter(): void
+    {
+        $bot = User::factory()->create([
+            'role' => User::ROLE_PESERTA,
+            'is_system' => true,
+        ]);
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('akun sistem');
+
+        $this->service->createTicket($bot, [
+            'subject' => 'Tes Subject Bot',
+            'description' => 'Tes Deskripsi Bot',
+            'priority' => TicketPriority::LOW,
+        ]);
+    }
+
     public function test_resolution_time_calculation_exact_minutes_and_signed_clamp(): void
     {
         $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);

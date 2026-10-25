@@ -157,9 +157,92 @@
                         </div>
                         <h2 class="font-heading font-black text-2xl text-[var(--ink)] mt-1">{{ $selectedTicket->subject }}</h2>
                         <div class="text-xs text-[var(--mute)] flex items-center gap-2">
-                            <span>Operator: {{ $selectedTicket->operator ? $selectedTicket->operator->name : 'Belum ditugaskan' }}</span>
+                            <span class="font-bold text-[var(--ink)]">Operator: {{ $selectedTicket->operator ? $selectedTicket->operator->name : 'Belum ditugaskan' }}</span>
                             <span>•</span>
-                            <span>Dibuka {{ $selectedTicket->created_at->format('d M Y H:i') }}</span>
+                            <span>Dibuka {{ $selectedTicket->created_at->timezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB</span>
+                        </div>
+                    </div>
+
+                    <!-- PROGRESS TIMELINE PELAPOR -->
+                    <div class="px-6 py-4 bg-[#FBF4E6] border-b-2 border-[var(--ink)]" data-testid="ticket-timeline">
+                        <div class="text-[11px] font-black uppercase tracking-wider text-[var(--mute)] mb-3">
+                            Status &amp; Progres Penanganan
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            {{-- Step 1: Dibuat --}}
+                            <div class="flex items-start gap-2.5 p-2.5 bg-white border-[1.5px] border-[var(--ink)] rounded-xl shadow-[2px_2px_0_var(--ink)]" data-testid="timeline-step-dibuat">
+                                <div class="w-6 h-6 rounded-full bg-emerald-500 text-white border-[1.5px] border-[var(--ink)] flex items-center justify-center font-bold text-xs shrink-0">
+                                    ✓
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="font-black text-xs text-[var(--ink)]">Dibuat</div>
+                                    <div class="text-[11px] text-[var(--mute)] font-medium">
+                                        {{ $selectedTicket->created_at->timezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Step 2: Ditugaskan (Only if assigned) --}}
+                            @if ($selectedTicket->operator_id && $selectedTicket->operator)
+                                <div class="flex items-start gap-2.5 p-2.5 bg-white border-[1.5px] border-[var(--ink)] rounded-xl shadow-[2px_2px_0_var(--ink)]" data-testid="timeline-step-ditugaskan">
+                                    <div class="w-6 h-6 rounded-full bg-emerald-500 text-white border-[1.5px] border-[var(--ink)] flex items-center justify-center font-bold text-xs shrink-0">
+                                        ✓
+                                    </div>
+                                    <div class="min-w-0">
+                                        <div class="font-black text-xs text-[var(--ink)] truncate">
+                                            Ditugaskan ke {{ $selectedTicket->operator->name }}
+                                        </div>
+                                        <div class="text-[11px] text-[var(--mute)] font-medium">
+                                            {{ ($selectedTicket->first_response_at ?? $selectedTicket->updated_at)->timezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- Step 3: Diproses (first human reply or In-Progress) --}}
+                            @php
+                                $isDiproses = $selectedTicket->first_response_at !== null || $selectedTicket->isInProgress() || $selectedTicket->isClosed();
+                            @endphp
+                            <div class="flex items-start gap-2.5 p-2.5 {{ $isDiproses ? 'bg-white' : 'bg-[#F3E7CF]/50' }} border-[1.5px] border-[var(--ink)] rounded-xl shadow-[2px_2px_0_var(--ink)]" data-testid="timeline-step-diproses">
+                                <div class="w-6 h-6 rounded-full {{ $isDiproses ? 'bg-amber-400 text-[var(--ink)]' : 'bg-white text-[var(--mute)] border-dashed' }} border-[1.5px] border-[var(--ink)] flex items-center justify-center font-bold text-xs shrink-0">
+                                    {{ $isDiproses ? '✓' : '•' }}
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="font-black text-xs {{ $isDiproses ? 'text-[var(--ink)]' : 'text-[var(--mute)]' }}">
+                                        Diproses
+                                    </div>
+                                    <div class="text-[11px] text-[var(--mute)] font-medium">
+                                        @if ($isDiproses)
+                                            {{ ($selectedTicket->first_response_at ?? $selectedTicket->updated_at)->timezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
+                                        @else
+                                            Menunggu tanggapan
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Step 4: Selesai --}}
+                            @php
+                                $isClosed = $selectedTicket->isClosed();
+                            @endphp
+                            <div class="flex items-start gap-2.5 p-2.5 {{ $isClosed ? 'bg-white' : 'bg-[#F3E7CF]/50' }} border-[1.5px] border-[var(--ink)] rounded-xl shadow-[2px_2px_0_var(--ink)]" data-testid="timeline-step-selesai">
+                                <div class="w-6 h-6 rounded-full {{ $isClosed ? 'bg-emerald-500 text-white' : 'bg-white text-[var(--mute)] border-dashed' }} border-[1.5px] border-[var(--ink)] flex items-center justify-center font-bold text-xs shrink-0">
+                                    {{ $isClosed ? '✓' : '•' }}
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="font-black text-xs {{ $isClosed ? 'text-[var(--ink)]' : 'text-[var(--mute)]' }}">
+                                        Selesai
+                                    </div>
+                                    <div class="text-[11px] text-[var(--mute)] font-medium">
+                                        @if ($isClosed)
+                                            {{ ($selectedTicket->closed_at ?? $selectedTicket->updated_at)->timezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
+                                        @else
+                                            Menunggu penyelesaian
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
