@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Helpdesk;
 
+use App\Enums\Helpdesk\TicketCategory;
 use App\Enums\TicketPriority;
 use App\Enums\TicketStatus;
 use App\Models\HelpdeskTicket;
@@ -43,6 +44,24 @@ class HelpdeskSchemaAndPolicyTest extends TestCase
         preg_match("/^enum\((.*)\)$/", $priorityColumn->Type, $matches);
         $priorityValues = array_map(fn ($val) => trim($val, "'"), explode(',', $matches[1]));
         $this->assertEquals(TicketPriority::values(), $priorityValues);
+
+        // Format MySQL: enum('Tiket/QR','Pembayaran','Akun','Lokasi','Lainnya')
+        $categoryColumn = DB::selectOne("SHOW COLUMNS FROM " . HelpdeskTicket::TABLE_NAME . " LIKE 'category'");
+        $this->assertNotNull($categoryColumn);
+        $this->assertSame("enum('Tiket/QR','Pembayaran','Akun','Lokasi','Lainnya')", $categoryColumn->Type);
+
+        preg_match("/^enum\((.*)\)$/", $categoryColumn->Type, $matches);
+        $categoryValues = array_map(fn ($val) => trim($val, "'"), explode(',', $matches[1]));
+        $this->assertEquals(TicketCategory::values(), $categoryValues);
+
+        // Format MySQL pada tabel reply_templates
+        $tplCategoryColumn = DB::selectOne("SHOW COLUMNS FROM reply_templates LIKE 'category'");
+        $this->assertNotNull($tplCategoryColumn);
+        $this->assertSame("enum('Tiket/QR','Pembayaran','Akun','Lokasi','Lainnya')", $tplCategoryColumn->Type);
+
+        preg_match("/^enum\((.*)\)$/", $tplCategoryColumn->Type, $matches);
+        $tplCategoryValues = array_map(fn ($val) => trim($val, "'"), explode(',', $matches[1]));
+        $this->assertEquals(TicketCategory::values(), $tplCategoryValues);
     }
 
     /**
@@ -55,6 +74,7 @@ class HelpdeskSchemaAndPolicyTest extends TestCase
             'id',
             'reporter_id',
             'operator_id',
+            'category',
             'subject',
             'description',
             'priority',

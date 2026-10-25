@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Helpdesk\TicketCategory;
 use App\Enums\TicketPriority;
 use App\Enums\TicketStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,6 +33,7 @@ class HelpdeskTicket extends Model
     protected $fillable = [
         'reporter_id',
         'operator_id',
+        'category',
         'subject',
         'description',
         'priority',
@@ -47,6 +49,7 @@ class HelpdeskTicket extends Model
     ];
 
     protected $casts = [
+        'category' => TicketCategory::class,
         'priority' => TicketPriority::class,
         'status' => TicketStatus::class,
         'is_reference' => 'boolean',

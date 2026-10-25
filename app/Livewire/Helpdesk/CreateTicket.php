@@ -24,6 +24,12 @@ class CreateTicket extends Component
     ])]
     public string $subject = '';
 
+    #[Validate('required|string|in:Tiket/QR,Pembayaran,Akun,Lokasi,Lainnya', message: [
+        'required' => 'Kategori kendala wajib dipilih.',
+        'in' => 'Kategori yang dipilih tidak valid.',
+    ])]
+    public string $category = 'Tiket/QR';
+
     #[Validate('required|string|min:10|max:5000', message: [
         'required' => 'Deskripsi kendala wajib diisi.',
         'min' => 'Deskripsi minimal 10 karakter.',
@@ -107,9 +113,11 @@ class CreateTicket extends Component
         $this->validate();
 
         $priorityEnum = TicketPriority::tryFrom($this->priority) ?? TicketPriority::MID;
+        $categoryEnum = \App\Enums\Helpdesk\TicketCategory::tryFrom($this->category) ?? \App\Enums\Helpdesk\TicketCategory::LAINNYA;
 
         $ticketService = app(\App\Services\Helpdesk\TicketService::class);
         $ticket = $ticketService->createTicket($user, [
+            'category' => $categoryEnum,
             'subject' => $this->subject,
             'description' => $this->description,
             'priority' => $priorityEnum,

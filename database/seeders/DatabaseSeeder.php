@@ -27,5 +27,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AboutContentSeeder::class);
         $this->call(RuleContentSeeder::class);
         $this->call(HelpContentSeeder::class);
+        $this->call(ReplyTemplateSeeder::class);
     }
 }
