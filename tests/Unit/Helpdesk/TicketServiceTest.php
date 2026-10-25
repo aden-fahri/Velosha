@@ -242,4 +242,64 @@ class TicketServiceTest extends TestCase
 
         $this->service->changeStatus($ticket, TicketStatus::OPEN, $operator);
     }
+
+    public function test_same_state_transition_open_to_open_throws_domain_exception(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        $ticket = HelpdeskTicket::factory()->create([
+            'status' => TicketStatus::OPEN,
+        ]);
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('Tiket sudah berstatus Open.');
+
+        $this->service->changeStatus($ticket, TicketStatus::OPEN, $operator);
+    }
+
+    public function test_same_state_transition_in_progress_to_in_progress_throws_domain_exception(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        $ticket = HelpdeskTicket::factory()->create([
+            'status' => TicketStatus::IN_PROGRESS,
+            'operator_id' => $operator->id,
+        ]);
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('Tiket sudah berstatus In-Progress.');
+
+        $this->service->changeStatus($ticket, TicketStatus::IN_PROGRESS, $operator);
+    }
+
+    public function test_any_transition_out_of_closed_throws_domain_exception(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        $ticket = HelpdeskTicket::factory()->create([
+            'status' => TicketStatus::CLOSED,
+            'closed_at' => Carbon::now(),
+        ]);
+
+        // Closed -> Open
+        try {
+            $this->service->changeStatus($ticket, TicketStatus::OPEN, $operator);
+            $this->fail('Closed -> Open must throw DomainException');
+        } catch (DomainException $e) {
+            $this->assertStringContainsString('ditutup', $e->getMessage());
+        }
+
+        // Closed -> In-Progress
+        try {
+            $this->service->changeStatus($ticket, TicketStatus::IN_PROGRESS, $operator);
+            $this->fail('Closed -> In-Progress must throw DomainException');
+        } catch (DomainException $e) {
+            $this->assertStringContainsString('ditutup', $e->getMessage());
+        }
+
+        // Closed -> Closed
+        try {
+            $this->service->changeStatus($ticket, TicketStatus::CLOSED, $operator);
+            $this->fail('Closed -> Closed must throw DomainException');
+        } catch (DomainException $e) {
+            $this->assertStringContainsString('ditutup', $e->getMessage());
+        }
+    }
 }
