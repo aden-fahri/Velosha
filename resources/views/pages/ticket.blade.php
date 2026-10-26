@@ -240,8 +240,13 @@
                     <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                 </a>
                 @else
-                <a href="{{ route('dashboard') }}" class="flex items-center justify-center px-4 py-3 bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] velo-box-1 text-xs font-extrabold shadow-xs transition">
-                    <span>Buka Dashboard Peserta</span>
+                @php
+                    $u = Auth::user();
+                    $homeUrl = $u ? $u->home() : '/dashboard';
+                    $homeLabel = $u?->isOperator() ? 'Antrian Helpdesk' : 'Buka Dashboard Peserta';
+                @endphp
+                <a href="{{ $homeUrl }}" class="flex items-center justify-center px-4 py-3 bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] velo-box-1 text-xs font-extrabold shadow-xs transition">
+                    <span>{{ $homeLabel }}</span>
                     <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                 </a>
                 @endif
