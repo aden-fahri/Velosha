@@ -2,6 +2,11 @@
 
 namespace App\Support\Helpdesk;
 
+/**
+ * @file TicketSanitizer.php
+ * @brief Utilitas sanitasi dan redaksi data sensitif (PII) pada modul Helpdesk.
+ * @package App\Support\Helpdesk
+ */
 class TicketSanitizer
 {
     /**

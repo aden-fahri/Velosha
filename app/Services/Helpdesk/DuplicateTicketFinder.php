@@ -49,8 +49,6 @@ class DuplicateTicketFinder
     /**
      * Daftar stopword bahasa Indonesia untuk normalisasi query pencarian.
      * Kata-kata fungsional ini disaring agar query FULLTEXT berfokus pada istilah inti.
-     *
-     * @var array<int, string>
      */
     public const INDONESIAN_STOPWORDS = [
         'yang', 'untuk', 'pada', 'ke', 'para', 'namun', 'menurut', 'antara', 'dia',

@@ -39,7 +39,10 @@ class CreateTicket extends Component
 
     public string $priority = 'Mid';
 
-    /** @var array<int, array{id: int, subject: string, solution_summary: string, is_closed: bool}> */
+    /**
+     * Rekomendasi tiket serupa hasil pencarian duplicate finder.
+     * @var array $similarTickets
+     */
     public array $similarTickets = [];
 
     public ?string $feedbackMessage = null;

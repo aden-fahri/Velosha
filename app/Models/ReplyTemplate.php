@@ -7,16 +7,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Model template balasan cepat helpdesk.
+ * @file ReplyTemplate.php
+ * @class ReplyTemplate
+ * @brief Model template balasan cepat helpdesk.
  *
- * @property int $id
- * @property TicketCategory $category
- * @property string $title
- * @property string $body
- * @property string|null $keywords
- * @property array<string>|null $keyword_triggers
- * @property bool $is_active
- * @property int $use_count
+ * Properti model:
+ * - int $id
+ * - TicketCategory $category
+ * - string $title
+ * - string $body
+ * - string|null $keywords
+ * - array<string>|null $keyword_triggers
+ * - bool $is_active
+ * - int $use_count
  */
 class ReplyTemplate extends Model
 {

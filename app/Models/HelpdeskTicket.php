@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  *
  * Catatan Arsitektur:
  * Model dan tabel dinamai HelpdeskTicket / helpdesk_tickets untuk menjaga pemisahan
- * domain yang bersih dengan tabel tiket lomba (race e-ticket: App\Models\Ticket / tickets)
+ * domain yang bersih dengan tabel tiket lomba (race e-ticket: App\\Models\\Ticket / tickets)
  * tanpa resiko konflik nama atau regresi pada sistem e-ticket QR.
  */
 class HelpdeskTicket extends Model
