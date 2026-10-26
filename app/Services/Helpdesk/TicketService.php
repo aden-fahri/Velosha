@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * @file TicketService.php
+ * @class TicketService
  * @brief Layanan inti pengelolaan siklus hidup tiket helpdesk Velosha.
  *
  * @details
@@ -28,8 +29,6 @@ use Illuminate\Support\Facades\Log;
  * - Penambahan balasan pada tiket (mencatat first_response_at untuk operator manusia).
  * - Perubahan status tiket: SATU-SATUNYA tempat perhitungan dan pencatatan closed_at serta resolution_time.
  * - Penggabungan tiket duplikat (merge) ke tiket rujukan/utama.
- *
- * @package App\Services\Helpdesk
  */
 class TicketService
 {
@@ -433,3 +432,4 @@ class TicketService
         });
     }
 }
+

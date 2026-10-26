@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * @file HelpdeskAnalytics.php
+ * @class HelpdeskAnalytics
  * @brief Layanan kalkulasi analitik dan metrik performa modul Velosha Helpdesk.
  *
  * @details

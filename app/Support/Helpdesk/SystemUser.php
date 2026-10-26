@@ -8,8 +8,8 @@ use Illuminate\Support\Str;
 
 /**
  * @file SystemUser.php
+ * @class SystemUser
  * @brief Helper penyedia akun bot sistem helpdesk secara lazy.
- * @package App\Support\Helpdesk
  */
 class SystemUser
 {

@@ -83,33 +83,33 @@ Parameter opsional `?CarbonInterface $now = null` disediakan khusus agar penguji
 Pasang breakpoint di file layanan tiket:
 
 - **File**: `app/Services/Helpdesk/TicketService.php`
-- **Baris Kunci Perhitungan `$diff`**: **Baris 316** (di dalam blok status `CLOSED`):
+- **Baris Kunci Perhitungan `$diff`**: **Baris 315** (di dalam blok status `CLOSED`):
 
 ```php
-314:             if ($newStatus === TicketStatus::CLOSED) {
-315:                 $closedAt = $current;
-316:                 $diff = (int) $lockedTicket->created_at->diffInMinutes($closedAt); // <-- BREAKPOINT UTAMA (Baris 316)
-317:                 $resolutionTime = max(0, $diff);
-318: 
-319:                 $lockedTicket->status = TicketStatus::CLOSED;
-320:                 $lockedTicket->closed_at = $closedAt;
-321:                 $lockedTicket->resolution_time = $resolutionTime;
-322: 
-323:                 if ($solutionSummary !== null && trim($solutionSummary) !== '') {
-324:                     $lockedTicket->solution_summary = trim($solutionSummary);
-325:                 }
-326: 
-327:                 $lockedTicket->save();
-328: 
-329:                 return $lockedTicket;
-330:             }
+313:             if ($newStatus === TicketStatus::CLOSED) {
+314:                 $closedAt = $current;
+315:                 $diff = (int) $lockedTicket->created_at->diffInMinutes($closedAt); // <-- BREAKPOINT UTAMA (Baris 315)
+316:                 $resolutionTime = max(0, $diff);
+317: 
+318:                 $lockedTicket->status = TicketStatus::CLOSED;
+319:                 $lockedTicket->closed_at = $closedAt;
+320:                 $lockedTicket->resolution_time = $resolutionTime;
+321: 
+322:                 if ($solutionSummary !== null && trim($solutionSummary) !== '') {
+323:                     $lockedTicket->solution_summary = trim($solutionSummary);
+324:                 }
+325: 
+326:                 $lockedTicket->save();
+327: 
+328:                 return $lockedTicket;
+329:             }
 ```
 
 ---
 
 ## 4. Demonstrasi Evaluasi pada VS Code Debug Console
 
-Ketika eksekusi program berhenti pada breakpoint di **baris 316**, buka tab **Debug Console** di VS Code dan lakukan evaluasi perbandingan kedua ekspresi berikut:
+Ketika eksekusi program berhenti pada breakpoint di **baris 315**, buka tab **Debug Console** di VS Code dan lakukan evaluasi perbandingan kedua ekspresi berikut:
 
 ### Evaluasi 1 (Bentuk Terbalik / Mundur):
 ```text
@@ -140,8 +140,8 @@ Tambahkan variabel-variabel berikut ke panel **Watch** di panel Run & Debug IDE:
 | `$lockedTicket->created_at` | `Carbon` | Waktu awal tiket dibuat oleh pelapor (misal: `2026-10-25 10:00:00`). |
 | `$current` | `Carbon` | Waktu evaluasi penutupan tiket (menggunakan `$now` jika diinjeksi, atau `Carbon::now()`). |
 | `$closedAt` | `Carbon` | Stempel waktu yang akan disimpan ke database pada kolom `closed_at`. |
-| `$diff` | `int` | Selisih waktu dalam satuan menit via `diffInMinutes` (Baris 316: bernilai `150`). |
-| `$resolutionTime` | `int` | Durasi final terproteksi via `max(0, $diff)` (Baris 317: bernilai `150`). |
+| `$diff` | `int` | Selisih waktu dalam satuan menit via `diffInMinutes` (Baris 315: bernilai `150`). |
+| `$resolutionTime` | `int` | Durasi final terproteksi via `max(0, $diff)` (Baris 316: bernilai `150`). |
 | `$newStatus` | `TicketStatus` | Enum status tujuan; bernilai `TicketStatus::CLOSED`. |
 | `$actor` | `User` | Pengguna yang menutup tiket (wajib berstatus `operator` atau `admin`). |
 | `$solutionSummary` | `string|null` | Catatan solusi yang ditulis staf sebelum menutup tiket. |
@@ -165,7 +165,7 @@ php artisan test tests/Unit/Helpdesk/TicketServiceTest.php --filter=test_resolut
 $env:XDEBUG_MODE="off"
 ```
 
-Jika listener VS Code aktif (`F5`), test runner PHPUnit akan langsung memicu breakpoint pada baris 316.
+Jika listener VS Code aktif (`F5`), test runner PHPUnit akan langsung memicu breakpoint pada baris 315.
 
 ### Metode B: Melalui Tampilan Browser (Livewire Operator Interface)
 
@@ -181,7 +181,7 @@ Jika listener VS Code aktif (`F5`), test runner PHPUnit akan langsung memicu bre
    - Pilih opsi **Closed** (Tutup Tiket).
    - Masukkan ringkasan solusi.
    - Klik tombol konfirmasi penutupan.
-6. Permintaan HTTP Livewire akan memanggil `TicketService::changeStatus()` dan VS Code akan langsung berhenti di breakpoint **baris 316**.
+6. Permintaan HTTP Livewire akan memanggil `TicketService::changeStatus()` dan VS Code akan langsung berhenti di breakpoint **baris 315**.
 
 ### Metode C: Melalui Interactive CLI (Laravel Tinker)
 
