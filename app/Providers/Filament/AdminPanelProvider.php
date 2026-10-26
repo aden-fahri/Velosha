@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\HelpdeskOverview;
 use App\Filament\Widgets\RecentRegistrationsWidget;
 use App\Filament\Widgets\RegistrationStatusChart;
 use App\Filament\Widgets\RegistrationTrendChart;
@@ -12,6 +13,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -44,9 +46,24 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
+            ->navigationItems([
+                NavigationItem::make('Antrian tiket')
+                    ->url('/helpdesk')
+                    ->icon('heroicon-o-ticket')
+                    ->group('Helpdesk')
+                    ->sort(1)
+                    ->visible(fn (): bool => auth()->user()?->isAdmin() ?? false),
+                NavigationItem::make('Analitik helpdesk')
+                    ->url('/helpdesk/analitik')
+                    ->icon('heroicon-o-chart-bar')
+                    ->group('Helpdesk')
+                    ->sort(2)
+                    ->visible(fn (): bool => auth()->user()?->isAdmin() ?? false),
+            ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 VeloshaStatsOverview::class,
+                HelpdeskOverview::class,
                 RegistrationTrendChart::class,
                 RegistrationStatusChart::class,
                 UpcomingEventsWidget::class,

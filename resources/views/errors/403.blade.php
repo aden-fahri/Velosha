@@ -127,13 +127,18 @@
                onclick="history.length > 1 ? history.back() : (window.location.href = '/'); return false;">Kembali</a>
 
             @auth
-                @if (auth()->user()->canVisit('/dashboard'))
-                    <a class="btn btn-primary" href="/dashboard">Ke Dashboard Saya</a>
-                @elseif (auth()->user()->canVisit('/admin'))
-                    <a class="btn btn-primary" href="/admin">Ke Panel Admin</a>
-                @else
-                    <a class="btn btn-primary" href="/">Ke Beranda</a>
-                @endif
+                @php
+                    $u = auth()->user();
+                    $homeUrl = $u->home();
+                    if ($u->isOperator()) {
+                        $homeLabel = 'Antrian Helpdesk';
+                    } elseif ($u->isAdmin() || $u->isPenyelenggara()) {
+                        $homeLabel = 'Ke Panel Admin';
+                    } else {
+                        $homeLabel = 'Ke Dashboard Saya';
+                    }
+                @endphp
+                <a class="btn btn-primary" href="{{ $homeUrl }}">{{ $homeLabel }}</a>
             @else
                 <a class="btn btn-primary" href="/login">Masuk</a>
             @endauth

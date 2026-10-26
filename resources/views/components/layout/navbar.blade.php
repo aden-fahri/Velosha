@@ -18,7 +18,9 @@
                     ['rule', '/rule', 'Regulasi'],
                     ['help', '/help', 'Bantuan'],
                 ] as [$key, $url, $label])
-                @php($active = request()->routeIs($key . '*') || ($key === 'home' && request()->is('/')) || ($key === 'events.index' && request()->is('events*')))
+                @php
+                    $active = request()->routeIs($key . '*') || ($key === 'home' && request()->is('/')) || ($key === 'events.index' && request()->is('events*'));
+                @endphp
                 <a href="{{ $url }}"
                    wire:navigate
                    @if ($active) aria-current="page" @endif
@@ -31,18 +33,26 @@
 
         <!-- Right Actions -->
         <div class="flex items-center gap-3">
-            @auth
-                @if (Auth::user()->isAdmin() || Auth::user()->isPenyelenggara())
-                    <a href="/admin" class="btn btn-sm btn-ghost">
-                        <i data-lucide="layout-dashboard" class="w-4 h-4 mr-1 text-[var(--ink)]"></i>
-                        <span>Panel Admin</span>
-                    </a>
-                @else
-                    <a href="/dashboard" wire:navigate class="btn btn-sm btn-ghost">
-                        <i data-lucide="gauge" class="w-4 h-4 mr-1 text-[var(--ink)]"></i>
-                        <span>Portal Saya</span>
-                    </a>
-                @endif
+            @if (auth()->check())
+                @php
+                    $u = auth()->user();
+                    $homeUrl = $u->home();
+                    $isFilament = $u->isAdmin() || $u->isPenyelenggara();
+                    if ($u->isOperator()) {
+                        $homeLabel = 'Antrian Helpdesk';
+                        $homeIcon = 'ticket';
+                    } elseif ($isFilament) {
+                        $homeLabel = 'Panel Admin';
+                        $homeIcon = 'layout-dashboard';
+                    } else {
+                        $homeLabel = 'Portal Saya';
+                        $homeIcon = 'gauge';
+                    }
+                @endphp
+                <a href="{{ $homeUrl }}" {{ $isFilament ? '' : 'wire:navigate' }} class="btn btn-sm btn-ghost">
+                    <i data-lucide="{{ $homeIcon }}" class="w-4 h-4 mr-1 text-[var(--ink)]"></i>
+                    <span>{{ $homeLabel }}</span>
+                </a>
 
                 <a href="{{ route('ticket.show') }}" wire:navigate class="btn btn-sm btn-pine">
                     <i data-lucide="ticket" class="w-4 h-4 mr-1"></i>
@@ -53,7 +63,7 @@
                     <span>Masuk</span>
                     <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
                 </a>
-            @endauth
+            @endif
 
             <!-- Mobile Menu Button -->
             <button type="button" @click="mobileOpen = !mobileOpen" class="lg:hidden w-11 h-11 border-[2.5px] border-[var(--ink)] rounded-lg bg-[var(--card)] flex items-center justify-center cursor-pointer shadow-[3px_3px_0_var(--ink)]" aria-label="Menu navigasi">
@@ -73,7 +83,9 @@
             ['rule', '/rule', 'Regulasi'],
             ['help', '/help', 'Bantuan'],
         ] as [$key, $url, $label])
-        @php($active = request()->routeIs($key . '*') || ($key === 'home' && request()->is('/')) || ($key === 'events.index' && request()->is('events*')))
+        @php
+            $active = request()->routeIs($key . '*') || ($key === 'home' && request()->is('/')) || ($key === 'events.index' && request()->is('events*'));
+        @endphp
         <a href="{{ $url }}"
            wire:navigate
            @click="mobileOpen = false"
