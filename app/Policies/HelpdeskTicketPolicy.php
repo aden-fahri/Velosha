@@ -7,6 +7,7 @@ use App\Models\User;
 
 /**
  * @file HelpdeskTicketPolicy.php
+ * @class HelpdeskTicketPolicy
  * @brief Kebijakan otorisasi (RBAC) untuk akses tiket Helpdesk Velosha.
  */
 class HelpdeskTicketPolicy

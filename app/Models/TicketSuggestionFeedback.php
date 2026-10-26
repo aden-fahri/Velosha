@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @brief Model rekaman umpan balik pengguna terhadap saran solusi tiket serupa (helpful / not helpful).
+ */
 class TicketSuggestionFeedback extends Model
 {
     use HasFactory;

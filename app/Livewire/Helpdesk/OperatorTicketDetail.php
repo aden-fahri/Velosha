@@ -19,6 +19,9 @@ use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
+/**
+ * @brief Komponen Livewire tampilan detail, respons balasan, dan eskalasi status tiket untuk operator.
+ */
 #[Layout('layouts.app', ['nav' => false])]
 #[Title('Detail Tiket — Velosha Helpdesk')]
 class OperatorTicketDetail extends Component

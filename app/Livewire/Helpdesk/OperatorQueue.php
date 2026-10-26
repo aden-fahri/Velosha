@@ -16,6 +16,9 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+/**
+ * @brief Komponen Livewire antrian penanganan tiket masuk untuk operator helpdesk.
+ */
 #[Layout('layouts.app', ['nav' => false])]
 #[Title('Antrian Tiket Operator — Velosha Helpdesk')]
 class OperatorQueue extends Component

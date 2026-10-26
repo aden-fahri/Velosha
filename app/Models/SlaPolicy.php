@@ -6,6 +6,9 @@ use App\Enums\TicketPriority;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @brief Model konfigurasi target durasi SLA respons dan resolusi per prioritas tiket.
+ */
 class SlaPolicy extends Model
 {
     use HasFactory;

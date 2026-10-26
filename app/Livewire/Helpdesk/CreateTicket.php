@@ -13,6 +13,9 @@ use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
+/**
+ * @brief Komponen Livewire pembuatan tiket bantuan baru oleh pelapor.
+ */
 #[Layout('layouts.app', ['nav' => false])]
 #[Title('Buat Tiket Bantuan — Velosha')]
 class CreateTicket extends Component
