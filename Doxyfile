@@ -20,15 +20,15 @@ CASE_SENSE_NAMES       = NO
 # Input Files and Directories (Helpdesk Codebase)
 INPUT                  = app/Services/Helpdesk \
                          app/Support/Helpdesk \
-                         app/Enums/Helpdesk \
+                         app/Enums \
                          app/Livewire/Helpdesk \
+                         app/Policies/HelpdeskTicketPolicy.php \
                          app/Models/HelpdeskTicket.php \
                          app/Models/TicketResponse.php \
                          app/Models/SlaPolicy.php \
                          app/Models/ReplyTemplate.php \
                          app/Models/SatisfactionRating.php \
-                         app/Models/TicketSuggestionFeedback.php \
-                         app/Models/Ticket.php
+                         app/Models/TicketSuggestionFeedback.php
 RECURSIVE              = YES
 FILE_PATTERNS          = *.php
 EXCLUDE_PATTERNS       = */tests/* */vendor/* */storage/* */public/*
@@ -43,9 +43,10 @@ AUTOLINK_SUPPORT       = YES
 # Warning and Status Messages
 QUIET                  = NO
 WARNINGS               = YES
-WARN_IF_UNDOCUMENTED   = NO
-WARN_IF_DOC_ERROR      = NO
-WARN_NO_PARAMDOC       = NO
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+WARN_NO_PARAMDOC       = YES
+WARN_LOGFILE           = docs/doxygen/warnings.txt
 
 # Output Formats
 GENERATE_HTML          = YES

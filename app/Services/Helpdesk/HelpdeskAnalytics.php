@@ -71,7 +71,7 @@ class HelpdeskAnalytics
      * Jika operator belum memiliki data respons, nilai numerik bernilai null dan
      * `formatted_time` menghasilkan "-".
      *
-     * @return \Illuminate\Support\Collection<int, object>
+     * @return Collection<int, object>
      */
     public function getAverageResponseTimesPerOperator(): Collection
     {
@@ -117,7 +117,7 @@ class HelpdeskAnalytics
      *
      * @return array{
      *     overall: array{total: int, average: float|null, formatted_average: string, distribution: array<int, int>},
-     *     by_operator: \Illuminate\Support\Collection<int, object>
+     *     by_operator: Collection<int, object>
      * }
      */
     public function getSatisfactionRatings(): array
@@ -207,7 +207,7 @@ class HelpdeskAnalytics
      * Cakupan operator mencakup pengguna `role = 'operator'` (selalu) ditambah pengguna
      * `role = 'admin'` yang menangani minimal 1 tiket. Akun sistem (`is_system = true`) dieksklusikan.
      *
-     * @return \Illuminate\Support\Collection<int, object>
+     * @return Collection<int, object>
      */
     public function getTopOperators(): Collection
     {
