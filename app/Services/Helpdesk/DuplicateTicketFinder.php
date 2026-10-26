@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * @file DuplicateTicketFinder.php
+ * @class DuplicateTicketFinder
  * @brief Layanan pendeteksi tiket duplikat dan aduan serupa menggunakan MySQL FULLTEXT.
  *
  * @details
@@ -30,7 +31,6 @@ use Illuminate\Support\Facades\DB;
  * token di-normalisasi. Penggunaan ngram parser dihindari karena meningkatkan ukuran indeks secara
  * eksponensial (bigram) dan menyebabkan false positive pada kemunculan substring kata umum.
  *
- * @package App\Services\Helpdesk
  * @author Velosha Core Engineering
  * @version 1.0.0
  */
@@ -49,8 +49,6 @@ class DuplicateTicketFinder
     /**
      * Daftar stopword bahasa Indonesia untuk normalisasi query pencarian.
      * Kata-kata fungsional ini disaring agar query FULLTEXT berfokus pada istilah inti.
-     *
-     * @var array<int, string>
      */
     public const INDONESIAN_STOPWORDS = [
         'yang', 'untuk', 'pada', 'ke', 'para', 'namun', 'menurut', 'antara', 'dia',

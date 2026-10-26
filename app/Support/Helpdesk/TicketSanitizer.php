@@ -2,6 +2,11 @@
 
 namespace App\Support\Helpdesk;
 
+/**
+ * @file TicketSanitizer.php
+ * @class TicketSanitizer
+ * @brief Utilitas sanitasi dan redaksi data sensitif (PII) pada modul Helpdesk.
+ */
 class TicketSanitizer
 {
     /**
@@ -10,6 +15,9 @@ class TicketSanitizer
      * - Nomor telepon & format digit panjang (>= 8 digit, dengan atau tanpa pemisah)
      * - URL bertoken / query string sensitif
      * - Spasi berlebih
+     *
+     * @param string|null $text Teks input yang akan disanitasi
+     * @return string Teks hasil redaksi PII
      */
     public static function clean(?string $text): string
     {

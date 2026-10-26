@@ -11,7 +11,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * Layanan untuk pembuatan balasan otomatis (auto-reply) dan rekomendasi tanggapan operator.
+ * @file AutoReplyService.php
+ * @class AutoReplyService
+ * @brief Layanan untuk pembuatan balasan otomatis (auto-reply) dan rekomendasi tanggapan operator.
  *
  * Mengimplementasikan aturan ketat non-empty guarantee:
  * pesan kosong atau yang menjadi kosong setelah substitusi placeholder tidak akan pernah

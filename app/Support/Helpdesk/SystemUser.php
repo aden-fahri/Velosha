@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * Helper penyedia akun bot sistem helpdesk secara lazy.
+ * @file SystemUser.php
+ * @class SystemUser
+ * @brief Helper penyedia akun bot sistem helpdesk secara lazy.
  */
 class SystemUser
 {

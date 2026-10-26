@@ -15,6 +15,9 @@ use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
+/**
+ * @brief Komponen Livewire daftar tiket dan riwayat aduan milik pelapor.
+ */
 #[Layout('layouts.app', ['nav' => false])]
 #[Title('Tiket Saya — Velosha Helpdesk')]
 class MyTickets extends Component

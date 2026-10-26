@@ -8,6 +8,9 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
+/**
+ * @brief Komponen Livewire analitik dan metrik performa helpdesk untuk administrator.
+ */
 #[Layout('layouts.app', ['nav' => false])]
 #[Title('Analitik Helpdesk — Administrator Velosha')]
 class AdminAnalytics extends Component

@@ -5,10 +5,18 @@ namespace App\Policies;
 use App\Models\HelpdeskTicket;
 use App\Models\User;
 
+/**
+ * @file HelpdeskTicketPolicy.php
+ * @class HelpdeskTicketPolicy
+ * @brief Kebijakan otorisasi (RBAC) untuk akses tiket Helpdesk Velosha.
+ */
 class HelpdeskTicketPolicy
 {
     /**
      * Tentukan apakah user boleh melihat daftar antrian / tiket saya.
+     *
+     * @param User $user Pengguna yang diautentikasi
+     * @return bool
      */
     public function viewAny(User $user): bool
     {
@@ -20,6 +28,10 @@ class HelpdeskTicketPolicy
      * Aturan spec:
      * - Admin dan Operator dapat melihat semua tiket.
      * - Reporter (peserta) HANYA boleh melihat tiket miliknya.
+     *
+     * @param User $user Pengguna yang diautentikasi
+     * @param HelpdeskTicket $ticket Tiket yang akan dilihat
+     * @return bool
      */
     public function view(User $user, HelpdeskTicket $ticket): bool
     {
@@ -32,6 +44,9 @@ class HelpdeskTicketPolicy
 
     /**
      * Tentukan apakah user boleh membuat tiket baru (peserta).
+     *
+     * @param User $user Pengguna yang diautentikasi
+     * @return bool
      */
     public function create(User $user): bool
     {
@@ -44,6 +59,10 @@ class HelpdeskTicketPolicy
      * - Tiket yang sudah Closed tidak boleh dibalas oleh siapa pun (pelapor membuat tiket baru).
      * - Operator & Admin boleh membalas jika status belum Closed.
      * - Pelapor hanya boleh membalas tiket miliknya jika status belum Closed.
+     *
+     * @param User $user Pengguna yang diautentikasi
+     * @param HelpdeskTicket $ticket Tiket yang akan dibalas
+     * @return bool
      */
     public function reply(User $user, HelpdeskTicket $ticket): bool
     {
@@ -61,6 +80,10 @@ class HelpdeskTicketPolicy
     /**
      * Tentukan apakah user boleh mengubah status / prioritas / operator assignment.
      * Aturan spec: Operator dan Admin saja.
+     *
+     * @param User $user Pengguna yang diautentikasi
+     * @param HelpdeskTicket $ticket Tiket yang akan diubah
+     * @return bool
      */
     public function update(User $user, HelpdeskTicket $ticket): bool
     {
@@ -73,6 +96,10 @@ class HelpdeskTicketPolicy
      * - HANYA reporter tiket (bukan operator atau admin).
      * - HANYA jika status Closed.
      * - HANYA satu kali (belum pernah dirating).
+     *
+     * @param User $user Pengguna yang diautentikasi
+     * @param HelpdeskTicket $ticket Tiket yang dinilai
+     * @return bool
      */
     public function rate(User $user, HelpdeskTicket $ticket): bool
     {

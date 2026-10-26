@@ -16,6 +16,20 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * @file TicketService.php
+ * @class TicketService
+ * @brief Layanan inti pengelolaan siklus hidup tiket helpdesk Velosha.
+ *
+ * @details
+ * Mengelola seluruh operasi bisnis helpdesk:
+ * - Pembuatan tiket baru oleh pelapor dengan penentuan SLA otomatis.
+ * - Klaim tiket secara atomik oleh operator dengan proteksi concurrency.
+ * - Penugasan tiket ke operator oleh supervisor/admin.
+ * - Penambahan balasan pada tiket (mencatat first_response_at untuk operator manusia).
+ * - Perubahan status tiket: SATU-SATUNYA tempat perhitungan dan pencatatan closed_at serta resolution_time.
+ * - Penggabungan tiket duplikat (merge) ke tiket rujukan/utama.
+ */
 class TicketService
 {
     /**
@@ -23,9 +37,9 @@ class TicketService
      * Mengirimkan balasan otomatis (auto-reply) jika tersedia template yang relevan.
      * Kegagalan pada auto-reply dicatat ke log dan tidak membatalkan pembuatan tiket.
      *
-     * @param User $reporter
-     * @param array{subject: string, description: string, priority: TicketPriority|string, category?: TicketCategory|string} $data
-     * @param CarbonInterface|null $now
+     * @param User $reporter Pelapor tiket
+     * @param array $data Data tiket (subject, description, priority, category)
+     * @param CarbonInterface|null $now Waktu pembuatan (opsional untuk testing)
      * @return HelpdeskTicket
      * @throws DomainException
      */
@@ -371,9 +385,9 @@ class TicketService
                 ->get()
                 ->keyBy('id');
 
-            /** @var HelpdeskTicket $lockedTarget */
+            /* @var HelpdeskTicket $lockedTarget */
             $lockedTarget = $locked->get($target->id);
-            /** @var HelpdeskTicket $lockedDuplicate */
+            /* @var HelpdeskTicket $lockedDuplicate */
             $lockedDuplicate = $locked->get($duplicate->id);
 
             if (! $lockedTarget || ! $lockedDuplicate) {
@@ -418,3 +432,4 @@ class TicketService
         });
     }
 }
+

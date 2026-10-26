@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @brief Model pesan tanggapan, percakapan balasan, atau auto-reply pada tiket helpdesk.
+ */
 class TicketResponse extends Model
 {
     use HasFactory;

@@ -13,6 +13,9 @@ use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
+/**
+ * @brief Komponen Livewire pembuatan tiket bantuan baru oleh pelapor.
+ */
 #[Layout('layouts.app', ['nav' => false])]
 #[Title('Buat Tiket Bantuan — Velosha')]
 class CreateTicket extends Component
@@ -39,7 +42,10 @@ class CreateTicket extends Component
 
     public string $priority = 'Mid';
 
-    /** @var array<int, array{id: int, subject: string, solution_summary: string, is_closed: bool}> */
+    /**
+     * Rekomendasi tiket serupa hasil pencarian duplicate finder.
+     * @var array $similarTickets
+     */
     public array $similarTickets = [];
 
     public ?string $feedbackMessage = null;
