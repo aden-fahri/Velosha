@@ -25,6 +25,37 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+Desktop.ini
+
+# Dokumentasi & Bukti Pengujian Lokal
 /docs/evidence
 /docs/doxygen
+/html
+/latex
+
+# Arsip & Kompresi
 *.zip
+*.rar
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+
+# Output Pengujian & Hasil Ekstraksi
+/test_out/
+/test-results/
+/playwright-report/
+test_suite_output.txt
+doxygen_terminal_output.txt
+/PRD/*-extracted/
+
+# File Debug & Dump Informasi Sistem
+phpinfo.txt
+*.dump
+*.sql
+*.sqlite
+*.sqlite-journal
+
+# Script Testing / Capture Lokal
+scripts/capture_phase4.mjs
+
