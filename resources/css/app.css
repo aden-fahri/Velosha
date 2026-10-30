@@ -704,46 +704,301 @@ h1, h2, h3, h4, .disp, .font-heading {
     will-change: transform, opacity;
 }
 
-/* Fan Cards: 1 kartu di tengah saat stacked, berpencar jadi 3 saat scroll */
-.fan-c { z-index: 3; }
-.fan-r { z-index: 2; }
-.fan-l { z-index: 1; }
-
-.fan-wrap {
+/* ==========================================================================
+   2 · KARTU EVENT DECK (Stacked, Spread, 3D Tilt, Drag to discard)
+   ========================================================================== */
+.deck {
     position: relative;
+    display: grid;
+    gap: 24px;
+    min-height: 440px;
+    padding: 20px 0 30px;
+    perspective: 1000px;
 }
-.fan-wrap .fan-l,
-.fan-wrap .fan-c,
-.fan-wrap .fan-r {
-    transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease-out;
-    will-change: transform, opacity;
+.deck.spread {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.deck.stacked {
+    grid-template-columns: minmax(0, 360px);
+    justify-content: center;
+}
+.deck.stacked .card {
+    grid-area: 1 / 1;
+    left: calc(var(--k, 0) * 12px);
+    top: calc(var(--k, 0) * -6px);
+    rotate: calc((var(--k, 0) - var(--m, 0)) * 4.5deg);
+    cursor: grab;
+}
+.deck.stacked .card:active {
+    cursor: grabbing;
+}
+.deck .card {
+    position: relative;
+    will-change: translate, rotate;
+    touch-action: pan-y;
+    user-select: none;
+}
+.deck .card.off {
+    display: none;
+}
+.deck .card .in {
+    background: var(--card);
+    color: var(--ink);
+    border: 3px solid var(--ink);
+    border-radius: 18px;
+    box-shadow: 6px 6px 0 var(--ink);
+    overflow: hidden;
+    transition: transform .25s ease-out, box-shadow .25s ease-out;
+}
+.deck.spread .card:hover .in {
+    box-shadow: 12px 12px 0 var(--ink);
+}
+.card .bd {
+    padding: 16px 18px 18px;
+}
+.card .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    font: 700 12px 'Inter', sans-serif;
+    background: var(--mustard);
+    color: var(--ink);
+}
+.card h3 {
+    margin: 8px 0 2px;
+    font-size: 20px;
+    line-height: 1.15;
+    font-weight: 800;
+    color: var(--ink);
+}
+.card .dt {
+    color: var(--mute);
+    font-size: 13px;
+    margin-top: 4px;
+}
+.spec {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin: 14px 0;
+    padding: 10px 0;
+    border: solid var(--ink);
+    border-width: 2px 0;
+    text-align: center;
+}
+.spec span {
+    font-size: 11px;
+    color: var(--mute);
+    display: block;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.spec b {
+    font: 800 14px 'Bricolage Grotesque', sans-serif;
+    color: var(--ink);
+}
+.price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+.price b {
+    font: 800 20px 'Bricolage Grotesque', sans-serif;
+    color: var(--ink);
 }
 
-@media (min-width: 1024px) {
-    /* STACKED (Awalnya cuma 1 kartu yang keliatan di tengah) */
-    .fan-wrap.fan-stacked .fan-l {
-        transform: translateX(calc(100% + 32px)) rotate(4deg) scale(0.96);
-        opacity: 0;
-        pointer-events: none;
-    }
-    .fan-wrap.fan-stacked .fan-r {
-        transform: translateX(calc(-100% - 32px)) rotate(-4deg) scale(0.96);
-        opacity: 0;
-        pointer-events: none;
-    }
-    .fan-wrap.fan-stacked .fan-c {
-        transform: scale(0.98);
-        opacity: 1;
-    }
-
-    /* SPREAD (Berpencar menjadi 3 kartu setelah ter-scroll) */
-    .fan-wrap.fan-spread .fan-l,
-    .fan-wrap.fan-spread .fan-c,
-    .fan-wrap.fan-spread .fan-r {
-        transform: none;
-        opacity: 1;
-        pointer-events: auto;
-    }
+/* ==========================================================================
+   3 · TIKET KARCIS 3D DENGAN QR PINDAI & SOBEK STUB
+   ========================================================================== */
+.tkarea {
+    display: grid;
+    justify-items: center;
+    gap: 20px;
+    padding: 10px 0;
+    perspective: 1200px;
+}
+.ticket {
+    position: relative;
+    width: min(760px, 100%);
+    min-height: 260px;
+    display: flex;
+    transform: rotate(-2.5deg) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform .2s ease-out;
+    transform-style: preserve-3d;
+    filter: drop-shadow(10px 12px 0 rgba(16, 40, 46, .25));
+}
+.ticket .main {
+    flex: 1;
+    position: relative;
+    background: var(--butter);
+    border: 3px solid var(--ink);
+    border-right: 0;
+    border-radius: 18px 0 0 18px;
+    padding: 24px 28px;
+    color: var(--ink);
+    overflow: hidden;
+}
+.stub {
+    position: relative;
+    width: min(210px, 34%);
+    background: var(--card);
+    border: 3px solid var(--ink);
+    border-radius: 0 18px 18px 0;
+    padding: 16px;
+    color: var(--ink);
+    transform-origin: 0 0;
+    cursor: grab;
+    touch-action: none;
+    display: grid;
+    place-items: center;
+    border-left: 3px dashed var(--ink);
+    user-select: none;
+}
+.stub:active {
+    cursor: grabbing;
+}
+.stub::before, .main::after {
+    content: "";
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--butter);
+    border: 3px solid var(--ink);
+    right: -3px;
+}
+.main::after {
+    right: -16px;
+    top: -15px;
+    z-index: 2;
+}
+.stub::before {
+    left: -16px;
+    bottom: -15px;
+    z-index: 2;
+}
+.glare {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    pointer-events: none;
+    background: radial-gradient(circle at var(--gx, 50%) var(--gy, 0%), rgba(255, 255, 255, .55), transparent 45%);
+    mix-blend-mode: soft-light;
+    opacity: var(--go, 0);
+    transition: opacity .2s;
+}
+.bib {
+    font: 800 clamp(54px, 8vw, 92px)/.9 'Bricolage Grotesque', sans-serif;
+    letter-spacing: -.05em;
+    color: var(--orange);
+    -webkit-text-stroke: 3px var(--ink);
+    paint-order: stroke fill;
+    text-shadow: 4px 4px 0 var(--ink);
+}
+.tk-k {
+    font: 700 12px 'Inter', sans-serif;
+    letter-spacing: .12em;
+    color: var(--mute);
+    text-transform: uppercase;
+}
+.qr {
+    position: relative;
+    width: 124px;
+    height: 124px;
+    background: #fff;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    padding: 6px;
+    overflow: hidden;
+}
+.qr svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.laser {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 4px;
+    background: #e0313a;
+    box-shadow: 0 0 10px 3px rgba(224, 49, 58, .7);
+    opacity: 0;
+}
+.qr.scanning .laser {
+    animation: scan 1.1s ease-in-out;
+}
+@keyframes scan {
+    0% { top: 0; opacity: 1; }
+    50% { top: calc(100% - 4px); }
+    100% { top: 0; opacity: 1; }
+}
+.okmark {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(31, 111, 74, .92);
+    color: #fff;
+    font: 800 40px 'Bricolage Grotesque', sans-serif;
+    opacity: 0;
+    transform: scale(.6);
+    transition: .3s cubic-bezier(.3, 1.6, .5, 1);
+}
+.qr.ok .okmark {
+    opacity: 1;
+    transform: none;
+}
+.stamp {
+    position: absolute;
+    right: 26px;
+    bottom: 20px;
+    border: 5px solid var(--pine);
+    color: var(--pine);
+    border-radius: 10px;
+    padding: 4px 16px;
+    font: 800 28px 'Bricolage Grotesque', sans-serif;
+    letter-spacing: .04em;
+    transform: rotate(-12deg) scale(2.2);
+    opacity: 0;
+    pointer-events: none;
+}
+.ticket.torn .stamp {
+    animation: stamp .5s .15s cubic-bezier(.3, 1.5, .5, 1) forwards;
+}
+@keyframes stamp {
+    to { opacity: 1; transform: rotate(-12deg) scale(1); }
+}
+.ticket.torn .glare {
+    display: none;
+}
+.ticket.torn .main {
+    border-radius: 18px;
+    border-right: 3px solid var(--ink);
+}
+.tkctl {
+    margin-top: 14px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+#tkmsg {
+    margin: 0;
+    color: var(--mute);
+    text-align: center;
+    min-height: 1.5em;
+    font-size: 14px;
+    font-weight: 600;
+}
+@media (max-width: 640px) {
+    .ticket { height: auto; min-height: 280px; }
+    .ticket .main { padding: 16px; }
+    .stub { width: 42%; padding: 10px; }
+    .qr { width: 96px; height: 96px; }
 }
 
 /* Pagehead & Band Art */

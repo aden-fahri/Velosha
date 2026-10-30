@@ -16,10 +16,15 @@
                     @endforeach
                 </div>
 
-                <a href="/events" wire:navigate class="btn btn-sm btn-ghost hidden sm:inline-flex">
-                    <span>Lihat Semua Kalender</span>
-                    <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
-                </a>
+                <div class="flex items-center gap-3">
+                    <button type="button" id="deck-mode-btn" class="btn btn-sm btn-ghost">
+                        Sebar kartu
+                    </button>
+                    <a href="/events" wire:navigate class="btn btn-sm btn-ghost hidden sm:inline-flex">
+                        <span>Lihat Semua Kalender</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -98,73 +103,60 @@
                 </div>
             </div>
 
-            <!-- Cards Grid (Fan out dari 1 kartu ke 3 kartu saat di-scroll) -->
-            <div class="fan-wrap grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-opacity duration-150"
-                 :class="fanned ? 'fan-spread' : 'fan-stacked'"
-                 x-data="{
-                    fanned: false,
-                    checkScroll() {
-                        const el = $el;
-                        if (!el) return;
-                        const rect = el.getBoundingClientRect();
-                        this.fanned = rect.top <= (window.innerHeight * 0.85);
-                    }
-                 }"
-                 @scroll.window.passive="checkScroll()"
-                 x-init="checkScroll()"
+            <!-- Cards Deck (Tumpukan 4 kartu miring, menyebar mulus, tarik kartu teratas, 3D tilt) -->
+            <div class="deck stacked" id="deck"
                  wire:loading.class="opacity-50"
                  wire:target="filter">
 
                 @forelse($races as $race)
-                @php
-                    $fanClass = $loop->index === 0 ? 'fan-l' : ($loop->index === 1 ? 'fan-c' : ($loop->index === 2 ? 'fan-r' : ''));
-                @endphp
-                <article wire:key="race-{{ $loop->index }}" class="card card-hover flex flex-col overflow-hidden bg-[var(--card)] {{ $fanClass }}">
-                    {{-- Header Poster Image --}}
-                    <div class="relative h-52 overflow-hidden border-b-[2.5px] border-[var(--ink)] bg-[var(--paper2)]">
-                        <img src="{{ $race['img'] }}" alt="{{ $race['title'] }}" class="w-full h-full object-cover">
-                        <div class="absolute top-3 left-3 flex gap-2">
-                            <span class="chip chip-orange">{{ $race['cat'] }}</span>
-                            <span class="chip bg-[var(--card)]">{{ $race['dist'] }}</span>
-                        </div>
-                    </div>
-
-                    {{-- Card Body --}}
-                    <div class="p-5 flex-grow flex flex-col">
-                        <div class="flex items-center text-xs font-bold text-[var(--mute)] gap-2 mb-2">
-                            <span class="flex items-center">
-                                <i data-lucide="calendar" class="w-3.5 h-3.5 mr-1 text-[var(--orange)]"></i>{{ $race['date'] }}
-                            </span>
-                            <span>•</span>
-                            <span class="truncate flex items-center">
-                                <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-1 text-[var(--orange)]"></i>{{ $race['loc'] }}
-                            </span>
-                        </div>
-
-                        <h3 class="text-lg font-heading font-extrabold text-[var(--ink)] line-clamp-2 leading-tight">
-                            {{ $race['title'] }}
-                        </h3>
-
-                        {{-- Stats 3-Col --}}
-                        <div class="mt-4 grid grid-cols-3 gap-2 text-center">
-                            @foreach($race['specs'] as $label => $value)
-                            <div class="bg-[var(--paper2)] p-2 rounded-lg border-[2px] border-[var(--ink)]">
-                                <div class="text-[10px] text-[var(--mute)] uppercase font-bold tracking-wider">{{ $label }}</div>
-                                <div class="text-xs font-heading font-extrabold text-[var(--ink)] mt-0.5">{{ $value }}</div>
+                <article wire:key="race-{{ $loop->index }}" class="card" data-c="{{ $race['cat'] }}">
+                    <div class="in">
+                        {{-- Header Poster Image / Art --}}
+                        <div class="relative h-44 overflow-hidden border-b-[3px] border-[var(--ink)] bg-[var(--paper2)]">
+                            <img src="{{ $race['img'] }}" alt="{{ $race['title'] }}" class="w-full h-full object-cover">
+                            <div class="absolute top-3 left-3 flex gap-2">
+                                <span class="tag" style="background: var(--orange)">{{ $race['cat'] }}</span>
+                                <span class="tag" style="background: var(--card)">{{ $race['dist'] }}</span>
                             </div>
-                            @endforeach
                         </div>
 
-                        {{-- Footer with Price & CTA Button --}}
-                        <div class="mt-auto pt-6 flex items-end justify-between border-t-[2px] border-dashed border-[var(--line)]">
-                            <div>
-                                <div class="text-[11px] uppercase tracking-wider text-[var(--mute)] font-bold">Mulai dari</div>
-                                <div class="text-xl font-heading font-extrabold text-[var(--ink)]">Rp {{ $race['price'] }}</div>
+                        {{-- Card Body --}}
+                        <div class="bd">
+                            <div class="dt flex items-center text-xs font-bold gap-2">
+                                <span class="flex items-center">
+                                    <i data-lucide="calendar" class="w-3.5 h-3.5 mr-1 text-[var(--orange)]"></i>{{ $race['date'] }}
+                                </span>
+                                <span>•</span>
+                                <span class="truncate flex items-center">
+                                    <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-1 text-[var(--orange)]"></i>{{ $race['loc'] }}
+                                </span>
                             </div>
-                            <a href="{{ $race['url'] }}" wire:navigate class="btn btn-sm">
-                                <span>Lihat detail</span>
-                                <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
-                            </a>
+
+                            <h3 class="disp leading-tight">
+                                {{ $race['title'] }}
+                            </h3>
+
+                            {{-- Stats 3-Col --}}
+                            <div class="spec">
+                                @foreach($race['specs'] as $label => $value)
+                                <div>
+                                    <span>{{ $label }}</span>
+                                    <b>{{ $value }}</b>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            {{-- Footer with Price & CTA Button --}}
+                            <div class="price">
+                                <div>
+                                    <div class="text-[10px] uppercase tracking-wider text-[var(--mute)] font-bold">Mulai dari</div>
+                                    <b class="text-xl">Rp {{ $race['price'] }}</b>
+                                </div>
+                                <a href="{{ $race['url'] }}" wire:navigate class="btn btn-sm">
+                                    <span>Lihat detail</span>
+                                    <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </article>

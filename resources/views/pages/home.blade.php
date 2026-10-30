@@ -228,36 +228,41 @@
         </p>
 
         <div style="display: grid; grid-template-columns: 5fr 7fr; gap: 48px; margin-top: 48px; align-items: start">
-            <!-- Kiri: Tiket Karcis Kartun Miring (-2.5deg) dengan Cutout Semicircle Persis Mockup -->
-            <div style="position: relative; transform: rotate(-2.5deg)">
-                <div class="card" style="position: relative; padding: 28px 28px 24px; border-radius: 14px">
-                    <div style="display: flex; justify-content: space-between; align-items: center">
-                        <span class="chip m">{{ $paket->eyebrow ?? 'Contoh tiket' }}</span>
-                        <span class="mono" style="font-weight: 700; font-size: 14px">VLS-GF-0001</span>
+            <!-- Kiri: Tiket Karcis 3D Interaktif (Tilt 3D, Kilau Glare, Pindai QR, Sobek Stub & Stempel TERVALIDASI) -->
+            <div class="tkarea" id="tkarea">
+                <div class="ticket" id="ticket">
+                    <div class="main">
+                        <div class="tk-k">{{ $paket->eyebrow ?? 'VELOSHA GRAN FONDO BOROBUDUR 2026' }}</div>
+                        <div class="bib" aria-label="Nomor BIB 0147">0147</div>
+                        <div style="margin-top: 10px">
+                            <div class="tk-k">PESERTA</div>
+                            <b class="disp" style="font-size: 22px; color: var(--ink)">Budi Prasetyo</b>
+                            <div class="tk-k" style="margin-top: 6px">GRAN FONDO · 130 KM · WAVE B</div>
+                        </div>
+                        <span id="badge" class="chip" style="position: absolute; right: 20px; top: 18px; background: var(--pine); color: #fff; border-color: var(--ink); display: none">
+                            Valid · Flag-off 05.42
+                        </span>
+                        <div class="stamp" aria-hidden="true">TERVALIDASI</div>
                     </div>
-
-                    <div class="disp" style="font-size: 30px; font-weight: 800; margin-top: 20px; line-height: 1.05">
-                        Velosha Gran Fondo<br>Borobudur 2026
-                    </div>
-
-                    <div style="margin-top: 22px; border-top: 3px dashed #10282E; position: relative">
-                        <i style="position: absolute; left: -41px; top: -15px; width: 28px; height: 28px; border-radius: 50%; background: #F8E3B5; border: 2.5px solid #10282E; display: block"></i>
-                        <i style="position: absolute; right: -41px; top: -15px; width: 28px; height: 28px; border-radius: 50%; background: #F8E3B5; border: 2.5px solid #10282E; display: block"></i>
-                    </div>
-
-                    <div style="display: flex; gap: 20px; margin-top: 22px; align-items: center">
-                        <svg width="104" height="104" viewBox="0 0 10 10" aria-label="Contoh kode QR" role="img" style="flex: none">
-                            <rect width="10" height="10" fill="#fff"></rect>
-                            <path fill="#10282E" d="M0 0h3v3H0zM7 0h3v3H7zM0 7h3v3H0zM4 0h1v1H4zM4 2h2v1H4zM5 4h1v1H5zM3 4h1v2H3zM7 4h2v1H7zM6 6h2v1H6zM8 7h2v1H8zM4 8h2v2H4zM7 9h1v1H7zM9 5h1v1H9z"></path>
-                            <path fill="#fff" d="M1 1h1v1H1zM8 1h1v1H8zM1 8h1v1H1z"></path>
-                        </svg>
+                    <div class="stub" id="stub" tabindex="0" aria-label="Potongan tiket. Tarik ke bawah untuk menyobek, atau tekan Enter.">
                         <div>
-                            <div class="mute" style="font-size: 12px; font-weight: 700; letter-spacing: .06em">NOMOR BIB</div>
-                            <div class="disp" style="font-size: 44px; font-weight: 800; line-height: 1">0147</div>
-                            <div class="mute" style="font-size: 13px; margin-top: 6px">Tunjukkan QR saat ambil race pack</div>
+                            <div class="qr" id="qr">
+                                <svg viewBox="0 0 25 25" shape-rendering="crispEdges" aria-hidden="true">
+                                    <path id="qrp" fill="#10282E"></path>
+                                </svg>
+                                <span class="laser"></span>
+                                <span class="okmark" aria-hidden="true">✓</span>
+                            </div>
+                            <div class="tk-k" style="text-align: center; margin-top: 6px; font-weight: 700">VLS-0147-8841</div>
                         </div>
                     </div>
+                    <span class="glare"></span>
                 </div>
+                <div class="tkctl">
+                    <button type="button" id="scan" class="btn btn-sm">Pindai QR</button>
+                    <button type="button" id="reset" class="btn btn-sm btn-ghost">Pasang lagi</button>
+                </div>
+                <p id="tkmsg" role="status" aria-live="polite">Pindai dulu, lalu tarik potongan kanan ke bawah.</p>
             </div>
 
             <!-- Kanan: Grid Fitur Kartun + Kartu Flat Hitam Benefit -->
