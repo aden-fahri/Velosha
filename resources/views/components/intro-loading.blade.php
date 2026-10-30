@@ -1,17 +1,16 @@
 <div x-data="{
-        show: !sessionStorage.getItem('velosha_intro_seen') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        show: !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
         skip() {
             this.show = false;
-            try { sessionStorage.setItem('velosha_intro_seen', '1'); } catch (e) {}
         }
      }"
      x-init="
+        try { sessionStorage.removeItem('velosha_intro_seen'); } catch (e) {}
         if (show) {
             setTimeout(() => skip(), 3500);
         }
      "
      x-show="show"
-     x-cloak
      x-transition:leave="transition ease-out duration-600"
      x-transition:leave-start="opacity-100 transform translate-y-0"
      x-transition:leave-end="opacity-0 transform -translate-y-8"
