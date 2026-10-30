@@ -21,19 +21,32 @@
     $rpcLabel = $rpcStart->format('j') . '-' . $rpcEnd->format('j') . ' ' . $monthShort[(int) $rpcEnd->format('n')];
     $raceLabel = $eventDate->format('j') . ' ' . $monthShort[(int) $eventDate->format('n')];
 @endphp
-{{-- Header abu-abu + kontur topo horizontal (seragam dengan halaman lain) --}}
-<x-page-header
-    size="compact"
-    eyebrow="Detail Balap Resmi"
-    title="{{ $event->title }}"
-    :meta="$eventDate->isFuture() ? ($totalRemaining > 0 ? 'Registrasi Dibuka · '.$event->type_label : 'Slot Penuh · '.$event->type_label) : 'Event Selesai · '.$event->type_label"
-    :chips="array_values(array_filter([
-        ['icon' => 'calendar', 'label' => P::tanggalLengkap($eventDate)],
-        ['icon' => 'clock', 'label' => 'Start '.$startTime.' WIB'],
-        $event->location_name ? ['icon' => 'map-pin', 'label' => $event->location_name] : null,
-        ['icon' => 'route', 'label' => P::distance($maxDistance)],
-    ]))"
-/>
+<!-- Banner Screenprint Neobrutalist dengan Pesepeda Menikung (EventDetail.dc.html) -->
+<section style="position: relative; min-height: 380px; border-bottom: 3px solid #10282E; overflow: hidden; background: #F6B777; display: flex; align-items: flex-end; padding-bottom: 36px">
+    <svg viewBox="0 0 1440 380" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true" style="position: absolute; inset: 0">
+        <rect width="1440" height="380" fill="#F6B777"></rect>
+        <circle cx="1130" cy="120" r="64" fill="#FBF4E6" stroke="#10282E" stroke-width="4"></circle>
+        <path d="M720 270 L820 130 L920 270Z M880 270 L1010 90 L1140 270Z M1100 270 L1200 150 L1300 270Z" fill="#B2590F" stroke="#10282E" stroke-width="4" stroke-linejoin="round"></path>
+        <path d="M0 250 Q300 190 600 240 T1200 230 T1440 220 V380 H0Z" fill="#7DB88A" stroke="#10282E" stroke-width="4"></path>
+        <path d="M0 310 Q360 270 720 300 T1440 290 V380 H0Z" fill="#1F6F4A" stroke="#10282E" stroke-width="4"></path>
+    </svg>
+    <img class="band-art" src="/images/mockup/miring.png" alt="Pesepeda berjersey oranye melaju miring menikung" style="height: 330px; right: 90px; bottom: 0">
+    <div class="wrap" style="position: relative; z-index: 3; width: 100%">
+        <div style="display: flex; gap: 10px; flex-wrap: wrap">
+            <span class="chip o">{{ $event->type_label }}</span>
+            <span class="chip">{{ P::distance($maxDistance) }}</span>
+            <span class="chip m">{{ $eventDate->isFuture() ? ($totalRemaining > 0 ? 'Pendaftaran dibuka' : 'Slot penuh') : 'Event selesai' }}</span>
+        </div>
+        <h1 class="h2" style="font-size: 56px; margin-top: 16px; max-width: 760px; line-height: 1.05">
+            {{ $event->title }}
+        </h1>
+        <div style="display: flex; gap: 24px; margin-top: 14px; font-weight: 700; font-size: 15px; flex-wrap: wrap; color: #10282E">
+            <span>{{ P::tanggalLengkap($eventDate) }}</span>
+            <span>{{ $event->location_name }}</span>
+            <span>Start {{ $startTime }} WIB</span>
+        </div>
+    </div>
+</section>
 
 <!-- Photo Gallery Grid (1 large + up to 4 small grid) -->
 @include('pages.event-detail.partials.gallery')

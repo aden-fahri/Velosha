@@ -565,3 +565,274 @@ h1, h2, h3, h4, .disp, .font-heading {
     cursor: pointer;
 }
 
+/* ==========================================================================
+   VELOSHA SCREEN-PRINT DESIGN SYSTEM & MOCKUP ANIMATIONS (30 Okt 2026)
+   ========================================================================== */
+
+/* Hero Stage & Animations */
+@keyframes ride {
+    0% { transform: translateX(-1500px); animation-timing-function: cubic-bezier(.2, .7, .3, 1); }
+    80% { transform: translateX(12px); animation-timing-function: ease-in-out; }
+    100% { transform: translateX(0); }
+}
+@keyframes bob { to { transform: translateY(-6px); } }
+@keyframes rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+@keyframes reveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes amber { from { transform: translate(-14px, -14px); } to { transform: none; } }
+@keyframes trail {
+    0% { opacity: 0; transform: translateX(-1500px); }
+    12% { opacity: 1; }
+    80% { opacity: 1; transform: none; }
+    100% { opacity: 0; transform: translateX(60px); }
+}
+
+.a-ride { animation: ride 1.7s both; }
+.a-bob { animation: bob 2.4s ease-in-out 1.7s infinite alternate; }
+.a-trail { animation: trail 1.7s both; }
+.a-panel { animation: reveal 0.9s cubic-bezier(.7, 0, .2, 1) both; }
+.a-amber { animation: amber 0.7s cubic-bezier(.2, .8, .2, 1) 1.25s both; }
+.a-rise { animation: rise 0.8s cubic-bezier(.2, .8, .2, 1) both; }
+
+.stage.off * { animation: none !important; }
+.stage.off .a-ride, .stage.off .a-trail { transform: translateX(-1500px); }
+.stage.off .a-rise, .stage.off .a-trail { opacity: 0; }
+.stage.off .a-panel { clip-path: inset(0 100% 0 0); }
+.stage.off .a-amber { transform: translate(-14px, -14px); }
+.stage.rm * { animation: none !important; }
+.stage.rm .a-ride, .stage.rm .a-rise, .stage.rm .a-panel, .stage.rm .a-amber { transform: none !important; opacity: 1 !important; clip-path: none !important; }
+.stage.rm .a-trail { opacity: 0 !important; }
+
+@media (prefers-reduced-motion: reduce) {
+    .stage * { animation: none !important; }
+    .stage .a-ride, .stage .a-rise, .stage .a-panel, .stage .a-amber { transform: none !important; opacity: 1 !important; clip-path: none !important; }
+    .stage .a-trail { opacity: 0 !important; }
+}
+
+/* Dots Button Carousel */
+.dotbtn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+}
+.dotbtn i {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border: 2.5px solid var(--ink);
+    border-radius: 50%;
+    background: #FFFDF8;
+    transition: all 0.2s ease;
+}
+.dotbtn.on i {
+    background: var(--orange);
+    width: 28px;
+    border-radius: 6px;
+}
+
+/* Curvy Transition (Hero -> Event) */
+#event { border-top: 3px solid var(--ink); }
+.arc-cap {
+    position: relative;
+    height: 0;
+    z-index: 6;
+    overflow: visible;
+}
+.arc-cap .arc-clip {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -257px;
+    height: 260px;
+    overflow: hidden;
+}
+.arc-cap .arc-dome {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 2600px;
+    height: 560px;
+    margin-left: -1300px;
+    background: var(--butter);
+    border: 3px solid var(--ink);
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    box-sizing: border-box;
+}
+.arc-cap .arc-text {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 110px;
+    font: 800 15px 'Bricolage Grotesque', sans-serif;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    fill: var(--ink);
+}
+
+.fan-c { z-index: 3; }
+.fan-r { z-index: 2; }
+.fan-l { z-index: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes v-arc { 0%, 16% { transform: translateY(264px); } 38%, 68% { transform: none; } 90%, 100% { transform: translateY(264px); } }
+    @keyframes v-arcT { 0%, 16% { transform: translateY(264px); opacity: 0; } 30% { opacity: 0; } 40%, 66% { transform: none; opacity: 1; } 38% { transform: none; } 78% { opacity: 0; } 90%, 100% { transform: translateY(264px); opacity: 0; } }
+    @keyframes v-fanL { 0%, 30% { transform: translateX(calc(100% + 32px)) rotate(6deg) scale(.96); } 54%, 68% { transform: none; } 90%, 100% { transform: translateX(calc(100% + 32px)) rotate(6deg) scale(.96); } }
+    @keyframes v-fanR { 0%, 30% { transform: translateX(calc(-100% - 32px)) rotate(-6deg) scale(.96); } 54%, 68% { transform: none; } 90%, 100% { transform: translateX(calc(-100% - 32px)) rotate(-6deg) scale(.96); } }
+    @keyframes v-fanC { 0%, 30% { transform: scale(.94); } 54%, 68% { transform: none; } 90%, 100% { transform: scale(.94); } }
+    .arc-cap .arc-dome { animation: v-arc 11s cubic-bezier(.45, .05, .2, 1) infinite; }
+    .arc-cap .arc-text { animation: v-arcT 11s cubic-bezier(.45, .05, .2, 1) infinite; }
+    .fan-l { animation: v-fanL 11s cubic-bezier(.4, .1, .2, 1) infinite; }
+    .fan-r { animation: v-fanR 11s cubic-bezier(.4, .1, .2, 1) infinite; }
+    .fan-c { animation: v-fanC 11s cubic-bezier(.4, .1, .2, 1) infinite; }
+}
+
+/* Pagehead & Band Art */
+.pagehead {
+    min-height: 380px;
+    padding: 72px 0 70px;
+    display: flex;
+    align-items: center;
+    background-color: var(--butter);
+    background-image: radial-gradient(rgba(222, 113, 25, .22) 2px, transparent 2.5px);
+    background-size: 16px 16px;
+    border-bottom: 0;
+    position: relative;
+    overflow: hidden;
+}
+.pagehead::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 26px;
+    background: linear-gradient(90deg, var(--card) 0 50%, transparent 0) 0 50%/64px 4px repeat-x, var(--ink);
+}
+.pagehead > .wrap {
+    width: 100%;
+    position: relative;
+    z-index: 3;
+}
+.pagehead .h2 {
+    font-size: 64px;
+    line-height: 1;
+    max-width: 620px;
+}
+.band-art {
+    position: absolute;
+    right: 56px;
+    bottom: 22px;
+    height: 400px;
+    width: auto;
+    max-width: 52%;
+    z-index: 2;
+    pointer-events: none;
+    object-fit: contain;
+    filter: drop-shadow(8px 8px 0 rgba(16, 40, 46, .16));
+}
+@media (prefers-reduced-motion: no-preference) {
+    .band-art { animation: band-in .8s .2s cubic-bezier(.2, .8, .2, 1) backwards; }
+    @keyframes band-in { from { opacity: 0; transform: translateX(70px); } }
+}
+
+/* Number Outline */
+.numo {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: .9;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--ink);
+}
+
+/* ==========================================================================
+   INTRO LOADING OVERLAY STYLES (IntroLoading.dc.html - 3.4 Detik)
+   ========================================================================== */
+@keyframes ov {
+    0%, 52% { clip-path: inset(0); opacity: 1; }
+    59%, 93% { clip-path: inset(0 0 100% 0); opacity: 1; }
+    94% { clip-path: inset(0 0 100% 0); opacity: 0; }
+    95% { clip-path: inset(0); opacity: 0; }
+    100% { clip-path: inset(0); opacity: 1; }
+}
+@keyframes sc {
+    0%, 46% { transform: none; opacity: 1; animation-timing-function: ease-in-out; }
+    52%, 93% { transform: translateY(102%); opacity: 1; }
+    94%, 100% { transform: none; opacity: 0; }
+}
+@keyframes draw { 0%, 3% { stroke-dashoffset: 1; } 13%, 100% { stroke-dashoffset: 0; } }
+@keyframes gr { 0% { opacity: 0; transform: translateY(40px); } 6%, 100% { opacity: 1; transform: none; } }
+@keyframes cl { 0%, 10% { transform: translateX(calc(40px * var(--k))); } 40%, 100% { transform: translateX(calc(-90px * var(--k))); } }
+@keyframes par { 0%, 10% { transform: none; } 40%, 100% { transform: translate(-14px, 5px); } }
+@keyframes wm { 0%, 9% { clip-path: inset(0 100% 0 0); } 24%, 100% { clip-path: inset(0 0 0 0); } }
+@keyframes rise-intro { 0%, 54% { opacity: 0; transform: translateY(28px); } 68%, 100% { opacity: 1; transform: none; } }
+@keyframes fxg { 0%, 11% { opacity: 0; } 14%, 40% { opacity: 1; } 43%, 100% { opacity: 0; } }
+@keyframes pf { 0% { opacity: 0; transform: translate(0, 0) scale(.5); } 25% { opacity: .95; } 100% { opacity: 0; transform: translate(-170px, -30px) scale(1.15); } }
+@keyframes flag { 0% { transform: skewY(-5deg); } 100% { transform: skewY(5deg); } }
+
+.vs-ov { animation: ov 4.5s linear forwards; }
+.vs-scene { position: absolute; inset: 0; animation: sc 4.5s linear forwards; }
+.vs-draw { stroke-dashoffset: 1; animation: draw 4.5s ease-out forwards; }
+.vs-gr, .vs-gr2 { animation: gr 4.5s ease-out forwards; }
+.vs-cl { animation: cl 4.5s ease-in-out forwards; }
+.vs-par { animation: par 4.5s ease-in-out forwards; }
+.vs-wm { animation: wm 4.5s ease-out forwards; }
+.vs-h { animation: rise-intro 4.5s ease-out forwards; }
+.vs-fxg { animation: fxg 4.5s forwards; }
+.vs-pf { transform-box: fill-box; transform-origin: center; animation: pf .6s ease-out infinite; }
+.vs-flag { animation: flag .5s ease-in-out infinite alternate; }
+
+.skip-intro {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 18px;
+    background: #FFFDF8;
+    color: #10282E;
+    border: 3px solid #10282E;
+    border-radius: 999px;
+    font: 700 14px 'Inter', sans-serif;
+    text-decoration: none;
+    box-shadow: 3px 3px 0 #10282E;
+    cursor: pointer;
+    z-index: 50;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.skip-intro:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 #10282E;
+}
+
+@keyframes pop0 { 0%, 1% { opacity: 0; transform: scale(.4); } 6% { opacity: 1; transform: scale(1.06); } 8%, 100% { opacity: 1; transform: none; } }
+.vs-p0 { animation: pop0 4.5s forwards; }
+@keyframes pop1 { 0%, 3% { opacity: 0; transform: scale(.4); } 8% { opacity: 1; transform: scale(1.06); } 10%, 100% { opacity: 1; transform: none; } }
+.vs-p1 { animation: pop1 4.5s forwards; }
+@keyframes pop2 { 0%, 5% { opacity: 0; transform: scale(.4); } 10% { opacity: 1; transform: scale(1.06); } 12%, 100% { opacity: 1; transform: none; } }
+.vs-p2 { animation: pop2 4.5s forwards; }
+@keyframes pop3 { 0%, 7% { opacity: 0; transform: scale(.4); } 12% { opacity: 1; transform: scale(1.06); } 14%, 100% { opacity: 1; transform: none; } }
+.vs-p3 { animation: pop3 4.5s forwards; }
+@keyframes pop4 { 0%, 9% { opacity: 0; transform: scale(.4); } 14% { opacity: 1; transform: scale(1.06); } 16%, 100% { opacity: 1; transform: none; } }
+.vs-p4 { animation: pop4 4.5s forwards; }
+@keyframes pop5 { 0%, 11% { opacity: 0; transform: scale(.4); } 16% { opacity: 1; transform: scale(1.06); } 18%, 100% { opacity: 1; transform: none; } }
+.vs-p5 { animation: pop5 4.5s forwards; }
+
+@keyframes spind0 { 0% { transform: rotate(0); } 10% { transform: rotate(0deg); } 38% { transform: rotate(2040deg); } 100% { transform: rotate(2040deg); } }
+.spind0 { animation: spind0 4.5s linear forwards; }
+@keyframes spind1 { 0% { transform: rotate(0); } 10% { transform: rotate(0deg); } 12.24% { transform: rotate(0deg); } 38% { transform: rotate(2148deg); } 100% { transform: rotate(2148deg); } }
+.spind1 { animation: spind1 4.5s linear forwards; }
+@keyframes spind2 { 0% { transform: rotate(0); } 10% { transform: rotate(0deg); } 11.12% { transform: rotate(0deg); } 25.4% { transform: rotate(833deg); } 30.2% { transform: rotate(1502deg); } 34.12% { transform: rotate(2082deg); } 100% { transform: rotate(2082deg); } }
+.spind2 { animation: spind2 4.5s linear forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+    .vs-ov { display: none !important; }
+    .vs-h { animation: none !important; }
+}
+
+

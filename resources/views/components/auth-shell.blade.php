@@ -16,15 +16,11 @@
                 Velosha
             </a>
 
-            {{-- Cycling illustration (using existing asset or emoji fallback) --}}
-            <div class="float absolute -left-10 top-[90px] w-[480px] h-[480px] flex items-center justify-center opacity-20 select-none pointer-events-none" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="400" height="400" fill="none" stroke="var(--ink)" stroke-width="8">
-                    <circle cx="130" cy="370" r="90"/><circle cx="382" cy="370" r="90"/>
-                    <path d="M130 370 L200 180 L310 180 L382 370" stroke-linejoin="round"/>
-                    <circle cx="256" cy="180" r="20" fill="var(--ink)"/>
-                    <path d="M200 180 L170 120 M310 180 L340 120"/>
-                </svg>
-            </div>
+            {{-- Pesepeda berjersey oranye berdiri di samping sepedanya sambil memegang botol minum (berdiri.png) --}}
+            <img class="float"
+                 src="/images/mockup/berdiri.png"
+                 alt="Pesepeda berjersey oranye berdiri di samping sepedanya sambil memegang botol minum"
+                 style="position: absolute; left: -40px; top: 90px; width: 480px; height: 480px; object-fit: contain; display: block; filter: drop-shadow(6px 6px 0 rgba(16, 40, 46, 0.12)); pointer-events: none">
 
             {{-- Tagline --}}
             <h1 class="h3 relative z-10" style="font-size: 30px; line-height: 1.1; max-width: 300px">

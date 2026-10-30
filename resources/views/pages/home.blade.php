@@ -2,18 +2,40 @@
 
 @section('content')
 
-<!-- HERO SECTION (Cartoon Screen-Print Stage - 1:1 Pixel Match dengan Mockup) -->
-<section style="position: relative; min-height: 660px; background: var(--paper); overflow: hidden; border-bottom: 3px solid var(--ink)">
-    <div style="position: relative; max-width: 1200px; height: 660px; margin: 0 auto; padding: 0 32px">
+<!-- INTRO LOADING OVERLAY (3.4s, sessionStorage guard, skip button, reduced motion support) -->
+<x-intro-loading />
 
-        <!-- Panel Berlekuk SVG (Takik di atas) & Blok Oranye di Belakang -->
-        <svg width="580" height="445" viewBox="-2 -2 580 445" aria-hidden="true"
+<!-- HERO SECTION (Screen-Print Neobrutalist Stage dengan Animasi 1:1 Mockup) -->
+<section style="position: relative; min-height: 760px; background: var(--paper); overflow: hidden; border-bottom: 3px solid var(--ink)"
+         x-data="{
+            off: false,
+            replay() {
+                this.off = true;
+                setTimeout(() => this.off = false, 90);
+            }
+         }">
+
+    <!-- Tombol Putar Ulang Animasi -->
+    <button type="button"
+            class="btn btn-ghost btn-sm"
+            @click="replay()"
+            style="position: absolute; top: 16px; right: 24px; z-index: 20"
+            aria-label="Putar ulang animasi hero">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 3-6.2"></path><path d="M4 4v5h5"></path></svg>
+        <span>Putar ulang</span>
+    </button>
+
+    <div class="stage" :class="off ? 'off' : 'on'" style="position: relative; width: 1200px; height: 680px; margin: 0 auto; padding: 0 24px">
+
+        <!-- Panel Berlekuk SVG (Blok Oranye di Belakang) -->
+        <svg class="a-amber" width="580" height="445" viewBox="-2 -2 580 445" aria-hidden="true"
              style="position: absolute; left: 566px; top: 56px; z-index: 1; overflow: visible">
             <path d="M226,0 H540 Q576,0 576,36 V405 Q576,441 540,441 H36 Q0,441 0,405 V136 Q0,100 36,100 H154 Q190,100 190,64 V36 Q190,0 226,0 Z"
-                  fill="var(--orange)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"></path>
+                  fill="#DE7119" stroke="#10282E" stroke-width="3" stroke-linejoin="round"></path>
         </svg>
 
-        <svg width="580" height="445" viewBox="-2 -2 580 445" aria-hidden="true"
+        <!-- Panel Berlekuk SVG (Krem Bertitik Halus di Depan) -->
+        <svg class="a-panel" width="580" height="445" viewBox="-2 -2 580 445" aria-hidden="true"
              style="position: absolute; left: 552px; top: 42px; z-index: 2; overflow: visible">
             <defs>
                 <clipPath id="panelShape">
@@ -35,32 +57,35 @@
                 <rect width="576" height="441" fill="url(#dots)" mask="url(#fadeMask)"></rect>
             </g>
             <path d="M226,0 H540 Q576,0 576,36 V405 Q576,441 540,441 H36 Q0,441 0,405 V136 Q0,100 36,100 H154 Q190,100 190,64 V36 Q190,0 226,0 Z"
-                  fill="none" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"></path>
+                  fill="none" stroke="#10282E" stroke-width="3" stroke-linejoin="round"></path>
         </svg>
 
-        <!-- Garis Kecepatan Kartun -->
-        <div style="position: absolute; left: 470px; top: 300px; width: 150px; height: 6px; border-radius: 3px; background: #F4BE3F; border: 2px solid #10282E; z-index: 3"></div>
-        <div style="position: absolute; left: 520px; top: 326px; width: 100px; height: 6px; border-radius: 3px; background: #1F6F4A; border: 2px solid #10282E; z-index: 3"></div>
-        <div style="position: absolute; left: 450px; top: 352px; width: 170px; height: 6px; border-radius: 3px; background: #DE7119; border: 2px solid #10282E; z-index: 3"></div>
+        <!-- Garis Kecepatan Kartun (Speed Lines) -->
+        <div class="a-trail" style="position: absolute; left: 470px; top: 300px; width: 150px; height: 6px; border-radius: 3px; background: #F4BE3F; border: 2px solid #10282E; z-index: 3"></div>
+        <div class="a-trail" style="position: absolute; left: 520px; top: 326px; width: 100px; height: 6px; border-radius: 3px; background: #1F6F4A; border: 2px solid #10282E; z-index: 3"></div>
+        <div class="a-trail" style="position: absolute; left: 450px; top: 352px; width: 170px; height: 6px; border-radius: 3px; background: #DE7119; border: 2px solid #10282E; z-index: 3"></div>
 
-        <!-- Pesepeda Kartun Besar (Tepat di left: 590px, top: -45px, width: 680px, height: 680px - Roda menembus garis) -->
-        <div style="position: absolute; left: 590px; top: -45px; width: 680px; height: 680px; z-index: 10; pointer-events: none">
-            <img src="/images/hero/rider_final.png"
-                 alt="Pesepeda Velosha"
-                 fetchpriority="high"
-                 style="display: block; width: 100%; height: 100%; object-fit: contain">
+        <!-- Pesepeda Berjersey Oranye Melaju Miring Menikung (miring.png) -->
+        <div class="a-ride" style="position: absolute; left: 610px; top: -40px; width: 640px; height: 640px; z-index: 10; pointer-events: none">
+            <div class="a-bob" style="width: 100%; height: 100%">
+                <img src="/images/mockup/miring.png"
+                     data-rider="/images/hero/rider_final.png"
+                     alt="Pesepeda berjersey oranye melaju miring menikung"
+                     fetchpriority="high"
+                     style="display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(4px 4px 0 rgba(16, 40, 46, 0.15))">
+            </div>
         </div>
 
-        <!-- Kolom Teks Kiri -->
-        <div style="position: absolute; left: 32px; top: 64px; width: 500px; z-index: 5">
-            <h1 style="font-size: 72px; line-height: 0.98; font-weight: 800; letter-spacing: -0.04em; color: var(--ink); margin: 0">
+        <!-- Kolom Kiri -->
+        <div style="position: absolute; left: 0; top: 64px; width: 500px; z-index: 5">
+            <h1 class="a-rise" style="animation-delay: .2s; font-size: 72px; line-height: .98; font-weight: 800; letter-spacing: -0.04em; color: var(--ink); margin: 0">
                 Siap gowes<br>
                 sampai <span class="squig">finis?<svg viewBox="0 0 100 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 Q14 1 26 8 T50 8 T74 8 T98 8" fill="none" stroke="#DE7119" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg></span>
             </h1>
-            <p style="margin: 28px 0 0; max-width: 400px; font-size: 18px; line-height: 1.5; color: #10282E; font-weight: 500">
+            <p class="a-rise" style="animation-delay: .35s; margin: 28px 0 0; max-width: 400px; font-size: 18px; line-height: 1.5; color: #10282E; font-weight: 500">
                 Daftar Gran Fondo, Medio Fondo, dan Fun Ride di seluruh Indonesia. Tiket dan nomor BIB langsung jadi.
             </p>
-            <div style="margin-top: 28px">
+            <div class="a-rise" style="animation-delay: .5s; margin-top: 28px">
                 <a href="/events" wire:navigate class="btn">
                     Cari event
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
@@ -68,8 +93,9 @@
             </div>
         </div>
 
-        <!-- Slider Media Kiri Bawah (Persis Mockup: Kartun Ilustrasi SVG 3 Slide dengan Dot dan Navigasi Samping) -->
-        <div style="position: absolute; left: 32px; top: 400px; width: 480px; height: 220px; z-index: 5"
+        <!-- Slider Media Kiri Bawah (Maks 3 Gambar Ilustrasi dengan Dot & Panah) -->
+        <div class="a-rise"
+             style="animation-delay: .7s; position: absolute; left: 0; top: 400px; width: 480px; height: 220px; z-index: 5"
              x-data="{
                 slide: 0,
                 timer: null,
@@ -88,11 +114,11 @@
              @focusin="stop()"
              @focusout="start()"
              @visibilitychange.window="document.hidden ? stop() : start()">
-            
+
             <div class="card" style="position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 14px">
                 <!-- Slide 0: Matahari Terbit & Jalan Pegunungan -->
                 <div x-show="slide === 0" style="position: absolute; inset: 0">
-                    <svg viewBox="0 0 360 180" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" role="img" aria-label="Foto event 1" style="position: absolute; inset: 0">
+                    <svg viewBox="0 0 360 180" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" role="img" aria-label="Foto event 1: jalan raya menurun saat matahari terbit" style="position: absolute; left: 0; top: 0; width: 100%; height: calc(100% - 63px)">
                         <rect width="360" height="180" fill="#FFD9A0"></rect>
                         <circle cx="270" cy="56" r="28" fill="#F4BE3F" stroke="#10282E" stroke-width="3"></circle>
                         <path d="M0 118 Q60 66 120 106 T240 96 T360 84 V180 H0Z" fill="#9CCB9A" stroke="#10282E" stroke-width="3"></path>
@@ -104,7 +130,7 @@
 
                 <!-- Slide 1: Peleton Candi -->
                 <div x-show="slide === 1" style="position: absolute; inset: 0">
-                    <svg viewBox="0 0 360 180" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" role="img" aria-label="Foto event 2" style="position: absolute; inset: 0">
+                    <svg viewBox="0 0 360 180" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" role="img" aria-label="Foto event 2: peleton melintas candi" style="position: absolute; left: 0; top: 0; width: 100%; height: calc(100% - 63px)">
                         <rect width="360" height="180" fill="#F6B777"></rect>
                         <circle cx="90" cy="60" r="30" fill="#FBF4E6" stroke="#10282E" stroke-width="3"></circle>
                         <path d="M200 120 L230 70 L260 120Z M240 120 L275 56 L310 120Z" fill="#B2590F" stroke="#10282E" stroke-width="3" stroke-linejoin="round"></path>
@@ -117,9 +143,9 @@
                     </svg>
                 </div>
 
-                <!-- Slide 2: Tanjakan Kaldera -->
+                <!-- Slide 2: Tanjakan Kaldera Bromo -->
                 <div x-show="slide === 2" style="position: absolute; inset: 0">
-                    <svg viewBox="0 0 360 180" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" role="img" aria-label="Foto event 3" style="position: absolute; inset: 0">
+                    <svg viewBox="0 0 360 180" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" role="img" aria-label="Foto event 3: tanjakan menuju kaldera" style="position: absolute; left: 0; top: 0; width: 100%; height: calc(100% - 63px)">
                         <rect width="360" height="180" fill="#F8E3B5"></rect>
                         <path d="M-10 150 L90 50 L150 100 L230 30 L370 150Z" fill="#9B3D5A" stroke="#10282E" stroke-width="3" stroke-linejoin="round"></path>
                         <path d="M210 52 L230 30 L250 52 L240 48 L230 56 L220 48Z" fill="#FBF4E6" stroke="#10282E" stroke-width="2.5" stroke-linejoin="round"></path>
@@ -129,23 +155,13 @@
                     </svg>
                 </div>
 
-                <!-- Bar Navigasi Bawah Slider Sesuai Mockup -->
-                <div style="position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #FFFDF8; border-top: 2.5px solid #10282E; z-index: 10">
-                    <div style="display: flex; align-items: center; gap: 8px">
-                        <button type="button" @click="slide = 0" style="padding: 0; background: none; border: none; cursor: pointer" aria-label="Slide 1">
-                            <span style="display: block; height: 12px; border: 2.5px solid #10282E; transition: all .15s"
-                                  :style="slide === 0 ? 'background: #DE7119; width: 28px; border-radius: 6px' : 'background: #FFFDF8; width: 12px; border-radius: 50%'"></span>
-                        </button>
-                        <button type="button" @click="slide = 1" style="padding: 0; background: none; border: none; cursor: pointer" aria-label="Slide 2">
-                            <span style="display: block; height: 12px; border: 2.5px solid #10282E; transition: all .15s"
-                                  :style="slide === 1 ? 'background: #DE7119; width: 28px; border-radius: 6px' : 'background: #FFFDF8; width: 12px; border-radius: 50%'"></span>
-                        </button>
-                        <button type="button" @click="slide = 2" style="padding: 0; background: none; border: none; cursor: pointer" aria-label="Slide 3">
-                            <span style="display: block; height: 12px; border: 2.5px solid #10282E; transition: all .15s"
-                                  :style="slide === 2 ? 'background: #DE7119; width: 28px; border-radius: 6px' : 'background: #FFFDF8; width: 12px; border-radius: 50%'"></span>
-                        </button>
+                <!-- Bar Kontrol Slider Bawah (Dot + Navigasi) -->
+                <div style="position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: #FFFDF8; border-top: 2.5px solid #10282E">
+                    <div style="display: flex; align-items: center">
+                        <button type="button" class="dotbtn" :class="{ 'on': slide === 0 }" @click="slide = 0" aria-label="Gambar 1"><i></i></button>
+                        <button type="button" class="dotbtn" :class="{ 'on': slide === 1 }" @click="slide = 1" aria-label="Gambar 2"><i></i></button>
+                        <button type="button" class="dotbtn" :class="{ 'on': slide === 2 }" @click="slide = 2" aria-label="Gambar 3"><i></i></button>
                     </div>
-
                     <div style="display: flex; gap: 8px">
                         <button type="button" class="btn btn-ghost btn-sm" @click="prev()" aria-label="Gambar sebelumnya" style="width: 44px; padding: 0">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
@@ -161,22 +177,30 @@
     </div>
 </section>
 
-<!-- 1. MARQUEE BAND (Pita Berjalan Info Sesuai Mockup) -->
-<div class="band" aria-hidden="true">
-    <div class="band-in">
-        <span>Gran Fondo</span><i class="sep"></i><span>Medio Fondo</span><i class="sep"></i><span>Fun Ride</span><i class="sep"></i><span>KOM Climb</span><i class="sep"></i><span>Timing chip RFID</span><i class="sep"></i>
-        <span>Gran Fondo</span><i class="sep"></i><span>Medio Fondo</span><i class="sep"></i><span>Fun Ride</span><i class="sep"></i><span>KOM Climb</span><i class="sep"></i><span>Timing chip RFID</span><i class="sep"></i>
-        <span>Gran Fondo</span><i class="sep"></i><span>Medio Fondo</span><i class="sep"></i><span>Fun Ride</span><i class="sep"></i><span>KOM Climb</span><i class="sep"></i><span>Timing chip RFID</span><i class="sep"></i>
+<!-- LENGKUNG TRANSISI: KELOPAK LENGKUNG SVG DENGAN TEKS MENGIKUTI KURVA (Arc Cap) -->
+<div class="arc-cap" aria-hidden="true">
+    <div class="arc-clip">
+        <div class="arc-dome"></div>
+        <svg class="arc-text" viewBox="0 0 1440 110" preserveAspectRatio="none" width="100%" height="110">
+            <defs>
+                <path id="arcpath" d="M0,126 Q720,-66 1440,126"></path>
+            </defs>
+            <text>
+                <textPath href="#arcpath" startOffset="50%" text-anchor="middle">
+                    Gran Fondo<tspan fill="#DE7119" dx="14" dy="0">◆</tspan><tspan dx="14">Medio Fondo</tspan><tspan fill="#DE7119" dx="14">◆</tspan><tspan dx="14">Fun Ride</tspan><tspan fill="#DE7119" dx="14">◆</tspan><tspan dx="14">KOM Climb</tspan><tspan fill="#DE7119" dx="14">◆</tspan><tspan dx="14">Timing chip RFID</tspan>
+                </textPath>
+            </text>
+        </svg>
     </div>
 </div>
 
-<!-- 2. LIVEWIRE RACE CARDS (Katalog Event Terbuka & Mendatang) -->
-<div class="velo-reveal">
-    <h2 class="sr-only">Race mendatang</h2>
+<!-- KATALOG EVENT TERBUKA & MENDATANG (Livewire Filter + Race Cards) -->
+<div class="velo-reveal" id="event">
+    <h2 class="sr-only">Pendaftaran terbuka &amp; mendatang</h2>
     @livewire('race-cards')
 </div>
 
-<!-- 3. YANG KAMU DAPAT DARI SATU TIKET (Mockup Exact Match: Karcis Miring + 4 Fasilitas + Benefit Flat Card) -->
+<!-- YANG KAMU DAPAT DARI SATU TIKET (Karcis Miring Perforasi + 4 Fasilitas Resmi + Benefit Flat) -->
 @php
     $paket = \App\Models\TicketPackageContent::current();
 @endphp
@@ -190,7 +214,7 @@
         </p>
 
         <div style="display: grid; grid-template-columns: 5fr 7fr; gap: 48px; margin-top: 48px; align-items: start">
-            <!-- Kiri: Tiket Karcis Kartun Miring (-2.5deg) dengan Cutout Lingkaran Persis Mockup -->
+            <!-- Kiri: Tiket Karcis Kartun Miring (-2.5deg) dengan Cutout Semicircle Persis Mockup -->
             <div style="position: relative; transform: rotate(-2.5deg)">
                 <div class="card" style="position: relative; padding: 28px 28px 24px; border-radius: 14px">
                     <div style="display: flex; justify-content: space-between; align-items: center">
@@ -230,7 +254,17 @@
                 @foreach(($paket->features ?? []) as $idx => $f)
                 <div class="card" style="padding: 22px; display: flex; gap: 16px; align-items: center">
                     <div style="width: 56px; height: 56px; flex: none; border: 2.5px solid #10282E; border-radius: 10px; background: {{ $colors[$idx % count($colors)] }}; display: flex; align-items: center; justify-content: center">
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M9 9h6v6H9zM9 2v2M15 2v2M9 20v2M15 20v2"></path></svg>
+                        @if(($f['icon'] ?? '') === 'cpu')
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M9 9h6v6H9zM9 2v2M15 2v2M9 20v2M15 20v2"></path></svg>
+                        @elseif(($f['icon'] ?? '') === 'award')
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"></circle><path d="M8.5 14L7 22l5-3 5 3-1.500-8"></path></svg>
+                        @elseif(($f['icon'] ?? '') === 'shield-plus')
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg>
+                        @elseif(($f['icon'] ?? '') === 'utensils')
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v8a3 3 0 0 0 6 0V3M9 3v18M18 3c-2 2-3 5-3 8h3v10"></path></svg>
+                        @else
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        @endif
                     </div>
                     <div>
                         <div class="h3" style="font-size: 20px">{{ $f['title'] ?? '' }}</div>
@@ -241,7 +275,7 @@
 
                 <!-- Kartu Flat Gelap Benefit Lain Persis Mockup -->
                 <div class="card-flat" style="grid-column: 1 / -1; padding: 22px 24px; background: #10282E; color: #FBF4E6; border-radius: 14px">
-                    <div class="disp" style="font-size: 18px; font-weight: 800; color: #F4BE3F; text-transform: uppercase; letter-spacing: .04em">{{ $paket->benefits_title }}</div>
+                    <div class="disp" style="font-size: 18px; font-weight: 800; color: #F4BE3F; text-transform: uppercase; letter-spacing: .04em">{{ $paket->benefits_title ?? 'Benefit Lain dari Satu Tiket' }}</div>
                     <ul style="margin: 14px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 28px; font-size: 14px; line-height: 1.45">
                         @foreach(($paket->benefits ?? []) as $b)
                         <li style="display: flex; align-items: center; gap: 8px">
@@ -255,7 +289,7 @@
     </div>
 </section>
 
-<!-- 4. INFORMASI & REGULASI PESERTA (Mockup Exact Match: Help Center Hijau Pine + 4 Kartu Warna + Cek Cepat) -->
+<!-- INFORMASI & REGULASI PESERTA (Help Center Hijau Pine + 4 Kartu Warna + Cek Cepat) -->
 <section class="sec" style="background: var(--paper2); border-block: 3px solid var(--ink); position: relative; overflow: hidden; padding: 80px 0">
     <div class="dots" style="position: absolute; inset: 0; opacity: .55; pointer-events: none"></div>
 
@@ -300,7 +334,7 @@
                 </a>
             </div>
 
-            <!-- Right 4 Regulation Hub Cards (.numo outline 01-04 dengan Warna Asli Mockup) -->
+            <!-- Right 4 Regulation Hub Cards (.numo outline 01-04) -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px">
                 <!-- 01 Tentang Velosha (Butter #F8E3B5) -->
                 <a href="/about" wire:navigate class="card racecard" style="background: #F8E3B5; padding: 26px; display: flex; flex-direction: column; gap: 18px; text-decoration: none; min-height: 210px">
@@ -384,7 +418,7 @@
             </div>
         </div>
 
-        <!-- Cek Cepat Sebelum Hari-H (Mockup Dark Strip with Mustard Checkboxes) -->
+        <!-- Cek Cepat Sebelum Hari-H (Dark Strip with Mustard Checkboxes) -->
         <div class="card-flat" style="margin-top: 32px; background: #10282E; color: #FBF4E6; padding: 24px 32px; display: flex; align-items: center; gap: 32px; box-shadow: 5px 5px 0 #DE7119; flex-wrap: wrap">
             <div class="disp" style="font-size: 22px; font-weight: 800; color: #F4BE3F; line-height: 1.1">Cek cepat<br>sebelum hari-H</div>
             <div style="flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; min-width: 640px">
@@ -417,12 +451,11 @@
     </div>
 </section>
 
-<!-- 5. BANNER PESEPEDA PEMISAH MENUJU FOOTER (Jarak Lapang & Sepeda Besar) -->
-<section class="wrap mt-24 mb-24">
+<!-- BANNER PESEPEDA PEMISAH MENUJU FOOTER -->
+<section class="wrap mt-20 mb-20">
     <div class="card bg-[#FFFDF8] text-[var(--ink)] p-10 sm:p-14 relative overflow-hidden border-[3px] border-[var(--ink)]">
-        <!-- Ilustrasi Pesepeda Hero Berukuran Besar di Sisi Kanan (width 600px) -->
-        <div class="hidden lg:block absolute -right-4 -bottom-10 w-[600px] h-[460px] pointer-events-none z-10">
-            <img src="/images/hero/rider_final.png" alt="" class="w-full h-full object-contain filter drop-shadow-[5px_5px_0_var(--ink)]">
+        <div class="hidden lg:block absolute -right-4 -bottom-6 w-[520px] h-[400px] pointer-events-none z-10">
+            <img src="/images/hero/rider_final.png" alt="" class="w-full h-full object-contain filter drop-shadow-[6px_6px_0_var(--ink)]">
         </div>
 
         <div class="relative z-20 max-w-xl">
