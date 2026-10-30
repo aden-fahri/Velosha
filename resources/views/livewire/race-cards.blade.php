@@ -98,13 +98,28 @@
                 </div>
             </div>
 
-            <!-- Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-opacity duration-150"
+            <!-- Cards Grid (Fan out dari 1 kartu ke 3 kartu saat di-scroll) -->
+            <div class="fan-wrap grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-opacity duration-150"
+                 :class="fanned ? 'fan-spread' : 'fan-stacked'"
+                 x-data="{
+                    fanned: false,
+                    checkScroll() {
+                        const el = $el;
+                        if (!el) return;
+                        const rect = el.getBoundingClientRect();
+                        this.fanned = rect.top <= (window.innerHeight * 0.85);
+                    }
+                 }"
+                 @scroll.window.passive="checkScroll()"
+                 x-init="checkScroll()"
                  wire:loading.class="opacity-50"
                  wire:target="filter">
 
                 @forelse($races as $race)
-                <article wire:key="race-{{ $loop->index }}" class="card card-hover flex flex-col overflow-hidden bg-[var(--card)]">
+                @php
+                    $fanClass = $loop->index === 0 ? 'fan-l' : ($loop->index === 1 ? 'fan-c' : ($loop->index === 2 ? 'fan-r' : ''));
+                @endphp
+                <article wire:key="race-{{ $loop->index }}" class="card card-hover flex flex-col overflow-hidden bg-[var(--card)] {{ $fanClass }}">
                     {{-- Header Poster Image --}}
                     <div class="relative h-52 overflow-hidden border-b-[2.5px] border-[var(--ink)] bg-[var(--paper2)]">
                         <img src="{{ $race['img'] }}" alt="{{ $race['title'] }}" class="w-full h-full object-cover">

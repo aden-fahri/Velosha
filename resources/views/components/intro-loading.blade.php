@@ -1,17 +1,17 @@
 <div x-data="{
-        show: false,
+        show: !sessionStorage.getItem('velosha_intro_seen') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
         skip() {
             this.show = false;
             try { sessionStorage.setItem('velosha_intro_seen', '1'); } catch (e) {}
         }
      }"
      x-init="
-        if (!sessionStorage.getItem('velosha_intro_seen') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            show = true;
-            setTimeout(() => skip(), 3400);
+        if (show) {
+            setTimeout(() => skip(), 3500);
         }
      "
      x-show="show"
+     x-cloak
      x-transition:leave="transition ease-out duration-600"
      x-transition:leave-start="opacity-100 transform translate-y-0"
      x-transition:leave-end="opacity-0 transform -translate-y-8"
@@ -21,7 +21,7 @@
 
     <!-- DESKTOP SCENE (viewBox 0 0 1440 810) -->
     <div class="hidden md:block absolute inset-0 w-full h-full">
-        <svg viewBox="0 0 1440 810" preserveAspectRatio="xMidYMid slice" class="w-full h-full" role="img" aria-label="Animasi pemuatan: tiga pesepeda menanjak, satu menyalip sebelum garis finis">
+        <svg viewBox="0 0 1440 810" preserveAspectRatio="xMidYMid slice" class="w-full h-full" role="img" aria-label="Animasi pemuatan: tiga pesepeda menanjak, satu menyalip sebelum garis finis" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
                 <mask id="md">
                     <path d="M-260,790 C200,745 560,590 860,490 S1300,220 1620,30" fill="none" stroke="#fff" stroke-width="192" pathLength="1" stroke-dasharray="1" class="vs-draw"/>
@@ -131,47 +131,47 @@
                 </g>
             </g>
 
-            <!-- PESEPEDA 1: BASE ORANGE (Durasi 3.4s) -->
+            <!-- PESEPEDA 1: BASE ORANGE (Durasi 3.5s) -->
             <g>
-                <animateMotion dur="3.4s" repeatCount="1" fill="freeze" rotate="auto" calcMode="linear" keyPoints="0;0.0000;1.0000;1" keyTimes="0;0.1000;0.3800;1">
-                    <mpath href="#pd"/>
+                <animateMotion dur="3.5s" repeatCount="1" fill="freeze" rotate="auto" calcMode="linear" keyPoints="0;0.0000;1.0000;1" keyTimes="0;0.0800;0.6800;1">
+                    <mpath href="#pd" xlink:href="#pd"/>
                 </animateMotion>
                 <g transform="translate(0,-8) scale(0.376)">
                     <g class="vs-fxg" aria-hidden="true">
-                        <svg x="-960" y="-330" width="360" height="57" viewBox="165 438 365 58" overflow="hidden"><image href="/images/mockup/fx.png" width="1376" height="768"/></svg>
-                        <svg x="-900" y="-230" width="300" height="56" viewBox="728 441 308 57" overflow="hidden"><image href="/images/mockup/fx.png" width="1376" height="768"/></svg>
-                        <svg x="-840" y="-130" width="300" height="52" viewBox="309 610 326 56" overflow="hidden"><image href="/images/mockup/fx.png" width="1376" height="768"/></svg>
+                        <svg x="-960" y="-330" width="360" height="57" viewBox="165 438 365 58" overflow="hidden"><image href="/images/mockup/fx.png" xlink:href="/images/mockup/fx.png" width="1376" height="768"/></svg>
+                        <svg x="-900" y="-230" width="300" height="56" viewBox="728 441 308 57" overflow="hidden"><image href="/images/mockup/fx.png" xlink:href="/images/mockup/fx.png" width="1376" height="768"/></svg>
+                        <svg x="-840" y="-130" width="300" height="52" viewBox="309 610 326 56" overflow="hidden"><image href="/images/mockup/fx.png" xlink:href="/images/mockup/fx.png" width="1376" height="768"/></svg>
                     </g>
-                    <image class="spind0" href="/images/mockup/spokes_r.png" x="-349.5" y="-282.5" width="256" height="256" style="transform-box:fill-box;transform-origin:center"/>
-                    <image class="spind0" href="/images/mockup/spokes_f.png" x="92.5" y="-284.5" width="256" height="256" style="transform-box:fill-box;transform-origin:center"/>
-                    <image href="/images/mockup/bike_base.png" x="-375" y="-670" width="750" height="670"/>
+                    <image class="spind0" href="/images/mockup/spokes_r.png" xlink:href="/images/mockup/spokes_r.png" x="-349.5" y="-282.5" width="256" height="256" style="transform-box:fill-box;transform-origin:center"/>
+                    <image class="spind0" href="/images/mockup/spokes_f.png" xlink:href="/images/mockup/spokes_f.png" x="92.5" y="-284.5" width="256" height="256" style="transform-box:fill-box;transform-origin:center"/>
+                    <image href="/images/mockup/bike_base.png" xlink:href="/images/mockup/bike_base.png" x="-375" y="-670" width="750" height="670"/>
                 </g>
             </g>
 
-            <!-- PESEPEDA 2: PURPLE (Durasi 3.4s) -->
+            <!-- PESEPEDA 2: PURPLE (Durasi 3.5s) -->
             <g>
-                <animateMotion dur="3.4s" repeatCount="1" fill="freeze" rotate="auto" calcMode="linear" keyPoints="0;0.0000;0.0000;1.0000;1" keyTimes="0;0.1000;0.1224;0.3800;1">
-                    <mpath href="#pd"/>
+                <animateMotion dur="3.5s" repeatCount="1" fill="freeze" rotate="auto" calcMode="linear" keyPoints="0;0.0000;0.0000;0.9600;1" keyTimes="0;0.0800;0.1200;0.7000;1">
+                    <mpath href="#pd" xlink:href="#pd"/>
                 </animateMotion>
                 <g transform="translate(0,6) scale(0.357)">
-                    <image class="spind1" href="/images/mockup/spokes_r.png" x="-349.5" y="-282.5" width="256" height="256" style="transform-box:fill-box;transform-origin:center"/>
-                    <image class="spind1" href="/images/mockup/spokes_f.png" x="92.5" y="-284.5" width="256" height="256" style="transform-box:fill-box;transform-origin:center"/>
-                    <image href="/images/mockup/bike_p.png" x="-375" y="-670" width="750" height="670"/>
+                    <image class="spind1" href="/images/mockup/spokes_r.png" xlink:href="/images/mockup/spokes_r.png" x="-349.5" y="-282.5" width="256" height="256" style="transform-box:fill-box;transform-origin:center"/>
+                    <image class="spind1" href="/images/mockup/spokes_f.png" xlink:href="/images/mockup/spokes_f.png" x="92.5" y="-284.5" width="256" height="256" style="transform-box:fill-box;transform-origin:center"/>
+                    <image href="/images/mockup/bike_p.png" xlink:href="/images/mockup/bike_p.png" x="-375" y="-670" width="750" height="670"/>
                 </g>
             </g>
 
-            <!-- PESEPEDA 3: GREEN (MENYALIP DI FINIS) -->
+            <!-- PESEPEDA 3: GREEN (MENYALIP DI FINIS - Durasi 3.5s) -->
             <g>
-                <animateMotion dur="3.4s" repeatCount="1" fill="freeze" rotate="auto" calcMode="linear" keyPoints="0;0.0000;0.0000;0.4000;0.7213;1.0000;1" keyTimes="0;0.1000;0.1112;0.2540;0.3020;0.3412;1">
-                    <mpath href="#pd"/>
+                <animateMotion dur="3.5s" repeatCount="1" fill="freeze" rotate="auto" calcMode="linear" keyPoints="0;0.0000;0.4200;0.6600;0.9800;1.0000;1" keyTimes="0;0.0800;0.4000;0.5400;0.6500;0.6800;1">
+                    <mpath href="#pd" xlink:href="#pd"/>
                 </animateMotion>
                 <g transform="translate(0,21) scale(0.369)">
                     <g class="vs-fxg" aria-hidden="true">
-                        <svg x="-960" y="-330" width="360" height="57" viewBox="165 438 365 58" overflow="hidden"><image href="/images/mockup/fx.png" width="1376" height="768"/></svg>
+                        <svg x="-960" y="-330" width="360" height="57" viewBox="165 438 365 58" overflow="hidden"><image href="/images/mockup/fx.png" xlink:href="/images/mockup/fx.png" width="1376" height="768"/></svg>
                     </g>
-                    <image class="spind2" href="/images/mockup/spokes_r.png" x="-349.5" y="-282.5" width="256" height="256" style="transform-box:fill-box;transform-origin:center"/>
-                    <image class="spind2" href="/images/mockup/spokes_f.png" x="92.5" y="-284.5" width="256" height="256" style="transform-box:fill-box;transform-origin:center"/>
-                    <image href="/images/mockup/bike_g.png" x="-375" y="-670" width="750" height="670"/>
+                    <image class="spind2" href="/images/mockup/spokes_r.png" xlink:href="/images/mockup/spokes_r.png" x="-349.5" y="-282.5" width="256" height="256" style="transform-box:fill-box;transform-origin:center"/>
+                    <image class="spind2" href="/images/mockup/spokes_f.png" xlink:href="/images/mockup/spokes_f.png" x="92.5" y="-284.5" width="256" height="256" style="transform-box:fill-box;transform-origin:center"/>
+                    <image href="/images/mockup/bike_g.png" xlink:href="/images/mockup/bike_g.png" x="-375" y="-670" width="750" height="670"/>
                 </g>
             </g>
 
@@ -190,7 +190,7 @@
 
     <!-- MOBILE SCENE (viewBox 0 0 390 780) -->
     <div class="block md:hidden absolute inset-0 w-full h-full">
-        <svg viewBox="0 0 390 780" preserveAspectRatio="xMidYMid slice" class="w-full h-full" role="img" aria-label="Animasi intro HP">
+        <svg viewBox="0 0 390 780" preserveAspectRatio="xMidYMid slice" class="w-full h-full" role="img" aria-label="Animasi intro HP" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
                 <mask id="mm">
                     <path d="M-200,740 C0,700 150,580 230,470 S360,220 520,20" fill="none" stroke="#fff" stroke-width="88" pathLength="1" stroke-dasharray="1" class="vs-draw"/>
@@ -208,8 +208,8 @@
             </defs>
 
             <!-- Awan Paralaks HP -->
-            <g class="vs-cl" style="--k:0.6"><svg x="190" y="30" width="120" height="59" viewBox="382 35 199 98" overflow="hidden"><image href="/images/mockup/scenery2.png" width="1376" height="768"/></svg></g>
-            <g class="vs-cl" style="--k:0.85"><svg x="40" y="170" width="90" height="49" viewBox="955 46 145 79" overflow="hidden"><image href="/images/mockup/scenery2.png" width="1376" height="768"/></svg></g>
+            <g class="vs-cl" style="--k:0.6"><svg x="190" y="30" width="120" height="59" viewBox="382 35 199 98" overflow="hidden"><image href="/images/mockup/scenery2.png" xlink:href="/images/mockup/scenery2.png" width="1376" height="768"/></svg></g>
+            <g class="vs-cl" style="--k:0.85"><svg x="40" y="170" width="90" height="49" viewBox="955 46 145 79" overflow="hidden"><image href="/images/mockup/scenery2.png" xlink:href="/images/mockup/scenery2.png" width="1376" height="768"/></svg></g>
 
             <!-- Bukit & Pohon HP -->
             <g class="vs-gr">
@@ -239,25 +239,25 @@
 
             <!-- Pesepeda HP -->
             <g>
-                <animateMotion dur="3.4s" repeatCount="1" fill="freeze" rotate="auto" calcMode="linear" keyPoints="0;0.0000;1.0000;1" keyTimes="0;0.1000;0.3800;1">
-                    <mpath href="#pm"/>
+                <animateMotion dur="3.5s" repeatCount="1" fill="freeze" rotate="auto" calcMode="linear" keyPoints="0;0.0000;1.0000;1" keyTimes="0;0.0800;0.6800;1">
+                    <mpath href="#pm" xlink:href="#pm"/>
                 </animateMotion>
                 <g transform="translate(0,0) scale(0.238)">
-                    <image class="spind0" href="/images/mockup/spokes_r.png" x="-349.5" y="-282.5" width="256" height="256"/>
-                    <image class="spind0" href="/images/mockup/spokes_f.png" x="92.5" y="-284.5" width="256" height="256"/>
-                    <image href="/images/mockup/bike_base.png" x="-375" y="-670" width="750" height="670"/>
+                    <image class="spind0" href="/images/mockup/spokes_r.png" xlink:href="/images/mockup/spokes_r.png" x="-349.5" y="-282.5" width="256" height="256"/>
+                    <image class="spind0" href="/images/mockup/spokes_f.png" xlink:href="/images/mockup/spokes_f.png" x="92.5" y="-284.5" width="256" height="256"/>
+                    <image href="/images/mockup/bike_base.png" xlink:href="/images/mockup/bike_base.png" x="-375" y="-670" width="750" height="670"/>
                 </g>
             </g>
 
             <!-- Green Jersey Menyusul HP -->
             <g>
-                <animateMotion dur="3.4s" repeatCount="1" fill="freeze" rotate="auto" calcMode="linear" keyPoints="0;0.0000;0.0000;0.4000;0.5611;1.0000;1" keyTimes="0;0.1000;0.1112;0.2540;0.2571;0.2963;1">
-                    <mpath href="#pm"/>
+                <animateMotion dur="3.5s" repeatCount="1" fill="freeze" rotate="auto" calcMode="linear" keyPoints="0;0.0000;0.4200;0.6600;0.9800;1.0000;1" keyTimes="0;0.0800;0.4000;0.5400;0.6500;0.6800;1">
+                    <mpath href="#pm" xlink:href="#pm"/>
                 </animateMotion>
                 <g transform="translate(0,13) scale(0.233)">
-                    <image class="spind2" href="/images/mockup/spokes_r.png" x="-349.5" y="-282.5" width="256" height="256"/>
-                    <image class="spind2" href="/images/mockup/spokes_f.png" x="92.5" y="-284.5" width="256" height="256"/>
-                    <image href="/images/mockup/bike_g.png" x="-375" y="-670" width="750" height="670"/>
+                    <image class="spind2" href="/images/mockup/spokes_r.png" xlink:href="/images/mockup/spokes_r.png" x="-349.5" y="-282.5" width="256" height="256"/>
+                    <image class="spind2" href="/images/mockup/spokes_f.png" xlink:href="/images/mockup/spokes_f.png" x="92.5" y="-284.5" width="256" height="256"/>
+                    <image href="/images/mockup/bike_g.png" xlink:href="/images/mockup/bike_g.png" x="-375" y="-670" width="750" height="670"/>
                 </g>
             </g>
 

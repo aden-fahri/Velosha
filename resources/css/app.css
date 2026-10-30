@@ -188,12 +188,12 @@ h1, h2, h3, h4, .disp, .font-heading {
     white-space: nowrap;
 }
 .btn:hover {
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0 var(--ink);
+    transform: translate(-3px, -3px);
+    box-shadow: 7px 7px 0 var(--ink);
 }
 .btn:active {
-    transform: translate(4px, 4px);
-    box-shadow: 0 0 0 var(--ink);
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--ink);
 }
 .btn:focus-visible, a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
     outline: 3px solid var(--mustard);
@@ -204,6 +204,14 @@ h1, h2, h3, h4, .disp, .font-heading {
     padding: 0 18px;
     font-size: 14px;
     box-shadow: 3px 3px 0 var(--ink);
+}
+.btn-sm:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--ink);
+}
+.btn-sm:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--ink);
 }
 .btn-pine {
     background: var(--pine);
@@ -241,8 +249,8 @@ h1, h2, h3, h4, .disp, .font-heading {
     border-radius: 14px;
 }
 .card-hover:hover, .racecard:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 7px 7px 0 var(--ink);
+    transform: translate(-4px, -4px);
+    box-shadow: 9px 9px 0 var(--ink);
 }
 
 /* 3. Chips & Badges */
@@ -262,6 +270,10 @@ h1, h2, h3, h4, .disp, .font-heading {
     background: var(--card);
     color: var(--ink);
     white-space: nowrap;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.chip:hover {
+    transform: translateY(-2px);
 }
 .chip.o, .chip-orange { background: var(--orange); color: var(--ink); }
 .chip.m, .chip-mustard { background: var(--mustard); color: var(--ink); }
@@ -284,7 +296,15 @@ h1, h2, h3, h4, .disp, .font-heading {
     font-size: 15px;
     color: var(--ink);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+.filter:hover:not(.on):not(.active) {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--ink);
+}
+.filter:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--ink);
 }
 .filter.on, .filter.active {
     background: var(--orange);
@@ -663,6 +683,11 @@ h1, h2, h3, h4, .disp, .font-heading {
     border-radius: 50% 50% 0 0 / 100% 100% 0 0;
     box-sizing: border-box;
 }
+.arc-cap .arc-dome {
+    transform: translateY(264px);
+    transition: transform 0.12s linear;
+    will-change: transform;
+}
 .arc-cap .arc-text {
     position: absolute;
     left: 0;
@@ -673,23 +698,52 @@ h1, h2, h3, h4, .disp, .font-heading {
     letter-spacing: .22em;
     text-transform: uppercase;
     fill: var(--ink);
+    transform: translateY(264px);
+    opacity: 0;
+    transition: transform 0.12s linear, opacity 0.2s ease-out;
+    will-change: transform, opacity;
 }
 
+/* Fan Cards: 1 kartu di tengah saat stacked, berpencar jadi 3 saat scroll */
 .fan-c { z-index: 3; }
 .fan-r { z-index: 2; }
 .fan-l { z-index: 1; }
 
-@media (prefers-reduced-motion: no-preference) {
-    @keyframes v-arc { 0%, 16% { transform: translateY(264px); } 38%, 68% { transform: none; } 90%, 100% { transform: translateY(264px); } }
-    @keyframes v-arcT { 0%, 16% { transform: translateY(264px); opacity: 0; } 30% { opacity: 0; } 40%, 66% { transform: none; opacity: 1; } 38% { transform: none; } 78% { opacity: 0; } 90%, 100% { transform: translateY(264px); opacity: 0; } }
-    @keyframes v-fanL { 0%, 30% { transform: translateX(calc(100% + 32px)) rotate(6deg) scale(.96); } 54%, 68% { transform: none; } 90%, 100% { transform: translateX(calc(100% + 32px)) rotate(6deg) scale(.96); } }
-    @keyframes v-fanR { 0%, 30% { transform: translateX(calc(-100% - 32px)) rotate(-6deg) scale(.96); } 54%, 68% { transform: none; } 90%, 100% { transform: translateX(calc(-100% - 32px)) rotate(-6deg) scale(.96); } }
-    @keyframes v-fanC { 0%, 30% { transform: scale(.94); } 54%, 68% { transform: none; } 90%, 100% { transform: scale(.94); } }
-    .arc-cap .arc-dome { animation: v-arc 11s cubic-bezier(.45, .05, .2, 1) infinite; }
-    .arc-cap .arc-text { animation: v-arcT 11s cubic-bezier(.45, .05, .2, 1) infinite; }
-    .fan-l { animation: v-fanL 11s cubic-bezier(.4, .1, .2, 1) infinite; }
-    .fan-r { animation: v-fanR 11s cubic-bezier(.4, .1, .2, 1) infinite; }
-    .fan-c { animation: v-fanC 11s cubic-bezier(.4, .1, .2, 1) infinite; }
+.fan-wrap {
+    position: relative;
+}
+.fan-wrap .fan-l,
+.fan-wrap .fan-c,
+.fan-wrap .fan-r {
+    transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease-out;
+    will-change: transform, opacity;
+}
+
+@media (min-width: 1024px) {
+    /* STACKED (Awalnya cuma 1 kartu yang keliatan di tengah) */
+    .fan-wrap.fan-stacked .fan-l {
+        transform: translateX(calc(100% + 32px)) rotate(4deg) scale(0.96);
+        opacity: 0;
+        pointer-events: none;
+    }
+    .fan-wrap.fan-stacked .fan-r {
+        transform: translateX(calc(-100% - 32px)) rotate(-4deg) scale(0.96);
+        opacity: 0;
+        pointer-events: none;
+    }
+    .fan-wrap.fan-stacked .fan-c {
+        transform: scale(0.98);
+        opacity: 1;
+    }
+
+    /* SPREAD (Berpencar menjadi 3 kartu setelah ter-scroll) */
+    .fan-wrap.fan-spread .fan-l,
+    .fan-wrap.fan-spread .fan-c,
+    .fan-wrap.fan-spread .fan-r {
+        transform: none;
+        opacity: 1;
+        pointer-events: auto;
+    }
 }
 
 /* Pagehead & Band Art */
@@ -767,23 +821,23 @@ h1, h2, h3, h4, .disp, .font-heading {
 }
 @keyframes draw { 0%, 3% { stroke-dashoffset: 1; } 13%, 100% { stroke-dashoffset: 0; } }
 @keyframes gr { 0% { opacity: 0; transform: translateY(40px); } 6%, 100% { opacity: 1; transform: none; } }
-@keyframes cl { 0%, 10% { transform: translateX(calc(40px * var(--k))); } 40%, 100% { transform: translateX(calc(-90px * var(--k))); } }
-@keyframes par { 0%, 10% { transform: none; } 40%, 100% { transform: translate(-14px, 5px); } }
-@keyframes wm { 0%, 9% { clip-path: inset(0 100% 0 0); } 24%, 100% { clip-path: inset(0 0 0 0); } }
+@keyframes cl { 0%, 8% { transform: translateX(calc(40px * var(--k))); } 68%, 100% { transform: translateX(calc(-90px * var(--k))); } }
+@keyframes par { 0%, 8% { transform: none; } 68%, 100% { transform: translate(-14px, 5px); } }
+@keyframes wm { 0%, 8% { clip-path: inset(0 100% 0 0); } 22%, 100% { clip-path: inset(0 0 0 0); } }
 @keyframes rise-intro { 0%, 54% { opacity: 0; transform: translateY(28px); } 68%, 100% { opacity: 1; transform: none; } }
-@keyframes fxg { 0%, 11% { opacity: 0; } 14%, 40% { opacity: 1; } 43%, 100% { opacity: 0; } }
+@keyframes fxg { 0%, 8% { opacity: 0; } 14%, 68% { opacity: 1; } 72%, 100% { opacity: 0; } }
 @keyframes pf { 0% { opacity: 0; transform: translate(0, 0) scale(.5); } 25% { opacity: .95; } 100% { opacity: 0; transform: translate(-170px, -30px) scale(1.15); } }
 @keyframes flag { 0% { transform: skewY(-5deg); } 100% { transform: skewY(5deg); } }
 
-.vs-ov { animation: ov 4.5s linear forwards; }
-.vs-scene { position: absolute; inset: 0; animation: sc 4.5s linear forwards; }
-.vs-draw { stroke-dashoffset: 1; animation: draw 4.5s ease-out forwards; }
-.vs-gr, .vs-gr2 { animation: gr 4.5s ease-out forwards; }
-.vs-cl { animation: cl 4.5s ease-in-out forwards; }
-.vs-par { animation: par 4.5s ease-in-out forwards; }
-.vs-wm { animation: wm 4.5s ease-out forwards; }
-.vs-h { animation: rise-intro 4.5s ease-out forwards; }
-.vs-fxg { animation: fxg 4.5s forwards; }
+.vs-ov { animation: ov 3.5s linear forwards; }
+.vs-scene { position: absolute; inset: 0; animation: sc 3.5s linear forwards; }
+.vs-draw { stroke-dashoffset: 1; animation: draw 3.5s ease-out forwards; }
+.vs-gr, .vs-gr2 { animation: gr 3.5s ease-out forwards; }
+.vs-cl { animation: cl 3.5s ease-in-out forwards; }
+.vs-par { animation: par 3.5s ease-in-out forwards; }
+.vs-wm { animation: wm 3.5s ease-out forwards; }
+.vs-h { animation: rise-intro 3.5s ease-out forwards; }
+.vs-fxg { animation: fxg 3.5s forwards; }
 .vs-pf { transform-box: fill-box; transform-origin: center; animation: pf .6s ease-out infinite; }
 .vs-flag { animation: flag .5s ease-in-out infinite alternate; }
 
@@ -806,29 +860,33 @@ h1, h2, h3, h4, .disp, .font-heading {
     transition: transform 0.15s, box-shadow 0.15s;
 }
 .skip-intro:hover {
-    transform: translate(2px, 2px);
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 #10282E;
+}
+.skip-intro:active {
+    transform: translate(1px, 1px);
     box-shadow: 1px 1px 0 #10282E;
 }
 
 @keyframes pop0 { 0%, 1% { opacity: 0; transform: scale(.4); } 6% { opacity: 1; transform: scale(1.06); } 8%, 100% { opacity: 1; transform: none; } }
-.vs-p0 { animation: pop0 4.5s forwards; }
+.vs-p0 { animation: pop0 3.5s forwards; }
 @keyframes pop1 { 0%, 3% { opacity: 0; transform: scale(.4); } 8% { opacity: 1; transform: scale(1.06); } 10%, 100% { opacity: 1; transform: none; } }
-.vs-p1 { animation: pop1 4.5s forwards; }
+.vs-p1 { animation: pop1 3.5s forwards; }
 @keyframes pop2 { 0%, 5% { opacity: 0; transform: scale(.4); } 10% { opacity: 1; transform: scale(1.06); } 12%, 100% { opacity: 1; transform: none; } }
-.vs-p2 { animation: pop2 4.5s forwards; }
+.vs-p2 { animation: pop2 3.5s forwards; }
 @keyframes pop3 { 0%, 7% { opacity: 0; transform: scale(.4); } 12% { opacity: 1; transform: scale(1.06); } 14%, 100% { opacity: 1; transform: none; } }
-.vs-p3 { animation: pop3 4.5s forwards; }
+.vs-p3 { animation: pop3 3.5s forwards; }
 @keyframes pop4 { 0%, 9% { opacity: 0; transform: scale(.4); } 14% { opacity: 1; transform: scale(1.06); } 16%, 100% { opacity: 1; transform: none; } }
-.vs-p4 { animation: pop4 4.5s forwards; }
+.vs-p4 { animation: pop4 3.5s forwards; }
 @keyframes pop5 { 0%, 11% { opacity: 0; transform: scale(.4); } 16% { opacity: 1; transform: scale(1.06); } 18%, 100% { opacity: 1; transform: none; } }
-.vs-p5 { animation: pop5 4.5s forwards; }
+.vs-p5 { animation: pop5 3.5s forwards; }
 
-@keyframes spind0 { 0% { transform: rotate(0); } 10% { transform: rotate(0deg); } 38% { transform: rotate(2040deg); } 100% { transform: rotate(2040deg); } }
-.spind0 { animation: spind0 4.5s linear forwards; }
-@keyframes spind1 { 0% { transform: rotate(0); } 10% { transform: rotate(0deg); } 12.24% { transform: rotate(0deg); } 38% { transform: rotate(2148deg); } 100% { transform: rotate(2148deg); } }
-.spind1 { animation: spind1 4.5s linear forwards; }
-@keyframes spind2 { 0% { transform: rotate(0); } 10% { transform: rotate(0deg); } 11.12% { transform: rotate(0deg); } 25.4% { transform: rotate(833deg); } 30.2% { transform: rotate(1502deg); } 34.12% { transform: rotate(2082deg); } 100% { transform: rotate(2082deg); } }
-.spind2 { animation: spind2 4.5s linear forwards; }
+@keyframes spind0 { 0%, 8% { transform: rotate(0deg); } 68%, 100% { transform: rotate(2160deg); } }
+.spind0 { animation: spind0 3.5s linear forwards; }
+@keyframes spind1 { 0%, 10% { transform: rotate(0deg); } 70%, 100% { transform: rotate(2160deg); } }
+.spind1 { animation: spind1 3.5s linear forwards; }
+@keyframes spind2 { 0%, 8% { transform: rotate(0deg); } 68%, 100% { transform: rotate(2520deg); } }
+.spind2 { animation: spind2 3.5s linear forwards; }
 
 @media (prefers-reduced-motion: reduce) {
     .vs-ov { display: none !important; }

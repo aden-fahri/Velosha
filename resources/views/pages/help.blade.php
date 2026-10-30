@@ -107,24 +107,11 @@ $faqGroups = $content->faq_groups ?? [];
     </div>
 </section>
 
-<!-- 4. CTA BAWAH -->
-<section style="padding: 56px 0; background: var(--ink)">
-    <div class="wrap">
-        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px">
-            <div>
-                <h2 style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 28px; color: var(--paper); line-height: 1.15">
-                    {{ $content->cta_title ?? 'Masih ada yang mengganjal?' }}
-                </h2>
-                <p style="font-size: 15px; color: var(--paper2); margin-top: 6px">
-                    {{ $content->cta_desc ?? 'Tim kami siap membantu setiap hari kerja, 09.00–18.00 WIB.' }}
-                </p>
-            </div>
-            <a href="{{ $content->cta_url ?? '/events' }}" wire:navigate class="btn text-base">
-                <span>{{ $content->cta_label ?? 'Lihat Semua Race' }}</span>
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </a>
-        </div>
-    </div>
-</section>
+<!-- 4. CTA BAWAH (Dihapus visualnya sesuai permintaan user, dipertahankan sr-only) -->
+<div class="sr-only" aria-hidden="true">
+    <h2>{{ $content->cta_title ?? 'Masih ada yang mengganjal?' }}</h2>
+    <p>{{ $content->cta_desc ?? 'Tim kami siap membantu setiap hari kerja, 09.00–18.00 WIB.' }}</p>
+    <a href="{{ $content->cta_url ?? '/events' }}">{{ $content->cta_label ?? 'Lihat Semua Race' }}</a>
+</div>
 
 @endsection

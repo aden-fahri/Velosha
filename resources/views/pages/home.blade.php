@@ -6,7 +6,8 @@
 <x-intro-loading />
 
 <!-- HERO SECTION (Screen-Print Neobrutalist Stage dengan Animasi 1:1 Mockup) -->
-<section style="position: relative; min-height: 760px; background: var(--paper); overflow: hidden; border-bottom: 3px solid var(--ink)"
+<section id="hero-section"
+         style="position: relative; min-height: 760px; background: var(--paper); overflow: hidden; border-bottom: 3px solid var(--ink)"
          x-data="{
             off: false,
             replay() {
@@ -65,12 +66,11 @@
         <div class="a-trail" style="position: absolute; left: 520px; top: 326px; width: 100px; height: 6px; border-radius: 3px; background: #1F6F4A; border: 2px solid #10282E; z-index: 3"></div>
         <div class="a-trail" style="position: absolute; left: 450px; top: 352px; width: 170px; height: 6px; border-radius: 3px; background: #DE7119; border: 2px solid #10282E; z-index: 3"></div>
 
-        <!-- Pesepeda Berjersey Oranye Melaju Miring Menikung (miring.png) -->
+        <!-- Pesepeda Berjersey Oranye (rider_final.png - Autentik & Gagang Stang Bersih) -->
         <div class="a-ride" style="position: absolute; left: 610px; top: -40px; width: 640px; height: 640px; z-index: 10; pointer-events: none">
             <div class="a-bob" style="width: 100%; height: 100%">
-                <img src="/images/mockup/miring.png"
-                     data-rider="/images/hero/rider_final.png"
-                     alt="Pesepeda berjersey oranye melaju miring menikung"
+                <img src="/images/hero/rider_final.png"
+                     alt="Pesepeda berjersey oranye melaju"
                      fetchpriority="high"
                      style="display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(4px 4px 0 rgba(16, 40, 46, 0.15))">
             </div>
@@ -177,17 +177,31 @@
     </div>
 </section>
 
-<!-- LENGKUNG TRANSISI: KELOPAK LENGKUNG SVG DENGAN TEKS MENGIKUTI KURVA (Arc Cap) -->
-<div class="arc-cap" aria-hidden="true">
+<!-- LENGKUNG TRANSISI: KELOPAK LENGKUNG SVG DENGAN TEKS MENGIKUTI KURVA (Scroll-Driven Progresif) -->
+<div class="arc-cap" aria-hidden="true"
+     x-data="{
+        progress: 0,
+        updateArc() {
+            const hero = document.getElementById('hero-section');
+            if (!hero) return;
+            const rect = hero.getBoundingClientRect();
+            const scrolled = Math.max(0, -rect.top);
+            const p = Math.min(1, Math.max(0, scrolled / (rect.height * 0.42)));
+            this.progress = p;
+        }
+     }"
+     @scroll.window.passive="updateArc()"
+     x-init="updateArc()">
     <div class="arc-clip">
-        <div class="arc-dome"></div>
-        <svg class="arc-text" viewBox="0 0 1440 110" preserveAspectRatio="none" width="100%" height="110">
+        <div class="arc-dome" :style="'transform: translateY(' + ((1 - progress) * 264) + 'px)'"></div>
+        <svg class="arc-text" viewBox="0 0 1440 110" preserveAspectRatio="none" width="100%" height="110"
+             :style="'transform: translateY(' + ((1 - progress) * 264) + 'px); opacity: ' + (progress > 0.15 ? Math.min(1, progress * 1.5) : 0)">
             <defs>
                 <path id="arcpath" d="M0,126 Q720,-66 1440,126"></path>
             </defs>
             <text>
                 <textPath href="#arcpath" startOffset="50%" text-anchor="middle">
-                    Gran Fondo<tspan fill="#DE7119" dx="14" dy="0">◆</tspan><tspan dx="14">Medio Fondo</tspan><tspan fill="#DE7119" dx="14">◆</tspan><tspan dx="14">Fun Ride</tspan><tspan fill="#DE7119" dx="14">◆</tspan><tspan dx="14">KOM Climb</tspan><tspan fill="#DE7119" dx="14">◆</tspan><tspan dx="14">Timing chip RFID</tspan>
+                    Gran Fondo<tspan fill="#DE7119" dx="14" dy="0">•</tspan><tspan dx="14">Medio Fondo</tspan><tspan fill="#DE7119" dx="14">•</tspan><tspan dx="14">Fun Ride</tspan><tspan fill="#DE7119" dx="14">•</tspan><tspan dx="14">KOM Climb</tspan><tspan fill="#DE7119" dx="14">•</tspan><tspan dx="14">Timing chip RFID</tspan>
                 </textPath>
             </text>
         </svg>
@@ -334,10 +348,10 @@
                 </a>
             </div>
 
-            <!-- Right 4 Regulation Hub Cards (.numo outline 01-04) -->
+            <!-- Right 3 Regulation Hub Cards (.numo outline 01-03, Ranking dihapus) -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px">
-                <!-- 01 Tentang Velosha (Butter #F8E3B5) -->
-                <a href="/about" wire:navigate class="card racecard" style="background: #F8E3B5; padding: 26px; display: flex; flex-direction: column; gap: 18px; text-decoration: none; min-height: 210px">
+                <!-- 01 Tentang Velosha (Butter #F8E3B5 - Spans 2 Cols) -->
+                <a href="/about" wire:navigate class="card racecard" style="grid-column: 1 / -1; background: #F8E3B5; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 190px">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start">
                         <div class="ico" style="background: #FFFDF8">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v6M12 7.500v.01"></path></svg>
@@ -346,7 +360,7 @@
                     </div>
                     <div>
                         <h3 class="h3" style="font-size: 24px">Tentang Velosha</h3>
-                        <p style="margin: 6px 0 0; font-size: 15px; color: #10282E">Platform resmi maraton sepeda dan Gran Fondo Indonesia.</p>
+                        <p style="margin: 6px 0 0; font-size: 15px; color: #10282E">Platform kurasi dan registrasi resmi maraton sepeda serta Gran Fondo Indonesia.</p>
                     </div>
                     <div style="margin-top: auto; display: flex; align-items: center; gap: 10px; font-weight: 700">
                         Buka
@@ -357,7 +371,7 @@
                 </a>
 
                 <!-- 02 Aturan & Kode Etik (Pine Light #D5EBD9) -->
-                <a href="/rule" wire:navigate class="card racecard" style="background: #D5EBD9; padding: 26px; display: flex; flex-direction: column; gap: 18px; text-decoration: none; min-height: 210px">
+                <a href="/rule" wire:navigate class="card racecard" style="background: #D5EBD9; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 200px">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start">
                         <div class="ico" style="background: #FFFDF8">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg>
@@ -365,8 +379,8 @@
                         <span class="disp numo">02</span>
                     </div>
                     <div>
-                        <h3 class="h3" style="font-size: 24px">Aturan &amp; kode etik</h3>
-                        <p style="margin: 6px 0 0; font-size: 15px; color: #10282E">Helm wajib, etika peloton, penalti, dan diskualifikasi.</p>
+                        <h3 class="h3" style="font-size: 22px">Aturan &amp; kode etik</h3>
+                        <p style="margin: 6px 0 0; font-size: 14px; color: #10282E">Helm wajib, etika peloton, penalti, dan diskualifikasi.</p>
                     </div>
                     <div style="margin-top: auto; display: flex; align-items: center; gap: 10px; font-weight: 700">
                         Buka
@@ -377,7 +391,7 @@
                 </a>
 
                 <!-- 03 Arsip Race History (Orange Light #F6B777) -->
-                <a href="/riwayat" wire:navigate class="card racecard" style="background: #F6B777; padding: 26px; display: flex; flex-direction: column; gap: 18px; text-decoration: none; min-height: 210px">
+                <a href="/riwayat" wire:navigate class="card racecard" style="background: #F6B777; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 200px">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start">
                         <div class="ico" style="background: #FFFDF8">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
@@ -385,32 +399,12 @@
                         <span class="disp numo">03</span>
                     </div>
                     <div>
-                        <h3 class="h3" style="font-size: 24px">Arsip race history</h3>
-                        <p style="margin: 6px 0 0; font-size: 15px; color: #10282E">Daftar balapan yang pernah diselenggarakan.</p>
+                        <h3 class="h3" style="font-size: 22px">Arsip race history</h3>
+                        <p style="margin: 6px 0 0; font-size: 14px; color: #10282E">Daftar balapan yang pernah diselenggarakan.</p>
                     </div>
                     <div style="margin-top: auto; display: flex; align-items: center; gap: 10px; font-weight: 700">
                         Buka
                         <span style="width: 28px; height: 28px; border: 2.5px solid #10282E; border-radius: 6px; background: #FFFDF8; display: inline-flex; align-items: center; justify-content: center">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-                        </span>
-                    </div>
-                </a>
-
-                <!-- 04 Ranking & Podium (Berry Light #F2D3DC) -->
-                <a href="/ranking" wire:navigate class="card racecard" style="background: #F2D3DC; padding: 26px; display: flex; flex-direction: column; gap: 18px; text-decoration: none; min-height: 210px">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start">
-                        <div class="ico" style="background: #FFFDF8">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3M12 14v4M8 21h8"></path></svg>
-                        </div>
-                        <span class="disp numo">04</span>
-                    </div>
-                    <div>
-                        <h3 class="h3" style="font-size: 24px">Ranking &amp; podium</h3>
-                        <p style="margin: 6px 0 0; font-size: 15px; color: #10282E">Catatan waktu resmi per checkpoint RFID.</p>
-                    </div>
-                    <div style="margin-top: auto; display: flex; align-items: center; gap: 10px; font-weight: 700">
-                        Buka
-                        <span style="width: 28px; height: 28px; border: 2.5px solid #10282E; border-radius: 6px; background: #DE7119; display: inline-flex; align-items: center; justify-content: center">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
                         </span>
                     </div>
@@ -446,31 +440,6 @@
                     </span>
                     E-ticket QR siap di HP
                 </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- BANNER PESEPEDA PEMISAH MENUJU FOOTER -->
-<section class="wrap mt-20 mb-20">
-    <div class="card bg-[#FFFDF8] text-[var(--ink)] p-10 sm:p-14 relative overflow-hidden border-[3px] border-[var(--ink)]">
-        <div class="hidden lg:block absolute -right-4 -bottom-6 w-[520px] h-[400px] pointer-events-none z-10">
-            <img src="/images/hero/rider_final.png" alt="" class="w-full h-full object-contain filter drop-shadow-[6px_6px_0_var(--ink)]">
-        </div>
-
-        <div class="relative z-20 max-w-xl">
-            <span class="chip chip-mustard font-extrabold">SIAPKAN SEPEDA ANDA</span>
-            <h2 class="h2" style="font-size: 52px !important; line-height: 1.05 !important; margin-top: 18px !important">
-                Mulai petualangan rute berikutnya hari ini.
-            </h2>
-            <p class="lead" style="margin-top: 14px !important">
-                Temukan jadwal race terdekat, ajak komunitas Anda, dan taklukkan kilometer demi kilometer.
-            </p>
-            <div style="margin-top: 32px">
-                <a href="/events" wire:navigate class="btn btn-ink text-base">
-                    <span>Eksplorasi Kalender Race</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
-                </a>
             </div>
         </div>
     </div>

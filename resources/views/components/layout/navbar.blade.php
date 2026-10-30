@@ -13,7 +13,6 @@
                 @foreach([
                     ['home', '/', 'Beranda'],
                     ['events.index', '/events', 'Kalender'],
-                    ['ranking', '/ranking', 'Ranking'],
                     ['about', '/about', 'Tentang'],
                     ['rule', '/rule', 'Regulasi'],
                     ['help', '/help', 'Bantuan'],
@@ -24,7 +23,7 @@
                 <a href="{{ $url }}"
                    wire:navigate
                    @if ($active) aria-current="page" @endif
-                   class="px-4 py-2 rounded-lg font-bold text-[15px] border-[2.5px] transition-all duration-150 {{ $active ? 'bg-[var(--mustard)] border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]' : 'border-transparent text-[var(--ink)] hover:bg-[var(--paper2)]' }}">
+                   class="px-4 py-2 rounded-lg font-bold text-[15px] border-[2.5px] transition-all duration-150 {{ $active ? 'bg-[var(--mustard)] border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]' : 'border-transparent text-[var(--ink)] hover:bg-[var(--paper2)] hover:border-[var(--ink)] hover:shadow-[2px_2px_0_var(--ink)] hover:-translate-y-0.5' }}">
                     {{ $label }}
                 </a>
                 @endforeach
@@ -78,7 +77,6 @@
         @foreach([
             ['home', '/', 'Beranda'],
             ['events.index', '/events', 'Kalender'],
-            ['ranking', '/ranking', 'Ranking'],
             ['about', '/about', 'Tentang'],
             ['rule', '/rule', 'Regulasi'],
             ['help', '/help', 'Bantuan'],
@@ -89,7 +87,7 @@
         <a href="{{ $url }}"
            wire:navigate
            @click="mobileOpen = false"
-           class="flex items-center h-[52px] px-4 font-bold text-[16px] rounded-lg border-[2.5px] {{ $active ? 'bg-[var(--mustard)] border-[var(--ink)] shadow-[3px_3px_0_var(--ink)]' : 'border-[var(--ink)] bg-[var(--card)] text-[var(--ink)]' }}">
+           class="flex items-center h-[52px] px-4 font-bold text-[16px] rounded-lg border-[2.5px] transition-all duration-150 {{ $active ? 'bg-[var(--mustard)] border-[var(--ink)] shadow-[3px_3px_0_var(--ink)]' : 'border-[var(--ink)] bg-[var(--card)] text-[var(--ink)] hover:bg-[var(--paper2)] hover:-translate-y-0.5' }}">
             {{ $label }}
         </a>
         @endforeach

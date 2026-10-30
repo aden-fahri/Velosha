@@ -18,8 +18,7 @@
 
             <!-- Kategori -->
             <div>
-                <h3 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4 flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 bg-[var(--orange)] rotate-45 border border-[var(--paper)]" aria-hidden="true"></span>
+                <h3 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4">
                     {{ $footer->kategori_title }}
                 </h3>
                 <ul class="space-y-2.5 text-sm">
@@ -35,8 +34,7 @@
 
             <!-- Bantuan -->
             <div>
-                <h3 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4 flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 bg-[var(--orange)] rotate-45 border border-[var(--paper)]" aria-hidden="true"></span>
+                <h3 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4">
                     {{ $footer->bantuan_title }}
                 </h3>
                 <ul class="space-y-2.5 text-sm">
@@ -57,8 +55,7 @@
 
             <!-- Pembayaran -->
             <div>
-                <h3 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4 flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 bg-[var(--orange)] rotate-45 border border-[var(--paper)]" aria-hidden="true"></span>
+                <h3 class="font-heading font-extrabold text-[15px] uppercase tracking-wider text-[var(--mustard)] mb-4">
                     {{ $footer->payment_title }}
                 </h3>
                 <div class="grid grid-cols-2 gap-2 text-[12px] font-bold">
