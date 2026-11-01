@@ -67,7 +67,7 @@
                 <div class="text-sm text-velomutedlight leading-relaxed space-y-4">
                     @if(strip_tags((string) $event->description) !== (string) $event->description)
                         <div class="prose max-w-none text-sm text-velomutedlight leading-relaxed [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4 [&_img]:velo-box-3">
-                            {!! $event->description !!}
+                            {!! \App\Support\HtmlSanitizer::clean($event->description) !!}
                         </div>
                     @else
                         {!! nl2br(e($event->description)) !!}
