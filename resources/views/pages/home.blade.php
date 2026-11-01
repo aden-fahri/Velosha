@@ -2,7 +2,7 @@
 
 @section('content')
 
-<!-- INTRO LOADING OVERLAY (3.4s, sessionStorage guard, skip button, reduced motion support) -->
+<!-- INTRO LOADING OVERLAY (Full-screen, tanpa navigasi, sekali per sesi) -->
 <x-intro-loading />
 
 <!-- HERO SECTION (Screen-Print Neobrutalist Stage dengan Animasi 1:1 Mockup) -->
@@ -18,6 +18,7 @@
 
     <!-- Tombol Putar Ulang Animasi -->
     <button type="button"
+            id="replay-hero"
             class="btn btn-ghost btn-sm"
             @click="replay()"
             style="position: absolute; top: 16px; right: 24px; z-index: 20"
@@ -36,7 +37,7 @@
         </svg>
 
         <!-- Panel Berlekuk SVG (Krem Bertitik Halus di Depan) -->
-        <svg class="a-panel" width="580" height="445" viewBox="-2 -2 580 445" aria-hidden="true"
+        <svg class="a-panel" id="hero-panel" width="580" height="445" viewBox="-2 -2 580 445" aria-hidden="true"
              style="position: absolute; left: 552px; top: 42px; z-index: 2; overflow: visible">
             <defs>
                 <clipPath id="panelShape">
@@ -66,8 +67,8 @@
         <div class="a-trail" style="position: absolute; left: 520px; top: 326px; width: 100px; height: 6px; border-radius: 3px; background: #1F6F4A; border: 2px solid #10282E; z-index: 3"></div>
         <div class="a-trail" style="position: absolute; left: 450px; top: 352px; width: 170px; height: 6px; border-radius: 3px; background: #DE7119; border: 2px solid #10282E; z-index: 3"></div>
 
-        <!-- Pesepeda Berjersey Oranye (rider_final.png - Autentik & Gagang Stang Bersih) -->
-        <div class="a-ride" style="position: absolute; left: 610px; top: -40px; width: 640px; height: 640px; z-index: 10; pointer-events: none">
+        <!-- Pesepeda Berjersey Oranye (rider_final.png - Autentik) -->
+        <div class="a-ride" id="hero-rider" style="position: absolute; left: 610px; top: -40px; width: 640px; height: 640px; z-index: 10; pointer-events: none">
             <div class="a-bob" style="width: 100%; height: 100%">
                 <img src="/images/hero/rider_final.png"
                      alt="Pesepeda berjersey oranye melaju"
@@ -86,7 +87,7 @@
                 Daftar Gran Fondo, Medio Fondo, dan Fun Ride di seluruh Indonesia. Tiket dan nomor BIB langsung jadi.
             </p>
             <div class="a-rise" style="animation-delay: .5s; margin-top: 28px">
-                <a href="/events" wire:navigate class="btn">
+                <a href="#event" class="btn">
                     Cari event
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
                 </a>
@@ -116,58 +117,40 @@
              @visibilitychange.window="document.hidden ? stop() : start()">
 
             <div class="card" style="position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 14px">
-                <!-- Slide 0: Matahari Terbit & Jalan Pegunungan -->
+                <!-- Slide 0: Foto Nyata Gran Fondo Borobudur -->
                 <div x-show="slide === 0" style="position: absolute; inset: 0">
-                    <svg viewBox="0 0 360 180" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" role="img" aria-label="Foto event 1: jalan raya menurun saat matahari terbit" style="position: absolute; left: 0; top: 0; width: 100%; height: calc(100% - 63px)">
-                        <rect width="360" height="180" fill="#FFD9A0"></rect>
-                        <circle cx="270" cy="56" r="28" fill="#F4BE3F" stroke="#10282E" stroke-width="3"></circle>
-                        <path d="M0 118 Q60 66 120 106 T240 96 T360 84 V180 H0Z" fill="#9CCB9A" stroke="#10282E" stroke-width="3"></path>
-                        <path d="M0 150 Q90 108 180 140 T360 128 V180 H0Z" fill="#1F6F4A" stroke="#10282E" stroke-width="3"></path>
-                        <path d="M150 190 Q180 150 232 128 T330 112" fill="none" stroke="#10282E" stroke-width="26" stroke-linecap="round"></path>
-                        <path d="M150 190 Q180 150 232 128 T330 112" fill="none" stroke="#FBF4E6" stroke-width="3" stroke-dasharray="10 12" stroke-linecap="round"></path>
-                    </svg>
+                    <img src="/images/events/kartu-1.jpg"
+                         alt="Foto Gran Fondo Borobudur"
+                         style="position: absolute; left: 0; top: 0; width: 100%; height: calc(100% - 46px); object-fit: cover; display: block;">
                 </div>
 
-                <!-- Slide 1: Peleton Candi -->
+                <!-- Slide 1: Foto Nyata Peloton Cycling -->
                 <div x-show="slide === 1" style="position: absolute; inset: 0">
-                    <svg viewBox="0 0 360 180" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" role="img" aria-label="Foto event 2: peleton melintas candi" style="position: absolute; left: 0; top: 0; width: 100%; height: calc(100% - 63px)">
-                        <rect width="360" height="180" fill="#F6B777"></rect>
-                        <circle cx="90" cy="60" r="30" fill="#FBF4E6" stroke="#10282E" stroke-width="3"></circle>
-                        <path d="M200 120 L230 70 L260 120Z M240 120 L275 56 L310 120Z" fill="#B2590F" stroke="#10282E" stroke-width="3" stroke-linejoin="round"></path>
-                        <path d="M0 128 Q90 96 180 120 T360 112 V180 H0Z" fill="#7DB88A" stroke="#10282E" stroke-width="3"></path>
-                        <path d="M0 160 H360 V180 H0Z" fill="#10282E"></path>
-                        <circle cx="120" cy="150" r="11" fill="#FFFDF8" stroke="#10282E" stroke-width="3"></circle>
-                        <circle cx="156" cy="150" r="11" fill="#FFFDF8" stroke="#10282E" stroke-width="3"></circle>
-                        <circle cx="206" cy="150" r="11" fill="#FFFDF8" stroke="#10282E" stroke-width="3"></circle>
-                        <circle cx="242" cy="150" r="11" fill="#FFFDF8" stroke="#10282E" stroke-width="3"></circle>
-                    </svg>
+                    <img src="/images/hero-peloton.jpg"
+                         alt="Foto Peloton Balap Sepeda"
+                         style="position: absolute; left: 0; top: 0; width: 100%; height: calc(100% - 46px); object-fit: cover; display: block;">
                 </div>
 
-                <!-- Slide 2: Tanjakan Kaldera Bromo -->
+                <!-- Slide 2: Foto Nyata Tanjakan Kaldera Bromo -->
                 <div x-show="slide === 2" style="position: absolute; inset: 0">
-                    <svg viewBox="0 0 360 180" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" role="img" aria-label="Foto event 3: tanjakan menuju kaldera" style="position: absolute; left: 0; top: 0; width: 100%; height: calc(100% - 63px)">
-                        <rect width="360" height="180" fill="#F8E3B5"></rect>
-                        <path d="M-10 150 L90 50 L150 100 L230 30 L370 150Z" fill="#9B3D5A" stroke="#10282E" stroke-width="3" stroke-linejoin="round"></path>
-                        <path d="M210 52 L230 30 L250 52 L240 48 L230 56 L220 48Z" fill="#FBF4E6" stroke="#10282E" stroke-width="2.5" stroke-linejoin="round"></path>
-                        <path d="M0 150 Q100 120 200 140 T360 130 V180 H0Z" fill="#7DB88A" stroke="#10282E" stroke-width="3"></path>
-                        <path d="M30 190 Q110 150 180 150 T330 128" fill="none" stroke="#10282E" stroke-width="24" stroke-linecap="round"></path>
-                        <path d="M30 190 Q110 150 180 150 T330 128" fill="none" stroke="#FBF4E6" stroke-width="3" stroke-dasharray="10 12" stroke-linecap="round"></path>
-                    </svg>
+                    <img src="/images/events/kartu-6.jpg"
+                         alt="Foto Bromo KOM Challenge"
+                         style="position: absolute; left: 0; top: 0; width: 100%; height: calc(100% - 46px); object-fit: cover; display: block;">
                 </div>
 
                 <!-- Bar Kontrol Slider Bawah (Dot + Navigasi) -->
-                <div style="position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: #FFFDF8; border-top: 2.5px solid #10282E">
+                <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; background: #FFFDF8; border-top: 2.5px solid #10282E">
                     <div style="display: flex; align-items: center">
                         <button type="button" class="dotbtn" :class="{ 'on': slide === 0 }" @click="slide = 0" aria-label="Gambar 1"><i></i></button>
                         <button type="button" class="dotbtn" :class="{ 'on': slide === 1 }" @click="slide = 1" aria-label="Gambar 2"><i></i></button>
                         <button type="button" class="dotbtn" :class="{ 'on': slide === 2 }" @click="slide = 2" aria-label="Gambar 3"><i></i></button>
                     </div>
                     <div style="display: flex; gap: 8px">
-                        <button type="button" class="btn btn-ghost btn-sm" @click="prev()" aria-label="Gambar sebelumnya" style="width: 44px; padding: 0">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+                        <button type="button" class="btn btn-ghost btn-sm" @click="prev()" aria-label="Gambar sebelumnya" style="width: 34px; height: 30px; padding: 0; min-height: 30px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
                         </button>
-                        <button type="button" class="btn btn-sm" @click="next()" aria-label="Gambar berikutnya" style="width: 44px; padding: 0">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+                        <button type="button" class="btn btn-sm" @click="next()" aria-label="Gambar berikutnya" style="width: 34px; height: 30px; padding: 0; min-height: 30px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
                         </button>
                     </div>
                 </div>
@@ -177,36 +160,6 @@
     </div>
 </section>
 
-<!-- LENGKUNG TRANSISI: KELOPAK LENGKUNG SVG DENGAN TEKS MENGIKUTI KURVA (Scroll-Driven Progresif) -->
-<div class="arc-cap" aria-hidden="true"
-     x-data="{
-        progress: 0,
-        updateArc() {
-            const hero = document.getElementById('hero-section');
-            if (!hero) return;
-            const rect = hero.getBoundingClientRect();
-            const scrolled = Math.max(0, -rect.top);
-            const p = Math.min(1, Math.max(0, scrolled / (rect.height * 0.42)));
-            this.progress = p;
-        }
-     }"
-     @scroll.window.passive="updateArc()"
-     x-init="updateArc()">
-    <div class="arc-clip">
-        <div class="arc-dome" :style="'transform: translateY(' + ((1 - progress) * 264) + 'px)'"></div>
-        <svg class="arc-text" viewBox="0 0 1440 110" preserveAspectRatio="none" width="100%" height="110"
-             :style="'transform: translateY(' + ((1 - progress) * 264) + 'px); opacity: ' + (progress > 0.15 ? Math.min(1, progress * 1.5) : 0)">
-            <defs>
-                <path id="arcpath" d="M0,126 Q720,-66 1440,126"></path>
-            </defs>
-            <text>
-                <textPath href="#arcpath" startOffset="50%" text-anchor="middle">
-                    Gran Fondo<tspan fill="#DE7119" dx="14" dy="0">•</tspan><tspan dx="14">Medio Fondo</tspan><tspan fill="#DE7119" dx="14">•</tspan><tspan dx="14">Fun Ride</tspan><tspan fill="#DE7119" dx="14">•</tspan><tspan dx="14">KOM Climb</tspan><tspan fill="#DE7119" dx="14">•</tspan><tspan dx="14">Timing chip RFID</tspan>
-                </textPath>
-            </text>
-        </svg>
-    </div>
-</div>
 
 <!-- KATALOG EVENT TERBUKA & MENDATANG (Livewire Filter + Race Cards) -->
 <div class="velo-reveal" id="event">
@@ -227,25 +180,49 @@
             {{ $paket->description }}
         </p>
 
-        <div style="display: grid; grid-template-columns: 5fr 7fr; gap: 48px; margin-top: 48px; align-items: start">
-            <!-- Kiri: Tiket Karcis 3D Interaktif (Tilt 3D, Kilau Glare, Pindai QR, Sobek Stub & Stempel TERVALIDASI) -->
-            <div class="tkarea" id="tkarea">
+        <!-- Ticket & Facility Responsive Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start mt-12">
+            
+            <!-- Kiri: Tiket Karcis 3D Interaktif (lg:col-span-5) -->
+            <div class="lg:col-span-5 flex flex-col items-center tkarea" id="tkarea">
                 <div class="ticket" id="ticket">
+                    <!-- Main Ticket Body -->
                     <div class="main">
-                        <div class="tk-k">{{ $paket->eyebrow ?? 'VELOSHA GRAN FONDO BOROBUDUR 2026' }}</div>
-                        <div class="bib" aria-label="Nomor BIB 0147">0147</div>
-                        <div style="margin-top: 10px">
-                            <div class="tk-k">PESERTA</div>
-                            <b class="disp" style="font-size: 22px; color: var(--ink)">Budi Prasetyo</b>
-                            <div class="tk-k" style="margin-top: 6px">GRAN FONDO · 130 KM · WAVE B</div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="tk-k">{{ $paket->eyebrow ?? 'VELOSHA GRAN FONDO BOROBUDUR 2026' }}</span>
+                            <div class="flex items-center gap-2">
+                                <span id="tk-badge" class="chip" style="background: var(--pine); color: #ffffff; border: 2px solid var(--ink); font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 6px; display: none; height: auto; text-transform: uppercase;">
+                                    ✓ Valid · Flag-off 05.42
+                                </span>
+                                <span class="inline-flex items-center gap-1 bg-[#F4BE3F] text-[10px] font-black text-[#10282E] px-2 py-0.5 rounded border-2 border-[#10282E]">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="4" y="4" width="16" height="16" rx="2"></rect><circle cx="12" cy="12" r="3"></circle></svg>
+                                    RFID
+                                </span>
+                            </div>
                         </div>
-                        <span id="badge" class="chip" style="position: absolute; right: 20px; top: 18px; background: var(--pine); color: #fff; border-color: var(--ink); display: none">
-                            Valid · Flag-off 05.42
-                        </span>
+
+                        <div class="bib" aria-label="Nomor BIB 0147">0147</div>
+
+                        <div style="margin-top: 8px">
+                            <div class="tk-k">PESERTA</div>
+                            <div class="disp font-heading font-black text-2xl text-[var(--ink)] leading-tight">Budi Prasetyo</div>
+                            <div class="tk-k font-bold" style="margin-top: 4px; color: var(--ink);">GRAN FONDO · 130 KM · WAVE B</div>
+                        </div>
+
                         <div class="stamp" aria-hidden="true">TERVALIDASI</div>
                     </div>
+
+                    <!-- Perforation Semicircle Notches -->
+                    <div class="ticket-notch notch-top" aria-hidden="true"></div>
+                    <div class="ticket-notch notch-bottom" aria-hidden="true"></div>
+
+                    <!-- Right Ticket Stub (Tearable Section) -->
                     <div class="stub" id="stub" tabindex="0" aria-label="Potongan tiket. Tarik ke bawah untuk menyobek, atau tekan Enter.">
-                        <div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-[9px] font-black uppercase tracking-wider text-[var(--ink)] mb-2 flex items-center gap-1 select-none">
+                                <span>SOBEK DI SINI</span>
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+                            </span>
                             <div class="qr" id="qr">
                                 <svg viewBox="0 0 25 25" shape-rendering="crispEdges" aria-hidden="true">
                                     <path id="qrp" fill="#10282E"></path>
@@ -253,26 +230,39 @@
                                 <span class="laser"></span>
                                 <span class="okmark" aria-hidden="true">✓</span>
                             </div>
-                            <div class="tk-k" style="text-align: center; margin-top: 6px; font-weight: 700">VLS-0147-8841</div>
+                            <div class="tk-k text-center font-black mt-2 text-[10px]">VLS-0147-8841</div>
                         </div>
                     </div>
                     <span class="glare"></span>
                 </div>
-                <div class="tkctl">
-                    <button type="button" id="scan" class="btn btn-sm">Pindai QR</button>
-                    <button type="button" id="reset" class="btn btn-sm btn-ghost">Pasang lagi</button>
+
+                <!-- Controls Below Ticket -->
+                <div class="tkctl flex items-center gap-3 mt-6">
+                    <button type="button" id="scan" class="btn btn-sm">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="mr-1.5"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"></path></svg>
+                        <span>Pindai QR</span>
+                    </button>
+                    <button type="button" id="reset" class="btn btn-sm btn-ghost">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="mr-1.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                        <span>Pasang lagi</span>
+                    </button>
                 </div>
-                <p id="tkmsg" role="status" aria-live="polite">Pindai dulu, lalu tarik potongan kanan ke bawah.</p>
+                <p id="tkmsg" class="text-xs font-semibold text-[var(--mute)] mt-3 text-center" role="status" aria-live="polite">
+                    💡 Pindai QR dulu, lalu tarik potongan kanan ke bawah untuk menyobek.
+                </p>
             </div>
 
-            <!-- Kanan: Grid Fitur Kartun + Kartu Flat Hitam Benefit -->
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px">
-                @php
-                    $colors = ['#F4BE3F', '#DE7119', '#D5EBD9', '#F2D3DC'];
-                @endphp
+            <!-- Kanan: Grid Fitur Kartun + Fasilitas (lg:col-span-7) -->
+            <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <style>
+                    .feat-icon-bg-0 { background-color: #F4BE3F; }
+                    .feat-icon-bg-1 { background-color: #DE7119; }
+                    .feat-icon-bg-2 { background-color: #D5EBD9; }
+                    .feat-icon-bg-3 { background-color: #F2D3DC; }
+                </style>
                 @foreach(($paket->features ?? []) as $idx => $f)
                 <div class="card" style="padding: 22px; display: flex; gap: 16px; align-items: center">
-                    <div style="width: 56px; height: 56px; flex: none; border: 2.5px solid #10282E; border-radius: 10px; background: {{ $colors[$idx % count($colors)] }}; display: flex; align-items: center; justify-content: center">
+                    <div class="feat-icon-bg-{{ $idx % 4 }}" style="width: 56px; height: 56px; flex: none; border: 2.5px solid #10282E; border-radius: 10px; display: flex; align-items: center; justify-content: center">
                         @if(($f['icon'] ?? '') === 'cpu')
                             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M9 9h6v6H9zM9 2v2M15 2v2M9 20v2M15 20v2"></path></svg>
                         @elseif(($f['icon'] ?? '') === 'award')

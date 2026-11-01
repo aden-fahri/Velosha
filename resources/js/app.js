@@ -1,23 +1,28 @@
 import './bootstrap';
-import { initInteractiveDeck } from './interactive-cards';
+import { initIntroHero } from './intro-hero';
+import { initRaceDeck } from './race-deck';
 import { initInteractiveTicket } from './interactive-ticket';
 
-function initVeloshaInteractive() {
-    initInteractiveDeck();
+function initVeloshaApp() {
+    initIntroHero();
+    initRaceDeck();
     initInteractiveTicket();
 }
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initVeloshaInteractive);
+    document.addEventListener('DOMContentLoaded', initVeloshaApp);
 } else {
-    initVeloshaInteractive();
+    initVeloshaApp();
 }
 
-document.addEventListener('livewire:navigated', initVeloshaInteractive);
+document.addEventListener('livewire:navigated', () => {
+    initRaceDeck();
+    initInteractiveTicket();
+});
 
 if (window.Livewire) {
     window.Livewire.hook('morph.updated', () => {
-        initInteractiveDeck();
+        initRaceDeck();
         initInteractiveTicket();
     });
 }

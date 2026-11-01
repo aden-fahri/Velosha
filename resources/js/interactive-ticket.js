@@ -4,7 +4,7 @@ export function initInteractiveTicket() {
     const stub = document.getElementById('stub');
     const qr = document.getElementById('qr');
     const msg = document.getElementById('tkmsg');
-    const badge = document.getElementById('badge');
+    const badge = document.getElementById('tk-badge') || document.getElementById('badge');
     const scanBtn = document.getElementById('scan');
     const resetBtn = document.getElementById('reset');
 
@@ -71,7 +71,7 @@ export function initInteractiveTicket() {
                     qr.classList.remove('scanning');
                     qr.classList.add('ok');
                 }
-                if (badge) badge.style.display = '';
+                if (badge) badge.style.display = 'inline-flex';
                 scanned = true;
                 if (msg) msg.textContent = 'Valid. Sekarang tarik potongan kanan ke bawah untuk menyobek.';
             }, RM ? 0 : 1150);
@@ -143,5 +143,18 @@ export function initInteractiveTicket() {
             stub.style.opacity = '';
             if (msg) msg.textContent = 'Pindai dulu, lalu tarik potongan kanan ke bawah.';
         });
+    }
+}
+
+if (typeof window !== 'undefined') {
+    window.initInteractiveTicket = initInteractiveTicket;
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initInteractiveTicket);
+    } else {
+        initInteractiveTicket();
+    }
+    document.addEventListener('livewire:navigated', initInteractiveTicket);
+    if (window.Livewire) {
+        window.Livewire.hook('morph.updated', initInteractiveTicket);
     }
 }

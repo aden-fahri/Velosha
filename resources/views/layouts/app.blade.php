@@ -105,5 +105,8 @@
             });
         }
     </script>
+    <script type="module" src="{{ asset('js/intro-hero.js') }}"></script>
+    <script type="module" src="{{ asset('js/race-deck.js') }}"></script>
+    <script type="module" src="{{ asset('js/interactive-ticket.js') }}"></script>
 </body>
 </html>

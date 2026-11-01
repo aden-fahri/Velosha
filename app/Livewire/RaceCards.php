@@ -60,7 +60,7 @@ class RaceCards extends Component
         }
 
         return $query
-            ->limit(4)
+            ->limit(3)
             ->get()
             ->map(fn (Event $event): array => EventCardPresenter::card($event))
             ->values()

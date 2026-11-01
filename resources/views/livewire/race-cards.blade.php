@@ -17,10 +17,7 @@
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <button type="button" id="deck-mode-btn" class="btn btn-sm btn-ghost">
-                        Sebar kartu
-                    </button>
-                    <a href="/events" wire:navigate class="btn btn-sm btn-ghost hidden sm:inline-flex">
+                    <a href="/events" wire:navigate class="btn btn-sm btn-ghost">
                         <span>Lihat Semua Kalender</span>
                         <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
                     </a>
@@ -103,54 +100,64 @@
                 </div>
             </div>
 
-            <!-- Cards Deck (Tumpukan 4 kartu miring, menyebar mulus, tarik kartu teratas, 3D tilt) -->
-            <div class="deck stacked" id="deck"
-                 wire:loading.class="opacity-50"
+            <!-- Kartu Event (Pas 3 Kartu, Transisi Spring Halus, Hover 3D Tactile, Bersih Tanpa Tumpukan) -->
+            <div class="race-cards-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+                 id="race-cards-grid"
+                 wire:loading.class="opacity-60"
                  wire:target="filter">
 
                 @forelse($races as $race)
-                <article wire:key="race-{{ $loop->index }}" class="card" data-c="{{ $race['cat'] }}">
-                    <div class="in">
+                <article wire:key="race-{{ $loop->index }}"
+                         class="race-card group"
+                         data-c="{{ $race['cat'] }}">
+
+                    <div class="race-card-inner c flex flex-col h-full bg-[var(--card)] rounded-[18px] border-[3px] border-[var(--ink)] shadow-[6px_6px_0_var(--ink)] overflow-hidden">
                         {{-- Header Poster Image / Art --}}
-                        <div class="relative h-44 overflow-hidden border-b-[3px] border-[var(--ink)] bg-[var(--paper2)]">
-                            <img src="{{ $race['img'] }}" alt="{{ $race['title'] }}" class="w-full h-full object-cover">
-                            <div class="absolute top-3 left-3 flex gap-2">
-                                <span class="tag" style="background: var(--orange)">{{ $race['cat'] }}</span>
-                                <span class="tag" style="background: var(--card)">{{ $race['dist'] }}</span>
+                        <div class="race-card-thumb relative overflow-hidden border-b-[3px] border-[var(--ink)] bg-[var(--paper2)]"
+                             style="height: 200px; min-height: 200px; max-height: 200px; width: 100%; position: relative;">
+                            <img src="{{ $race['img'] }}"
+                                 alt="{{ $race['title'] }}"
+                                 class="race-card-img w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                                 style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+                            <div class="absolute top-3 left-3 flex gap-2 z-10">
+                                <span class="chip chip-orange">{{ $race['cat'] }}</span>
+                                <span class="chip bg-[var(--card)]">{{ $race['dist'] }}</span>
                             </div>
                         </div>
 
                         {{-- Card Body --}}
-                        <div class="bd">
-                            <div class="dt flex items-center text-xs font-bold gap-2">
-                                <span class="flex items-center">
-                                    <i data-lucide="calendar" class="w-3.5 h-3.5 mr-1 text-[var(--orange)]"></i>{{ $race['date'] }}
-                                </span>
-                                <span>•</span>
-                                <span class="truncate flex items-center">
-                                    <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-1 text-[var(--orange)]"></i>{{ $race['loc'] }}
-                                </span>
-                            </div>
-
-                            <h3 class="disp leading-tight">
-                                {{ $race['title'] }}
-                            </h3>
-
-                            {{-- Stats 3-Col --}}
-                            <div class="spec">
-                                @foreach($race['specs'] as $label => $value)
-                                <div>
-                                    <span>{{ $label }}</span>
-                                    <b>{{ $value }}</b>
+                        <div class="p-5 flex flex-col flex-grow justify-between bg-[var(--card)]">
+                            <div>
+                                <div class="flex items-center text-xs font-bold gap-2 text-[var(--mute)]">
+                                    <span class="flex items-center">
+                                        <i data-lucide="calendar" class="w-3.5 h-3.5 mr-1 text-[var(--orange)]"></i>{{ $race['date'] }}
+                                    </span>
+                                    <span>•</span>
+                                    <span class="truncate flex items-center">
+                                        <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-1 text-[var(--orange)]"></i>{{ $race['loc'] }}
+                                    </span>
                                 </div>
-                                @endforeach
+
+                                <h3 class="font-heading font-black text-xl text-[var(--ink)] mt-2.5 mb-3 leading-snug line-clamp-2">
+                                    {{ $race['title'] }}
+                                </h3>
+
+                                {{-- Stats 3-Col --}}
+                                <div class="spec mb-4">
+                                    @foreach($race['specs'] as $label => $value)
+                                    <div>
+                                        <span>{{ $label }}</span>
+                                        <b>{{ $value }}</b>
+                                    </div>
+                                    @endforeach
+                                </div>
                             </div>
 
                             {{-- Footer with Price & CTA Button --}}
-                            <div class="price">
+                            <div class="pt-3 border-t-2 border-[var(--ink)]/15 flex items-center justify-between gap-3">
                                 <div>
                                     <div class="text-[10px] uppercase tracking-wider text-[var(--mute)] font-bold">Mulai dari</div>
-                                    <b class="text-xl">Rp {{ $race['price'] }}</b>
+                                    <b class="font-heading font-black text-xl text-[var(--ink)]">Rp {{ $race['price'] }}</b>
                                 </div>
                                 <a href="{{ $race['url'] }}" wire:navigate class="btn btn-sm">
                                     <span>Lihat detail</span>
@@ -171,4 +178,93 @@
 
         </div>
     </section>
+
+    <!-- Script Tumpuk Lalu Menyebar Mengikuti Scroll (Deck Stack -> Fan Out) -->
+    <script>
+    (function() {
+        const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+        const easeIo = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+        let lastE = 0;
+        let tick = 0;
+
+        function scrubDeck() {
+            const deck = document.getElementById('race-cards-grid');
+            if (!deck) return;
+
+            const r = deck.getBoundingClientRect();
+            // e = 0 saat di atas layar (tertumpuk) -> e = 1 saat masuk layar (menyebar penuh)
+            const e = easeIo(clamp((window.innerHeight * 0.84 - r.top) / (window.innerHeight * 0.48), 0, 1));
+            lastE = e;
+
+            const cards = [...deck.querySelectorAll('.race-card:not(.off)')];
+            if (!cards.length) return;
+
+            const m = (cards.length - 1) / 2;
+            const W = deck.offsetWidth;
+            const c0 = cards[0];
+            if (!c0) return;
+            const y0 = c0.offsetTop + c0.offsetHeight / 2;
+
+            cards.forEach((c, k) => {
+                const cx = c.offsetLeft + c.offsetWidth / 2;
+                const cy = c.offsetTop + c.offsetHeight / 2;
+                const s = 1 - e; // 1 = bertumpuk, 0 = menyebar ke kolom grid
+
+                c.style.translate = `${(W / 2 - cx) * s + (k - m) * 16 * s}px ${(y0 - cy) * s + (k - m) * -8 * s}px`;
+                c.style.rotate = `${(k - m) * 7.5 * s}deg`;
+                c.style.scale = 1 - 0.07 * s;
+                c.style.zIndex = k + 1;
+            });
+        }
+
+        const reqScrub = () => {
+            if (!tick) {
+                tick = requestAnimationFrame(() => {
+                    tick = 0;
+                    scrubDeck();
+                });
+            }
+        };
+
+        window.addEventListener('scroll', reqScrub, { passive: true });
+        window.addEventListener('resize', reqScrub, { passive: true });
+
+        // Efek Hover 3D Tactile saat kartu sudah menyebar
+        document.addEventListener('pointermove', (ev) => {
+            const deck = document.getElementById('race-cards-grid');
+            if (!deck || lastE < 0.92 || ev.pointerType === 'touch') return;
+            const c = ev.target.closest('.race-card');
+            if (!c || !deck.contains(c)) return;
+
+            const inner = c.querySelector('.race-card-inner') || c;
+            const r = c.getBoundingClientRect();
+            const x = (ev.clientX - r.left) / r.width - 0.5;
+            const y = (ev.clientY - r.top) / r.height - 0.5;
+            inner.style.transform = `rotateY(${x * 14}deg) rotateX(${-y * 12}deg) translateY(-8px)`;
+            inner.style.boxShadow = '12px 12px 0 #10282E';
+        });
+
+        document.addEventListener('pointerout', (ev) => {
+            const deck = document.getElementById('race-cards-grid');
+            if (!deck) return;
+            const c = ev.target.closest('.race-card');
+            if (c && deck.contains(c)) {
+                const inner = c.querySelector('.race-card-inner') || c;
+                inner.style.transform = '';
+                inner.style.boxShadow = '';
+            }
+        });
+
+        // Jalankan saat halaman siap dan setelah Livewire morph
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', scrubDeck);
+        } else {
+            scrubDeck();
+        }
+        document.addEventListener('livewire:navigated', scrubDeck);
+        if (window.Livewire) {
+            window.Livewire.hook('morph.updated', () => setTimeout(scrubDeck, 50));
+        }
+    })();
+    </script>
 </div>

@@ -5,6 +5,8 @@ namespace App\Livewire;
 use App\Models\Event;
 use App\Support\EventCardPresenter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -84,11 +86,11 @@ class EventCatalog extends Component
     protected function typeOptions(): array
     {
         return [
-            'all' => 'Semua Kategori Jarak',
+            'all' => 'Semua Kategori',
             'gran-fondo' => 'Gran Fondo (120KM+)',
             'medio-fondo' => 'Medio Fondo (60-90KM)',
-            'fun-ride' => 'Fun Ride & Heritage (25-40KM)',
-            'climb' => 'King of Mountain (KOM Climb)',
+            'fun-ride' => 'Fun Ride (25-40KM)',
+            'climb' => 'KOM Climb',
         ];
     }
 
@@ -189,11 +191,33 @@ class EventCatalog extends Component
             default => $query->orderBy('event_date'),
         };
 
-        $paginator = $query->paginate(9);
-        $paginator->getCollection()->transform(
+        $currentPage = max(1, (int) $this->getPage());
+        $total = $query->count();
+
+        if ($currentPage === 1) {
+            $items = $query->take(4)->get();
+        } else {
+            $offset = 4 + ($currentPage - 2) * 9;
+            $items = $query->skip($offset)->take(9)->get();
+        }
+
+        $items->transform(
             fn (Event $event): array => EventCardPresenter::card($event)
         );
 
-        return $paginator;
+        return new class($items, $total, 9, $currentPage, [
+            'path' => Paginator::resolveCurrentPath(),
+            'pageName' => 'page',
+        ]) extends LengthAwarePaginator {
+            public function lastPage(): int
+            {
+                return $this->total() <= 4 ? 1 : 1 + (int) ceil(($this->total() - 4) / 9);
+            }
+
+            public function hasMorePages(): bool
+            {
+                return $this->currentPage() < $this->lastPage();
+            }
+        };
     }
 }

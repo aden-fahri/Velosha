@@ -10,7 +10,43 @@
      x-init="scrollBottom()"
      @mizu-opened.window="scrollBottom()"
      @mizu-answered.window="scrollBottom()"
-     class="fixed bottom-6 right-6 z-50 flex flex-col items-end w-fit">
+     style="position: fixed; right: 20px; bottom: 20px; z-index: 40;"
+     class="flex flex-col items-end w-fit">
+
+    <style>
+        .mizu-trigger-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #0A353E;
+            color: #FFFFFF;
+            border: 2px solid #10282E;
+            box-shadow: 3px 3px 0 #10282E;
+            padding: 12px 18px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+        .mizu-trigger-btn:hover {
+            background-color: #1F6F4A;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 639.98px) {
+            .mizu-trigger-btn {
+                width: 52px !important;
+                height: 52px !important;
+                border-radius: 9999px !important;
+                padding: 0 !important;
+                justify-content: center !important;
+            }
+            .mizu-trigger-btn span {
+                display: none !important;
+            }
+        }
+    </style>
 
     {{-- Panel obrolan: absolute agar tidak pernah menggeser tombol pemicu --}}
     <div x-cloak x-show="open"
@@ -132,7 +168,7 @@
     <button type="button" @click="open = !open; if (open) $dispatch('mizu-opened')"
             :aria-expanded="open.toString()"
             aria-label="Tanya Mizu"
-            class="flex items-center gap-2 bg-teal-900 hover:bg-teal-800 text-white px-4 py-3 velo-box-1 shadow-lg transition hover:-translate-y-0.5 whitespace-nowrap">
+            class="mizu-trigger-btn">
         <i x-show="!open" data-lucide="bot" class="w-4 h-4"></i>
         <i x-show="open" data-lucide="x" class="w-4 h-4" x-cloak></i>
         <span>Tanya Mizu</span>
