@@ -40,7 +40,7 @@ class Ticket extends Model
             return $existing;
         }
 
-        $hash = strtoupper(hash('sha256', uniqid('velosha-', true)));
+        $hash = strtoupper(hash('sha256', bin2hex(random_bytes(32))));
 
         return static::create([
             'registration_id' => $registration->id,
