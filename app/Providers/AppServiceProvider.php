@@ -7,6 +7,7 @@ use Filament\Auth\Http\Responses\Contracts\LogoutResponse as FilamentLogoutRespo
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 
@@ -28,6 +29,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (app()->isProduction()) {
+            URL::forceScheme('https');
+        }
+
         // Semua halaman (termasuk tanpa komponen Livewire) mendapat aset Livewire
         // agar wire:navigate berfungsi di seluruh situs.
         Livewire::forceAssetInjection();
