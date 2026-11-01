@@ -4,32 +4,17 @@ use App\Http\Controllers\DemoSocialController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\TicketController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // 1. Landing Page / Beranda
-Route::get('/', function () {
-    return view('pages.home');
-})->name('home');
+Route::view('/', 'pages.home')->name('home');
 
 // 1b. Halaman Informasi (Navigasi Utama)
-Route::get('/about', function () {
-    return view('pages.about');
-})->name('about');
-
-Route::get('/rule', function () {
-    return view('pages.rule');
-})->name('rule');
-
+Route::view('/about', 'pages.about')->name('about');
+Route::view('/rule', 'pages.rule')->name('rule');
 Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat');
-
-Route::get('/ranking', function () {
-    return view('pages.ranking');
-})->name('ranking');
-
-Route::get('/help', function () {
-    return view('pages.help');
-})->name('help');
+Route::view('/ranking', 'pages.ranking')->name('ranking');
+Route::view('/help', 'pages.help')->name('help');
 
 // 2. Daftar Event / Race Finder Catalog
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
@@ -46,16 +31,13 @@ Route::get('/auth/demo/{provider}', DemoSocialController::class)
     ->name('auth.demo');
 
 // 4c. Halaman login panel lama (bookmarked) → arahkan ke login utama
-Route::get('/admin/login', fn () => redirect()->route('login'))
+Route::redirect('/admin/login', '/login')
     ->name('admin.login.redirect');
 
 // 5. Checkout & Formulir Pendaftaran (Livewire 3 langkah — wajib login peserta)
-Route::get('/checkout', function (Request $request) {
-    return view('pages.checkout', [
-        'eventSlug' => (string) $request->query('event', ''),
-        'categoryId' => $request->filled('category') ? (int) $request->query('category') : null,
-    ]);
-})->middleware(['auth', 'role:peserta'])->name('checkout');
+Route::view('/checkout', 'pages.checkout')
+    ->middleware(['auth', 'role:peserta'])
+    ->name('checkout');
 
 // 6. Konfirmasi Pembayaran & E-Ticket Resmi (hanya pemilik pendaftaran / admin)
 Route::get('/ticket/{registration?}', [TicketController::class, 'show'])
@@ -72,28 +54,24 @@ Route::view('/dashboard/bantuan/buat', 'pages.helpdesk.create')
     ->middleware(['auth', 'role:peserta'])
     ->name('helpdesk.create-ticket');
 
-Route::get('/dashboard/bantuan/{ticket?}', function ($ticket = null) {
-    return view('pages.helpdesk.my-tickets', ['ticket' => $ticket]);
-})->middleware(['auth', 'role:peserta'])->name('helpdesk.my-tickets');
+Route::view('/dashboard/bantuan/{ticket?}', 'pages.helpdesk.my-tickets')
+    ->middleware(['auth', 'role:peserta'])
+    ->name('helpdesk.my-tickets');
 
 // 8. Helpdesk Operator & Admin (Antrian Tiket & Detail)
 Route::view('/helpdesk', 'pages.helpdesk.index')
     ->middleware(['auth', 'role:operator,admin'])
     ->name('helpdesk.index');
 
-Route::get('/helpdesk/tickets/{ticket}', function ($ticket) {
-    return view('pages.helpdesk.detail', ['ticketId' => (int) $ticket]);
-})->middleware(['auth', 'role:operator,admin'])
-  ->name('helpdesk.detail');
+Route::view('/helpdesk/tickets/{ticket}', 'pages.helpdesk.detail')
+    ->middleware(['auth', 'role:operator,admin'])
+    ->name('helpdesk.detail');
 
-Route::get('/helpdesk/operator/tickets/{ticket}', function ($ticket) {
-    return redirect()->route('helpdesk.detail', ['ticket' => $ticket]);
-})->middleware(['auth', 'role:operator,admin'])
-  ->name('helpdesk.operator.detail');
+Route::redirect('/helpdesk/operator/tickets/{ticket}', '/helpdesk/tickets/{ticket}')
+    ->middleware(['auth', 'role:operator,admin'])
+    ->name('helpdesk.operator.detail');
 
 // 9. Helpdesk Admin Analitik (Khusus Administrator)
 Route::view('/helpdesk/analitik', 'pages.helpdesk.analytics')
     ->middleware(['auth', 'role:admin'])
     ->name('helpdesk.analytics');
-
-
