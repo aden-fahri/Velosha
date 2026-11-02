@@ -36,6 +36,7 @@ class StaticContentPagesTest extends TestCase
         $response->assertSee('Kendaraan');
         $response->assertSee('diskualifikasi');
         $response->assertSee('Commissaire');
+        $response->assertSee(RuleContent::defaults()['sanksi_note']);
     }
 
     public function test_help_page_renders_with_default_content_when_table_empty(): void
