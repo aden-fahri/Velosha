@@ -59,3 +59,11 @@ phpinfo.txt
 # Script Testing / Capture Lokal
 scripts/capture_phase4.mjs
 
+AUDIT.md
+AUDIT_IDOR.md
+docs/screenshots/
+docs/diagrams/
+docs/*.docx
+scripts/capture_*.mjs
+scripts/generate_*.mjs
+ambil_semua_screenshot.bat
