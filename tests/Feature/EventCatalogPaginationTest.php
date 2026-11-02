@@ -82,4 +82,76 @@ class EventCatalogPaginationTest extends TestCase
             ->assertOk()
             ->assertSee('var(--butter', false);
     }
+
+    public function test_twenty_five_events_paginate_without_duplicates_or_gaps(): void
+    {
+        $createdTitles = [];
+        for ($i = 1; $i <= 25; $i++) {
+            $title = sprintf('Distro Event %02d', $i);
+            $createdTitles[] = $title;
+            Event::factory()->create([
+                'title' => $title,
+                'event_date' => now()->addDays($i)->format('Y-m-d'),
+            ]);
+        }
+
+        $seenTitles = [];
+        $expectedCounts = [1 => 4, 2 => 9, 3 => 9, 4 => 3];
+
+        foreach ([1, 2, 3, 4] as $page) {
+            $response = $this->get('/events?page='.$page);
+            $response->assertOk();
+
+            $pageTitles = [];
+            foreach ($createdTitles as $title) {
+                if (str_contains($response->getContent(), $title)) {
+                    $pageTitles[] = $title;
+                }
+            }
+
+            $this->assertCount($expectedCounts[$page], $pageTitles, "Page {$page} must show exactly {$expectedCounts[$page]} events");
+
+            foreach ($pageTitles as $title) {
+                $this->assertNotContains($title, $seenTitles, "Event {$title} appeared more than once across pagination");
+                $seenTitles[] = $title;
+            }
+        }
+
+        $this->assertCount(25, $seenTitles);
+        $this->assertEqualsCanonicalizing($createdTitles, $seenTitles);
+    }
+
+    public function test_seven_events_with_same_date_paginate_consistently(): void
+    {
+        $sameDate = now()->addDays(10)->format('Y-m-d');
+        $createdTitles = [];
+        for ($i = 1; $i <= 7; $i++) {
+            $title = sprintf('SameDate Race %02d', $i);
+            $createdTitles[] = $title;
+            Event::factory()->create([
+                'title' => $title,
+                'event_date' => $sameDate,
+            ]);
+        }
+
+        $p1 = $this->get('/events?page=1');
+        $p2 = $this->get('/events?page=2');
+
+        $p1Titles = [];
+        $p2Titles = [];
+        foreach ($createdTitles as $title) {
+            if (str_contains($p1->getContent(), $title)) {
+                $p1Titles[] = $title;
+            }
+            if (str_contains($p2->getContent(), $title)) {
+                $p2Titles[] = $title;
+            }
+        }
+
+        $this->assertCount(4, $p1Titles, 'Page 1 must show 4 events');
+        $this->assertCount(3, $p2Titles, 'Page 2 must show 3 events');
+
+        $overlap = array_intersect($p1Titles, $p2Titles);
+        $this->assertEmpty($overlap, 'No duplicate events should appear between page 1 and page 2');
+    }
 }
