@@ -162,7 +162,30 @@ class User extends Authenticatable implements FilamentUser
             return false;
         }
 
-        $path = parse_url($url, PHP_URL_PATH) ?: '/';
+        // Tolak URL protokol-relatif (//evil.com)
+        if (str_starts_with($url, '//')) {
+            return false;
+        }
+
+        $parts = parse_url($url);
+        if ($parts === false) {
+            return false;
+        }
+
+        // Jika skema ada, wajib http atau https
+        if (isset($parts['scheme']) && ! in_array(strtolower($parts['scheme']), ['http', 'https'], true)) {
+            return false;
+        }
+
+        // Jika host ada, wajib cocok dengan host request saat ini
+        if (isset($parts['host'])) {
+            $currentHost = function_exists('request') && request() ? request()->getHost() : null;
+            if (blank($currentHost) || strtolower($parts['host']) !== strtolower($currentHost)) {
+                return false;
+            }
+        }
+
+        $path = $parts['path'] ?? '/';
 
         if (str_starts_with($path, '/admin')) {
             return $this->isAdmin() || $this->isPenyelenggara();
