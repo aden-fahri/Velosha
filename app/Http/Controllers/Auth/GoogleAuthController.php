@@ -105,8 +105,8 @@ class GoogleAuthController extends Controller
                     'provider_id' => $googleUser->getId(),
                     'avatar' => $googleUser->getAvatar(),
                     'role' => User::ROLE_PESERTA,
-                    'email_verified_at' => now(),
                 ]);
+                $user->forceFill(['email_verified_at' => now()])->save();
             }
         } else {
             // Perbarui avatar jika ada
