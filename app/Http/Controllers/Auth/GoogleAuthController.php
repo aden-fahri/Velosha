@@ -70,14 +70,34 @@ class GoogleAuthController extends Controller
             $user = User::where('email', $email)->first();
 
             if ($user) {
-                // Tautkan akun yang sudah ada
-                $user->update([
-                    'provider' => 'google',
-                    'provider_id' => $googleUser->getId(),
-                    'avatar' => $user->avatar ?: $googleUser->getAvatar(),
-                ]);
+                // Jangan tautkan akun istimewa (admin, penyelenggara, operator)
+                if (in_array($user->role, [User::ROLE_ADMIN, User::ROLE_PENYELENGGARA, User::ROLE_OPERATOR], true)) {
+                    return redirect()->route('login')->withErrors([
+                        'email' => 'Akun ini dikelola dengan kata sandi. Masuk dengan email dan kata sandi.',
+                    ]);
+                }
+
+                // Jangan tautkan jika akun lokal belum terverifikasi
+                if (is_null($user->email_verified_at)) {
+                    return redirect()->route('login')->withErrors([
+                        'email' => 'Alamat email akun Anda belum diverifikasi. Silakan verifikasi email Anda atau masuk dengan kata sandi.',
+                    ]);
+                }
+
+                // Tautkan hanya jika role peserta dan email terverifikasi
+                if ($user->role === User::ROLE_PESERTA) {
+                    $user->update([
+                        'provider' => 'google',
+                        'provider_id' => $googleUser->getId(),
+                        'avatar' => $user->avatar ?: $googleUser->getAvatar(),
+                    ]);
+                } else {
+                    return redirect()->route('login')->withErrors([
+                        'email' => 'Akun ini dikelola dengan kata sandi. Masuk dengan email dan kata sandi.',
+                    ]);
+                }
             } else {
-                // Buat user baru
+                // Buat user baru (role peserta, email_verified_at sekarang, password NULL)
                 $user = User::create([
                     'name' => $googleUser->getName() ?? $googleUser->getNickname() ?? 'Peserta Velosha',
                     'email' => $email,
