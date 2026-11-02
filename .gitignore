@@ -30,8 +30,13 @@ Desktop.ini
 # Dokumentasi & Bukti Pengujian Lokal
 /docs/evidence
 /docs/doxygen
+/docs/*.docx
+/docs/diagrams/
+/docs/screenshots/
 /html
 /latex
+*.bat
+scripts/*.mjs
 
 # Arsip & Kompresi
 *.zip

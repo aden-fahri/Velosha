@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\DemoSocialController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RiwayatController;
@@ -40,7 +41,15 @@ Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.sho
 // 4. Autentikasi: Login & Register Peserta (Laravel Breeze)
 require __DIR__.'/auth.php';
 
-// 4b. Social login (mode demo — Socialite asli menyusul)
+// 4b. Google Socialite OAuth
+Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])
+    ->middleware('guest')
+    ->name('auth.google');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])
+    ->middleware('guest')
+    ->name('auth.google.callback');
+
+// 4c. Social login (mode demo fallback)
 Route::get('/auth/demo/{provider}', DemoSocialController::class)
     ->middleware('guest')
     ->name('auth.demo');
