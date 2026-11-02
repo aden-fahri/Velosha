@@ -51,6 +51,16 @@ class GoogleAuthController extends Controller
             ]);
         }
 
+        $rawUser = $googleUser->user ?? [];
+        $emailVerified = $rawUser['email_verified'] ?? false;
+        $isVerified = ($emailVerified === true || $emailVerified === 'true');
+
+        if (! $isVerified) {
+            return redirect()->route('login')->withErrors([
+                'email' => 'Alamat email Google Anda belum diverifikasi. Harap verifikasi akun Google Anda terlebih dahulu.',
+            ]);
+        }
+
         // Cari berdasarkan google_id atau email yang terdaftar
         $user = User::where('provider', 'google')
             ->where('provider_id', $googleUser->getId())
