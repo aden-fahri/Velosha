@@ -43,10 +43,10 @@ require __DIR__.'/auth.php';
 
 // 4b. Google Socialite OAuth
 Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])
-    ->middleware('guest')
+    ->middleware(['guest', 'throttle:20,1'])
     ->name('auth.google');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])
-    ->middleware('guest')
+    ->middleware(['guest', 'throttle:20,1'])
     ->name('auth.google.callback');
 
 // 4c. Social login (mode demo fallback)
