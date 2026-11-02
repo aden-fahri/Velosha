@@ -14,6 +14,8 @@ class HtmlSanitizer
     protected const ALLOWED_TAGS = [
         'p', 'br', 'strong', 'b', 'em', 'i', 'u',
         'ul', 'ol', 'li', 'h2', 'h3', 'h4', 'blockquote', 'a',
+        'img', 'figure', 'figcaption', 'hr', 'code', 'pre', 's', 'del',
+        'table', 'thead', 'tbody', 'tr', 'th', 'td',
     ];
 
     /**
@@ -28,6 +30,20 @@ class HtmlSanitizer
      */
     protected const ALLOWED_A_ATTRIBUTES = [
         'href', 'title', 'target', 'rel',
+    ];
+
+    /**
+     * Allowed attributes on 'img' tag.
+     */
+    protected const ALLOWED_IMG_ATTRIBUTES = [
+        'src', 'alt', 'width', 'height', 'loading',
+    ];
+
+    /**
+     * Allowed attributes on table cell tags.
+     */
+    protected const ALLOWED_CELL_ATTRIBUTES = [
+        'colspan', 'rowspan',
     ];
 
     public static function clean(?string $html): string
@@ -84,6 +100,13 @@ class HtmlSanitizer
                     continue;
                 }
 
+                if ($tagName === 'img') {
+                    if (! self::isValidImage($child)) {
+                        $toRemove[] = ['node' => $child, 'mode' => 'delete'];
+                        continue;
+                    }
+                }
+
                 self::sanitizeAttributes($child);
                 self::sanitizeNode($child);
             }
@@ -100,6 +123,47 @@ class HtmlSanitizer
                 $target->parentNode->removeChild($target);
             }
         }
+    }
+
+    protected static function isValidImage(DOMElement $element): bool
+    {
+        if (! $element->hasAttribute('src')) {
+            return false;
+        }
+
+        $src = trim($element->getAttribute('src'));
+        if ($src === '') {
+            return false;
+        }
+
+        $decoded = rawurldecode(html_entity_decode($src, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        $decoded = preg_replace('/[\x00-\x1F\x7F]/u', '', $decoded);
+
+        if (preg_match('/^\s*(javascript|data|vbscript):/i', $decoded)) {
+            return false;
+        }
+
+        if (str_starts_with($src, '/storage/')) {
+            return true;
+        }
+
+        $parts = parse_url($src);
+        if (! isset($parts['host'])) {
+            return false;
+        }
+
+        $appUrl = config('app.url');
+        $appHost = $appUrl ? parse_url($appUrl, PHP_URL_HOST) : null;
+        $currentHost = function_exists('request') && request() ? request()->getHost() : null;
+
+        $validHosts = array_filter([$appHost, $currentHost, 'localhost', '127.0.0.1']);
+
+        if (in_array(strtolower($parts['host']), array_map('strtolower', $validHosts), true)) {
+            $path = $parts['path'] ?? '';
+            return str_starts_with($path, '/storage/');
+        }
+
+        return false;
     }
 
     protected static function sanitizeAttributes(DOMElement $element): void
@@ -132,6 +196,16 @@ class HtmlSanitizer
                         continue;
                     }
                 }
+            } elseif ($tagName === 'img') {
+                if (! in_array($name, self::ALLOWED_IMG_ATTRIBUTES, true)) {
+                    $attributesToRemove[] = $name;
+                    continue;
+                }
+            } elseif (in_array($tagName, ['th', 'td'], true)) {
+                if (! in_array($name, self::ALLOWED_CELL_ATTRIBUTES, true)) {
+                    $attributesToRemove[] = $name;
+                    continue;
+                }
             } else {
                 $attributesToRemove[] = $name;
             }
@@ -147,6 +221,10 @@ class HtmlSanitizer
             if (preg_match('#^https?://#i', $href) || str_starts_with($href, '//')) {
                 $element->setAttribute('target', '_blank');
             }
+        }
+
+        if ($tagName === 'img') {
+            $element->setAttribute('loading', 'lazy');
         }
     }
 }

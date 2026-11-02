@@ -70,4 +70,84 @@ class HtmlSanitizerTest extends TestCase
         $this->assertStringContainsString('<em>Candi Cetho</em>', $clean);
         $this->assertStringContainsString('<ul><li>Pos 1: KM 20</li><li>Pos 2: KM 45</li></ul>', $clean);
     }
+
+    public function test_uploaded_image_from_storage_survives_with_lazy_loading(): void
+    {
+        $html = '<p><img src="/storage/attachments/route-map.jpg" alt="Route Map" width="600" height="400"></p>';
+        $clean = HtmlSanitizer::clean($html);
+
+        $this->assertStringContainsString('src="/storage/attachments/route-map.jpg"', $clean);
+        $this->assertStringContainsString('alt="Route Map"', $clean);
+        $this->assertStringContainsString('width="600"', $clean);
+        $this->assertStringContainsString('height="400"', $clean);
+        $this->assertStringContainsString('loading="lazy"', $clean);
+    }
+
+    public function test_external_image_host_is_removed(): void
+    {
+        $html = '<p><img src="https://evil.example/x.png" alt="Evil Image"></p>';
+        $clean = HtmlSanitizer::clean($html);
+
+        $this->assertStringNotContainsString('evil.example', $clean);
+        $this->assertStringNotContainsString('<img', $clean);
+    }
+
+    public function test_image_loses_onerror_and_disallowed_attributes(): void
+    {
+        $html = '<img src="/storage/attachments/banner.png" alt="Banner" onerror="alert(1)" class="evil-class">';
+        $clean = HtmlSanitizer::clean($html);
+
+        $this->assertStringNotContainsString('onerror', $clean);
+        $this->assertStringNotContainsString('evil-class', $clean);
+        $this->assertStringContainsString('src="/storage/attachments/banner.png"', $clean);
+        $this->assertStringContainsString('alt="Banner"', $clean);
+        $this->assertStringContainsString('loading="lazy"', $clean);
+    }
+
+    public function test_table_and_extended_formatting_tags_survive(): void
+    {
+        $html = '<table><thead><tr><th colspan="2">Rute</th></tr></thead><tbody><tr><td>Etape 1</td><td>Solo - Tawangmangu</td></tr></tbody></table>'
+            . '<hr>'
+            . '<figure><figcaption>Peta Elevasi</figcaption></figure>'
+            . '<code>elevation: 1200m</code><pre>curl https://example.com</pre>'
+            . '<s>Harga Lama</s> <del>Dicoret</del>';
+
+        $clean = HtmlSanitizer::clean($html);
+
+        $this->assertStringContainsString('<table>', $clean);
+        $this->assertStringContainsString('<thead>', $clean);
+        $this->assertStringContainsString('<tbody>', $clean);
+        $this->assertStringContainsString('<tr>', $clean);
+        $this->assertStringContainsString('<th colspan="2">Rute</th>', $clean);
+        $this->assertStringContainsString('<td>Etape 1</td>', $clean);
+        $this->assertStringContainsString('<hr>', $clean);
+        $this->assertStringContainsString('<figure>', $clean);
+        $this->assertStringContainsString('<figcaption>Peta Elevasi</figcaption>', $clean);
+        $this->assertStringContainsString('<code>elevation: 1200m</code>', $clean);
+        $this->assertStringContainsString('<pre>curl https://example.com</pre>', $clean);
+        $this->assertStringContainsString('<s>Harga Lama</s>', $clean);
+        $this->assertStringContainsString('<del>Dicoret</del>', $clean);
+    }
+
+    public function test_filament_rich_editor_attachment_image_shape_survives(): void
+    {
+        config(['app.url' => 'http://localhost']);
+        $html = '<p><img src="http://localhost/storage/attachments/circuit.png" alt="Circuit"></p>';
+        $clean = HtmlSanitizer::clean($html);
+
+        $this->assertStringContainsString('src="http://localhost/storage/attachments/circuit.png"', $clean);
+        $this->assertStringContainsString('alt="Circuit"', $clean);
+        $this->assertStringContainsString('loading="lazy"', $clean);
+    }
+
+    public function test_dangerous_schemes_in_img_src_are_removed(): void
+    {
+        $html = '<img src="javascript:alert(1)"><img src="data:image/svg+xml;base64,PHN2Zw=="><img src="vbscript:msgbox(1)">';
+        $clean = HtmlSanitizer::clean($html);
+
+        $this->assertStringNotContainsString('<img', $clean);
+        $this->assertStringNotContainsString('javascript:', $clean);
+        $this->assertStringNotContainsString('data:', $clean);
+        $this->assertStringNotContainsString('vbscript:', $clean);
+    }
 }
