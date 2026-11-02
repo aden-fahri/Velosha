@@ -169,6 +169,7 @@
             @endif
 
             {{-- Social login divider & Google button --}}
+            @if (!empty(config('services.google.client_id')) || config('app.demo_login'))
             <div class="flex items-center gap-3 text-sm text-[var(--mute)]">
                 <i class="flex-1 border-t-2 border-[var(--line)]"></i>
                 atau lanjutkan dengan
@@ -188,6 +189,7 @@
                     <span>Masuk dengan Akun Google</span>
                 </a>
             </div>
+            @endif
         </div>
     </div>
 </div>
