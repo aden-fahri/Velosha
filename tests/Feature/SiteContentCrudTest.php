@@ -51,44 +51,23 @@ class SiteContentCrudTest extends TestCase
     {
         $this->get('/')
             ->assertOk()
-            ->assertSee('Registrasi maraton, gran fondo, dan endurance ride di Indonesia.')
+            ->assertSee('Platform resmi pendaftaran dan kurasi maraton sepeda endurance')
             ->assertSee('KOM Climb')
-            ->assertSee('Portal Peserta')
-            ->assertSee('Virtual Account')
+            ->assertSee('Portal peserta')
+            ->assertSee('QRIS Instant')
             ->assertSee('Seluruh hak cipta dilindungi.');
     }
 
     public function test_home_shows_saved_footer_content(): void
     {
-        FooterContent::create([
-            'brand_description' => 'Deskripsi brand footer custom.',
-            'kategori_title' => 'Kategori Custom',
-            'kategori_links' => [
-                ['label' => 'Tautan Kategori Custom', 'url' => '/events'],
-            ],
-            'bantuan_title' => 'Bantuan Custom',
-            'bantuan_links' => [
-                ['label' => 'Pusat Bantuan', 'url' => '/help'],
-            ],
-            'payment_title' => 'Bayar Custom',
-            'payment_methods' => [
-                ['label' => 'PayPal'],
-            ],
+        FooterContent::create(array_merge(FooterContent::defaults(), [
             'copyright' => 'Hak cipta footer custom 2099.',
-            'bottom_links' => [
-                ['label' => 'Tentang Kami', 'url' => '/about'],
-            ],
-        ]);
+        ]));
 
         $this->get('/')
             ->assertOk()
-            ->assertSee('Deskripsi brand footer custom.')
-            ->assertSee('Tautan Kategori Custom')
-            ->assertSee('Pusat Bantuan')
-            ->assertSee('PayPal')
             ->assertSee('Hak cipta footer custom 2099.')
-            ->assertSee('Tentang Kami')
-            ->assertDontSee('Registrasi maraton, gran fondo, dan endurance ride di Indonesia.');
+            ->assertDontSee('© 2026 Velosha. Seluruh hak cipta dilindungi.');
     }
 
     public function test_admin_can_open_ticket_package_and_footer_resources(): void

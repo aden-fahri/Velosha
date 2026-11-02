@@ -30,11 +30,12 @@ class EventCatalogPaginationTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Race Nomor 1');
-        $response->assertSee('Race Nomor 9');
+        $response->assertSee('Race Nomor 4');
+        $response->assertDontSee('Race Nomor 5');
         $response->assertDontSee('Race Nomor 10');
-        $response->assertSee('hasil filter');
+        $response->assertSee('Punya event sepeda?');
         $response->assertSee('gotoPage', false);
-        $response->assertSee('Sebelumnya');
+        $response->assertSee('aria-label="Halaman berikutnya"', false);
     }
 
     public function test_events_page_two_shows_tenth_event(): void
@@ -44,10 +45,12 @@ class EventCatalogPaginationTest extends TestCase
         $response = $this->get('/events?page=2');
 
         $response->assertOk();
+        $response->assertSee('Race Nomor 5');
         $response->assertSee('Race Nomor 10');
-        $response->assertDontSee('Race Nomor 5');
+        $response->assertDontSee('Race Nomor 2');
+        $response->assertDontSee('Race Nomor 4');
         $response->assertSee('aria-current="page"', false);
-        $response->assertSee('Berikutnya');
+        $response->assertSee('aria-label="Halaman sebelumnya"', false);
     }
 
     public function test_changing_filter_resets_pagination_to_first_page(): void
@@ -67,7 +70,8 @@ class EventCatalogPaginationTest extends TestCase
 
         $html = $this->get('/events')->getContent();
 
-        $this->assertStringContainsString('veloborder', $html);
+        $this->assertStringContainsString('events-pagination-nav', $html);
+        $this->assertStringContainsString('page-btn', $html);
         $this->assertStringNotContainsString('bg-gray-100', $html);
         $this->assertStringNotContainsString('text-blue-', $html);
     }
@@ -76,6 +80,6 @@ class EventCatalogPaginationTest extends TestCase
     {
         $this->get('/events')
             ->assertOk()
-            ->assertSee('bg-[#0A353E]', false);
+            ->assertSee('var(--butter', false);
     }
 }

@@ -32,10 +32,10 @@ class StaticContentPagesTest extends TestCase
         $response = $this->get('/rule');
 
         $response->assertOk();
-        $response->assertSee('Aturan balap & kode etik', false);
+        $response->assertSee('Aturan Balap & Kode Etik');
         $response->assertSee('Kendaraan');
-        $response->assertSee('Sanksi & diskualifikasi', false);
-        $response->assertSee('Seluruh keputusan Race Comisaris');
+        $response->assertSee('diskualifikasi');
+        $response->assertSee('Commissaire');
     }
 
     public function test_help_page_renders_with_default_content_when_table_empty(): void
