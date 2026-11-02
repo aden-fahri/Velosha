@@ -178,17 +178,23 @@ class EventCatalog extends Component
         match ($this->sort) {
             'popular' => $query
                 ->withSum('categories as total_registered', 'registered_count')
-                ->orderByDesc('total_registered'),
+                ->orderByDesc('total_registered')
+                ->orderBy('events.id'),
             'price-asc' => $query
                 ->withMin('categories as lowest_price', 'price')
-                ->orderBy('lowest_price'),
+                ->orderBy('lowest_price')
+                ->orderBy('events.id'),
             'distance-desc' => $query
                 ->withMax('categories as max_distance', 'distance_km')
-                ->orderByDesc('max_distance'),
+                ->orderByDesc('max_distance')
+                ->orderBy('events.id'),
             'elevation-desc' => $query
                 ->withMax('categories as max_elevation', 'elevation_gain_m')
-                ->orderByDesc('max_elevation'),
-            default => $query->orderBy('event_date'),
+                ->orderByDesc('max_elevation')
+                ->orderBy('events.id'),
+            default => $query
+                ->orderBy('event_date')
+                ->orderBy('events.id'),
         };
 
         $currentPage = max(1, (int) $this->getPage());
