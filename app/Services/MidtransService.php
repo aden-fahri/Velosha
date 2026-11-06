@@ -61,9 +61,9 @@ class MidtransService
                 'gross_amount' => $grossAmount,
             ],
             'customer_details' => [
-                'first_name' => mb_substr($registration->participant_name, 0, 50),
-                'email' => $registration->user?->email,
-                'phone' => $registration->user?->phone,
+                'first_name' => mb_substr($registration->participant_name ?: ($registration->user?->name ?? 'Peserta'), 0, 50),
+                'email' => $registration->user?->email ?? 'peserta@velosha.id',
+                'phone' => $registration->user?->phone ?? '',
             ],
             'item_details' => [
                 [
@@ -127,3 +127,4 @@ class MidtransService
         return hash_equals($calculated, $signatureKey);
     }
 }
+

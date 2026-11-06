@@ -50,9 +50,9 @@ class EventResource extends Resource
         if ($user instanceof User && ! $user->isAdmin()) {
             $orgIds = $user->organizations()->pluck('organizations.id');
             $query->where(function (Builder $q) use ($user, $orgIds) {
-                $q->where('user_id', $user->id);
+                $q->where('events.user_id', $user->id);
                 if ($orgIds->isNotEmpty()) {
-                    $q->orWhereIn('organization_id', $orgIds);
+                    $q->orWhereIn('events.organization_id', $orgIds);
                 }
             });
         }

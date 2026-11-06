@@ -335,6 +335,12 @@ class Checkout extends Component
             return;
         }
 
+        if ($registration->isPaid()) {
+            $this->redirect('/ticket/'.$registration->id);
+
+            return;
+        }
+
         /** @var \App\Services\MidtransService $midtrans */
         $midtrans = app(\App\Services\MidtransService::class);
         $result = $midtrans->createSnapTransaction($registration, $this->total());

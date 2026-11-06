@@ -47,12 +47,18 @@ class PaymentWebhookController extends Controller
             return response()->json(['message' => 'Pesanan tidak ditemukan.'], 404);
         }
 
-        // 3. Idempotensi: jika sudah lunas, jangan proses ulang
+        // 3. Validasi kesesuaian jumlah bayar (gross amount)
+        if (! empty($grossAmount) && (int) (float) $grossAmount !== (int) $payment->amount) {
+            Log::warning("Midtrans Webhook: Jumlah bayar tidak cocok untuk order {$orderId}. Terdaftar: {$payment->amount}, Diterima: {$grossAmount}");
+            return response()->json(['message' => 'Gross amount tidak sesuai pesanan.'], 400);
+        }
+
+        // 4. Idempotensi: jika sudah lunas, jangan proses ulang
         if ($payment->isSettled()) {
             return response()->json(['message' => 'Pembayaran sudah berstatus lunas sebelumnya.'], 200);
         }
 
-        // 4. Proses status transaksi
+        // 5. Proses status transaksi
         if ($transactionStatus === 'settlement' || ($transactionStatus === 'capture' && $fraudStatus === 'accept')) {
             $payment->update([
                 'status' => Payment::STATUS_SETTLEMENT,
@@ -63,7 +69,15 @@ class PaymentWebhookController extends Controller
 
             // Terbitkan BIB resmi & e-ticket QR atomik
             if ($payment->registration) {
-                $this->completeAction->execute($payment->registration);
+                try {
+                    $this->completeAction->execute($payment->registration);
+                } catch (\RuntimeException $e) {
+                    Log::error("Midtrans Webhook: Gagal menerbitkan tiket untuk order {$orderId}: " . $e->getMessage());
+                    return response()->json([
+                        'status' => 'FAILED',
+                        'message' => 'Pendaftaran tidak dapat diselesaikan: ' . $e->getMessage(),
+                    ], 200);
+                }
             }
 
             Log::info("Midtrans Webhook: Pembayaran sukses untuk order {$orderId}");
@@ -85,3 +99,4 @@ class PaymentWebhookController extends Controller
         return response()->json(['status' => 'OK', 'message' => 'Webhook berhasil diproses.'], 200);
     }
 }
+

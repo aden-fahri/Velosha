@@ -43,3 +43,4 @@ class Payment extends Model
         return in_array($this->status, [self::STATUS_SETTLEMENT, self::STATUS_CAPTURE], true);
     }
 }
+

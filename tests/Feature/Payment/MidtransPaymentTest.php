@@ -173,4 +173,53 @@ class MidtransPaymentTest extends TestCase
         $this->assertSame(Payment::STATUS_EXPIRE, $payment->status);
         $this->assertSame(Registration::STATUS_CANCELLED, $registration->status);
     }
+
+    public function test_midtrans_webhook_rejects_mismatched_gross_amount(): void
+    {
+        $registration = $this->createRegistration();
+        $payment = Payment::create([
+            'registration_id' => $registration->id,
+            'order_id' => 'VLS-TEST-005',
+            'amount' => 250000,
+            'status' => Payment::STATUS_PENDING,
+        ]);
+
+        $response = $this->postJson(route('payment.midtrans.webhook'), [
+            'order_id' => 'VLS-TEST-005',
+            'status_code' => '200',
+            'gross_amount' => '10000.00', // Discrepancy!
+            'transaction_status' => 'settlement',
+        ]);
+
+        $response->assertStatus(400);
+        $payment->refresh();
+        $this->assertSame(Payment::STATUS_PENDING, $payment->status);
+    }
+
+    public function test_midtrans_webhook_handles_full_quota_gracefully(): void
+    {
+        $registration = $this->createRegistration();
+        // Fill up quota
+        $registration->category->update([
+            'quota' => 10,
+            'registered_count' => 10,
+        ]);
+
+        $payment = Payment::create([
+            'registration_id' => $registration->id,
+            'order_id' => 'VLS-TEST-006',
+            'amount' => 250000,
+            'status' => Payment::STATUS_PENDING,
+        ]);
+
+        $response = $this->postJson(route('payment.midtrans.webhook'), [
+            'order_id' => 'VLS-TEST-006',
+            'status_code' => '200',
+            'gross_amount' => '250000.00',
+            'transaction_status' => 'settlement',
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson(['status' => 'FAILED']);
+    }
 }
