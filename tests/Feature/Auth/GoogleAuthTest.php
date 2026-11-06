@@ -257,4 +257,58 @@ class GoogleAuthTest extends TestCase
         $this->assertTrue($user->canVisit('/events'));
         $this->assertTrue($user->canVisit('/dashboard'));
     }
+
+    public function test_google_callback_blocks_already_linked_privileged_user(): void
+    {
+        $admin = User::factory()->create([
+            'email' => 'admin_linked@velosha.id',
+            'role' => User::ROLE_ADMIN,
+            'email_verified_at' => now(),
+            'provider' => 'google',
+            'provider_id' => 'google-admin-linked',
+        ]);
+
+        $this->mockGoogleUser([
+            'id' => 'google-admin-linked',
+            'email' => 'admin_linked@velosha.id',
+        ]);
+
+        $response = $this->get(route('auth.google.callback'));
+
+        $response->assertRedirect(route('login'));
+        $response->assertSessionHasErrors([
+            'email' => 'Akun ini dikelola dengan kata sandi. Masuk dengan email dan kata sandi.',
+        ]);
+        $this->assertGuest();
+    }
+
+    public function test_google_callback_rejects_missing_or_invalid_email_format(): void
+    {
+        $this->mockGoogleUser([
+            'id' => 'google-bad-email',
+            'email' => 'not-a-valid-email',
+        ]);
+
+        $response = $this->get(route('auth.google.callback'));
+
+        $response->assertRedirect(route('login'));
+        $response->assertSessionHasErrors(['email']);
+        $this->assertGuest();
+    }
+
+    public function test_google_callback_sanitizes_invalid_avatar_url(): void
+    {
+        $this->mockGoogleUser([
+            'id' => 'google-bad-avatar',
+            'email' => 'safe_avatar@velosha.id',
+            'avatar' => 'javascript:alert(1)',
+        ]);
+
+        $response = $this->get(route('auth.google.callback'));
+
+        $this->assertAuthenticated();
+        $user = User::where('email', 'safe_avatar@velosha.id')->first();
+        $this->assertNotNull($user);
+        $this->assertNull($user->avatar);
+    }
 }
