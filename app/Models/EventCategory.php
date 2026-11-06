@@ -48,8 +48,27 @@ class EventCategory extends Model
         return $this->hasMany(Registration::class);
     }
 
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
     public function getRemainingAttribute(): int
     {
         return max(0, $this->quota - $this->registered_count);
+    }
+
+    /**
+     * Sisa slot bebas yang belum dibeli dan belum di-hold oleh peserta lain.
+     */
+    public function availableSlots(?int $excludeUserId = null): int
+    {
+        $query = $this->reservations()->activeHeld();
+        if ($excludeUserId !== null) {
+            $query->where('user_id', '!=', $excludeUserId);
+        }
+        $held = $query->count();
+
+        return max(0, $this->remaining - $held);
     }
 }

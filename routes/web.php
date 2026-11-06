@@ -57,6 +57,14 @@ Route::get('/checkout', function (Request $request) {
     ]);
 })->middleware(['auth', 'role:peserta'])->name('checkout');
 
+// 5b. Ruang Tunggu Antrean Pendaftaran (Waiting Room)
+Route::get('/waiting-room', function (Request $request) {
+    return view('pages.waiting-room', [
+        'eventSlug' => (string) $request->query('event', ''),
+        'categoryId' => $request->filled('category') ? (int) $request->query('category') : null,
+    ]);
+})->middleware(['auth', 'role:peserta'])->name('waiting-room');
+
 // 6. Konfirmasi Pembayaran & E-Ticket Resmi (hanya pemilik pendaftaran / admin)
 Route::get('/ticket/{registration?}', [TicketController::class, 'show'])
     ->middleware('auth')

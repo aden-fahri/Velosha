@@ -154,6 +154,16 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
+     * Slot reservasi pendaftaran race milik pengguna ini.
+     *
+     * @return HasMany<Reservation, $this>
+     */
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    /**
      * Organisasi atau komunitas yang diikuti pengguna.
      */
     public function organizations(): BelongsToMany
@@ -191,8 +201,8 @@ class User extends Authenticatable implements FilamentUser
             return $this->isOperator() || $this->isAdmin();
         }
 
-        // Halaman khusus peserta: portal rider & formulir pendaftaran race.
-        if (in_array($path, ['/dashboard', '/checkout'], true)) {
+        // Halaman khusus peserta: portal rider, formulir pendaftaran race, & ruang tunggu antrean.
+        if (in_array($path, ['/dashboard', '/checkout', '/waiting-room'], true)) {
             return $this->isPeserta();
         }
 

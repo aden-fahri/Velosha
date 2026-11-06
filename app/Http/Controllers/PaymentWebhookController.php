@@ -91,6 +91,11 @@ class PaymentWebhookController extends Controller
                 $payment->registration->update([
                     'status' => Registration::STATUS_CANCELLED,
                 ]);
+
+                \App\Models\Reservation::where('user_id', $payment->registration->user_id)
+                    ->where('event_category_id', $payment->registration->event_category_id)
+                    ->where('status', \App\Models\Reservation::STATUS_HELD)
+                    ->update(['status' => \App\Models\Reservation::STATUS_RELEASED]);
             }
 
             Log::info("Midtrans Webhook: Pembayaran {$transactionStatus} untuk order {$orderId}");

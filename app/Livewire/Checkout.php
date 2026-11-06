@@ -181,6 +181,29 @@ class Checkout extends Component
             return;
         }
 
+        // Kunci slot reservasi 15 menit atau arahkan ke ruang tunggu jika sedang penuh
+        $userId = auth()->id();
+        $myHeld = \App\Models\Reservation::query()
+            ->where('user_id', $userId)
+            ->where('event_category_id', $category->id)
+            ->activeHeld()
+            ->first();
+
+        if (! $myHeld) {
+            if ($category->availableSlots($userId) <= 0) {
+                $this->redirect(route('waiting-room', ['event' => $this->eventSlug, 'category' => $category->id]));
+
+                return;
+            }
+
+            \App\Models\Reservation::create([
+                'user_id' => $userId,
+                'event_category_id' => $category->id,
+                'status' => \App\Models\Reservation::STATUS_HELD,
+                'expires_at' => now()->addMinutes(15),
+            ]);
+        }
+
         $this->error = '';
         $this->step = 2;
     }

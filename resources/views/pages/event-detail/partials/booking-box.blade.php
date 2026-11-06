@@ -75,10 +75,10 @@
             <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
         </button>
         @else
-        <a href="/checkout?event={{ $event->slug }}"
+        <a href="/waiting-room?event={{ $event->slug }}"
            id="checkout-cta"
            wire:navigate
-           :href="selected ? '/checkout?event={{ $event->slug }}&category=' + selected : '/checkout?event={{ $event->slug }}'"
+           :href="selected ? '/waiting-room?event={{ $event->slug }}&category=' + selected : '/waiting-room?event={{ $event->slug }}'"
            class="mt-4 w-full flex items-center justify-center bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-semibold py-3.5 text-sm velo-box-1 shadow-sm transition">
             <span>Lanjut ke Formulir Pendaftaran</span>
             <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>

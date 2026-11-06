@@ -57,6 +57,11 @@ class CompleteRegistrationAction
                 $reg->save();
                 $quotaFull = true;
 
+                \App\Models\Reservation::where('user_id', $reg->user_id)
+                    ->where('event_category_id', $reg->event_category_id)
+                    ->where('status', \App\Models\Reservation::STATUS_HELD)
+                    ->update(['status' => \App\Models\Reservation::STATUS_RELEASED]);
+
                 return $reg;
             }
 
@@ -68,6 +73,11 @@ class CompleteRegistrationAction
             $reg->save();
 
             $category->increment('registered_count');
+
+            \App\Models\Reservation::where('user_id', $reg->user_id)
+                ->where('event_category_id', $reg->event_category_id)
+                ->where('status', \App\Models\Reservation::STATUS_HELD)
+                ->update(['status' => \App\Models\Reservation::STATUS_CONVERTED]);
 
             Ticket::issueFor($reg);
 
