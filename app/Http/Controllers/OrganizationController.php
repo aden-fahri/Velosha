@@ -46,3 +46,4 @@ class OrganizationController extends Controller
             ->with('status', 'Komunitas / Organisasi berhasil didaftarkan! Silakan buat event baru untuk komunitas Anda.');
     }
 }
+

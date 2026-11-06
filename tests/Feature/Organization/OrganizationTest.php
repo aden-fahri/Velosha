@@ -114,3 +114,4 @@ class OrganizationTest extends TestCase
         $this->assertTrue($resultsAdmin->contains($eventB->id));
     }
 }
+
