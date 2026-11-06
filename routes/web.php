@@ -96,4 +96,14 @@ Route::view('/helpdesk/analitik', 'pages.helpdesk.analytics')
     ->middleware(['auth', 'role:admin'])
     ->name('helpdesk.analytics');
 
+// 10. Pendaftaran Komunitas / Organisasi Penyelenggara (SaaS)
+Route::get('/organisasi/daftar', [App\Http\Controllers\OrganizationController::class, 'create'])
+    ->middleware('auth')
+    ->name('organizations.create');
+
+Route::post('/organisasi/daftar', [App\Http\Controllers\OrganizationController::class, 'store'])
+    ->middleware('auth')
+    ->name('organizations.store');
+
+
 

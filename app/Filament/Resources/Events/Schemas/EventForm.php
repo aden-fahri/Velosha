@@ -62,6 +62,21 @@ class EventForm
                     ->default(fn (): ?int => Auth::id())
                     ->visible(fn (): bool => (bool) Auth::user()?->isAdmin())
                     ->required(),
+                Select::make('organization_id')
+                    ->label('Komunitas / Organisasi')
+                    ->options(function () {
+                        $user = Auth::user();
+                        if (! $user) {
+                            return [];
+                        }
+                        if ($user->isAdmin()) {
+                            return \App\Models\Organization::pluck('name', 'id');
+                        }
+                        return $user->organizations()->pluck('organizations.name', 'organizations.id');
+                    })
+                    ->searchable()
+                    ->nullable()
+                    ->helperText('Pilih komunitas/organisasi penyelenggara race ini (opsional).'),
                 DatePicker::make('event_date')
                     ->label('Tanggal Race Day')
                     ->required(),

@@ -48,7 +48,13 @@ class EventResource extends Resource
         $user = Auth::user();
 
         if ($user instanceof User && ! $user->isAdmin()) {
-            $query->where('user_id', $user->id);
+            $orgIds = $user->organizations()->pluck('organizations.id');
+            $query->where(function (Builder $q) use ($user, $orgIds) {
+                $q->where('user_id', $user->id);
+                if ($orgIds->isNotEmpty()) {
+                    $q->orWhereIn('organization_id', $orgIds);
+                }
+            });
         }
 
         return $query;

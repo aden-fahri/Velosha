@@ -8,6 +8,7 @@ use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -153,6 +154,24 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
+     * Organisasi atau komunitas yang diikuti pengguna.
+     */
+    public function organizations(): BelongsToMany
+    {
+        return $this->belongsToMany(Organization::class, 'organization_members')
+            ->withPivot('role')
+            ->withTimestamps();
+    }
+
+    /**
+     * Organisasi yang dimiliki (role: owner) oleh pengguna.
+     */
+    public function ownedOrganizations(): BelongsToMany
+    {
+        return $this->organizations()->wherePivot('role', 'owner');
+    }
+
+    /**
      * Apakah role ini boleh membuka URL tersebut?
      * Dipakai untuk memvalidasi URL intended sebelum redirect pasca-login.
      */
@@ -165,7 +184,7 @@ class User extends Authenticatable implements FilamentUser
         $path = parse_url($url, PHP_URL_PATH) ?: '/';
 
         if (str_starts_with($path, '/admin')) {
-            return $this->isAdmin() || $this->isPenyelenggara();
+            return $this->isAdmin() || $this->isPenyelenggara() || $this->organizations()->exists();
         }
 
         if (str_starts_with($path, '/helpdesk')) {
@@ -197,6 +216,7 @@ class User extends Authenticatable implements FilamentUser
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return in_array($this->role, [self::ROLE_ADMIN, self::ROLE_PENYELENGGARA], true);
+        return in_array($this->role, [self::ROLE_ADMIN, self::ROLE_PENYELENGGARA], true)
+            || $this->organizations()->exists();
     }
 }
