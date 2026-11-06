@@ -105,5 +105,10 @@ Route::post('/organisasi/daftar', [App\Http\Controllers\OrganizationController::
     ->middleware('auth')
     ->name('organizations.store');
 
+// 11. Midtrans Webhook (Pembayaran Tiket Race & Kuota SaaS)
+Route::post('/payment/midtrans-webhook', [App\Http\Controllers\PaymentWebhookController::class, 'handle'])
+    ->name('payment.midtrans.webhook');
+
+
 
 

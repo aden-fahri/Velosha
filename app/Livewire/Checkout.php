@@ -305,13 +305,10 @@ class Checkout extends Component
     }
 
     /**
-     * Simulasi pembayaran (Midtrans asli menyusul pada Fase 4).
-     * Kunci baris kategori, cek kuota, terbitkan nomor BIB + tiket QR.
+     * Pembayaran tiket race (Midtrans Snap riil jika key diset di .env, atau auto-complete mock).
      */
     public function simulatePaid(): void
     {
-        abort_unless(config('payments.simulation'), 403);
-
         $key = 'checkout:'.(auth()->id() ?: request()->ip());
         if (RateLimiter::tooManyAttempts($key, 10)) {
             $this->error = 'Terlalu banyak permintaan. Coba lagi sebentar.';
@@ -338,11 +335,35 @@ class Checkout extends Component
             return;
         }
 
-        try {
-            $action = app(\App\Actions\CompleteRegistrationAction::class);
-            $registration = $action->execute($registration);
-        } catch (\RuntimeException $exception) {
-            $this->error = $exception->getMessage();
+        /** @var \App\Services\MidtransService $midtrans */
+        $midtrans = app(\App\Services\MidtransService::class);
+        $result = $midtrans->createSnapTransaction($registration, $this->total());
+
+        if ($result['is_mock']) {
+            // Mode simulasi/lokal tanpa Midtrans API Key di .env
+            try {
+                $action = app(\App\Actions\CompleteRegistrationAction::class);
+                $registration = $action->execute($registration);
+
+                if (isset($result['payment_id'])) {
+                    \App\Models\Payment::whereKey($result['payment_id'])->update([
+                        'status' => \App\Models\Payment::STATUS_SETTLEMENT,
+                        'paid_at' => now(),
+                    ]);
+                }
+            } catch (\RuntimeException $exception) {
+                $this->error = $exception->getMessage();
+
+                return;
+            }
+
+            $this->redirect('/ticket/'.$registration->id);
+
+            return;
+        }
+
+        if (! empty($result['redirect_url'])) {
+            $this->redirect($result['redirect_url']);
 
             return;
         }

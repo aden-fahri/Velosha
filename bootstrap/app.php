@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => Role::class,
         ]);
 
+        $middleware->validateCsrfTokens(except: [
+            'payment/midtrans-webhook',
+        ]);
+
         $middleware->redirectUsersTo(fn ($request) => $request->user()?->home() ?? '/');
     })
     ->withExceptions(function (Exceptions $exceptions): void {

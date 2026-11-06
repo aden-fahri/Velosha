@@ -61,6 +61,16 @@ class Registration extends Model
         return $this->hasOne(Ticket::class);
     }
 
+    public function payments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function latestPayment(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Payment::class)->latestOfMany();
+    }
+
     public function isPaid(): bool
     {
         $val = $this->status instanceof RegistrationStatus ? $this->status->value : $this->status;
