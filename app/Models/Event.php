@@ -59,14 +59,38 @@ class Event extends Model
 
         static::saving(function (Event $event): void {
             if ($event->organization_id && $event->status === self::STATUS_PUBLISHED) {
-                $wasAlreadyPublished = $event->exists && $event->getOriginal('status') === self::STATUS_PUBLISHED;
-                if (! $wasAlreadyPublished) {
+                $wasAlreadyPublishedForOrg = $event->exists
+                    && $event->getOriginal('status') === self::STATUS_PUBLISHED
+                    && (int) $event->getOriginal('organization_id') === (int) $event->organization_id;
+
+                if (! $wasAlreadyPublishedForOrg) {
                     $org = $event->organization ?? Organization::find($event->organization_id);
                     if ($org) {
-                        $deducted = $org->deductQuotaForEvent($event);
-                        if (! $deducted) {
+                        $currentlyDeducted = $event->exists && (int) $org->quotaLedger()
+                            ->where('event_id', $event->id)
+                            ->sum('delta') < 0;
+
+                        if (! $currentlyDeducted && ! $org->hasQuota()) {
                             throw new \DomainException('Kuota event organisasi Anda tidak mencukupi (0). Silakan beli paket kuota terlebih dahulu.');
                         }
+                    }
+                }
+            }
+        });
+
+        static::saved(function (Event $event): void {
+            if ($event->organization_id) {
+                $org = $event->organization ?? Organization::find($event->organization_id);
+                if (! $org) {
+                    return;
+                }
+
+                if ($event->status === self::STATUS_PUBLISHED) {
+                    $org->deductQuotaForEvent($event);
+                } elseif ($event->status === self::STATUS_CANCELLED) {
+                    $wasPublished = $event->getOriginal('status') === self::STATUS_PUBLISHED;
+                    if ($wasPublished) {
+                        $org->refundQuotaForEvent($event);
                     }
                 }
             }
@@ -100,6 +124,11 @@ class Event extends Model
     public function categories(): HasMany
     {
         return $this->hasMany(EventCategory::class);
+    }
+
+    public function registrations(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
+    {
+        return $this->hasManyThrough(Registration::class, EventCategory::class);
     }
 
     public function photos(): HasMany

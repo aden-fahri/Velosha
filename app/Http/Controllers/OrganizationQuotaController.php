@@ -50,7 +50,7 @@ class OrganizationQuotaController extends Controller
             'package_id' => ['required', 'exists:quota_packages,id'],
         ]);
 
-        $package = QuotaPackage::findOrFail($validated['package_id']);
+        $package = QuotaPackage::active()->findOrFail($validated['package_id']);
         $user = Auth::user();
         $orderId = 'VLS-QUOTA-' . $organization->id . '-' . time() . '-' . Str::upper(Str::random(4));
 
@@ -112,9 +112,15 @@ class OrganizationQuotaController extends Controller
                 }
             } else {
                 Log::error('Midtrans Quota Purchase Error: ' . $response->body());
+
+                return redirect()->route('organizations.quota', ['organization' => $organization->slug])
+                    ->with('error', 'Gagal memproses pembayaran Midtrans. Silakan coba beberapa saat lagi.');
             }
         } catch (\Throwable $e) {
             Log::error('Midtrans Quota Purchase Exception: ' . $e->getMessage());
+
+            return redirect()->route('organizations.quota', ['organization' => $organization->slug])
+                ->with('error', 'Terjadi kendala jaringan saat menghubungi gateway Midtrans.');
         }
 
         return redirect()->route('organizations.quota', ['organization' => $organization->slug])

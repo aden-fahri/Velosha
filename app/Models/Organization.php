@@ -63,16 +63,19 @@ class Organization extends Model
 
     /**
      * Potong 1 kuota saat event ditayangkan (published).
-     * Mencegah pemotongan ganda bila event sudah pernah dipotong kuotanya.
+     * Mencegah pemotongan ganda bila event sedang berstatus terpotong (net delta < 0).
      */
     public function deductQuotaForEvent(Event $event): bool
     {
-        $alreadyDeducted = $this->quotaLedger()
-            ->where('event_id', $event->id)
-            ->where('reason', 'publish_event')
-            ->exists();
+        if (! $event->id) {
+            return false;
+        }
 
-        if ($alreadyDeducted) {
+        $currentlyDeducted = (int) $this->quotaLedger()
+            ->where('event_id', $event->id)
+            ->sum('delta') < 0;
+
+        if ($currentlyDeducted) {
             return true;
         }
 
@@ -89,6 +92,43 @@ class Organization extends Model
         ]);
 
         return true;
+    }
+
+    /**
+     * Kembalikan kuota jika event dibatalkan sebelum ada tiket yang terjual (sesuai PRD §5.5).
+     */
+    public function refundQuotaForEvent(Event $event): bool
+    {
+        if (! $event->id) {
+            return false;
+        }
+
+        // Jika sudah ada tiket yang dibayar, kuota hangus (kewajiban refund ke peserta ada di EO)
+        $hasPaidTickets = $event->registrations()
+            ->whereIn('status', [Registration::STATUS_PAID, Registration::STATUS_CHECKED_IN])
+            ->exists();
+
+        if ($hasPaidTickets) {
+            return false;
+        }
+
+        $currentlyDeducted = (int) $this->quotaLedger()
+            ->where('event_id', $event->id)
+            ->sum('delta') < 0;
+
+        if ($currentlyDeducted) {
+            QuotaLedger::create([
+                'organization_id' => $this->id,
+                'delta' => 1,
+                'reason' => 'refund_event',
+                'event_id' => $event->id,
+                'created_at' => now(),
+            ]);
+
+            return true;
+        }
+
+        return false;
     }
 }
 

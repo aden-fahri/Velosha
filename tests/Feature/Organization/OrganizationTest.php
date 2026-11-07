@@ -62,6 +62,12 @@ class OrganizationTest extends TestCase
             'slug' => 'nusantara-gran-fondo',
         ]);
         $org->users()->attach($user->id, ['role' => 'owner']);
+        \App\Models\QuotaLedger::create([
+            'organization_id' => $org->id,
+            'delta' => 1,
+            'reason' => 'purchase',
+            'created_at' => now(),
+        ]);
 
         $event = Event::factory()->create([
             'user_id' => $user->id,
@@ -79,10 +85,22 @@ class OrganizationTest extends TestCase
         $userA = User::factory()->create(['role' => User::ROLE_PESERTA]);
         $orgA = Organization::create(['name' => 'Org A', 'slug' => 'org-a']);
         $orgA->users()->attach($userA->id, ['role' => 'owner']);
+        \App\Models\QuotaLedger::create([
+            'organization_id' => $orgA->id,
+            'delta' => 1,
+            'reason' => 'purchase',
+            'created_at' => now(),
+        ]);
 
         $userB = User::factory()->create(['role' => User::ROLE_PESERTA]);
         $orgB = Organization::create(['name' => 'Org B', 'slug' => 'org-b']);
         $orgB->users()->attach($userB->id, ['role' => 'owner']);
+        \App\Models\QuotaLedger::create([
+            'organization_id' => $orgB->id,
+            'delta' => 1,
+            'reason' => 'purchase',
+            'created_at' => now(),
+        ]);
 
         $eventA = Event::factory()->create([
             'user_id' => $userA->id,

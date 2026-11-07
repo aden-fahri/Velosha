@@ -57,6 +57,7 @@ class EventForm
                     ->label('Penyelenggara')
                     ->options(
                         User::whereIn('role', [User::ROLE_ADMIN, User::ROLE_PENYELENGGARA])
+                            ->orWhereHas('organizations')
                             ->pluck('name', 'id')
                     )
                     ->default(fn (): ?int => Auth::id())

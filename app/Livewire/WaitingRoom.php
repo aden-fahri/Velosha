@@ -154,8 +154,8 @@ class WaitingRoom extends Component
                     return;
                 }
 
-                // Masuk antrean baru
-                $myWaiting = Reservation::create([
+                // Masuk antrean baru (firstOrCreate mencegah duplikasi saat klik ganda)
+                $myWaiting = Reservation::firstOrCreate([
                     'user_id' => $userId,
                     'event_category_id' => $this->categoryId,
                     'status' => Reservation::STATUS_WAITING,
@@ -170,7 +170,7 @@ class WaitingRoom extends Component
         } else {
             // Semua slot sedang di-hold
             if (! $myWaiting) {
-                $myWaiting = Reservation::create([
+                $myWaiting = Reservation::firstOrCreate([
                     'user_id' => $userId,
                     'event_category_id' => $this->categoryId,
                     'status' => Reservation::STATUS_WAITING,

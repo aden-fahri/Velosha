@@ -99,7 +99,7 @@ class PaymentWebhookController extends Controller
 
                 \App\Models\Reservation::where('user_id', $payment->registration->user_id)
                     ->where('event_category_id', $payment->registration->event_category_id)
-                    ->where('status', \App\Models\Reservation::STATUS_HELD)
+                    ->whereIn('status', [\App\Models\Reservation::STATUS_HELD, \App\Models\Reservation::STATUS_WAITING])
                     ->update(['status' => \App\Models\Reservation::STATUS_RELEASED]);
             }
 

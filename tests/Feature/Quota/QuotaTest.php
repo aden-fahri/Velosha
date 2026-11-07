@@ -199,5 +199,184 @@ class QuotaTest extends TestCase
         ]);
         $buyResponse->assertStatus(403);
     }
+
+    public function test_event_created_directly_as_published_deducts_quota_with_valid_event_id(): void
+    {
+        [$organization, $user] = $this->createOrganizationWithMember();
+
+        QuotaLedger::create([
+            'organization_id' => $organization->id,
+            'delta' => 1,
+            'reason' => 'purchase',
+            'created_at' => now(),
+        ]);
+
+        $event = Event::factory()->create([
+            'user_id' => $user->id,
+            'organization_id' => $organization->id,
+            'status' => Event::STATUS_PUBLISHED,
+        ]);
+
+        $this->assertSame(0, $organization->quotaBalance());
+        $this->assertDatabaseHas('quota_ledger', [
+            'organization_id' => $organization->id,
+            'delta' => -1,
+            'reason' => 'publish_event',
+            'event_id' => $event->id,
+        ]);
+    }
+
+    public function test_cancelling_published_event_without_tickets_refunds_quota(): void
+    {
+        [$organization, $user] = $this->createOrganizationWithMember();
+
+        QuotaLedger::create([
+            'organization_id' => $organization->id,
+            'delta' => 1,
+            'reason' => 'purchase',
+            'created_at' => now(),
+        ]);
+
+        $event = Event::factory()->create([
+            'user_id' => $user->id,
+            'organization_id' => $organization->id,
+            'status' => Event::STATUS_PUBLISHED,
+        ]);
+
+        $this->assertSame(0, $organization->quotaBalance());
+
+        // Batalkan event yang belum ada penjualan tiket
+        $event->update(['status' => Event::STATUS_CANCELLED]);
+
+        // Kuota kembali ke organisasi!
+        $this->assertSame(1, $organization->quotaBalance());
+        $this->assertDatabaseHas('quota_ledger', [
+            'organization_id' => $organization->id,
+            'delta' => 1,
+            'reason' => 'refund_event',
+            'event_id' => $event->id,
+        ]);
+    }
+
+    public function test_cancelling_event_with_paid_tickets_does_not_refund_quota(): void
+    {
+        [$organization, $user] = $this->createOrganizationWithMember();
+
+        QuotaLedger::create([
+            'organization_id' => $organization->id,
+            'delta' => 1,
+            'reason' => 'purchase',
+            'created_at' => now(),
+        ]);
+
+        $event = Event::factory()->create([
+            'user_id' => $user->id,
+            'organization_id' => $organization->id,
+            'status' => Event::STATUS_PUBLISHED,
+        ]);
+
+        $category = \App\Models\EventCategory::create([
+            'event_id' => $event->id,
+            'name' => '100K Gran Fondo',
+            'code' => 'GF100',
+            'distance_km' => 100,
+            'elevation_gain_m' => 850,
+            'price' => 350000,
+            'quota' => 50,
+            'registered_count' => 1,
+            'wave_start_time' => '06:00',
+            'cut_off_hours' => 6.0,
+        ]);
+
+        \App\Models\Registration::create([
+            'event_category_id' => $category->id,
+            'user_id' => $user->id,
+            'participant_name' => 'John Doe',
+            'identity_number' => '3171010101010001',
+            'gender' => 'male',
+            'birth_date' => '1995-01-01',
+            'blood_type' => 'O',
+            'phone' => '081234567890',
+            'emergency_contact_name' => 'Jane Doe',
+            'emergency_contact_relation' => 'Keluarga',
+            'emergency_contact_phone' => '081234567891',
+            'status' => \App\Models\Registration::STATUS_PAID,
+            'bib_number' => 'GF-101',
+        ]);
+
+        $this->assertSame(0, $organization->quotaBalance());
+
+        // Batalkan event yang SUDAH ada tiket terjual
+        $event->update(['status' => Event::STATUS_CANCELLED]);
+
+        // Kuota tetap 0 (hangus, tidak di-refund)
+        $this->assertSame(0, $organization->quotaBalance());
+        $this->assertDatabaseMissing('quota_ledger', [
+            'organization_id' => $organization->id,
+            'reason' => 'refund_event',
+            'event_id' => $event->id,
+        ]);
+    }
+
+    public function test_republishing_cancelled_event_deducts_quota_again(): void
+    {
+        [$organization, $user] = $this->createOrganizationWithMember();
+
+        QuotaLedger::create([
+            'organization_id' => $organization->id,
+            'delta' => 1,
+            'reason' => 'purchase',
+            'created_at' => now(),
+        ]);
+
+        $event = Event::factory()->create([
+            'user_id' => $user->id,
+            'organization_id' => $organization->id,
+            'status' => Event::STATUS_PUBLISHED,
+        ]);
+
+        $this->assertSame(0, $organization->quotaBalance());
+
+        // Cancel
+        $event->update(['status' => Event::STATUS_CANCELLED]);
+        $this->assertSame(1, $organization->quotaBalance());
+
+        // Re-publish
+        $event->update(['status' => Event::STATUS_PUBLISHED]);
+        $this->assertSame(0, $organization->quotaBalance());
+
+        $this->assertSame(2, $organization->quotaLedger()->where('reason', 'publish_event')->count());
+        $this->assertSame(1, $organization->quotaLedger()->where('reason', 'refund_event')->count());
+    }
+
+    public function test_mark_as_paid_is_idempotent_and_prevents_duplicate_ledger(): void
+    {
+        [$organization, $user] = $this->createOrganizationWithMember();
+        $package = QuotaPackage::create([
+            'name' => 'Paket Pro (3 Event)',
+            'events_count' => 3,
+            'price' => 750000,
+            'is_active' => true,
+        ]);
+
+        $purchase = QuotaPurchase::create([
+            'organization_id' => $organization->id,
+            'quota_package_id' => $package->id,
+            'user_id' => $user->id,
+            'order_id' => 'VLS-QUOTA-TEST-DUP-1',
+            'amount' => $package->price,
+            'status' => QuotaPurchase::STATUS_PENDING,
+        ]);
+
+        // Panggilan pertama
+        $purchase->markAsPaid('midtrans', ['transaction_id' => 'tx-1']);
+        $this->assertSame(3, $organization->quotaBalance());
+
+        // Panggilan kedua (misal webhook ganda / replay)
+        $purchase->markAsPaid('midtrans', ['transaction_id' => 'tx-1']);
+        $this->assertSame(3, $organization->quotaBalance());
+
+        $this->assertSame(1, QuotaLedger::where('quota_purchase_id', $purchase->id)->count());
+    }
 }
 

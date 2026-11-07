@@ -71,20 +71,36 @@ class QuotaPurchase extends Model
         }
 
         DB::transaction(function () use ($paymentType, $payload) {
-            $this->update([
+            /** @var static|null $fresh */
+            $fresh = self::where('id', $this->id)->lockForUpdate()->first();
+            if (! $fresh || $fresh->isPaid()) {
+                return;
+            }
+
+            // Cegah pencatatan ganda ke ledger jika webhook terpicu berulang kali
+            $alreadyCredited = QuotaLedger::where('quota_purchase_id', $fresh->id)->exists();
+            if ($alreadyCredited) {
+                $fresh->update(['status' => self::STATUS_PAID]);
+                $this->status = self::STATUS_PAID;
+                return;
+            }
+
+            $fresh->update([
                 'status' => self::STATUS_PAID,
-                'payment_type' => $paymentType ?? $this->payment_type,
+                'payment_type' => $paymentType ?? $fresh->payment_type,
                 'paid_at' => now(),
-                'payload' => $payload ?: $this->payload,
+                'payload' => $payload ?: $fresh->payload,
             ]);
 
             QuotaLedger::create([
-                'organization_id' => $this->organization_id,
-                'delta' => (int) $this->package->events_count,
+                'organization_id' => $fresh->organization_id,
+                'delta' => (int) $fresh->package->events_count,
                 'reason' => 'purchase',
-                'quota_purchase_id' => $this->id,
+                'quota_purchase_id' => $fresh->id,
                 'created_at' => now(),
             ]);
+
+            $this->status = self::STATUS_PAID;
         });
     }
 }

@@ -4,12 +4,21 @@
 <div class="bg-velosurfacealt min-h-[calc(100vh-140px)] py-10">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
-        {{-- Notifikasi Status --}}
+        {{-- Notifikasi Status & Error --}}
         @if (session('status'))
         <div class="p-4 bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-semibold velo-box-1 flex items-center justify-between">
             <div class="flex items-center space-x-2">
                 <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 shrink-0"></i>
                 <span>{{ session('status') }}</span>
+            </div>
+        </div>
+        @endif
+
+        @if (session('error'))
+        <div class="p-4 bg-red-50 border border-red-300 text-red-800 text-xs font-semibold velo-box-1 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="alert-circle" class="w-4 h-4 text-red-600 shrink-0"></i>
+                <span>{{ session('error') }}</span>
             </div>
         </div>
         @endif
@@ -126,6 +135,10 @@
                                 @elseif ($item->reason === 'publish_event')
                                 <span class="inline-flex items-center px-2 py-0.5 velo-box-3 text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">
                                     Publish Event
+                                </span>
+                                @elseif ($item->reason === 'refund_event')
+                                <span class="inline-flex items-center px-2 py-0.5 velo-box-3 text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                                    Refund Pembatalan
                                 </span>
                                 @else
                                 <span class="inline-flex items-center px-2 py-0.5 velo-box-3 text-[10px] font-bold bg-gray-50 text-gray-800 border border-gray-200">
