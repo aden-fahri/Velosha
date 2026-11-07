@@ -76,7 +76,7 @@ class EventForm
                     })
                     ->searchable()
                     ->nullable()
-                    ->helperText('Pilih komunitas/organisasi penyelenggara race ini (opsional).'),
+                    ->helperText('Pilih komunitas/organisasi penyelenggara race ini (opsional). Menayangkan (publish) event memakai 1 kuota aktif.'),
                 DatePicker::make('event_date')
                     ->label('Tanggal Race Day')
                     ->required(),

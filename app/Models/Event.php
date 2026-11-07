@@ -56,6 +56,21 @@ class Event extends Model
         static::creating(function (Event $event): void {
             $event->slug = static::generateUniqueSlug($event->slug ?: $event->title);
         });
+
+        static::saving(function (Event $event): void {
+            if ($event->organization_id && $event->status === self::STATUS_PUBLISHED) {
+                $wasAlreadyPublished = $event->exists && $event->getOriginal('status') === self::STATUS_PUBLISHED;
+                if (! $wasAlreadyPublished) {
+                    $org = $event->organization ?? Organization::find($event->organization_id);
+                    if ($org) {
+                        $deducted = $org->deductQuotaForEvent($event);
+                        if (! $deducted) {
+                            throw new \DomainException('Kuota event organisasi Anda tidak mencukupi (0). Silakan beli paket kuota terlebih dahulu.');
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public static function generateUniqueSlug(string $source): string

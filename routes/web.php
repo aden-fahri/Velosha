@@ -113,6 +113,15 @@ Route::post('/organisasi/daftar', [App\Http\Controllers\OrganizationController::
     ->middleware('auth')
     ->name('organizations.store');
 
+// 10b. Manajemen Paket Kuota Event Penyelenggara (SaaS)
+Route::get('/organisasi/{organization:slug}/kuota', [App\Http\Controllers\OrganizationQuotaController::class, 'index'])
+    ->middleware('auth')
+    ->name('organizations.quota');
+
+Route::post('/organisasi/{organization:slug}/kuota/beli', [App\Http\Controllers\OrganizationQuotaController::class, 'purchase'])
+    ->middleware('auth')
+    ->name('organizations.quota.purchase');
+
 // 11. Midtrans Webhook (Pembayaran Tiket Race & Kuota SaaS)
 Route::post('/payment/midtrans-webhook', [App\Http\Controllers\PaymentWebhookController::class, 'handle'])
     ->name('payment.midtrans.webhook');

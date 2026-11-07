@@ -28,5 +28,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RuleContentSeeder::class);
         $this->call(HelpContentSeeder::class);
         $this->call(ReplyTemplateSeeder::class);
+        $this->call(QuotaPackageSeeder::class);
     }
 }

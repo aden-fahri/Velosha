@@ -39,7 +39,12 @@ class PaymentWebhookController extends Controller
             return response()->json(['message' => 'Security hash tidak valid.'], 403);
         }
 
-        // 2. Cari data Payment berdasarkan order_id
+        // 2. Cek apakah ini transaksi pembelian paket kuota organisasi
+        if (str_starts_with($orderId, 'VLS-QUOTA-')) {
+            return $this->handleQuotaPurchase($request, $orderId, $grossAmount, $transactionStatus, $fraudStatus);
+        }
+
+        // 3. Cari data Payment berdasarkan order_id
         $payment = Payment::where('order_id', $orderId)->first();
 
         if (! $payment) {
@@ -102,6 +107,41 @@ class PaymentWebhookController extends Controller
         }
 
         return response()->json(['status' => 'OK', 'message' => 'Webhook berhasil diproses.'], 200);
+    }
+
+    /**
+     * Tangani notifikasi pembayaran paket kuota event organisasi.
+     */
+    protected function handleQuotaPurchase(Request $request, string $orderId, string $grossAmount, string $transactionStatus, string $fraudStatus): JsonResponse
+    {
+        $purchase = \App\Models\QuotaPurchase::where('order_id', $orderId)->first();
+
+        if (! $purchase) {
+            Log::warning("Midtrans Webhook: Quota Purchase {$orderId} tidak ditemukan.");
+            return response()->json(['message' => 'Pesanan kuota tidak ditemukan.'], 404);
+        }
+
+        if (! empty($grossAmount) && (int) (float) $grossAmount !== (int) $purchase->amount) {
+            Log::warning("Midtrans Webhook: Jumlah bayar kuota tidak cocok untuk {$orderId}. Terdaftar: {$purchase->amount}, Diterima: {$grossAmount}");
+            return response()->json(['message' => 'Gross amount tidak sesuai pesanan kuota.'], 400);
+        }
+
+        if ($purchase->isPaid()) {
+            return response()->json(['message' => 'Pembayaran kuota sudah lunas sebelumnya.'], 200);
+        }
+
+        if ($transactionStatus === 'settlement' || ($transactionStatus === 'capture' && $fraudStatus === 'accept')) {
+            $purchase->markAsPaid($request->input('payment_type', 'midtrans'), $request->all());
+            Log::info("Midtrans Webhook: Pembelian kuota sukses untuk order {$orderId}");
+        } elseif (in_array($transactionStatus, ['expire', 'cancel', 'deny'], true)) {
+            $purchase->update([
+                'status' => $transactionStatus === 'expire' ? \App\Models\QuotaPurchase::STATUS_EXPIRE : \App\Models\QuotaPurchase::STATUS_CANCELLED,
+                'payload' => $request->all(),
+            ]);
+            Log::info("Midtrans Webhook: Pembelian kuota {$transactionStatus} untuk order {$orderId}");
+        }
+
+        return response()->json(['status' => 'OK', 'message' => 'Webhook kuota berhasil diproses.'], 200);
     }
 }
 
