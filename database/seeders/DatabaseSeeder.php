@@ -18,9 +18,12 @@ class DatabaseSeeder extends Seeder
             $this->call(DemoUserSeeder::class);
             $this->call(DemoPesertaSeeder::class);
             $this->call(DemoHelpdeskSeeder::class);
+            $this->call(QuotaPackageSeeder::class);
+            $this->call(OrganizationSeeder::class);
             $this->call(EventSeeder::class);
             $this->call(ExtraEventSeeder::class);
             $this->call(RegistrationSeeder::class);
+            $this->call(FinanceSeeder::class);
         } else {
             $this->call(ProductionAdminSeeder::class);
         }

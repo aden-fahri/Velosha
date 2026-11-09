@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Event;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
@@ -29,7 +30,10 @@ class EventSeeder extends Seeder
             ?? User::where('role', User::ROLE_PENYELENGGARA)->first()
             ?? User::firstOrFail();
 
+        $owner2 = User::where('email', 'penyelenggara2@velosha.id')->first() ?? $owner;
         $admin = User::where('email', 'admin@velosha.id')->first() ?? $owner;
+        $bromoOrg = Organization::where('slug', 'bromo-cycling-club')->first();
+        $gravelOrg = Organization::where('slug', 'nusantara-gravel-explorers')->first();
 
         $this->ensureDemoPhotos();
 
@@ -108,6 +112,32 @@ class EventSeeder extends Seeder
                     ['name' => 'Medio Fondo', 'code' => 'MF', 'distance_km' => 65.00, 'elevation_gain_m' => 520.00, 'price' => 320000.00, 'quota' => 300, 'registered_count' => 74, 'wave_start_time' => 'Wave 2 - 06:30 WIB', 'cut_off_hours' => 4.50],
                 ],
             ],
+            [
+                'title' => 'Bromo Sunset Criterium 2026',
+                'location_name' => 'Pasuruan, Jawa Timur',
+                'event_date' => '2026-12-20',
+                'type' => Event::TYPE_FUN_RIDE,
+                'user_id' => $owner->id,
+                'organization_id' => $bromoOrg?->id,
+                'status' => Event::STATUS_SUBMITTED,
+                'description' => 'Balapan sirkuit jalan raya lingkar kota menjelang senja dengan pemandangan pegunungan Bromo.',
+                'categories' => [
+                    ['name' => 'Open Men Criterium', 'code' => 'CRIT-M', 'distance_km' => 30.00, 'elevation_gain_m' => 150.00, 'price' => 250000.00, 'quota' => 100, 'registered_count' => 0, 'wave_start_time' => '16:00 WIB', 'cut_off_hours' => 1.50],
+                ],
+            ],
+            [
+                'title' => 'Jawa Timur Gravel Epic 2026',
+                'location_name' => 'Batu, Jawa Timur',
+                'event_date' => '2027-02-14',
+                'type' => Event::TYPE_CLIMB,
+                'user_id' => $owner2->id,
+                'organization_id' => $gravelOrg?->id,
+                'status' => Event::STATUS_DRAFT,
+                'description' => 'Draf event penjelajahan rute perkebunan apel dan jalur bebatuan lereng Gunung Panderman.',
+                'categories' => [
+                    ['name' => 'Epic Gravel 100K', 'code' => 'GRV-100', 'distance_km' => 100.00, 'elevation_gain_m' => 1800.00, 'price' => 350000.00, 'quota' => 200, 'registered_count' => 0, 'wave_start_time' => '06:00 WIB', 'cut_off_hours' => 6.00],
+                ],
+            ],
         ];
 
         foreach ($events as $index => $data) {
@@ -120,9 +150,16 @@ class EventSeeder extends Seeder
             $categories = $data['categories'];
             unset($data['categories']);
 
+            $status = $data['status'] ?? Event::STATUS_PUBLISHED;
+            unset($data['status']);
+
+            $orgId = $data['organization_id'] ?? $bromoOrg?->id;
+            unset($data['organization_id']);
+
             $event = Event::create($data + [
                 'slug' => $slug,
-                'status' => Event::STATUS_PUBLISHED,
+                'organization_id' => $orgId,
+                'status' => $status,
                 'start_time' => '05:45:00',
                 'youtube_video_id' => null,
                 'gpx_file_path' => null,

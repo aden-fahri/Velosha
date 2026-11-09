@@ -20,9 +20,27 @@ class DemoUserSeeder extends Seeder
                 'role' => User::ROLE_ADMIN,
             ],
             [
-                'name' => 'Race Director',
+                'name' => 'Race Director Bromo',
                 'email' => 'penyelenggara@velosha.id',
                 'phone' => '081100000002',
+                'role' => User::ROLE_PENYELENGGARA,
+            ],
+            [
+                'name' => 'Bambang Manager',
+                'email' => 'manager@velosha.id',
+                'phone' => '081100000005',
+                'role' => User::ROLE_PENYELENGGARA,
+            ],
+            [
+                'name' => 'Siti Lapangan',
+                'email' => 'staf@velosha.id',
+                'phone' => '081100000006',
+                'role' => User::ROLE_PENYELENGGARA,
+            ],
+            [
+                'name' => 'Andi Gravel',
+                'email' => 'penyelenggara2@velosha.id',
+                'phone' => '081100000007',
                 'role' => User::ROLE_PENYELENGGARA,
             ],
             [

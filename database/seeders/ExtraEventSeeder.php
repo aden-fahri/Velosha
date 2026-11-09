@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Event;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
@@ -33,6 +34,8 @@ class ExtraEventSeeder extends Seeder
         $owner = User::where('email', 'penyelenggara@velosha.id')->first()
             ?? User::where('role', User::ROLE_PENYELENGGARA)->first()
             ?? User::firstOrFail();
+
+        $bromoOrg = Organization::where('slug', 'bromo-cycling-club')->first();
 
         $this->ensureDemoPhotos();
 
@@ -100,6 +103,7 @@ class ExtraEventSeeder extends Seeder
 
             $event = Event::create($data + [
                 'slug' => $slug,
+                'organization_id' => $bromoOrg?->id,
                 'status' => Event::STATUS_PUBLISHED,
                 'start_time' => '05:45:00',
                 'youtube_video_id' => null,
