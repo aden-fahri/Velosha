@@ -87,8 +87,8 @@ class EventForm
                         return $user->organizations()->pluck('organizations.name', 'organizations.id');
                     })
                     ->searchable()
-                    ->nullable()
-                    ->helperText('Pilih komunitas/organisasi penyelenggara race ini (opsional). Menayangkan (publish) event memakai 1 kuota aktif.'),
+                    ->required(fn (): bool => ! (bool) Auth::user()?->isAdmin())
+                    ->helperText('Pilih komunitas/organisasi penyelenggara race ini. Menayangkan (publish) event memakai 1 kuota aktif.'),
                 DatePicker::make('event_date')
                     ->label('Tanggal Race Day')
                     ->required(),

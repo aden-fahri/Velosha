@@ -66,6 +66,10 @@ class Event extends Model
         });
 
         static::saving(function (Event $event): void {
+            if (! $event->organization_id && \Illuminate\Support\Facades\Auth::check() && ! \Illuminate\Support\Facades\Auth::user()->isAdmin()) {
+                throw new \DomainException('Penyelenggara wajib memilih komunitas / organisasi untuk event ini.');
+            }
+
             if ($event->organization_id) {
                 $org = $event->organization ?? Organization::find($event->organization_id);
                 if ($org) {

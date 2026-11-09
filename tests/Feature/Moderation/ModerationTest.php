@@ -260,5 +260,21 @@ class ModerationTest extends TestCase
         $this->get(route('events.show', ['slug' => $rejected->slug]))
             ->assertStatus(404);
     }
+
+    public function test_non_admin_organizer_cannot_create_event_without_organization(): void
+    {
+        $user = User::factory()->create(['role' => User::ROLE_PENYELENGGARA]);
+
+        $this->actingAs($user);
+
+        $this->expectException(\DomainException::class);
+        $this->expectExceptionMessage('Penyelenggara wajib memilih komunitas / organisasi untuk event ini.');
+
+        Event::factory()->create([
+            'user_id' => $user->id,
+            'organization_id' => null,
+            'status' => Event::STATUS_DRAFT,
+        ]);
+    }
 }
 
