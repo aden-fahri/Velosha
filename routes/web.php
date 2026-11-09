@@ -109,11 +109,29 @@ Route::get('/organisasi/daftar', [App\Http\Controllers\OrganizationController::c
     ->middleware('auth')
     ->name('organizations.create');
 
+Route::get('/organisasi/daftar-eo', fn () => redirect()->route('organizations.create'))
+    ->name('organizer.register');
+
 Route::post('/organisasi/daftar', [App\Http\Controllers\OrganizationController::class, 'store'])
     ->middleware('auth')
     ->name('organizations.store');
 
+Route::get('/organisasi/dasbor', function () {
+    $user = auth()->user();
+    $org = $user?->organizations()->first() ?? $user?->ownedOrganizations()->first();
+    if ($org) {
+        return redirect()->route('organizations.finance', $org);
+    }
+    return redirect()->route('organizations.create')->with('info', 'Silakan daftarkan komunitas atau EO Anda terlebih dahulu.');
+})->middleware('auth')->name('organizer.dashboard');
+
 // 10b. Manajemen Paket Kuota Event Penyelenggara (SaaS)
+Route::get('/paket', [App\Http\Controllers\OrganizationQuotaController::class, 'publicPackages'])
+    ->name('packages.index');
+
+Route::get('/paket-kuota', fn () => redirect()->route('packages.index'))
+    ->name('organizer.packages');
+
 Route::get('/organisasi/{organization:slug}/kuota', [App\Http\Controllers\OrganizationQuotaController::class, 'index'])
     ->middleware('auth')
     ->name('organizations.quota');

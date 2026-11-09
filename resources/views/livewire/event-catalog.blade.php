@@ -463,14 +463,20 @@
 
                             <!-- Buttons (Daftar & Lihat Paket) -->
                             <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;">
-                                <a href="/help" wire:navigate
+                                @php
+                                    $currentUser = auth()->user();
+                                    $userOrg = $currentUser?->organizations()->first() ?? $currentUser?->ownedOrganizations()->first();
+                                    $targetDaftar = $userOrg ? route('organizations.finance', $userOrg) : route('organizations.create');
+                                    $targetPaket = $userOrg ? route('organizations.quota', $userOrg) : route('packages.index');
+                                @endphp
+                                <a href="{{ $targetDaftar }}" wire:navigate
                                    style="display: inline-flex; align-items: center; gap: 7px; background-color: #10282E; color: #FFFDF8; border: 2px solid #10282E; border-radius: 10px; box-shadow: 2.5px 2.5px 0 rgba(16,40,46,0.35); padding: 11px 18px; font-weight: 800; font-size: 13px; text-decoration: none;"
                                    class="hover:translate-x-[-1px] hover:translate-y-[-1px] hover:bg-[#1F6F4A] transition-all">
-                                    <span>Daftar jadi penyelenggara</span>
+                                    <span>{{ $userOrg ? 'Buka Dasbor EO' : 'Daftar jadi penyelenggara' }}</span>
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                                 </a>
 
-                                <a href="/help" wire:navigate
+                                <a href="{{ $targetPaket }}" wire:navigate
                                    style="display: inline-flex; align-items: center; gap: 5px; background-color: #FFFDF8; color: #10282E; border: 2px solid #10282E; border-radius: 10px; box-shadow: 2.5px 2.5px 0 #10282E; padding: 11px 16px; font-weight: 800; font-size: 13px; text-decoration: none;"
                                    class="hover:translate-x-[-1px] hover:translate-y-[-1px] hover:bg-[#FBF4E6] transition-all">
                                     <span>Lihat paket & harga</span>
@@ -482,8 +488,9 @@
                         <div style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; min-height: 260px; width: 100%;">
                             
                             <!-- Floating Stat Card (Dashboard Penyelenggara) di Kanan Atas Pesepeda -->
-                            <div style="position: absolute; top: -6px; right: 0; background: #FFFDF8; border: 2.5px solid #10282E; border-radius: 12px; box-shadow: 3px 3px 0 #10282E; padding: 8px 12px; z-index: 20; min-width: 150px;"
-                                 class="hidden sm:block">
+                            <a href="{{ $targetDaftar }}" wire:navigate
+                               style="position: absolute; top: -6px; right: 0; background: #FFFDF8; border: 2.5px solid #10282E; border-radius: 12px; box-shadow: 3px 3px 0 #10282E; padding: 8px 12px; z-index: 20; min-width: 150px; text-decoration: none; color: inherit;"
+                               class="hidden sm:block hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all">
                                 <div style="font-size: 8.5px; font-weight: 900; letter-spacing: 0.05em; color: #56666A; text-transform: uppercase;">
                                     DASHBOARD PENYELENGGARA
                                 </div>
@@ -501,7 +508,7 @@
                                     <div style="width: 6px; height: 11px; background: #1F6F4A; border-radius: 1px;"></div>
                                     <div style="width: 6px; height: 14px; background: #1F6F4A; border-radius: 1px;"></div>
                                 </div>
-                            </div>
+                            </a>
 
                             <!-- Pesepeda Gambar No 2 (Clean WebP Cutout) Berdiri di Sisi Kanan -->
                             <div style="width: 100%; max-width: 270px; height: 260px; display: flex; align-items: flex-end; justify-content: center; z-index: 10;">

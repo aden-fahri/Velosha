@@ -17,6 +17,26 @@ use Illuminate\View\View;
 class OrganizationQuotaController extends Controller
 {
     /**
+     * Halaman publik katalog paket kuota & harga SaaS.
+     */
+    public function publicPackages(): View|RedirectResponse
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $org = $user->organizations()->first() ?? $user->ownedOrganizations()->first();
+            if ($org) {
+                return redirect()->route('organizations.quota', $org);
+            }
+        }
+
+        $packages = QuotaPackage::active()->orderBy('price')->get();
+
+        return view('pages.packages', [
+            'packages' => $packages,
+        ]);
+    }
+
+    /**
      * Tampilkan saldo kuota, daftar paket, dan riwayat mutasi organisasi.
      */
     public function index(Organization $organization): View
