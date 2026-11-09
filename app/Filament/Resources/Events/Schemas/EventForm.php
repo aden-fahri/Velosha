@@ -9,6 +9,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Schemas\Schema;
@@ -45,14 +46,24 @@ class EventForm
                     ->required(),
                 Select::make('status')
                     ->label('Status')
-                    ->options([
-                        Event::STATUS_DRAFT => 'Draft',
-                        Event::STATUS_PUBLISHED => 'Published',
-                        Event::STATUS_COMPLETED => 'Selesai',
-                        Event::STATUS_CANCELLED => 'Dibatalkan',
-                    ])
+                    ->options(function () {
+                        $user = Auth::user();
+                        if ($user?->isAdmin()) {
+                            return \App\Enums\EventStatus::options();
+                        }
+
+                        return [
+                            Event::STATUS_DRAFT => 'Draft',
+                            Event::STATUS_SUBMITTED => 'Ajukan untuk Moderasi (Submitted)',
+                        ];
+                    })
                     ->default(Event::STATUS_DRAFT)
                     ->required(),
+                Textarea::make('rejection_note')
+                    ->label('Catatan Penolakan Moderasi')
+                    ->helperText('Alasan penolakan dari tim admin Velosha. Perbaiki poin-poin di atas lalu simpan & ajukan kembali.')
+                    ->disabled()
+                    ->visible(fn (?Event $record): bool => ! empty($record?->rejection_note)),
                 Select::make('user_id')
                     ->label('Penyelenggara')
                     ->options(

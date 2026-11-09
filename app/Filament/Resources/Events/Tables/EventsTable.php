@@ -3,11 +3,15 @@
 namespace App\Filament\Resources\Events\Tables;
 
 use App\Models\Event;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\Textarea;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,6 +28,11 @@ class EventsTable
                     ->searchable()
                     ->sortable()
                     ->limit(40),
+                TextColumn::make('organization.name')
+                    ->label('Komunitas')
+                    ->limit(20)
+                    ->placeholder('Independen')
+                    ->sortable(),
                 TextColumn::make('type')
                     ->label('Tipe')
                     ->badge()
@@ -44,15 +53,19 @@ class EventsTable
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         Event::STATUS_PUBLISHED => 'Published',
+                        Event::STATUS_SUBMITTED => 'Menunggu Moderasi',
+                        Event::STATUS_REJECTED => 'Ditolak',
                         Event::STATUS_COMPLETED => 'Selesai',
                         Event::STATUS_CANCELLED => 'Dibatalkan',
                         default => 'Draft',
                     })
                     ->color(fn (string $state): string => match ($state) {
                         Event::STATUS_PUBLISHED => 'success',
+                        Event::STATUS_SUBMITTED => 'warning',
+                        Event::STATUS_REJECTED => 'danger',
                         Event::STATUS_COMPLETED => 'info',
                         Event::STATUS_CANCELLED => 'danger',
-                        default => 'warning',
+                        default => 'gray',
                     }),
                 TextColumn::make('event_date')
                     ->label('Tanggal')
@@ -71,9 +84,73 @@ class EventsTable
                         : 'Rp '.number_format($record->lowestPrice, 0, ',', '.')),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->label('Status Event')
+                    ->options(\App\Enums\EventStatus::options()),
             ])
             ->recordActions([
+                Action::make('approve')
+                    ->label('Setujui')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->visible(fn (Event $record): bool => Auth::user()?->isAdmin() && $record->status === Event::STATUS_SUBMITTED)
+                    ->requiresConfirmation()
+                    ->modalHeading('Setujui & Publikasikan Race')
+                    ->modalDescription('Event ini akan resmi dipublikasikan ke peserta dan 1 kuota organisasi akan terpotong secara otomatis.')
+                    ->action(function (Event $record) {
+                        try {
+                            $record->approve(Auth::user());
+                            Notification::make()
+                                ->title('Event disetujui & dipublikasikan!')
+                                ->success()
+                                ->send();
+                        } catch (\DomainException $e) {
+                            Notification::make()
+                                ->title($e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
+                    }),
+                Action::make('reject')
+                    ->label('Tolak')
+                    ->icon('heroicon-o-x-circle')
+                    ->color('danger')
+                    ->visible(fn (Event $record): bool => Auth::user()?->isAdmin() && $record->status === Event::STATUS_SUBMITTED)
+                    ->form([
+                        Textarea::make('rejection_note')
+                            ->label('Alasan Penolakan')
+                            ->placeholder('Tuliskan poin-poin yang perlu diperbaiki...')
+                            ->required(),
+                    ])
+                    ->action(function (Event $record, array $data) {
+                        $record->reject(Auth::user(), $data['rejection_note']);
+                        Notification::make()
+                            ->title('Event ditolak.')
+                            ->warning()
+                            ->send();
+                    }),
+                Action::make('submitReview')
+                    ->label('Ajukan Moderasi')
+                    ->icon('heroicon-o-paper-airplane')
+                    ->color('warning')
+                    ->visible(fn (Event $record): bool => in_array($record->status, [Event::STATUS_DRAFT, Event::STATUS_REJECTED], true))
+                    ->requiresConfirmation()
+                    ->modalHeading('Ajukan Event untuk Ditinjau')
+                    ->modalDescription('Event akan dikirim ke tim admin Velosha untuk diverifikasi sebelum dipublikasikan.')
+                    ->action(function (Event $record) {
+                        try {
+                            $record->submitForReview();
+                            Notification::make()
+                                ->title('Event berhasil diajukan untuk moderasi.')
+                                ->info()
+                                ->send();
+                        } catch (\DomainException $e) {
+                            Notification::make()
+                                ->title($e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
+                    }),
                 EditAction::make(),
                 DeleteAction::make()
                     ->visible($isAdmin),

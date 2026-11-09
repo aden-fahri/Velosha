@@ -122,6 +122,19 @@ Route::post('/organisasi/{organization:slug}/kuota/beli', [App\Http\Controllers\
     ->middleware('auth')
     ->name('organizations.quota.purchase');
 
+// 10c. Verifikasi Penyelenggara & Dokumen Legalitas (SaaS)
+Route::get('/organisasi/{organization:slug}/verifikasi', [App\Http\Controllers\OrganizationController::class, 'verification'])
+    ->middleware('auth')
+    ->name('organizations.verification');
+
+Route::post('/organisasi/{organization:slug}/verifikasi', [App\Http\Controllers\OrganizationController::class, 'submitVerification'])
+    ->middleware('auth')
+    ->name('organizations.verification.submit');
+
+Route::get('/organisasi/{organization:slug}/dokumen-verifikasi', [App\Http\Controllers\OrganizationController::class, 'downloadDocument'])
+    ->middleware('auth')
+    ->name('organizations.document.download');
+
 // 11. Midtrans Webhook (Pembayaran Tiket Race & Kuota SaaS)
 Route::post('/payment/midtrans-webhook', [App\Http\Controllers\PaymentWebhookController::class, 'handle'])
     ->name('payment.midtrans.webhook');

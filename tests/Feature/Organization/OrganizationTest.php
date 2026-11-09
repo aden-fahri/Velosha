@@ -31,7 +31,7 @@ class OrganizationTest extends TestCase
             'description' => 'Komunitas gowes tanjakan Bromo',
         ]);
 
-        $response->assertRedirect('/admin/events/create');
+        $response->assertRedirect(route('organizations.verification', ['organization' => 'bromo-cycling-club']));
         $response->assertSessionHas('status');
 
         $this->assertDatabaseHas('organizations', [
@@ -60,6 +60,7 @@ class OrganizationTest extends TestCase
         $org = Organization::create([
             'name' => 'Nusantara Gran Fondo',
             'slug' => 'nusantara-gran-fondo',
+            'verification_status' => Organization::VERIFICATION_VERIFIED,
         ]);
         $org->users()->attach($user->id, ['role' => 'owner']);
         \App\Models\QuotaLedger::create([
@@ -83,7 +84,11 @@ class OrganizationTest extends TestCase
     public function test_organizer_query_scoped_to_their_organization_events(): void
     {
         $userA = User::factory()->create(['role' => User::ROLE_PESERTA]);
-        $orgA = Organization::create(['name' => 'Org A', 'slug' => 'org-a']);
+        $orgA = Organization::create([
+            'name' => 'Org A',
+            'slug' => 'org-a',
+            'verification_status' => Organization::VERIFICATION_VERIFIED,
+        ]);
         $orgA->users()->attach($userA->id, ['role' => 'owner']);
         \App\Models\QuotaLedger::create([
             'organization_id' => $orgA->id,
@@ -93,7 +98,11 @@ class OrganizationTest extends TestCase
         ]);
 
         $userB = User::factory()->create(['role' => User::ROLE_PESERTA]);
-        $orgB = Organization::create(['name' => 'Org B', 'slug' => 'org-b']);
+        $orgB = Organization::create([
+            'name' => 'Org B',
+            'slug' => 'org-b',
+            'verification_status' => Organization::VERIFICATION_VERIFIED,
+        ]);
         $orgB->users()->attach($userB->id, ['role' => 'owner']);
         \App\Models\QuotaLedger::create([
             'organization_id' => $orgB->id,

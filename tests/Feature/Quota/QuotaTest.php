@@ -22,6 +22,7 @@ class QuotaTest extends TestCase
             'name' => 'Brompton Bandung Club',
             'slug' => 'brompton-bandung-club',
             'description' => 'Komunitas sepeda lipat Bandung.',
+            'verification_status' => Organization::VERIFICATION_VERIFIED,
         ]);
 
         $organization->users()->attach($user->id, ['role' => 'owner']);

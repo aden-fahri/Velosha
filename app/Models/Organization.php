@@ -11,12 +11,75 @@ class Organization extends Model
 {
     use HasFactory;
 
+    public const VERIFICATION_UNVERIFIED = 'unverified';
+    public const VERIFICATION_PENDING = 'pending';
+    public const VERIFICATION_VERIFIED = 'verified';
+    public const VERIFICATION_REJECTED = 'rejected';
+
     protected $fillable = [
         'name',
         'slug',
         'description',
         'logo_path',
+        'verification_status',
+        'verification_document_path',
+        'verified_at',
+        'verified_by',
+        'rejection_note',
     ];
+
+    protected $casts = [
+        'verified_at' => 'datetime',
+    ];
+
+    public function verifier(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->verification_status === self::VERIFICATION_VERIFIED;
+    }
+
+    public function isPendingVerification(): bool
+    {
+        return $this->verification_status === self::VERIFICATION_PENDING;
+    }
+
+    public function isRejectedVerification(): bool
+    {
+        return $this->verification_status === self::VERIFICATION_REJECTED;
+    }
+
+    public function submitVerification(string $documentPath): void
+    {
+        $this->update([
+            'verification_status' => self::VERIFICATION_PENDING,
+            'verification_document_path' => $documentPath,
+            'rejection_note' => null,
+        ]);
+    }
+
+    public function approveVerification(User $admin): void
+    {
+        $this->update([
+            'verification_status' => self::VERIFICATION_VERIFIED,
+            'verified_at' => now(),
+            'verified_by' => $admin->id,
+            'rejection_note' => null,
+        ]);
+    }
+
+    public function rejectVerification(User $admin, string $note): void
+    {
+        $this->update([
+            'verification_status' => self::VERIFICATION_REJECTED,
+            'verified_at' => null,
+            'verified_by' => $admin->id,
+            'rejection_note' => $note,
+        ]);
+    }
 
     public function members(): HasMany
     {
