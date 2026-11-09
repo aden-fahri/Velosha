@@ -135,6 +135,19 @@ Route::get('/organisasi/{organization:slug}/dokumen-verifikasi', [App\Http\Contr
     ->middleware('auth')
     ->name('organizations.document.download');
 
+// 10d. Keuangan Penyelenggara & Pencairan Dana / Payout (SaaS)
+Route::get('/organisasi/{organization:slug}/keuangan', [App\Http\Controllers\OrganizationFinanceController::class, 'index'])
+    ->middleware('auth')
+    ->name('organizations.finance');
+
+Route::post('/organisasi/{organization:slug}/keuangan/rekening', [App\Http\Controllers\OrganizationFinanceController::class, 'storeAccount'])
+    ->middleware('auth')
+    ->name('organizations.finance.account.store');
+
+Route::post('/organisasi/{organization:slug}/keuangan/payout', [App\Http\Controllers\OrganizationFinanceController::class, 'requestPayout'])
+    ->middleware('auth')
+    ->name('organizations.finance.payout');
+
 // 11. Midtrans Webhook (Pembayaran Tiket Race & Kuota SaaS)
 Route::post('/payment/midtrans-webhook', [App\Http\Controllers\PaymentWebhookController::class, 'handle'])
     ->name('payment.midtrans.webhook');

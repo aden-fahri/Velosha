@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Organization extends Model
 {
@@ -106,6 +107,76 @@ class Organization extends Model
     public function quotaLedger(): HasMany
     {
         return $this->hasMany(QuotaLedger::class);
+    }
+
+    public function payoutAccounts(): HasMany
+    {
+        return $this->hasMany(PayoutAccount::class);
+    }
+
+    public function primaryPayoutAccount(): HasOne
+    {
+        return $this->hasOne(PayoutAccount::class)->where('is_primary', true);
+    }
+
+    public function financialLedger(): HasMany
+    {
+        return $this->hasMany(FinancialLedger::class);
+    }
+
+    public function payoutRequests(): HasMany
+    {
+        return $this->hasMany(PayoutRequest::class);
+    }
+
+    /**
+     * Hitung saldo kas aktif organisasi dari akumulasi kredit & debet ledger.
+     */
+    public function financialBalance(): int
+    {
+        return (int) ($this->financialLedger()
+            ->selectRaw("SUM(CASE WHEN direction = 'credit' THEN amount ELSE -amount END) as total")
+            ->value('total') ?? 0);
+    }
+
+    /**
+     * Total dana pada pengajuan penarikan yang masih berstatus pending.
+     */
+    public function pendingPayoutAmount(): int
+    {
+        return (int) $this->payoutRequests()
+            ->where('status', PayoutRequest::STATUS_PENDING)
+            ->sum('amount');
+    }
+
+    /**
+     * Saldo kas bersih yang siap dicairkan (setelah dikurangi pengajuan pending).
+     */
+    public function availablePayoutBalance(): int
+    {
+        return max(0, $this->financialBalance() - $this->pendingPayoutAmount());
+    }
+
+    /**
+     * Akumulasi total penjualan tiket kotor (gross sales).
+     */
+    public function totalGrossSales(): int
+    {
+        return (int) $this->financialLedger()
+            ->where('type', FinancialLedger::TYPE_TICKET_SALE)
+            ->where('direction', FinancialLedger::DIRECTION_CREDIT)
+            ->sum('amount');
+    }
+
+    /**
+     * Akumulasi total dana yang sudah berhasil ditransfer/dicairkan.
+     */
+    public function totalPaidOut(): int
+    {
+        return (int) $this->financialLedger()
+            ->where('type', FinancialLedger::TYPE_PAYOUT)
+            ->where('direction', FinancialLedger::DIRECTION_DEBIT)
+            ->sum('amount');
     }
 
     /**

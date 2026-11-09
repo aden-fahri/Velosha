@@ -81,6 +81,27 @@ class CompleteRegistrationAction
 
             Ticket::issueFor($reg);
 
+            // Catat kredit hasil penjualan tiket ke buku kas (financial ledger) organisasi
+            $event = $category->event;
+            if ($event && $event->organization_id) {
+                $alreadyRecorded = \App\Models\FinancialLedger::where('registration_id', $reg->id)
+                    ->where('type', \App\Models\FinancialLedger::TYPE_TICKET_SALE)
+                    ->exists();
+
+                if (! $alreadyRecorded) {
+                    \App\Models\FinancialLedger::create([
+                        'organization_id' => $event->organization_id,
+                        'event_id' => $event->id,
+                        'registration_id' => $reg->id,
+                        'type' => \App\Models\FinancialLedger::TYPE_TICKET_SALE,
+                        'direction' => \App\Models\FinancialLedger::DIRECTION_CREDIT,
+                        'amount' => (int) $category->price,
+                        'note' => 'Penjualan tiket ' . $category->name . ' (' . ($reg->participant_name ?: 'Peserta') . ')',
+                        'created_at' => now(),
+                    ]);
+                }
+            }
+
             return $reg;
         });
 
