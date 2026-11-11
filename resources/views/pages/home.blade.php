@@ -338,7 +338,7 @@
                     </div>
                 </div>
 
-                <a href="/help" wire:navigate class="btn btn-block" style="position: relative; margin-top: auto">
+                <a href="/help" wire:navigate.hover class="btn btn-block" style="position: relative; margin-top: auto">
                     Buka Pusat Bantuan
                 </a>
             </div>
@@ -346,7 +346,7 @@
             <!-- Right 3 Regulation Hub Cards (.numo outline 01-03, Ranking dihapus) -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px">
                 <!-- 01 Tentang Velosha (Butter #F8E3B5 - Spans 2 Cols) -->
-                <a href="/about" wire:navigate class="card racecard" style="grid-column: 1 / -1; background: #F8E3B5; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 190px">
+                <a href="/about" wire:navigate.hover class="card racecard" style="grid-column: 1 / -1; background: #F8E3B5; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 190px">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start">
                         <div class="ico" style="background: #FFFDF8">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v6M12 7.500v.01"></path></svg>
@@ -366,7 +366,7 @@
                 </a>
 
                 <!-- 02 Aturan & Kode Etik (Pine Light #D5EBD9) -->
-                <a href="/rule" wire:navigate class="card racecard" style="background: #D5EBD9; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 200px">
+                <a href="/rule" wire:navigate.hover class="card racecard" style="background: #D5EBD9; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 200px">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start">
                         <div class="ico" style="background: #FFFDF8">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg>
@@ -386,7 +386,7 @@
                 </a>
 
                 <!-- 03 Paket Penyelenggara & Kuota (Orange Light #F6B777) -->
-                <a href="/paket" wire:navigate class="card racecard" style="background: #F6B777; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 200px">
+                <a href="/paket" wire:navigate.hover class="card racecard" style="background: #F6B777; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 200px">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start">
                         <div class="ico" style="background: #FFFDF8">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>

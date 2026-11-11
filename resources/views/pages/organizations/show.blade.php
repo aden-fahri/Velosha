@@ -31,6 +31,7 @@
             <nav class="space-y-1 text-sm font-semibold">
                 {{-- 1. Ringkasan & Statistik --}}
                 <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'overview']) }}"
+                   wire:navigate.hover
                    class="w-full flex items-center justify-between {{ in_array($activeTab, ['overview', '']) ? 'on' : '' }}">
                     <div class="flex items-center gap-2.5 min-w-0">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"></rect><rect x="14" y="3" width="7" height="7" rx="2"></rect><rect x="3" y="14" width="7" height="7" rx="2"></rect><rect x="14" y="14" width="7" height="7" rx="2"></rect></svg>
@@ -40,6 +41,7 @@
 
                 {{-- 2. Buat Event Baru --}}
                 <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'create_event']) }}"
+                   wire:navigate.hover
                    class="w-full flex items-center justify-between {{ $activeTab === 'create_event' ? 'on' : '' }}">
                     <div class="flex items-center gap-2.5 min-w-0">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
@@ -49,6 +51,7 @@
 
                 {{-- 3. Event Saya --}}
                 <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'events']) }}"
+                   wire:navigate.hover
                    class="w-full flex items-center gap-2.5 {{ $activeTab === 'events' ? 'on' : '' }}">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
                     <span class="whitespace-nowrap font-bold text-sm">Event Saya</span>
@@ -56,6 +59,7 @@
 
                 {{-- 4. Paket & Kuota --}}
                 <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'kuota']) }}"
+                   wire:navigate.hover
                    class="w-full flex items-center gap-2.5 {{ $activeTab === 'kuota' ? 'on' : '' }}">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg>
                     <span class="whitespace-nowrap font-bold text-sm">Paket &amp; Kuota</span>
@@ -63,13 +67,14 @@
 
                 {{-- 5. Keuangan & Payout --}}
                 <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'keuangan']) }}"
+                   wire:navigate.hover
                    class="w-full flex items-center gap-2.5 {{ $activeTab === 'keuangan' ? 'on' : '' }}">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
                     <span class="whitespace-nowrap font-bold text-sm">Keuangan &amp; Payout</span>
                 </a>
 
                 {{-- 6. Tiket Bantuan / Chat Petugas --}}
-                <a href="{{ route('helpdesk.create-ticket', ['from' => 'organizer']) }}" wire:navigate class="w-full flex items-center gap-2.5">
+                <a href="{{ route('helpdesk.create-ticket', ['from' => 'organizer']) }}" wire:navigate.hover class="w-full flex items-center gap-2.5">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>
                     <span class="whitespace-nowrap font-bold text-sm">Chat / Bantuan</span>
                 </a>
@@ -125,29 +130,34 @@
 
             <nav class="space-y-1.5 text-sm flex-1">
                 <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'overview']) }}"
+                   wire:navigate.hover
                    class="w-full {{ in_array($activeTab, ['overview', '']) ? 'on' : '' }}">
                     Ringkasan EO
                 </a>
                 <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'create_event']) }}"
+                   wire:navigate.hover
                    class="w-full {{ $activeTab === 'create_event' ? 'on' : '' }}">
                     Buat Event
                 </a>
                 <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'events']) }}"
+                   wire:navigate.hover
                    class="w-full {{ $activeTab === 'events' ? 'on' : '' }}">
                     Event Saya
                 </a>
                 <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'kuota']) }}"
+                   wire:navigate.hover
                    class="w-full {{ $activeTab === 'kuota' ? 'on' : '' }}">
                     Paket &amp; Kuota
                 </a>
                 <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'keuangan']) }}"
+                   wire:navigate.hover
                    class="w-full {{ $activeTab === 'keuangan' ? 'on' : '' }}">
                     Keuangan &amp; Payout
                 </a>
-                <a href="{{ route('helpdesk.create-ticket', ['from' => 'organizer']) }}" wire:navigate class="w-full">
+                <a href="{{ route('helpdesk.create-ticket', ['from' => 'organizer']) }}" wire:navigate.hover class="w-full">
                     Chat / Bantuan CS
                 </a>
-                <a href="{{ route('dashboard') }}" wire:navigate class="w-full mt-4">
+                <a href="{{ route('dashboard') }}" wire:navigate.hover class="w-full mt-4">
                     Kembali ke Dashboard Rider
                 </a>
             </nav>

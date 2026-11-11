@@ -107,16 +107,18 @@ class EventCatalog extends Component
 
     protected function monthOptions(): array
     {
-        $options = [];
+        return cache()->remember('catalog_month_options', 60, function () {
+            $options = [];
 
-        foreach (Event::published()->upcoming()->distinct()->pluck('event_date') as $date) {
-            $key = EventCardPresenter::monthKey($date);
-            $options[$key] = EventCardPresenter::monthLabel($key);
-        }
+            foreach (Event::published()->upcoming()->distinct()->pluck('event_date') as $date) {
+                $key = EventCardPresenter::monthKey($date);
+                $options[$key] = EventCardPresenter::monthLabel($key);
+            }
 
-        ksort($options);
+            ksort($options);
 
-        return $options;
+            return $options;
+        });
     }
 
     protected function activeFilters(): array

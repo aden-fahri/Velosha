@@ -49,6 +49,12 @@
         @livewire('mizu-chat-widget')
     @endif
 
+    <!-- Neo-Brutalist Top Navigation Progress Bar -->
+    <div id="velo-nav-progress"
+         class="fixed top-0 left-0 right-0 h-[3.5px] bg-[#DE7119] z-[9999] pointer-events-none opacity-0 shadow-[0_1px_3px_rgba(16,40,46,0.3)]"
+         style="transform: scaleX(0); transform-origin: 0% 50%;"
+         aria-hidden="true"></div>
+
     @if ($nav)
     @include('components.layout.footer')
     @endif
@@ -72,36 +78,63 @@
             document.querySelectorAll('.velo-reveal').forEach((el) => el.classList.add('is-visible'));
         }
 
-        // Lucide Icons init (aman walau CDN gagal — reveal di atas tidak bergantung ini)
-        try { if (window.lucide) lucide.createIcons(); } catch (e) {}
+        // Lucide Icons init dengan throttling & scoping agar tidak membebani main thread
+        window.__veloRenderIcons = function(rootEl = document) {
+            if (!window.lucide || typeof window.lucide.createIcons !== 'function') return;
+            window.requestAnimationFrame(() => {
+                try {
+                    window.lucide.createIcons({
+                        root: rootEl instanceof HTMLElement ? rootEl : document
+                    });
+                } catch (e) {}
+            });
+        };
+
+        try { window.__veloRenderIcons(); } catch (e) {}
 
         // Re-render Lucide icons inside regions morphed by Livewire
         if (!window.__veloLivewireInit) {
             window.__veloLivewireInit = true;
             document.addEventListener('livewire:init', () => {
-                let rerender;
-                Livewire.hook('morph.added', () => {
-                    clearTimeout(rerender);
-                    rerender = setTimeout(() => {
-                        if (window.lucide) lucide.createIcons();
-                    }, 0);
+                let rerenderTimer;
+                Livewire.hook('morph.added', ({ el }) => {
+                    clearTimeout(rerenderTimer);
+                    rerenderTimer = setTimeout(() => {
+                        window.__veloRenderIcons(el);
+                    }, 16);
                 });
             });
         }
 
-        // Efek blur antar halaman wire:navigate (didaftarkan sekali per muat penuh)
+        // Top progress bar & transisi halaman wire:navigate instan
         if (!window.__veloNavFx) {
             window.__veloNavFx = true;
             let enterTimer;
             document.addEventListener('livewire:navigating', () => {
+                const bar = document.getElementById('velo-nav-progress');
+                if (bar) {
+                    bar.style.transition = 'transform 0.35s cubic-bezier(0.1, 0.9, 0.2, 1), opacity 0.1s ease';
+                    bar.style.opacity = '1';
+                    bar.style.transform = 'scaleX(0.75)';
+                }
                 document.body.classList.remove('velo-nav-entering');
                 document.body.classList.add('velo-nav-leaving');
             });
             document.addEventListener('livewire:navigated', () => {
+                const bar = document.getElementById('velo-nav-progress');
+                if (bar) {
+                    bar.style.transition = 'transform 0.15s ease-out, opacity 0.2s ease-out 0.15s';
+                    bar.style.transform = 'scaleX(1)';
+                    bar.style.opacity = '0';
+                    setTimeout(() => {
+                        bar.style.transform = 'scaleX(0)';
+                    }, 350);
+                }
+                window.__veloRenderIcons();
                 document.body.classList.remove('velo-nav-leaving');
                 document.body.classList.add('velo-nav-entering');
                 clearTimeout(enterTimer);
-                enterTimer = setTimeout(() => document.body.classList.remove('velo-nav-entering'), 400);
+                enterTimer = setTimeout(() => document.body.classList.remove('velo-nav-entering'), 300);
             });
         }
     </script>

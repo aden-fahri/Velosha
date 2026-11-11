@@ -252,7 +252,7 @@ $portalTarget = auth()->check() ? (Route::has('dashboard') ? route('dashboard') 
 
             {{-- Kolom 1: Brand Logo & Deskripsi Singkat --}}
             <div class="flex flex-col">
-                <a href="/" wire:navigate class="inline-flex items-center gap-3 w-max mb-3" aria-label="Beranda Velosha">
+                <a href="/" wire:navigate.hover class="inline-flex items-center gap-3 w-max mb-3" aria-label="Beranda Velosha">
                     <img src="/images/logo-velosha.png" alt="Velosha Logo" class="h-10 w-auto object-contain brightness-0 invert opacity-95 hover:opacity-100 transition-opacity" />
                     <span class="font-bricolage text-2xl font-extrabold text-[#FFFDF8] tracking-tight">Velosha</span>
                 </a>
@@ -298,31 +298,31 @@ $portalTarget = auth()->check() ? (Route::has('dashboard') ? route('dashboard') 
                     <h3 class="footer-col-heading">Jelajahi</h3>
                     <ul class="flex flex-col space-y-1">
                         <li>
-                            <a href="/events" wire:navigate class="footer-link">
+                            <a href="/events" wire:navigate.hover class="footer-link">
                                 <span class="footer-link-chevron">&rsaquo;</span>
                                 <span>Kalender balap</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/events?type=gran-fondo" wire:navigate class="footer-link">
+                            <a href="/events?type=gran-fondo" wire:navigate.hover class="footer-link">
                                 <span class="footer-link-chevron">&rsaquo;</span>
                                 <span>Gran Fondo</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/events?type=medio-fondo" wire:navigate class="footer-link">
+                            <a href="/events?type=medio-fondo" wire:navigate.hover class="footer-link">
                                 <span class="footer-link-chevron">&rsaquo;</span>
                                 <span>Medio Fondo</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/events?type=fun-ride" wire:navigate class="footer-link">
+                            <a href="/events?type=fun-ride" wire:navigate.hover class="footer-link">
                                 <span class="footer-link-chevron">&rsaquo;</span>
                                 <span>Fun Ride</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/events?type=climb" wire:navigate class="footer-link">
+                            <a href="/events?type=climb" wire:navigate.hover class="footer-link">
                                 <span class="footer-link-chevron">&rsaquo;</span>
                                 <span>KOM Climb</span>
                             </a>
@@ -335,31 +335,31 @@ $portalTarget = auth()->check() ? (Route::has('dashboard') ? route('dashboard') 
                     <h3 class="footer-col-heading">Bantuan & info</h3>
                     <ul class="flex flex-col space-y-1">
                         <li>
-                            <a href="/help" wire:navigate class="footer-link">
+                            <a href="/help" wire:navigate.hover class="footer-link">
                                 <span class="footer-link-chevron">&rsaquo;</span>
                                 <span>Pusat bantuan</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/rule" wire:navigate class="footer-link">
+                            <a href="/rule" wire:navigate.hover class="footer-link">
                                 <span class="footer-link-chevron">&rsaquo;</span>
                                 <span>Aturan & kode etik</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/about" wire:navigate class="footer-link">
+                            <a href="/about" wire:navigate.hover class="footer-link">
                                 <span class="footer-link-chevron">&rsaquo;</span>
                                 <span>Tentang Velosha</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{ $portalTarget }}" wire:navigate class="footer-link">
+                            <a href="{{ $portalTarget }}" wire:navigate.hover class="footer-link">
                                 <span class="footer-link-chevron">&rsaquo;</span>
                                 <span>Cek e-ticket</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{ $portalTarget }}" wire:navigate class="footer-link">
+                            <a href="{{ $portalTarget }}" wire:navigate.hover class="footer-link">
                                 <span class="footer-link-chevron">&rsaquo;</span>
                                 <span>Portal peserta</span>
                             </a>
@@ -393,8 +393,8 @@ $portalTarget = auth()->check() ? (Route::has('dashboard') ? route('dashboard') 
             </p>
 
             <div class="flex flex-wrap items-center gap-6">
-                <a href="/rule" wire:navigate class="text-inherit hover:text-[#F4BE3F] transition-colors">Privasi</a>
-                <a href="/rule" wire:navigate class="text-inherit hover:text-[#F4BE3F] transition-colors">Ketentuan</a>
+                <a href="/rule" wire:navigate.hover class="text-inherit hover:text-[#F4BE3F] transition-colors">Privasi</a>
+                <a href="/rule" wire:navigate.hover class="text-inherit hover:text-[#F4BE3F] transition-colors">Ketentuan</a>
 
                 <button type="button"
                         onclick="window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })"

@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <a href="/events" wire:navigate class="btn btn-sm btn-ghost">
+                    <a href="/events" wire:navigate.hover class="btn btn-sm btn-ghost">
                         <span>Lihat Semua Kalender</span>
                         <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
                     </a>
@@ -159,7 +159,7 @@
                                     <div class="text-[10px] uppercase tracking-wider text-[var(--mute)] font-bold">Mulai dari</div>
                                     <b class="font-heading font-black text-xl text-[var(--ink)]">Rp {{ $race['price'] }}</b>
                                 </div>
-                                <a href="{{ $race['url'] }}" wire:navigate class="btn btn-sm">
+                                <a href="{{ $race['url'] }}" wire:navigate.hover class="btn btn-sm">
                                     <span>Lihat detail</span>
                                     <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
                                 </a>

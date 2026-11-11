@@ -4,7 +4,7 @@
 
         <!-- Logo & Brand -->
         <div class="flex items-center gap-8">
-            <a href="/" wire:navigate class="flex items-center gap-3 transition-transform duration-150 hover:-translate-y-0.5" aria-label="Velosha — Beranda">
+            <a href="/" wire:navigate.hover class="flex items-center gap-3 transition-transform duration-150 hover:-translate-y-0.5" aria-label="Velosha — Beranda">
                 <img src="/images/logo-velosha.png" alt="Velosha" class="h-9 w-auto object-contain" />
                 <span class="font-extrabold text-2xl tracking-tight text-[var(--ink)]" style="font-family: 'Bricolage Grotesque', sans-serif;">Velosha</span>
             </a>
