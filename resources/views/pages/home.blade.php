@@ -305,7 +305,7 @@
     <div class="wrap" style="position: relative">
         <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap">
             <h2 class="h2">Informasi &amp; regulasi<br>peserta</h2>
-            <p class="lead" style="max-width: 400px; margin: 0; color: #10282E">Semua yang perlu kamu tahu sebelum start: aturan, bantuan, riwayat, dan hasil resmi.</p>
+            <p class="lead" style="max-width: 400px; margin: 0; color: #10282E">Semua yang perlu kamu tahu sebelum start: regulasi resmi balap, pusat bantuan peserta, dan paket kuota penyelenggara.</p>
         </div>
 
         <div style="display: grid; grid-template-columns: 5fr 7fr; gap: 32px; margin-top: 48px; align-items: stretch">

@@ -39,10 +39,6 @@ Route::get('/auth/demo/{provider}', DemoSocialController::class)
     ->middleware('guest')
     ->name('auth.demo');
 
-// 4c. Halaman login panel lama (bookmarked) → arahkan ke login utama
-Route::get('/admin/login', fn () => redirect()->route('login'))
-    ->name('admin.login.redirect');
-
 // 5. Checkout & Formulir Pendaftaran (Livewire 3 langkah — peserta & penyelenggara)
 Route::get('/checkout', function (Request $request) {
     return view('pages.checkout', [
@@ -95,11 +91,6 @@ Route::get('/helpdesk/tickets/{ticket}', function ($ticket) {
     return redirect()->route('helpdesk.detail', ['ticket' => $ticket]);
 })->middleware(['auth', 'role:operator,admin']);
 
-Route::get('/helpdesk/operator/tickets/{ticket}', function ($ticket) {
-    return redirect()->route('helpdesk.detail', ['ticket' => $ticket]);
-})->middleware(['auth', 'role:operator,admin'])
-  ->name('helpdesk.operator.detail');
-
 // 9. Helpdesk Admin Analitik (Khusus Administrator)
 Route::view('/helpdesk/analitik', 'pages.helpdesk.analytics')
     ->middleware(['auth', 'role:admin'])
@@ -109,9 +100,6 @@ Route::view('/helpdesk/analitik', 'pages.helpdesk.analytics')
 Route::get('/organisasi/daftar', [App\Http\Controllers\OrganizationController::class, 'create'])
     ->middleware('auth')
     ->name('organizations.create');
-
-Route::get('/organisasi/daftar-eo', fn () => redirect()->route('organizations.create'))
-    ->name('organizer.register');
 
 Route::post('/organisasi/daftar', [App\Http\Controllers\OrganizationController::class, 'store'])
     ->middleware('auth')
@@ -150,9 +138,6 @@ Route::put('/organisasi/{organization:slug}/events/{event:slug}', [App\Http\Cont
 // 10b. Manajemen Paket Kuota Event Penyelenggara (SaaS)
 Route::get('/paket', [App\Http\Controllers\OrganizationQuotaController::class, 'publicPackages'])
     ->name('packages.index');
-
-Route::get('/paket-kuota', fn () => redirect()->route('packages.index'))
-    ->name('organizer.packages');
 
 Route::get('/organisasi/{organization:slug}/kuota', [App\Http\Controllers\OrganizationQuotaController::class, 'index'])
     ->middleware('auth')
