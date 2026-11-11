@@ -183,6 +183,13 @@ class Event extends Model
         return $this->hasMany(EventCategory::class);
     }
 
+    public function primaryCategory(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(EventCategory::class)
+            ->where('is_primary', true)
+            ->withDefault(fn () => $this->categories()->orderBy('price')->first());
+    }
+
     public function registrations(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
     {
         return $this->hasManyThrough(Registration::class, EventCategory::class);
@@ -205,6 +212,11 @@ class Event extends Model
 
     public function getLowestPriceAttribute(): ?float
     {
+        $primary = $this->categories->firstWhere('is_primary', true);
+        if ($primary && $primary->price !== null) {
+            return (float) $primary->price;
+        }
+
         $min = $this->categories->min('price');
 
         return $min === null ? null : (float) $min;

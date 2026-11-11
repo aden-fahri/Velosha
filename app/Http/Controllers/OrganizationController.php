@@ -243,18 +243,21 @@ class OrganizationController extends Controller
         }
 
         // Simpan kategori-kategori tiket balap
+        $primaryIndex = (int) $request->input('primary_category_index', 0);
         $categoriesInput = $request->input('categories');
         if (is_array($categoriesInput) && count($categoriesInput) > 0) {
-            foreach ($categoriesInput as $catData) {
+            foreach ($categoriesInput as $idx => $catData) {
                 if (empty($catData['name'])) {
                     continue;
                 }
                 $catName = trim($catData['name']);
                 $catCode = Str::upper(substr(preg_replace('/[^A-Za-z0-9]/', '', $catName), 0, 6)) ?: 'CAT';
+                $isPrimary = ($idx === $primaryIndex) || (! empty($catData['is_primary']) && filter_var($catData['is_primary'], FILTER_VALIDATE_BOOLEAN));
 
                 $event->categories()->create([
                     'name' => $catName,
                     'code' => $catCode,
+                    'is_primary' => $isPrimary,
                     'distance_km' => ! empty($catData['distance_km']) ? (float) $catData['distance_km'] : 100.00,
                     'elevation_gain_m' => 450.00,
                     'price' => (float) ($catData['price'] ?? 0),
@@ -263,6 +266,11 @@ class OrganizationController extends Controller
                     'cut_off_hours' => ! empty($catData['cut_off_hours']) ? (float) $catData['cut_off_hours'] : 6.0,
                 ]);
             }
+
+            // Pastikan setidaknya ada satu kategori utama
+            if (! $event->categories()->where('is_primary', true)->exists()) {
+                $event->categories()->first()?->update(['is_primary' => true]);
+            }
         } elseif (! empty($validated['category_name'])) {
             $catName = $validated['category_name'];
             $catCode = Str::upper(substr(preg_replace('/[^A-Za-z0-9]/', '', $catName), 0, 6)) ?: 'CAT1';
@@ -270,6 +278,7 @@ class OrganizationController extends Controller
             $event->categories()->create([
                 'name' => $catName,
                 'code' => $catCode,
+                'is_primary' => true,
                 'distance_km' => $validated['category_distance'] ?? 100.00,
                 'elevation_gain_m' => 450.00,
                 'price' => $validated['category_price'] ?? 0,
@@ -352,15 +361,18 @@ class OrganizationController extends Controller
             'type' => $validated['type'],
         ]);
 
+        $primaryIndex = $request->has('primary_category_index') ? (int) $request->input('primary_category_index') : null;
         $categoriesInput = $request->input('categories');
         if (is_array($categoriesInput) && count($categoriesInput) > 0) {
             $submittedIds = [];
-            foreach ($categoriesInput as $catData) {
+            foreach ($categoriesInput as $idx => $catData) {
                 if (empty($catData['name'])) {
                     continue;
                 }
                 $catName = trim($catData['name']);
                 $catCode = Str::upper(substr(preg_replace('/[^A-Za-z0-9]/', '', $catName), 0, 6)) ?: 'CAT';
+                $isPrimary = ($primaryIndex !== null && $idx === $primaryIndex)
+                    || (! empty($catData['is_primary']) && filter_var($catData['is_primary'], FILTER_VALIDATE_BOOLEAN));
 
                 $catId = ! empty($catData['id']) ? (int) $catData['id'] : null;
                 $cat = $catId ? $event->categories()->where('id', $catId)->first() : null;
@@ -368,6 +380,7 @@ class OrganizationController extends Controller
                 if ($cat) {
                     $cat->update([
                         'name' => $catName,
+                        'is_primary' => $isPrimary,
                         'distance_km' => ! empty($catData['distance_km']) ? (float) $catData['distance_km'] : $cat->distance_km,
                         'price' => (float) ($catData['price'] ?? $cat->price),
                         'quota' => (int) ($catData['quota'] ?? $cat->quota),
@@ -378,6 +391,7 @@ class OrganizationController extends Controller
                     $newCat = $event->categories()->create([
                         'name' => $catName,
                         'code' => $catCode,
+                        'is_primary' => $isPrimary,
                         'distance_km' => ! empty($catData['distance_km']) ? (float) $catData['distance_km'] : 100.00,
                         'elevation_gain_m' => 450.00,
                         'price' => (float) ($catData['price'] ?? 0),
@@ -393,11 +407,21 @@ class OrganizationController extends Controller
             if (! empty($submittedIds)) {
                 $event->categories()->whereNotIn('id', $submittedIds)->doesntHave('registrations')->delete();
             }
+
+            // Pastikan tepat ada satu kategori yang is_primary
+            $primaryCount = $event->categories()->where('is_primary', true)->count();
+            if ($primaryCount === 0) {
+                $event->categories()->first()?->update(['is_primary' => true]);
+            } elseif ($primaryCount > 1) {
+                $firstPrimary = $event->categories()->where('is_primary', true)->first();
+                $event->categories()->where('id', '!=', $firstPrimary->id)->update(['is_primary' => false]);
+            }
         } elseif (! empty($validated['category_name'])) {
             $cat = $event->categories()->first();
             if ($cat) {
                 $cat->update([
                     'name' => $validated['category_name'],
+                    'is_primary' => true,
                     'distance_km' => $validated['category_distance'] ?? $cat->distance_km,
                     'price' => $validated['category_price'],
                     'quota' => $validated['category_quota'],

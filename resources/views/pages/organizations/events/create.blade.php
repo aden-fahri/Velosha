@@ -13,6 +13,7 @@
             cut_off_hours: 6.0
         }
     ],
+    primaryIndex: 0,
     addCategory() {
         this.categories.push({
             name: '',
@@ -25,6 +26,13 @@
     removeCategory(index) {
         if (this.categories.length > 1) {
             this.categories.splice(index, 1);
+            if (this.primaryIndex >= this.categories.length) {
+                this.primaryIndex = 0;
+            } else if (this.primaryIndex === index) {
+                this.primaryIndex = 0;
+            } else if (this.primaryIndex > index) {
+                this.primaryIndex--;
+            }
         }
     }
 }" class="vs min-h-screen bg-[var(--paper)] text-[var(--ink)] flex flex-col md:flex-row" style="display: flex; min-height: 100vh;">
@@ -379,10 +387,33 @@
 
                             <template x-for="(cat, index) in categories" :key="index">
                                 <div class="p-5 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] shadow-[3px_3px_0_var(--ink)] space-y-4 relative">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center gap-2">
+                                    <div class="flex items-center justify-between flex-wrap gap-2">
+                                        <div class="flex items-center gap-2 flex-wrap">
                                             <span class="w-6 h-6 rounded-md bg-[var(--orange)] text-white font-black text-xs flex items-center justify-center border border-[var(--ink)]" x-text="index + 1"></span>
-                                            <span class="font-heading font-black text-sm text-[var(--ink)]" x-text="index === 0 ? 'Kategori Tiket Utama' : 'Kategori Tiket Tambahan #' + (index + 1)"></span>
+                                            <span class="font-heading font-black text-sm text-[var(--ink)]" x-text="'Kategori #' + (index + 1)"></span>
+
+                                            {{-- Radio Button Kategori Utama --}}
+                                            <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs font-black px-2.5 py-1 rounded-lg border-2 transition-all shadow-[2px_2px_0_var(--ink)]"
+                                                   :class="primaryIndex === index ? 'bg-[var(--mustard)] border-[var(--ink)] text-[var(--ink)]' : 'bg-white border-[var(--ink)]/40 text-[var(--mute)] hover:border-[var(--ink)] hover:text-[var(--ink)]'">
+                                                <input type="radio" 
+                                                       name="primary_category_index" 
+                                                       :value="index" 
+                                                       :checked="primaryIndex === index" 
+                                                       @change="primaryIndex = index" 
+                                                       class="sr-only">
+                                                <template x-if="primaryIndex === index">
+                                                    <span class="flex items-center gap-1 text-[var(--ink)]">
+                                                        <svg class="w-3.5 h-3.5 fill-[var(--ink)]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                                        ★ Kategori Tiket Utama
+                                                    </span>
+                                                </template>
+                                                <template x-if="primaryIndex !== index">
+                                                    <span class="flex items-center gap-1">
+                                                        Jadikan Kategori Utama
+                                                    </span>
+                                                </template>
+                                            </label>
+                                            <input type="hidden" :name="'categories[' + index + '][is_primary]'" :value="primaryIndex === index ? '1' : '0'">
                                         </div>
                                         <button type="button"
                                                 x-show="categories.length > 1"

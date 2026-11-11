@@ -12,6 +12,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -126,6 +127,11 @@ class EventForm
                     ->label('Kategori Tiket')
                     ->relationship()
                     ->schema([
+                        Toggle::make('is_primary')
+                            ->label('Kategori Tiket Utama ★')
+                            ->helperText('Jadikan kategori ini rujukan utama promosi (harga mulai dari, elevasi, dan jarak)')
+                            ->default(false)
+                            ->columnSpan(2),
                         TextInput::make('name')
                             ->label('Nama Kategori')
                             ->maxLength(100)

@@ -26,11 +26,12 @@ class EventCardPresenter
     public static function card(Event $event): array
     {
         $categories = $event->categories;
+        $primary = $event->primaryCategory ?? $categories->first();
 
-        $maxElevation = $categories->max('elevation_gain_m');
-        $maxCutOff = $categories->max('cut_off_hours');
-        $maxDistance = $categories->max('distance_km');
-        $lowestPrice = $categories->min('price');
+        $displayElevation = $primary?->elevation_gain_m ?? $categories->max('elevation_gain_m');
+        $displayCutOff = $primary?->cut_off_hours ?? $categories->max('cut_off_hours');
+        $displayDistance = $primary?->distance_km ?? $categories->max('distance_km');
+        $lowestPrice = $primary?->price ?? $categories->min('price');
         $totalQuota = (int) $categories->sum('quota');
         $remaining = (int) $categories->sum(fn (mixed $category): int => $category->remaining);
 
@@ -40,14 +41,14 @@ class EventCardPresenter
             'img' => static::image($event),
             'cat' => $event->type_label,
             'catClass' => static::typeClass($event->type),
-            'dist' => static::distance($maxDistance),
+            'dist' => static::distance($displayDistance),
             'date' => static::tanggal($event->event_date),
             'loc' => $event->location_name,
             'title' => $event->title,
             'excerpt' => Str::limit(strip_tags((string) $event->description), 150),
             'specs' => [
-                'Elevasi' => $maxElevation === null ? '—' : '+'.static::angka((float) $maxElevation).' M',
-                'Cut-Off' => $maxCutOff === null ? '—' : static::jam((float) $maxCutOff),
+                'Elevasi' => $displayElevation === null ? '—' : '+'.static::angka((float) $displayElevation).' M',
+                'Cut-Off' => $displayCutOff === null ? '—' : static::jam((float) $displayCutOff),
                 'Kuota' => $totalQuota > 0 ? (string) $totalQuota : '—',
             ],
             'slots' => $categories->isEmpty() ? 'Buka' : ($remaining > 0 ? 'Slot tersisa '.$remaining : 'Penuh'),

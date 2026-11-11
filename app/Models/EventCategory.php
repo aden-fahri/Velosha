@@ -14,6 +14,7 @@ class EventCategory extends Model
     protected $fillable = [
         'event_id',
         'name',
+        'is_primary',
         'code',
         'distance_km',
         'elevation_gain_m',
@@ -25,6 +26,7 @@ class EventCategory extends Model
     ];
 
     protected $casts = [
+        'is_primary' => 'boolean',
         'distance_km' => 'decimal:2',
         'elevation_gain_m' => 'decimal:2',
         'price' => 'decimal:2',
@@ -56,6 +58,11 @@ class EventCategory extends Model
     public function getRemainingAttribute(): int
     {
         return max(0, $this->quota - $this->registered_count);
+    }
+
+    public function scopePrimary($query)
+    {
+        return $query->where('is_primary', true);
     }
 
     /**

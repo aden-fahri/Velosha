@@ -1,7 +1,7 @@
 @use('App\Support\EventCardPresenter', 'P')
 @php($loggedInNonPeserta = Auth::check() && ! Auth::user()->isPeserta())
 {{-- Sticky booking box: pilihan kategori, inklusi paket, CTA checkout (Neobrutalisme Velosha) --}}
-<div id="daftar" class="lg:col-span-4 sticky top-24" x-data="{ selected: '{{ $categories->first()?->id }}', roleWarning: false }">
+<div id="daftar" class="lg:col-span-4 sticky top-24" x-data="{ selected: '{{ ($categories->firstWhere('is_primary', true) ?? $categories->first())?->id }}', roleWarning: false }">
     <div class="bg-white border-[3px] border-[var(--ink)] rounded-2xl p-6 sm:p-7 shadow-[6px_6px_0_var(--ink)]">
 
         <div class="pb-4 border-b-2 border-[var(--ink)] flex justify-between items-start gap-3">
@@ -27,7 +27,14 @@
                 <div class="flex items-center space-x-3">
                     <input type="radio" name="race_category" x-model="selected" value="{{ $category->id }}" class="text-[var(--ink)] focus:ring-[var(--mustard)]">
                     <div>
-                        <div class="text-xs font-black text-[var(--ink)]">{{ $category->name }} ({{ P::distance($category->distance_km) }})</div>
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <span class="text-xs font-black text-[var(--ink)]">{{ $category->name }} ({{ P::distance($category->distance_km) }})</span>
+                            @if ($category->is_primary)
+                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)] shadow-[1px_1px_0_var(--ink)]">
+                                ★ Kategori Utama
+                            </span>
+                            @endif
+                        </div>
                         <div class="text-[10px] text-[var(--mute)] font-semibold">Elevasi +{{ P::angka((float) $category->elevation_gain_m) }}m &middot; COT {{ P::jam((float) $category->cut_off_hours) }}</div>
                         <div class="text-[11px] font-bold {{ $category->remaining > 0 ? 'text-[#1F6F4A]' : 'text-[#A02F1A]' }} mt-0.5">
                             {{ $category->remaining > 0 ? 'Sisa ' . $category->remaining . ' Slot' : 'Slot Penuh' }}

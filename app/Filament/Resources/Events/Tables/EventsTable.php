@@ -75,8 +75,15 @@ class EventsTable
                     ->label('Lokasi')
                     ->limit(25),
                 TextColumn::make('kategori')
-                    ->label('Kategori')
-                    ->state(fn (Event $record): int => $record->categories()->count()),
+                    ->label('Kategori Utama')
+                    ->state(function (Event $record): string {
+                        $primary = $record->primaryCategory;
+                        $count = $record->categories()->count();
+                        if ($primary) {
+                            return "★ {$primary->name} ({$count})";
+                        }
+                        return "{$count} Kategori";
+                    }),
                 TextColumn::make('lowestPrice')
                     ->label('Harga Min.')
                     ->state(fn (Event $record): string => $record->lowestPrice === null

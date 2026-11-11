@@ -466,11 +466,21 @@
                                 categories: [
                                     { name: 'Gran Fondo 120 KM', distance_km: 120, price: 250000, quota: 500 }
                                 ],
+                                primaryIndex: 0,
                                 addCategory() {
                                     this.categories.push({ name: '', distance_km: 60, price: 150000, quota: 200 });
                                 },
                                 removeCategory(idx) {
-                                    if (idx > 0) this.categories.splice(idx, 1);
+                                    if (this.categories.length > 1) {
+                                        this.categories.splice(idx, 1);
+                                        if (this.primaryIndex >= this.categories.length) {
+                                            this.primaryIndex = 0;
+                                        } else if (this.primaryIndex === idx) {
+                                            this.primaryIndex = 0;
+                                        } else if (this.primaryIndex > idx) {
+                                            this.primaryIndex--;
+                                        }
+                                    }
                                 }
                             }" class="space-y-4">
                                 <div class="flex items-center justify-between pb-2 border-b border-[var(--ink)]/15">
@@ -485,14 +495,35 @@
 
                                 <template x-for="(cat, idx) in categories" :key="idx">
                                     <div class="p-5 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] space-y-4">
-                                        <div class="flex items-center justify-between">
-                                            <span x-show="idx === 0" class="px-2.5 py-1 bg-[var(--mustard)] border-2 border-[var(--ink)] font-black text-[11px] uppercase tracking-wider rounded-md shadow-[1px_1px_0_var(--ink)]">
-                                                Kategori Tiket Utama
-                                            </span>
-                                            <span x-show="idx > 0" class="px-2.5 py-1 bg-[var(--butter)] border-2 border-[var(--ink)] font-black text-[11px] uppercase tracking-wider rounded-md shadow-[1px_1px_0_var(--ink)]">
-                                                Kategori Tambahan #<span x-text="idx + 1"></span>
-                                            </span>
-                                            <button type="button" x-show="idx > 0" @click="removeCategory(idx)"
+                                        <div class="flex items-center justify-between flex-wrap gap-2">
+                                            <div class="flex items-center gap-2 flex-wrap">
+                                                <span class="w-6 h-6 rounded-md bg-[var(--orange)] text-white font-black text-xs flex items-center justify-center border border-[var(--ink)]" x-text="idx + 1"></span>
+                                                <span class="font-heading font-black text-sm text-[var(--ink)]" x-text="'Kategori #' + (idx + 1)"></span>
+
+                                                {{-- Radio Button Kategori Utama --}}
+                                                <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs font-black px-2.5 py-1 rounded-lg border-2 transition-all shadow-[2px_2px_0_var(--ink)]"
+                                                       :class="primaryIndex === idx ? 'bg-[var(--mustard)] border-[var(--ink)] text-[var(--ink)]' : 'bg-white border-[var(--ink)]/40 text-[var(--mute)] hover:border-[var(--ink)] hover:text-[var(--ink)]'">
+                                                    <input type="radio" 
+                                                           name="primary_category_index" 
+                                                           :value="idx" 
+                                                           :checked="primaryIndex === idx" 
+                                                           @change="primaryIndex = idx" 
+                                                           class="sr-only">
+                                                    <template x-if="primaryIndex === idx">
+                                                        <span class="flex items-center gap-1 text-[var(--ink)]">
+                                                            <svg class="w-3.5 h-3.5 fill-[var(--ink)]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                                            ★ Kategori Tiket Utama
+                                                        </span>
+                                                    </template>
+                                                    <template x-if="primaryIndex !== idx">
+                                                        <span class="flex items-center gap-1">
+                                                            Jadikan Kategori Utama
+                                                        </span>
+                                                    </template>
+                                                </label>
+                                                <input type="hidden" :name="'categories[' + idx + '][is_primary]'" :value="primaryIndex === idx ? '1' : '0'">
+                                            </div>
+                                            <button type="button" x-show="categories.length > 1" @click="removeCategory(idx)"
                                                     class="px-2.5 py-1 rounded-lg border-2 border-[var(--ink)] bg-red-100 text-red-700 hover:bg-red-200 text-xs font-black shadow-[1px_1px_0_var(--ink)]">
                                                 &times; Hapus Kategori
                                             </button>
