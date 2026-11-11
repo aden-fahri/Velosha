@@ -70,7 +70,7 @@ class EventCardPresenter
 
     public static function photoUrl(?object $photo): string
     {
-        if ($photo === null) {
+        if ($photo === null || empty($photo->photo_path)) {
             return '/images/hero-peloton.jpg';
         }
 
@@ -78,7 +78,14 @@ class EventCardPresenter
             return $photo->photo_path;
         }
 
-        return asset('storage/'.ltrim($photo->photo_path, '/'));
+        $rel = ltrim($photo->photo_path, '/');
+
+        // Pastikan berkas fisik benar-benar ada di disk public storage
+        if (! file_exists(public_path('storage/'.$rel))) {
+            return '/images/hero-peloton.jpg';
+        }
+
+        return asset('storage/'.$rel);
     }
 
     public static function typeClass(string $type): string

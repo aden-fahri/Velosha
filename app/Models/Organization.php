@@ -104,6 +104,11 @@ class Organization extends Model
         return $this->hasMany(QuotaPurchase::class);
     }
 
+    public function quotaPurchases(): HasMany
+    {
+        return $this->hasMany(QuotaPurchase::class);
+    }
+
     public function quotaLedger(): HasMany
     {
         return $this->hasMany(QuotaLedger::class);

@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CompleteRegistrationAction;
+use App\Models\Payment;
 use App\Models\Registration;
+use App\Services\MidtransService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class TicketController extends Controller
@@ -12,7 +16,7 @@ class TicketController extends Controller
      * (atau pendaftaran terbaru bila tidak dispesifikasikan).
      * Akses: pemilik pendaftaran, admin, atau penyelenggara pemilik event.
      */
-    public function show(?Registration $registration = null): Response
+    public function show(Request $request, ?Registration $registration = null, MidtransService $midtrans, CompleteRegistrationAction $completeAction): Response
     {
         $user = auth()->user();
 
@@ -23,9 +27,44 @@ class TicketController extends Controller
                 || ($user->isPenyelenggara() && $registration->category?->event?->user_id === $user->id),
                 403
             );
-            $registration->loadMissing(['category.event.photos', 'ticket', 'user']);
+            $registration->loadMissing(['category.event.photos', 'ticket', 'user', 'payment']);
         } else {
-            $registration = $user->registrations()->with(['category.event.photos', 'ticket', 'user'])->latest()->first();
+            $registration = $user->registrations()->with(['category.event.photos', 'ticket', 'user', 'payment'])->latest()->first();
+        }
+
+        // Auto-sync status pembayaran tiket jika masih pending (berguna untuk lingkungan lokal & webhook tertunda)
+        if ($registration instanceof Registration && ! $registration->isPaid() && $registration->payment) {
+            $payment = $registration->payment;
+            $isPaid = false;
+
+            if ($midtrans->isConfigured()) {
+                $status = $midtrans->checkStatus($payment->order_id);
+                if ($status) {
+                    $trxStatus = $status['transaction_status'] ?? '';
+                    $fraudStatus = $status['fraud_status'] ?? '';
+                    if ($trxStatus === 'settlement' || ($trxStatus === 'capture' && $fraudStatus === 'accept')) {
+                        $isPaid = true;
+                    }
+                }
+            }
+
+            if (! $isPaid && $request->query('transaction_status') === 'settlement') {
+                $isPaid = true;
+            }
+
+            if ($isPaid) {
+                $payment->update([
+                    'status' => Payment::STATUS_SETTLEMENT,
+                    'paid_at' => now(),
+                ]);
+
+                try {
+                    $completeAction->execute($registration);
+                    $registration->refresh()->loadMissing(['category.event.photos', 'ticket', 'user', 'payment']);
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::error('TicketController auto-sync error: ' . $e->getMessage());
+                }
+            }
         }
 
         return response()->view('pages.ticket', ['registration' => $registration]);

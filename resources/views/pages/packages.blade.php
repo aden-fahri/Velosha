@@ -129,7 +129,7 @@
                                 $userOrg = auth()->user()->organizations()->first() ?? auth()->user()->ownedOrganizations()->first();
                             @endphp
                             @if ($userOrg)
-                                <form action="{{ route('organizations.quota.purchase', $userOrg) }}" method="POST">
+                                <form action="{{ route('organizations.quota.purchase', $userOrg) }}" method="POST" onsubmit="buyQuotaSnap(event, this)">
                                     @csrf
                                     <input type="hidden" name="package_id" value="{{ $pkg->id }}">
                                     <button type="submit"
@@ -192,5 +192,93 @@
         </div>
 
     </div>
+
+    {{-- Midtrans Snap Backdrop Blur Overlay --}}
+    <div id="midtrans-blur-overlay" class="fixed inset-0 z-50 bg-[#10282E]/60 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center pointer-events-none"></div>
+
+    <script src="{{ config('services.midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
+    <script>
+        function buyQuotaSnap(e, form) {
+            e.preventDefault();
+            const overlay = document.getElementById('midtrans-blur-overlay');
+            if (overlay) overlay.classList.remove('hidden');
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn ? submitBtn.innerHTML : '';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Menyiapkan Pembayaran...</span>';
+            }
+
+            const formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.is_mock && data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                    return;
+                }
+
+                if (data.snap_token && window.snap) {
+                    window.snap.pay(data.snap_token, {
+                        onSuccess: function(result) {
+                            const finishBase = data.finish_url || window.location.href;
+                            const sep = finishBase.includes('?') ? '&' : '?';
+                            window.location.href = finishBase + sep +
+                                'order_id=' + (result.order_id || data.order_id) +
+                                '&transaction_status=' + (result.transaction_status || 'settlement');
+                        },
+                        onPending: function(result) {
+                            const finishBase = data.finish_url || window.location.href;
+                            const sep = finishBase.includes('?') ? '&' : '?';
+                            window.location.href = finishBase + sep +
+                                'order_id=' + (result.order_id || data.order_id) +
+                                '&transaction_status=' + (result.transaction_status || 'pending');
+                        },
+                        onError: function(result) {
+                            if (overlay) overlay.classList.add('hidden');
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                                submitBtn.innerHTML = originalText;
+                            }
+                            alert('Pembayaran Midtrans tidak berhasil atau dibatalkan.');
+                        },
+                        onClose: function() {
+                            if (overlay) overlay.classList.add('hidden');
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                                submitBtn.innerHTML = originalText;
+                            }
+                        }
+                    });
+                } else if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    if (overlay) overlay.classList.add('hidden');
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                    }
+                    alert('Gagal memproses pembayaran. Silakan coba kembali.');
+                }
+            })
+            .catch(err => {
+                if (overlay) overlay.classList.add('hidden');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+                alert('Terjadi kendala jaringan saat menghubungi gateway Midtrans.');
+            });
+        }
+    </script>
 </section>
 @endsection
