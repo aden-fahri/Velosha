@@ -1,58 +1,58 @@
-<div x-data="{ sidebarOpen: false, showLogoutModal: false }" class="vs min-h-screen flex bg-[var(--paper)] text-[var(--ink)]">
+<div x-data="{ sidebarOpen: false, showLogoutModal: false }" class="vs min-h-screen bg-[var(--paper)] text-[var(--ink)] flex flex-col md:flex-row" style="display: flex; min-height: 100vh;">
 
     <!-- ==================== DESKTOP SIDEBAR ==================== -->
-    <aside class="side hidden md:flex w-64 bg-[#FBF4E6] text-[var(--ink)] shrink-0 flex-col justify-between border-r-[3px] border-[#10282E] p-6 fixed inset-y-0 left-0 z-30 overflow-y-auto">
+    <aside class="side hidden md:flex flex-col justify-between bg-[#FBF4E6] border-r-[3px] border-[#10282E] p-6 sticky top-0 h-screen overflow-y-auto overflow-x-hidden" style="width: 280px; min-width: 280px; max-width: 280px; flex-shrink: 0;">
         <div>
-            <!-- Brand Logo Header -->
-            <div class="flex items-center justify-between pb-6 mb-2 border-b border-[#10282E]/15">
-                <a href="/" wire:navigate class="font-heading font-extrabold text-2xl text-[var(--ink)] tracking-tight">
-                    Velosha
+            <!-- Brand Logo Header (Official Brand Asset) -->
+            <div class="flex items-center pb-5 mb-4 border-b border-[#10282E]/15">
+                <a href="/" wire:navigate class="flex items-center gap-3 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
+                    <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
+                    <span class="font-extrabold text-2xl tracking-tight text-[#10282E]" style="font-family: 'Bricolage Grotesque', sans-serif;">Velosha</span>
                 </a>
-                <span class="chip m">Portal</span>
             </div>
 
             <!-- Navigation Links -->
-            <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3.5 mb-2 mt-4">NAVIGASI</div>
+            <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 mb-2 mt-2">NAVIGASI</div>
             <nav class="space-y-1 text-sm font-semibold">
                 <button type="button" wire:click="setTab('overview')"
-                        class="w-full {{ $activeTab === 'overview' ? 'on' : '' }}">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"></rect><rect x="14" y="3" width="7" height="7" rx="2"></rect><rect x="3" y="14" width="7" height="7" rx="2"></rect><rect x="14" y="14" width="7" height="7" rx="2"></rect></svg>
-                    <span>Ringkasan musim</span>
+                        class="w-full flex items-center gap-2.5 {{ $activeTab === 'overview' ? 'on' : '' }}">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"></rect><rect x="14" y="3" width="7" height="7" rx="2"></rect><rect x="3" y="14" width="7" height="7" rx="2"></rect><rect x="14" y="14" width="7" height="7" rx="2"></rect></svg>
+                    <span class="whitespace-nowrap font-bold text-sm">Ringkasan Balap</span>
                 </button>
 
                 <button type="button" wire:click="setTab('tickets')"
                         class="w-full flex items-center justify-between {{ $activeTab === 'tickets' ? 'on' : '' }}">
-                    <div class="flex items-center gap-3">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9a3 3 0 0 0 0 6v3h18v-3a3 3 0 0 1 0-6V6H3z"></path><path d="M14 6v12" stroke-dasharray="2 3"></path></svg>
-                        <span>Tiket &amp; BIB Saya</span>
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9a3 3 0 0 0 0 6v3h18v-3a3 3 0 0 1 0-6V6H3z"></path><path d="M14 6v12" stroke-dasharray="2 3"></path></svg>
+                        <span class="whitespace-nowrap font-bold text-sm">Tiket &amp; BIB Saya</span>
                     </div>
                     @if($statTotal > 0)
-                    <span class="chip p ml-auto">{{ $statTotal }}</span>
+                    <span class="ml-auto text-[10px] font-black px-2 py-0.5 rounded bg-[var(--pine)] text-white border border-[var(--ink)] shadow-[1px_1px_0_var(--ink)] shrink-0">{{ $statTotal }}</span>
                     @endif
                 </button>
 
                 <button type="button" wire:click="setTab('events')"
-                        class="w-full {{ $activeTab === 'events' ? 'on' : '' }}">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M8 3v4M16 3v4M3 11h18"></path></svg>
-                    <span>Jadwal balap</span>
+                        class="w-full flex items-center gap-2.5 {{ $activeTab === 'events' ? 'on' : '' }}">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M8 3v4M16 3v4M3 11h18"></path></svg>
+                    <span class="whitespace-nowrap font-bold text-sm">Jadwal balap</span>
                 </button>
 
                 <button type="button" wire:click="setTab('profile')"
-                        class="w-full {{ $activeTab === 'profile' ? 'on' : '' }}">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1-5 15-5 16 0"></path></svg>
-                    <span>Profil &amp; akun</span>
+                        class="w-full flex items-center gap-2.5 {{ $activeTab === 'profile' ? 'on' : '' }}">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1-5 15-5 16 0"></path></svg>
+                    <span class="whitespace-nowrap font-bold text-sm">Profil &amp; akun</span>
                 </button>
 
                 <button type="button" wire:click="setTab('help')"
-                        class="w-full {{ $activeTab === 'help' ? 'on' : '' }}">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.500 9.500a2.500 2.500 0 1 1 3.500 2.300c-.7.4-1 .9-1 1.700M12 17v.01"></path></svg>
-                    <span>Pusat bantuan</span>
+                        class="w-full flex items-center gap-2.5 {{ $activeTab === 'help' ? 'on' : '' }}">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.500 9.500a2.500 2.500 0 1 1 3.500 2.300c-.7.4-1 .9-1 1.700M12 17v.01"></path></svg>
+                    <span class="whitespace-nowrap font-bold text-sm">Pusat bantuan</span>
                 </button>
 
                 <a href="{{ route('helpdesk.my-tickets') }}" wire:navigate class="w-full flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"></path></svg>
-                        <span>Tiket Bantuan</span>
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"></path></svg>
+                        <span class="whitespace-nowrap font-bold text-sm">Tiket Bantuan</span>
                     </div>
                     @php
                         $userTicketCount = \App\Models\HelpdeskTicket::where('reporter_id', Auth::id())
@@ -60,21 +60,47 @@
                             ->count();
                     @endphp
                     @if($userTicketCount > 0)
-                    <span class="chip p ml-auto">{{ $userTicketCount }}</span>
+                    <span class="ml-auto text-[10px] font-black px-2 py-0.5 rounded bg-[var(--pine)] text-white border border-[var(--ink)] shadow-[1px_1px_0_var(--ink)] shrink-0">{{ $userTicketCount }}</span>
                     @endif
                 </a>
 
-                <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3.5 pt-5 pb-1">PUBLIK</div>
+                <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 pt-5 pb-1">PUBLIK</div>
 
-                <a href="/" wire:navigate class="w-full">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
-                    <span>Kembali ke website</span>
+                <a href="/" wire:navigate class="w-full flex items-center gap-2.5">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+                    <span class="whitespace-nowrap font-bold text-sm">Kembali ke website</span>
                 </a>
 
-                @if(Auth::user()->isAdmin() || Auth::user()->isPenyelenggara())
-                <a href="/admin" class="w-full">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    <span>Panel Pengelola</span>
+                <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 pt-5 pb-1">PENYELENGGARA</div>
+
+                @php
+                    $sidebarOrg = Auth::user()->organizations()->first() ?? Auth::user()->ownedOrganizations()->first();
+                @endphp
+
+                @if ($sidebarOrg)
+                    <a href="{{ route('organizations.show', $sidebarOrg) }}" wire:navigate class="w-full flex items-center justify-between">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            <span class="whitespace-nowrap font-bold text-sm">Dasbor Penyelenggara</span>
+                        </div>
+                        @php($orgQuota = $sidebarOrg->quotaBalance())
+                        @if ($orgQuota > 0)
+                            <span class="text-[10px] font-black px-2 py-0.5 rounded bg-[var(--pine)] text-white border border-[var(--ink)] shadow-[1px_1px_0_var(--ink)] shrink-0">
+                                {{ $orgQuota }} Kuota
+                            </span>
+                        @endif
+                    </a>
+                @else
+                    <a href="{{ route('packages.index') }}" wire:navigate class="w-full flex items-center gap-2.5 group" title="Beli paket kuota untuk membuka dasbor penyelenggara">
+                        <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        <span class="whitespace-nowrap font-bold text-sm text-[var(--ink)]">Mulai Jadi Penyelenggara</span>
+                    </a>
+                @endif
+
+                @if(Auth::user()->isAdmin())
+                <a href="/admin" class="w-full flex items-center gap-2.5">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span class="whitespace-nowrap font-bold text-sm">Panel Admin</span>
                 </a>
                 @endif
             </nav>
@@ -106,7 +132,9 @@
         <div x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
              class="side relative flex flex-col w-72 max-w-full h-full bg-[#FBF4E6] text-[var(--ink)] border-r-[3px] border-[#10282E] p-6 shadow-2xl overflow-y-auto">
             <div class="flex items-center justify-between pb-6 mb-4 border-b border-[#10282E]/15">
-                <a href="/" class="font-heading font-extrabold text-2xl text-[var(--ink)]">Velosha</a>
+                <a href="/" wire:navigate class="flex items-center gap-2.5 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
+                    <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
+                </a>
                 <button type="button" @click="sidebarOpen = false" class="p-1.5 text-[var(--ink)]">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
@@ -115,7 +143,7 @@
             <nav class="space-y-1.5 text-sm flex-1">
                 <button type="button" wire:click="setTab('overview')" @click="sidebarOpen = false"
                         class="w-full {{ $activeTab === 'overview' ? 'on' : '' }}">
-                    Ringkasan musim
+                    Ringkasan Balap
                 </button>
                 <button type="button" wire:click="setTab('tickets')" @click="sidebarOpen = false"
                         class="w-full {{ $activeTab === 'tickets' ? 'on' : '' }}">
@@ -142,6 +170,16 @@
                 <a href="/" wire:navigate class="w-full mt-4">
                     Kembali ke website
                 </a>
+
+                @if ($sidebarOrg)
+                    <a href="{{ route('organizations.show', $sidebarOrg) }}" wire:navigate class="w-full flex items-center gap-2 mt-2">
+                        <span>Dasbor Penyelenggara</span>
+                    </a>
+                @else
+                    <a href="{{ route('packages.index') }}" wire:navigate class="w-full flex items-center gap-2 mt-2">
+                        <span>Mulai Jadi Penyelenggara</span>
+                    </a>
+                @endif
             </nav>
 
             <div class="pt-6 border-t border-[#10282E]/15 mt-auto">
@@ -153,14 +191,14 @@
     </div>
 
     <!-- ==================== MAIN APPLICATION CANVAS ==================== -->
-    <div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+    <div class="flex-1 min-w-0 flex flex-col min-h-screen" style="flex: 1 1 0%; min-width: 0;">
 
         <!-- TOP BAR FOR MOBILE -->
         <header class="md:hidden h-16 bg-[#FBF4E6] border-b-[2.5px] border-[#10282E] px-4 flex items-center justify-between sticky top-0 z-20">
             <button type="button" @click="sidebarOpen = true" class="p-2 text-[var(--ink)]">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </button>
-            <span class="font-heading font-black text-lg">Portal Rider</span>
+            <span class="font-heading font-black text-lg">Dashboard Rider</span>
             <span class="disp w-8 h-8 border-2 border-[#10282E] rounded-md bg-[var(--orange)] flex items-center justify-center font-bold text-xs text-[var(--ink)]">
                 {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
             </span>
@@ -173,21 +211,20 @@
             @if($activeTab === 'overview')
 
                 <div>
-                    <div class="text-[13px] font-bold tracking-[.08em] text-[var(--mute)] uppercase">PORTAL RIDER</div>
-                    <h1 class="h3 font-heading text-3xl font-black mt-0.5">Ringkasan musim</h1>
+                    <div class="text-[13px] font-bold tracking-[.08em] text-[var(--mute)] uppercase">DASHBOARD RIDER</div>
+                    <h1 class="h3 font-heading text-3xl font-black mt-0.5">Ringkasan Balap</h1>
                 </div>
 
                 <!-- Sapaan Kartun Screen-Print Oranye Solid (#DE7119) Sesuai Portal.dc.html -->
-                <section class="card bg-[#DE7119] p-8 sm:p-9 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6 min-h-[190px]">
+                <section class="card bg-[#DE7119] p-8 sm:p-9 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6 min-h-[170px]">
                     <div class="dots absolute inset-0 opacity-40 pointer-events-none"></div>
 
                     <div class="relative z-10">
-                        <span class="chip">Musim 2026/2027</span>
-                        <h2 class="h2 text-3xl sm:text-[44px] mt-3.5 text-[var(--ink)]">
+                        <h2 class="h2 text-3xl sm:text-[40px] mt-1 text-[var(--ink)] font-black">
                             Halo, {{ Auth::user()->name }}!
                         </h2>
                         <p class="mt-2.5 max-w-[480px] text-base font-medium text-[var(--ink)] leading-relaxed">
-                            Pantau status pendaftaran, jadwal race terdekat, dan nomor BIB RFID kamu di sini.
+                            Pantau status tiket balap, nomor BIB RFID, dan jadwal race terdekatmu di sini.
                         </p>
                     </div>
 
@@ -651,7 +688,7 @@
             <div>
                 <h3 class="h3 font-heading text-xl font-black text-[var(--ink)]">Konfirmasi Keluar</h3>
                 <p class="text-sm text-[var(--mute)] mt-1">
-                    Apakah Anda yakin ingin keluar dari portal rider Velosha?
+                    Apakah Anda yakin ingin keluar dari dashboard rider Velosha?
                 </p>
             </div>
 

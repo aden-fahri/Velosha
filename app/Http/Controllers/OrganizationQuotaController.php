@@ -17,18 +17,10 @@ use Illuminate\View\View;
 class OrganizationQuotaController extends Controller
 {
     /**
-     * Halaman publik katalog paket kuota & harga SaaS.
+     * Halaman publik katalog paket kuota & harga untuk penyelenggara.
      */
-    public function publicPackages(): View|RedirectResponse
+    public function publicPackages(): View
     {
-        if (Auth::check()) {
-            $user = Auth::user();
-            $org = $user->organizations()->first() ?? $user->ownedOrganizations()->first();
-            if ($org) {
-                return redirect()->route('organizations.quota', $org);
-            }
-        }
-
         $packages = QuotaPackage::active()->orderBy('price')->get();
 
         return view('pages.packages', [
@@ -39,24 +31,11 @@ class OrganizationQuotaController extends Controller
     /**
      * Tampilkan saldo kuota, daftar paket, dan riwayat mutasi organisasi.
      */
-    public function index(Organization $organization): View
+    public function index(Organization $organization): RedirectResponse
     {
         $this->authorizeMember($organization);
 
-        $packages = QuotaPackage::active()->orderBy('price')->get();
-        $balance = $organization->quotaBalance();
-        $ledger = $organization->quotaLedger()
-            ->with(['purchase.package', 'event'])
-            ->latest('id')
-            ->take(20)
-            ->get();
-
-        return view('pages.organizations.quota', [
-            'organization' => $organization,
-            'packages' => $packages,
-            'balance' => $balance,
-            'ledger' => $ledger,
-        ]);
+        return redirect()->route('organizations.show', ['organization' => $organization->slug, 'tab' => 'kuota']);
     }
 
     /**
@@ -87,8 +66,20 @@ class OrganizationQuotaController extends Controller
             // Mode simulasi lokal jika Midtrans API Key di .env masih kosong
             $purchase->markAsPaid('simulation', ['note' => 'Local development mock settlement']);
 
-            return redirect()->route('organizations.quota', ['organization' => $organization->slug])
-                ->with('status', "Pembelian paket '{$package->name}' berhasil! Saldo bertambah +{$package->events_count} kuota event.");
+            $redirectRoute = $request->input('redirect_to') === 'events.create'
+                ? route('organizations.events.create', ['organization' => $organization->slug])
+                : route('organizations.show', ['organization' => $organization->slug, 'tab' => 'kuota']);
+
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'is_mock' => true,
+                    'redirect_url' => $redirectRoute,
+                ]);
+            }
+
+            return redirect($redirectRoute)
+                ->with('status', "Pembelian paket '{$package->name}' berhasil! Kuota bertambah +{$package->events_count} event. Anda sekarang resmi menjadi Penyelenggara.");
         }
 
         // Mode Midtrans Asli
@@ -113,6 +104,9 @@ class OrganizationQuotaController extends Controller
                     'name' => mb_substr($package->name . ' (' . $package->events_count . ' Kuota Event)', 0, 50),
                 ],
             ],
+            'callbacks' => [
+                'finish' => route('organizations.show', ['organization' => $organization->slug, 'tab' => 'kuota']),
+            ],
         ];
 
         try {
@@ -126,6 +120,16 @@ class OrganizationQuotaController extends Controller
                     'snap_token' => $data['token'] ?? null,
                     'payload' => $data,
                 ]);
+
+                if ($request->expectsJson() || $request->ajax()) {
+                    return response()->json([
+                        'success' => true,
+                        'snap_token' => $data['token'] ?? null,
+                        'order_id' => $orderId,
+                        'redirect_url' => $data['redirect_url'] ?? null,
+                        'finish_url' => route('organizations.show', ['organization' => $organization->slug, 'tab' => 'kuota']),
+                    ]);
+                }
 
                 if (! empty($data['redirect_url'])) {
                     return redirect()->away($data['redirect_url']);

@@ -73,13 +73,6 @@ class Event extends Model
             if ($event->organization_id) {
                 $org = $event->organization ?? Organization::find($event->organization_id);
                 if ($org) {
-                    // Penyelenggara wajib terverifikasi sebelum dapat mengajukan atau menayangkan event
-                    if (in_array($event->status, [self::STATUS_SUBMITTED, self::STATUS_PUBLISHED], true)) {
-                        if (! $org->isVerified()) {
-                            throw new \DomainException('Komunitas / organisasi belum diverifikasi oleh admin Velosha. Lengkapi verifikasi terlebih dahulu.');
-                        }
-                    }
-
                     if ($event->status === self::STATUS_PUBLISHED) {
                         $wasAlreadyPublishedForOrg = $event->exists
                             && $event->getOriginal('status') === self::STATUS_PUBLISHED

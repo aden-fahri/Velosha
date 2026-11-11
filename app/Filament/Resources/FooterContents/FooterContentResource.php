@@ -21,7 +21,9 @@ class FooterContentResource extends Resource
 {
     protected static ?string $model = FooterContent::class;
 
-    protected static ?string $navigationLabel = 'Footer';
+    protected static ?string $navigationLabel = 'Footer & Kontak';
+
+    protected static string | \UnitEnum | null $navigationGroup = 'Konten & Halaman';
 
     protected static ?string $modelLabel = 'Konten Footer';
 
@@ -31,7 +33,7 @@ class FooterContentResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?int $navigationSort = 7;
+    protected static ?int $navigationSort = 6;
 
     public static function form(Schema $schema): Schema
     {

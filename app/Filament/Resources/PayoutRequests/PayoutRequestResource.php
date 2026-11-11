@@ -19,6 +19,10 @@ class PayoutRequestResource extends Resource
 
     protected static ?string $navigationLabel = 'Pencairan Dana (Payout)';
 
+    protected static string | \UnitEnum | null $navigationGroup = 'Operasional Balap';
+
+    protected static ?int $navigationSort = 3;
+
     protected static ?string $modelLabel = 'Pencairan Dana';
 
     protected static ?string $pluralModelLabel = 'Pencairan Dana (Payout)';

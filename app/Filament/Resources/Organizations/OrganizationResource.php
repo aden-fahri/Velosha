@@ -22,6 +22,10 @@ class OrganizationResource extends Resource
 
     protected static ?string $navigationLabel = 'Komunitas & EO';
 
+    protected static string | \UnitEnum | null $navigationGroup = 'Komunitas & Pengguna';
+
+    protected static ?int $navigationSort = 1;
+
     protected static ?string $modelLabel = 'Organisasi / Komunitas';
 
     protected static ?string $pluralModelLabel = 'Komunitas & EO';

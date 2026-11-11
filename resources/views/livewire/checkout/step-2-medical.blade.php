@@ -1,21 +1,21 @@
 @if ($step === 2)
 {{-- Langkah 2: data diri peserta (sesuai KTP) --}}
-<div class="bg-white border border-veloborder velo-box-1 p-6 space-y-4">
-    <h3 class="text-sm font-bold text-teal-900 uppercase tracking-wider flex items-center border-b border-velosurface pb-3">
-        <span class="w-2 h-2 bg-race-500 velo-box-1 mr-2"></span>
-        Data Pribadi Peserta (Sesuai KTP)
+<div class="rounded-2xl border-[2.5px] border-[var(--ink)] bg-white shadow-[4px_4px_0_var(--ink)] p-6 space-y-5">
+    <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider flex items-center gap-2 border-b-2 border-[var(--ink)] pb-3">
+        <span class="w-2.5 h-2.5 rounded-sm bg-[var(--orange)] border border-[var(--ink)]"></span>
+        <span>Data Pribadi Peserta (Sesuai KTP)</span>
     </h3>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-            <label class="block text-xs font-semibold text-teal-700 mb-1">Nama Lengkap Peserta *</label>
-            <input type="text" wire:model="participant_name" placeholder="Sesuai KTP" class="w-full px-3 py-2 text-xs border border-veloborderstrong velo-box-1 focus:outline-none focus:border-race-500 bg-white">
-            @error('participant_name') <p class="text-[11px] text-red-600 mt-1">{{ $message }}</p> @enderror
+            <label class="block text-xs font-bold text-[var(--ink)] mb-1">Nama Lengkap Peserta *</label>
+            <input type="text" wire:model="participant_name" placeholder="Sesuai KTP" class="w-full px-3 py-2.5 text-xs rounded-xl border-2 border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--mustard)] bg-white font-medium">
+            @error('participant_name') <p class="text-[11px] font-bold text-red-600 mt-1">{{ $message }}</p> @enderror
         </div>
         <div>
-            <label class="block text-xs font-semibold text-teal-700 mb-1">Nomor Induk Kependudukan (NIK / Paspor) *</label>
-            <input type="text" wire:model="identity_number" placeholder="16 digit NIK" class="w-full px-3 py-2 text-xs border border-veloborderstrong velo-box-1 focus:outline-none focus:border-race-500 bg-white">
-            @error('identity_number') <p class="text-[11px] text-red-600 mt-1">{{ $message }}</p> @enderror
+            <label class="block text-xs font-bold text-[var(--ink)] mb-1">Nomor Induk Kependudukan (NIK / Paspor) *</label>
+            <input type="text" wire:model="identity_number" placeholder="16 digit NIK" class="w-full px-3 py-2.5 text-xs rounded-xl border-2 border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--mustard)] bg-white font-medium">
+            @error('identity_number') <p class="text-[11px] font-bold text-red-600 mt-1">{{ $message }}</p> @enderror
         </div>
     </div>
 
@@ -103,14 +103,14 @@
 </div>
 
 {{-- Navigasi langkah 2 --}}
-<div class="flex items-center justify-between gap-3">
-    <button type="button" wire:click="toStep1" class="px-4 py-3 bg-white hover:bg-velosurfacealt text-teal-800 border border-veloborderstrong velo-box-1 text-xs font-semibold shadow-xs transition">
-        <i data-lucide="arrow-left" class="w-3.5 h-3.5 mr-1.5"></i>
-        Kembali
+<div class="flex items-center justify-between gap-3 pt-2">
+    <button type="button" wire:click="toStep1" class="px-5 py-3 bg-white hover:bg-[var(--paper)] text-[var(--ink)] border-2 border-[var(--ink)] rounded-xl text-xs font-black shadow-[2px_2px_0_var(--ink)] hover:translate-x-0.5 hover:translate-y-0.5 transition-all cursor-pointer">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5 inline mr-1.5"></i>
+        <span>Kembali</span>
     </button>
-    <button type="button" wire:click="toStep3" class="flex items-center justify-center bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-semibold px-6 py-3 text-xs velo-box-1 shadow-sm transition">
+    <button type="button" wire:click="toStep3" class="flex items-center justify-center gap-2 bg-[var(--orange)] hover:bg-[var(--orange-l)] text-white font-black px-6 py-3 text-xs rounded-xl border-2 border-[var(--ink)] shadow-[3px_3px_0_var(--ink)] hover:translate-x-0.5 hover:translate-y-0.5 transition-all cursor-pointer">
         <span>Lanjut ke Langkah Pembayaran</span>
-        <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-2"></i>
+        <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
     </button>
 </div>
 @endif

@@ -21,7 +21,9 @@ class TicketPackageContentResource extends Resource
 {
     protected static ?string $model = TicketPackageContent::class;
 
-    protected static ?string $navigationLabel = 'Ticket Package';
+    protected static ?string $navigationLabel = 'Paket Kuota & Tiket';
+
+    protected static string | \UnitEnum | null $navigationGroup = 'Konten & Halaman';
 
     protected static ?string $modelLabel = 'Isi Paket Tiket';
 
@@ -31,7 +33,7 @@ class TicketPackageContentResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTicket;
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {

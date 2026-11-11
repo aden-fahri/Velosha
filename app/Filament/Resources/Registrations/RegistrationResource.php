@@ -22,6 +22,8 @@ class RegistrationResource extends Resource
 
     protected static ?string $navigationLabel = 'Registrations & BIB';
 
+    protected static string | \UnitEnum | null $navigationGroup = 'Operasional Balap';
+
     protected static ?string $modelLabel = 'Pendaftaran Peserta';
 
     protected static ?string $pluralModelLabel = 'Pendaftaran Peserta';

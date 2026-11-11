@@ -21,29 +21,56 @@
     $rpcLabel = $rpcStart->format('j') . '-' . $rpcEnd->format('j') . ' ' . $monthShort[(int) $rpcEnd->format('n')];
     $raceLabel = $eventDate->format('j') . ' ' . $monthShort[(int) $eventDate->format('n')];
 @endphp
-<!-- Banner Screenprint Neobrutalist dengan Pesepeda Menikung (EventDetail.dc.html) -->
-<section style="position: relative; min-height: 380px; border-bottom: 3px solid #10282E; overflow: hidden; background: #F6B777; display: flex; align-items: flex-end; padding-bottom: 36px">
-    <svg viewBox="0 0 1440 380" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true" style="position: absolute; inset: 0">
-        <rect width="1440" height="380" fill="#F6B777"></rect>
-        <circle cx="1130" cy="120" r="64" fill="#FBF4E6" stroke="#10282E" stroke-width="4"></circle>
-        <path d="M720 270 L820 130 L920 270Z M880 270 L1010 90 L1140 270Z M1100 270 L1200 150 L1300 270Z" fill="#B2590F" stroke="#10282E" stroke-width="4" stroke-linejoin="round"></path>
-        <path d="M0 250 Q300 190 600 240 T1200 230 T1440 220 V380 H0Z" fill="#7DB88A" stroke="#10282E" stroke-width="4"></path>
-        <path d="M0 310 Q360 270 720 300 T1440 290 V380 H0Z" fill="#1F6F4A" stroke="#10282E" stroke-width="4"></path>
+@if ($event->status !== \App\Models\Event::STATUS_PUBLISHED)
+<div class="bg-[var(--mustard)] border-b-[2.5px] border-[var(--ink)] text-[var(--ink)] px-4 py-2.5 text-center text-xs font-black shadow-xs">
+    Mode Pratinjau Panitia &mdash; Event ini berstatus <strong>{{ strtoupper(str_replace('_', ' ', $event->status)) }}</strong> dan belum dibuka untuk pendaftaran umum.
+</div>
+@endif
+<!-- Page Header: Konsisten dengan Kalender, Tentang, Regulasi, & Bantuan -->
+<section class="relative overflow-hidden" style="background: var(--butter, #F8E3B5); border-bottom: 3.5px solid var(--ink, #10282E); padding: 52px 0;">
+    {{-- Elemen Dekorasi Geometris Neobrutalism di Sisi Kanan --}}
+    <svg aria-hidden="true" style="position:absolute; top:0; right:0; width:520px; max-width:45%; height:100%; z-index:1; pointer-events:none;" viewBox="0 0 520 280">
+        <g stroke="#10282E" stroke-width="3" stroke-linejoin="round">
+            <circle cx="90" cy="65" r="9" fill="#DE7119"></circle>
+            <rect x="160" y="145" width="20" height="20" rx="3" fill="#1F6F4A" transform="rotate(20 170 155)"></rect>
+            <path d="M250 215 l12 -20 l12 20z" fill="#F4BE3F"></path>
+            <circle cx="230" cy="55" r="7" fill="#9B3D5A"></circle>
+            <rect x="320" y="115" width="18" height="18" rx="3" fill="#F4BE3F" transform="rotate(-15 329 124)"></rect>
+            <path d="M420 65 l12 -20 l12 20z" fill="#DE7119"></path>
+            <circle cx="475" cy="165" r="8" fill="#1F6F4A"></circle>
+        </g>
     </svg>
-    <img class="band-art" src="/images/mockup/miring.png" alt="Pesepeda berjersey oranye melaju miring menikung" style="height: 330px; right: 90px; bottom: 0">
-    <div class="wrap" style="position: relative; z-index: 3; width: 100%">
-        <div style="display: flex; gap: 10px; flex-wrap: wrap">
-            <span class="chip o">{{ $event->type_label }}</span>
-            <span class="chip">{{ P::distance($maxDistance) }}</span>
-            <span class="chip m">{{ $eventDate->isFuture() ? ($totalRemaining > 0 ? 'Pendaftaran dibuka' : 'Slot penuh') : 'Event selesai' }}</span>
+
+    <div class="wrap relative z-10">
+        <div class="flex items-center gap-2.5 mb-3.5 flex-wrap">
+            <span class="chip font-bold bg-[var(--orange)] text-white border border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
+                {{ $event->type_label }}
+            </span>
+            <span class="chip font-bold bg-white text-[var(--ink)] border border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
+                {{ P::distance($maxDistance) }}
+            </span>
+            <span class="chip font-bold bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
+                {{ $eventDate->isFuture() ? ($totalRemaining > 0 ? 'Pendaftaran Dibuka' : 'Slot Penuh') : 'Event Selesai' }}
+            </span>
         </div>
-        <h1 class="h2" style="font-size: 56px; margin-top: 16px; max-width: 760px; line-height: 1.05">
+
+        <h1 class="font-heading font-black text-4xl sm:text-5xl md:text-6xl text-[var(--ink)] leading-[1.08] tracking-tight mb-4 max-w-3xl">
             {{ $event->title }}
         </h1>
-        <div style="display: flex; gap: 24px; margin-top: 14px; font-weight: 700; font-size: 15px; flex-wrap: wrap; color: #10282E">
-            <span>{{ P::tanggalLengkap($eventDate) }}</span>
-            <span>{{ $event->location_name }}</span>
-            <span>Start {{ $startTime }} WIB</span>
+
+        <div class="flex items-center gap-4 sm:gap-6 text-sm sm:text-base font-bold text-[var(--ink)]/90 flex-wrap mt-2">
+            <span class="inline-flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-[var(--orange)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span>{{ P::tanggalLengkap($eventDate) }}</span>
+            </span>
+            <span class="inline-flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-[var(--pine)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <span>{{ $event->location_name }}</span>
+            </span>
+            <span class="inline-flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-[var(--ink)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span>Start {{ $startTime }} WIB</span>
+            </span>
         </div>
     </div>
 </section>
@@ -56,17 +83,17 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
 
         <!-- Left: Course Overview, Maps & Itinerary (8 Cols) -->
-        <div class="lg:col-span-8 space-y-12">
+        <div class="lg:col-span-8 min-w-0 space-y-12">
 
             <!-- Quick Spec Highlights Strip -->
             @include('pages.event-detail.partials.specs-strip')
 
             <!-- Description -->
-            <div class="bg-white border border-veloborder velo-box-1 p-6 sm:p-8 space-y-4 shadow-xs">
-                <h2 class="text-xl font-extrabold text-teal-900 tracking-tight mb-2 border-b border-veloborder pb-3">Tentang Rute &amp; Pengalaman</h2>
-                <div class="text-sm text-velomutedlight leading-relaxed space-y-4">
+            <div class="bg-white border-[2.5px] border-[var(--ink)] rounded-2xl p-6 sm:p-8 space-y-4 shadow-[4px_4px_0_var(--ink)]">
+                <h2 class="font-heading font-black text-2xl text-[var(--ink)] tracking-tight mb-2 border-b-2 border-[var(--ink)]/15 pb-3">Tentang Rute &amp; Pengalaman</h2>
+                <div class="text-sm text-[var(--ink)]/85 leading-relaxed space-y-4 font-medium">
                     @if(strip_tags((string) $event->description) !== (string) $event->description)
-                        <div class="prose max-w-none text-sm text-velomutedlight leading-relaxed [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4 [&_img]:velo-box-3">
+                        <div class="prose max-w-none text-sm text-[var(--ink)]/85 leading-relaxed [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4 [&_img]:rounded-xl [&_img]:border-2 [&_img]:border-[var(--ink)]">
                             {!! $event->description !!}
                         </div>
                     @else
@@ -77,9 +104,9 @@
 
             @if ($event->youtube_video_id)
             <!-- Official Video -->
-            <div>
-                <h2 class="text-xl font-extrabold text-teal-900 tracking-tight mb-4">Video Resmi Event</h2>
-                <div class="border border-veloborderstrong velo-box-1 overflow-hidden">
+            <div class="space-y-4">
+                <h2 class="font-heading font-black text-2xl text-[var(--ink)] tracking-tight">Video Resmi Event</h2>
+                <div class="border-[2.5px] border-[var(--ink)] rounded-2xl shadow-[4px_4px_0_var(--ink)] overflow-hidden bg-black">
                     <div class="aspect-video w-full">
                         <iframe src="https://www.youtube.com/embed/{{ $event->youtube_video_id }}"
                                 class="w-full h-full" allowfullscreen loading="lazy"

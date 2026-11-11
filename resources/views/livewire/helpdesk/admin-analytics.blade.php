@@ -3,12 +3,13 @@
     {{-- ==================== SIDEBAR ADMIN ==================== --}}
     <aside class="w-full md:w-64 bg-[#FBF4E6] border-b-[3px] md:border-b-0 md:border-r-[3px] border-[var(--ink)] p-5 md:p-6 flex flex-col shrink-0 justify-between">
         <div class="space-y-6">
-            {{-- Brand Header --}}
-            <div class="flex items-center justify-between pb-5 border-b border-[#10282E]/10">
-                <a href="/" wire:navigate class="font-heading font-black text-2xl tracking-tight text-[var(--ink)] flex items-center gap-2">
-                    <span>Velosha</span>
+            {{-- Brand Logo Header (Official Brand Asset) --}}
+            <div class="flex items-center justify-between pb-5 border-b border-[#10282E]/15">
+                <a href="/" wire:navigate class="flex items-center gap-3 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
+                    <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
+                    <span class="font-extrabold text-2xl tracking-tight text-[#10282E]" style="font-family: 'Bricolage Grotesque', sans-serif;">Velosha</span>
                 </a>
-                <span class="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider bg-[var(--orange)] text-[var(--ink)] border-2 border-[var(--ink)] rounded-md shadow-[1px_1px_0_var(--ink)]">
+                <span class="px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider bg-[var(--orange)] text-white border-2 border-[var(--ink)] rounded-md shadow-[1px_1px_0_var(--ink)]">
                     ADMIN
                 </span>
             </div>

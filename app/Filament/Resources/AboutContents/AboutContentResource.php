@@ -21,7 +21,9 @@ class AboutContentResource extends Resource
 {
     protected static ?string $model = AboutContent::class;
 
-    protected static ?string $navigationLabel = 'About Page';
+    protected static ?string $navigationLabel = 'Halaman Tentang (About)';
+
+    protected static string | \UnitEnum | null $navigationGroup = 'Konten & Halaman';
 
     protected static ?string $modelLabel = 'Konten Tentang';
 

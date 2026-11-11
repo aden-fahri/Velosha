@@ -20,7 +20,9 @@ class RuleContentResource extends Resource
 {
     protected static ?string $model = RuleContent::class;
 
-    protected static ?string $navigationLabel = 'Rules Page';
+    protected static ?string $navigationLabel = 'Halaman Regulasi (Rules)';
+
+    protected static string | \UnitEnum | null $navigationGroup = 'Konten & Halaman';
 
     protected static ?string $modelLabel = 'Konten Aturan';
 

@@ -4,8 +4,9 @@
 
         <!-- Logo & Brand -->
         <div class="flex items-center gap-8">
-            <a href="/" wire:navigate class="flex items-center gap-2.5 transition-transform duration-150 hover:-translate-y-0.5" aria-label="Velosha — Beranda">
-                <img src="/images/logo-velosha.png" alt="Velosha" class="h-10 w-auto object-contain" />
+            <a href="/" wire:navigate class="flex items-center gap-3 transition-transform duration-150 hover:-translate-y-0.5" aria-label="Velosha — Beranda">
+                <img src="/images/logo-velosha.png" alt="Velosha" class="h-9 w-auto object-contain" />
+                <span class="font-extrabold text-2xl tracking-tight text-[var(--ink)]" style="font-family: 'Bricolage Grotesque', sans-serif;">Velosha</span>
             </a>
 
             <!-- Nav Links (Desktop — 7 items) -->
@@ -21,7 +22,7 @@
                     $active = request()->routeIs($key . '*') || ($key === 'home' && request()->is('/')) || ($key === 'events.index' && request()->is('events*'));
                 @endphp
                 <a href="{{ $url }}"
-                   wire:navigate
+                   wire:navigate.hover
                    @if ($active) aria-current="page" @endif
                    class="px-4 py-2 rounded-lg font-bold text-[15px] border-[2.5px] transition-all duration-150 {{ $active ? 'bg-[var(--mustard)] border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]' : 'border-transparent text-[var(--ink)] hover:bg-[var(--paper2)] hover:border-[var(--ink)] hover:shadow-[2px_2px_0_var(--ink)] hover:-translate-y-0.5' }}">
                     {{ $label }}
@@ -36,29 +37,31 @@
                 @php
                     $u = auth()->user();
                     $homeUrl = $u->home();
-                    $isFilament = $u->isAdmin() || $u->isPenyelenggara();
-                    if ($u->isOperator()) {
-                        $homeLabel = 'Antrian Helpdesk';
-                        $homeIcon = 'ticket';
-                    } elseif ($isFilament) {
+                    if ($u->isAdmin()) {
                         $homeLabel = 'Panel Admin';
                         $homeIcon = 'layout-dashboard';
+                    } elseif ($u->isOperator()) {
+                        $homeLabel = 'Antrian Helpdesk';
+                        $homeIcon = 'ticket';
+                    } elseif ($u->isPenyelenggara()) {
+                        $homeLabel = 'Dasbor Penyelenggara';
+                        $homeIcon = 'briefcase';
                     } else {
-                        $homeLabel = 'Portal Saya';
+                        $homeLabel = 'Dashboard Rider';
                         $homeIcon = 'gauge';
                     }
                 @endphp
-                <a href="{{ $homeUrl }}" {{ $isFilament ? '' : 'wire:navigate' }} class="btn btn-sm btn-ghost">
+                <a href="{{ $homeUrl }}" {{ $u->isAdmin() ? '' : 'wire:navigate.hover' }} class="btn btn-sm btn-ghost">
                     <i data-lucide="{{ $homeIcon }}" class="w-4 h-4 mr-1 text-[var(--ink)]"></i>
                     <span>{{ $homeLabel }}</span>
                 </a>
 
-                <a href="{{ route('ticket.show') }}" wire:navigate class="btn btn-sm btn-pine">
+                <a href="{{ route('ticket.show') }}" wire:navigate.hover class="btn btn-sm btn-pine">
                     <i data-lucide="ticket" class="w-4 h-4 mr-1"></i>
                     <span>Tiket Saya</span>
                 </a>
             @else
-                <a href="/login" wire:navigate class="btn btn-sm">
+                <a href="/login" wire:navigate.hover class="btn btn-sm">
                     <span>Masuk</span>
                     <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
                 </a>

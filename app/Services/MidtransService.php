@@ -73,6 +73,9 @@ class MidtransService
                     'name' => mb_substr($registration->category?->name ?? 'Tiket Race', 0, 50),
                 ],
             ],
+            'callbacks' => [
+                'finish' => route('ticket.show', ['registration' => $registration->id]),
+            ],
         ];
 
         $serverKey = (string) config('services.midtrans.server_key');
@@ -125,6 +128,50 @@ class MidtransService
         $calculated = hash('sha512', $orderId . $statusCode . $grossAmount . $serverKey);
 
         return hash_equals($calculated, $signatureKey);
+    }
+
+    /**
+     * Cek status transaksi langsung ke server REST API Midtrans.
+     */
+    public function checkStatus(string $orderId): ?array
+    {
+        $serverKey = (string) config('services.midtrans.server_key');
+        if (empty($serverKey)) {
+            return null;
+        }
+
+        $isProduction = (bool) config('services.midtrans.is_production', false);
+        $baseUrl = $isProduction ? 'https://api.midtrans.com/v2' : 'https://api.sandbox.midtrans.com/v2';
+
+        try {
+            $response = Http::withBasicAuth($serverKey, '')
+                ->timeout(3)
+                ->get("{$baseUrl}/{$orderId}/status");
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+        } catch (\Throwable $e) {
+            Log::warning("Midtrans checkStatus exception for {$orderId}: " . $e->getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * Cek apakah order Midtrans sudah lunas (settlement / capture).
+     */
+    public function isSettled(string $orderId): bool
+    {
+        $status = $this->checkStatus($orderId);
+        if (! $status) {
+            return false;
+        }
+
+        $trxStatus = $status['transaction_status'] ?? '';
+        $fraudStatus = $status['fraud_status'] ?? '';
+
+        return $trxStatus === 'settlement' || ($trxStatus === 'capture' && $fraudStatus === 'accept');
     }
 }
 

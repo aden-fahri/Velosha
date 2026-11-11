@@ -1,48 +1,57 @@
-<div class="vs min-h-screen bg-[var(--paper)] text-[var(--ink)] flex flex-col md:flex-row font-sans">
+<div x-data="{ sidebarOpen: false }" class="vs min-h-screen bg-[var(--paper)] text-[var(--ink)] flex flex-col md:flex-row font-sans">
 
     {{-- ==================== OPERATOR SIDEBAR ==================== --}}
-    <aside class="w-full md:w-64 bg-[#FBF4E6] border-b-2 md:border-b-0 md:border-r-[3px] border-[#10282E] p-6 flex flex-col shrink-0 justify-between">
-        <div class="space-y-6">
-            {{-- Brand Logo Header --}}
-            <div class="flex items-center justify-between pb-6 mb-2 border-b border-[#10282E]/10">
-                <a href="/" wire:navigate class="font-heading font-extrabold text-2xl text-[var(--ink)] tracking-tight" style="text-decoration: none">Velosha</a>
-                <span class="chip font-bold text-xs bg-[var(--mustard)] border border-[var(--ink)] px-2 py-0.5 rounded">
-                    {{ auth()->user()->isAdmin() ? 'Admin' : 'Operator' }}
-                </span>
+    <aside class="side hidden md:flex flex-col shrink-0 justify-between bg-[#FBF4E6] border-r-[3px] border-[#10282E] p-6 sticky top-0 h-screen overflow-y-auto overflow-x-hidden" style="width: 280px; min-width: 280px; max-width: 280px; flex-shrink: 0;">
+        <div>
+            {{-- Brand Logo Header (Official Brand Asset) --}}
+            <div class="flex items-center pb-5 mb-4 border-b border-[#10282E]/15">
+                <a href="/" wire:navigate class="flex items-center gap-3 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
+                    <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
+                    <span class="font-extrabold text-2xl tracking-tight text-[#10282E]" style="font-family: 'Bricolage Grotesque', sans-serif;">Velosha</span>
+                </a>
             </div>
 
-            {{-- Queue Navigation: single "Antrian tiket" item per mockup --}}
-            <div class="text-[11px] font-extrabold tracking-wider text-[var(--mute)] uppercase px-2 mb-2">Helpdesk · Operator</div>
+            {{-- Queue Navigation --}}
+            <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 mb-2 mt-2">NAVIGASI OPERATOR</div>
             <nav class="space-y-1 text-sm font-semibold" aria-label="Helpdesk">
                 <a href="{{ route('helpdesk.index') }}" wire:navigate
-                   class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg bg-[var(--mustard)] border-2 border-[var(--ink)] font-bold shadow-xs text-[var(--ink)]" style="text-decoration: none">
-                    <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13l3-8h12l3 8v6H3z"></path><path d="M3 13h5l1 3h6l1-3h5"></path></svg>
-                    <span>Antrian tiket</span>
+                   class="w-full flex items-center gap-2.5">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"></rect><rect x="14" y="3" width="7" height="7" rx="2"></rect><rect x="3" y="14" width="7" height="7" rx="2"></rect><rect x="14" y="14" width="7" height="7" rx="2"></rect></svg>
+                    <span class="whitespace-nowrap font-bold text-sm">Dasbor Operator</span>
                 </a>
-            </nav>
+                <a href="{{ route('helpdesk.index') }}?filter=all" wire:navigate
+                   class="w-full flex items-center gap-2.5 on">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>
+                    <span class="whitespace-nowrap font-bold text-sm">Antrian Tiket</span>
+                </a>
 
-            {{-- System Navigation --}}
-            <div class="text-[11px] font-extrabold tracking-wider text-[var(--mute)] uppercase px-2 mt-6 mb-2">Navigasi Sistem</div>
-            <nav class="space-y-1 text-sm font-semibold">
-                @if (auth()->user()->isAdmin())
-                    <a href="/helpdesk/analitik" wire:navigate
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[var(--ink)] hover:bg-[#F3E7CF] transition text-left {{ request()->is('helpdesk/analitik*') ? 'bg-[var(--mustard)] border-2 border-[var(--ink)] font-bold shadow-[2px_2px_0_var(--ink)]' : '' }}" style="text-decoration: none">
-                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                        <span>Analitik Helpdesk</span>
-                    </a>
+                {{-- 3. Tiket Selesai --}}
+                <a href="{{ route('helpdesk.index') }}?filter=closed" wire:navigate
+                   class="w-full flex items-center gap-2.5">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span class="whitespace-nowrap font-bold text-sm">Tiket Selesai</span>
+                </a>
 
-                    <a href="/admin"
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[var(--ink)] hover:bg-[#F3E7CF] transition text-left" style="text-decoration: none">
-                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                        <span>Admin Panel</span>
-                    </a>
+                {{-- 4. Profil & Akun --}}
+                <a href="{{ route('helpdesk.index') }}?tab=profile" wire:navigate
+                   class="w-full flex items-center gap-2.5">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1-5 15-5 16 0"></path></svg>
+                    <span class="whitespace-nowrap font-bold text-sm">Profil &amp; Akun</span>
+                </a>
+
+                <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 pt-5 pb-1">BERALIH</div>
+
+                <a href="/" wire:navigate class="w-full flex items-center gap-2.5">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg>
+                    <span class="whitespace-nowrap font-bold text-sm">Kembali ke website</span>
+                </a>
+
+                @if(Auth::user()->isAdmin())
+                <a href="/admin" class="w-full flex items-center gap-2.5">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span class="whitespace-nowrap font-bold text-sm">Panel Admin</span>
+                </a>
                 @endif
-
-                <a href="/" wire:navigate
-                   class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[var(--ink)] hover:bg-[#F3E7CF] transition text-left" style="text-decoration: none">
-                    <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                    <span>Kembali ke Beranda</span>
-                </a>
             </nav>
         </div>
 
@@ -69,8 +78,71 @@
         </div>
     </aside>
 
+    {{-- ==================== MOBILE DRAWER ==================== --}}
+    <div x-cloak x-show="sidebarOpen" class="fixed inset-0 z-40 md:hidden" role="dialog" aria-modal="true">
+        <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 bg-[#10282E]/80 backdrop-blur-xs" @click="sidebarOpen = false"></div>
+
+        <div x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
+             class="side relative flex flex-col w-72 max-w-full h-full bg-[#FBF4E6] text-[var(--ink)] border-r-[3px] border-[#10282E] p-6 shadow-2xl overflow-y-auto">
+            <div class="flex items-center justify-between pb-6 mb-4 border-b border-[#10282E]/15">
+                <a href="/" wire:navigate class="flex items-center gap-2.5">
+                    <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
+                    <span class="font-extrabold text-2xl tracking-tight text-[#10282E]" style="font-family: 'Bricolage Grotesque', sans-serif;">Velosha</span>
+                </a>
+                <button type="button" @click="sidebarOpen = false" class="p-2 text-[var(--ink)]">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+
+            <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 mb-2">NAVIGASI OPERATOR</div>
+            <nav class="space-y-1 text-sm font-semibold">
+                <a href="{{ route('helpdesk.index') }}" wire:navigate
+                   class="w-full flex items-center gap-2.5">
+                    <span>Dasbor Operator</span>
+                </a>
+                <a href="{{ route('helpdesk.index') }}?filter=all" wire:navigate
+                   class="w-full flex items-center gap-2.5 on">
+                    <span>Antrian Tiket</span>
+                </a>
+                <a href="{{ route('helpdesk.index') }}?filter=closed" wire:navigate
+                   class="w-full flex items-center gap-2.5">
+                    <span>Tiket Selesai</span>
+                </a>
+                <a href="{{ route('helpdesk.index') }}?tab=profile" wire:navigate
+                   class="w-full flex items-center gap-2.5">
+                    <span>Profil &amp; Akun</span>
+                </a>
+                <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 pt-5 pb-1">BERALIH</div>
+                <a href="/" wire:navigate class="w-full flex items-center gap-2.5">
+                    <span>Kembali ke website</span>
+                </a>
+            </nav>
+
+            <div class="pt-6 border-t border-[#10282E]/15 mt-auto">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-ghost btn-block btn-sm text-[#C23B22]">
+                        Keluar akun
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     {{-- ==================== MAIN CONTENT AREA ==================== --}}
-    <main class="flex-1 p-6 md:p-8 space-y-6 min-w-0">
+    <div class="flex-1 min-w-0 flex flex-col min-h-screen">
+        {{-- Top Bar for Mobile --}}
+        <header class="md:hidden h-16 bg-[#FBF4E6] border-b-[2.5px] border-[#10282E] px-4 flex items-center justify-between sticky top-0 z-20">
+            <button type="button" @click="sidebarOpen = true" class="p-2 text-[var(--ink)]">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+            <span class="font-heading font-black text-lg">Detail Tiket #{{ $ticket->id }}</span>
+            <span class="disp w-8 h-8 border-2 border-[#10282E] rounded-md bg-[var(--orange)] flex items-center justify-center font-bold text-xs text-[var(--ink)]">
+                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+            </span>
+        </header>
+
+        <main class="flex-1 p-6 md:p-8 space-y-6 min-w-0">
         <div class="max-w-6xl mx-auto space-y-6">
 
         {{-- Top Navigation & Breadcrumb --}}
@@ -541,4 +613,5 @@
 
         </div>
     </main>
+    </div>
 </div>

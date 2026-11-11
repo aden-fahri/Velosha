@@ -1,13 +1,13 @@
 @use('App\Support\EventCardPresenter', 'P')
 {{-- Langkah 1: pemilihan kategori jarak + ringkasan kategori terpilih (langkah 2 & 3) --}}
 @if ($step === 1 && $event !== null)
-<div class="bg-white border border-veloborder velo-box-1 p-6">
-    <div class="flex items-center justify-between mb-4">
-        <h3 class="text-sm font-bold text-teal-900 uppercase tracking-wider flex items-center">
-            <span class="w-2 h-2 bg-race-500 velo-box-1 mr-2"></span>
-            Pilih Kategori Jarak
+<div class="rounded-2xl border-[2.5px] border-[var(--ink)] bg-white shadow-[4px_4px_0_var(--ink)] p-6">
+    <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-[var(--ink)]">
+        <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-sm bg-[var(--orange)] border border-[var(--ink)]"></span>
+            <span>Pilih Kategori Jarak</span>
         </h3>
-        <a href="{{ route('events.show', $event->slug) }}" wire:navigate class="text-xs text-race-500 hover:underline">Ganti Event</a>
+        <a href="{{ route('events.show', $event->slug) }}" wire:navigate class="text-xs font-bold text-[var(--orange)] hover:underline">Ganti Event &rarr;</a>
     </div>
 
     <div class="space-y-3">
@@ -54,37 +54,37 @@
     </div>
 
     @if ($event->categories->isNotEmpty())
-    <button type="button" wire:click="toStep2" class="mt-5 w-full flex items-center justify-center bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-semibold py-3.5 text-xs velo-box-1 shadow-sm transition">
+    <button type="button" wire:click="toStep2" class="mt-5 w-full flex items-center justify-center gap-2 bg-[var(--orange)] hover:bg-[var(--orange-l)] text-white font-black py-3.5 text-xs rounded-xl border-2 border-[var(--ink)] shadow-[3px_3px_0_var(--ink)] hover:translate-x-0.5 hover:translate-y-0.5 transition-all cursor-pointer">
         <span>Lanjutkan ke Data Diri</span>
-        <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-2"></i>
+        <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
     </button>
     @endif
 </div>
 @endif
 
 @if ($step >= 2 && $category !== null)
-<div class="bg-white border border-veloborder velo-box-1 p-6">
-    <div class="flex items-center justify-between mb-4">
-        <h3 class="text-sm font-bold text-teal-900 uppercase tracking-wider flex items-center">
-            <span class="w-2 h-2 bg-race-500 velo-box-1 mr-2"></span>
-            Kategori Jarak Dipilih
+<div class="rounded-2xl border-[2.5px] border-[var(--ink)] bg-white shadow-[4px_4px_0_var(--ink)] p-6">
+    <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-[var(--ink)]">
+        <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-sm bg-[var(--orange)] border border-[var(--ink)]"></span>
+            <span>Kategori Jarak Dipilih</span>
         </h3>
-        <button type="button" wire:click="toStep1" class="text-xs text-race-500 hover:underline">Ubah</button>
+        <button type="button" wire:click="toStep1" class="text-xs font-bold text-[var(--orange)] hover:underline cursor-pointer">Ubah Kategori</button>
     </div>
 
-    <div class="border-2 border-race-500 bg-race-50/40 p-4 velo-box-3 flex items-center justify-between">
+    <div class="border-2 border-[var(--ink)] bg-[var(--paper)] p-4 rounded-xl shadow-[2px_2px_0_var(--ink)] flex items-center justify-between">
         <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-[var(--orange)] text-[var(--ink)] flex items-center justify-center font-bold text-xs velo-box-3">
+            <div class="w-10 h-10 bg-[var(--orange)] text-white border-2 border-[var(--ink)] rounded-lg flex items-center justify-center font-black text-xs shadow-[2px_2px_0_var(--ink)]">
                 {{ $category->code }}
             </div>
             <div>
-                <h4 class="text-sm font-bold text-teal-900">{{ $category->name }} ({{ P::distance($category->distance_km) }})</h4>
-                <div class="text-xs text-velomutedlight">Elevasi +{{ P::angka((float) $category->elevation_gain_m) }}m &middot; COT {{ P::jam((float) $category->cut_off_hours) }}</div>
+                <h4 class="text-sm font-black text-[var(--ink)]">{{ $category->name }} ({{ P::distance($category->distance_km) }})</h4>
+                <div class="text-xs text-[var(--mute)] font-medium">Elevasi +{{ P::angka((float) $category->elevation_gain_m) }}m &middot; COT {{ P::jam((float) $category->cut_off_hours) }}</div>
             </div>
         </div>
         <div class="text-right">
-            <div class="text-sm font-extrabold text-teal-900">Rp {{ P::angka((float) $category->price) }}</div>
-            <span class="text-[10px] px-1.5 py-0.5 velo-box-3 font-semibold {{ $category->remaining > 0 ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' : 'text-red-700 bg-red-50 border border-red-200' }}">
+            <div class="text-sm font-black text-[var(--ink)]">Rp {{ P::angka((float) $category->price) }}</div>
+            <span class="text-[10px] px-2 py-0.5 font-black rounded border border-[var(--ink)] {{ $category->remaining > 0 ? 'bg-[var(--pine)] text-white' : 'bg-red-500 text-white' }}">
                 {{ $category->remaining > 0 ? 'Tersedia' : 'Slot Penuh' }}
             </span>
         </div>

@@ -9,57 +9,57 @@
     'card' => ['label' => 'Kartu Kredit', 'hint' => 'Segera'],
 ])
 <div class="lg:col-span-4 sticky top-24 space-y-4">
-    <div class="bg-white border border-veloborderstrong p-6 velo-box-1 shadow-sm">
-        <h3 class="text-sm font-bold text-teal-900 uppercase tracking-wider border-b border-veloborder pb-3">
+    <div class="bg-white border-[2.5px] border-[var(--ink)] rounded-2xl p-6 shadow-[4px_4px_0_var(--ink)]">
+        <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider border-b-2 border-[var(--ink)] pb-3">
             Ringkasan Pembayaran
         </h3>
 
         <div class="my-4 space-y-3 text-xs">
             @if ($category !== null)
-            <div class="flex justify-between text-velomutedlight">
+            <div class="flex justify-between text-[var(--mute)]">
                 <span>Tiket {{ $category->name }} ({{ P::distance($category->distance_km) }})</span>
-                <span class="font-medium text-teal-900">Rp {{ P::angka((float) $category->price) }}</span>
+                <span class="font-bold text-[var(--ink)]">Rp {{ P::angka((float) $category->price) }}</span>
             </div>
             @else
-            <div class="text-velomutedlight text-center border border-dashed border-veloborderstrong velo-box-3 p-3">
+            <div class="text-[var(--mute)] text-center border-2 border-dashed border-[var(--ink)]/30 rounded-xl p-3 font-medium">
                 Pilih kategori jarak pada langkah 1 untuk melihat rincian biaya.
             </div>
             @endif
-            <div class="flex justify-between text-velomutedlight">
+            <div class="flex justify-between text-[var(--mute)]">
                 <span>Sewa RFID Timing Chip</span>
-                <span class="font-medium text-emerald-700">Termasuk (Gratis)</span>
+                <span class="font-bold text-[var(--pine)]">Termasuk (Gratis)</span>
             </div>
-            <div class="flex justify-between text-velomutedlight">
+            <div class="flex justify-between text-[var(--mute)]">
                 <span>Premi Asuransi Jiwa &amp; Kecelakaan</span>
-                <span class="font-medium text-emerald-700">Termasuk (Gratis)</span>
+                <span class="font-bold text-[var(--pine)]">Termasuk (Gratis)</span>
             </div>
-            <div class="flex justify-between text-velomutedlight">
+            <div class="flex justify-between text-[var(--mute)]">
                 <span>Biaya Layanan</span>
-                <span class="font-medium text-teal-900">Rp {{ P::angka((float) \App\Livewire\Checkout::SERVICE_FEE) }}</span>
+                <span class="font-bold text-[var(--ink)]">Rp {{ P::angka((float) \App\Livewire\Checkout::SERVICE_FEE) }}</span>
             </div>
 
-            <div class="pt-3 border-t border-veloborder flex justify-between items-baseline">
-                <span class="text-xs font-bold text-teal-900">Total Pembayaran</span>
-                <span class="text-xl font-extrabold text-race-600">Rp {{ P::angka((float) $this->total()) }}</span>
+            <div class="pt-3 border-t-2 border-[var(--ink)] flex justify-between items-baseline">
+                <span class="text-xs font-black text-[var(--ink)] uppercase tracking-wider">Total Pembayaran</span>
+                <span class="text-2xl font-black text-[var(--orange)]" style="font-family: 'Bricolage Grotesque', sans-serif">Rp {{ P::angka((float) $this->total()) }}</span>
             </div>
         </div>
 
         @if ($step === 3)
         {{-- Grid metode pembayaran (interaktif) --}}
-        <div class="border-t border-veloborder pt-4">
-            <div class="text-[10px] uppercase font-bold text-velomutedlight mb-2.5">Metode Pembayaran Midtrans</div>
-            <div class="grid grid-cols-3 gap-1.5">
+        <div class="border-t-2 border-[var(--ink)] pt-4">
+            <div class="text-[10px] uppercase font-black tracking-wider text-[var(--mute)] mb-2.5">Metode Pembayaran Midtrans</div>
+            <div class="grid grid-cols-3 gap-2">
                 @foreach ($methods as $key => $method)
                 @if ($key === 'card')
-                <div class="border border-veloborder bg-velosurfacealt velo-box-3 p-2 text-center opacity-60 cursor-not-allowed" title="Segera hadir">
-                    <div class="text-[10px] font-bold text-velomuted">{{ $method['label'] }}</div>
-                    <div class="text-[9px] text-velomutedlight mt-0.5">{{ $method['hint'] }}</div>
+                <div class="border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 p-2 text-center opacity-60 cursor-not-allowed" title="Segera hadir">
+                    <div class="text-[10px] font-bold text-gray-500">{{ $method['label'] }}</div>
+                    <div class="text-[9px] text-gray-400 mt-0.5">{{ $method['hint'] }}</div>
                 </div>
                 @else
                 <button type="button" wire:click="selectPaymentMethod('{{ $key }}')"
-                    class="border velo-box-3 p-2 text-center transition {{ $paymentMethod === $key ? 'border-race-500 bg-race-50/60 shadow-xs' : 'border-veloborder bg-white hover:border-[#93a0a1] cursor-pointer' }}">
-                    <div class="text-[10px] font-bold {{ $paymentMethod === $key ? 'text-race-700' : 'text-teal-800' }}">{{ $method['label'] }}</div>
-                    <div class="text-[9px] text-velomutedlight mt-0.5">{{ $method['hint'] }}</div>
+                    class="border-2 border-[var(--ink)] rounded-xl p-2 text-center transition cursor-pointer {{ $paymentMethod === $key ? 'bg-[var(--mustard)] shadow-[2px_2px_0_var(--ink)] font-black' : 'bg-white hover:bg-[var(--paper)] text-[var(--ink)] font-bold' }}">
+                    <div class="text-[10px]">{{ $method['label'] }}</div>
+                    <div class="text-[9px] text-[var(--mute)] mt-0.5">{{ $method['hint'] }}</div>
                 </button>
                 @endif
                 @endforeach
@@ -67,16 +67,31 @@
         </div>
 
         {{-- Countdown batas waktu checkout --}}
-        <div class="mt-4 p-3 bg-velosurfacealt border border-veloborder velo-box-3 text-center"
+        <div class="mt-4 p-3 bg-[var(--paper)] border-2 border-[var(--ink)] rounded-xl text-center shadow-[2px_2px_0_var(--ink)]"
              x-data="{ s: 900 }"
              x-init="setInterval(() => { if (s > 0) s--; }, 1000)">
-            <div class="text-[10px] uppercase font-bold text-velomutedlight mb-0.5">Batas Waktu Checkout</div>
-            <div class="text-lg font-black font-mono text-race-600 tracking-wider" x-text="String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0')">15:00</div>
+            <div class="text-[10px] uppercase font-black text-[var(--mute)] tracking-wider mb-0.5">Batas Waktu Checkout</div>
+            <div class="text-lg font-black font-mono text-[var(--orange)] tracking-wider" x-text="String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0')">15:00</div>
         </div>
 
-        <button type="button" wire:click="openPayment" class="mt-4 w-full flex items-center justify-center bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-semibold py-3.5 text-xs velo-box-1 shadow-sm transition">
-            <i data-lucide="lock" class="w-3.5 h-3.5 mr-2"></i>
-            <span>Lanjutkan Pembayaran</span>
+        {{-- Error feedback langsung di atas tombol --}}
+        @if ($error !== '')
+        <div class="mt-3 p-3.5 rounded-xl border-2 border-red-500 bg-red-100 text-red-900 text-xs font-bold shadow-[2px_2px_0_#991b1b] flex items-start gap-2">
+            <svg class="w-4 h-4 shrink-0 text-red-700 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <div>{{ $error }}</div>
+        </div>
+        @endif
+
+        <button type="button" wire:click="openPayment" wire:loading.attr="disabled"
+                class="mt-4 w-full flex items-center justify-center gap-2 bg-[var(--orange)] hover:bg-[var(--orange-l)] disabled:opacity-60 text-[var(--ink)] font-black py-3.5 text-xs rounded-xl border-2 border-[var(--ink)] shadow-[3px_3px_0_var(--ink)] hover:translate-x-0.5 hover:translate-y-0.5 transition-all cursor-pointer">
+            <span wire:loading.remove wire:target="openPayment" class="inline-flex items-center gap-2">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <span>Lanjutkan Pembayaran Midtrans</span>
+            </span>
+            <span wire:loading wire:target="openPayment" class="inline-flex items-center gap-2">
+                <svg class="animate-spin h-4 w-4 text-[var(--ink)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                <span>Menghubungkan ke Midtrans...</span>
+            </span>
         </button>
         <p class="text-[10px] text-velomuted text-center mt-2">Pembayaran diproses melalui Midtrans Snap.</p>
         @elseif ($step === 2)

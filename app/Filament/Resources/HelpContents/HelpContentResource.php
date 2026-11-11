@@ -20,7 +20,9 @@ class HelpContentResource extends Resource
 {
     protected static ?string $model = HelpContent::class;
 
-    protected static ?string $navigationLabel = 'Help Page';
+    protected static ?string $navigationLabel = 'Halaman Bantuan (FAQ)';
+
+    protected static string | \UnitEnum | null $navigationGroup = 'Konten & Halaman';
 
     protected static ?string $modelLabel = 'Konten Bantuan';
 

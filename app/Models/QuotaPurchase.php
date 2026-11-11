@@ -100,6 +100,11 @@ class QuotaPurchase extends Model
                 'created_at' => now(),
             ]);
 
+            // Peserta otomatis di-upgrade menjadi role Penyelenggara saat pembelian kuota lunas
+            if ($fresh->user && $fresh->user->isPeserta()) {
+                $fresh->user->update(['role' => User::ROLE_PENYELENGGARA]);
+            }
+
             $this->status = self::STATUS_PAID;
         });
     }

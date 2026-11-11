@@ -114,7 +114,9 @@ class User extends Authenticatable implements FilamentUser
 
     public function isPenyelenggara(): bool
     {
-        return $this->role === self::ROLE_PENYELENGGARA;
+        return $this->role === self::ROLE_PENYELENGGARA
+            || $this->ownedOrganizations()->exists()
+            || $this->organizations()->exists();
     }
 
     public function isOperator(): bool
@@ -132,15 +134,19 @@ class User extends Authenticatable implements FilamentUser
      */
     public function home(): string
     {
-        if ($this->isPeserta()) {
-            return '/dashboard';
+        if ($this->isAdmin()) {
+            return '/admin';
+        }
+
+        if ($this->isPenyelenggara()) {
+            return '/organisasi/dasbor';
         }
 
         if ($this->isOperator()) {
-            return '/helpdesk';
+            return '/operator/helpdesk';
         }
 
-        return '/admin';
+        return '/dashboard';
     }
 
     /**
@@ -197,13 +203,13 @@ class User extends Authenticatable implements FilamentUser
             return $this->isAdmin() || $this->isPenyelenggara() || $this->organizations()->exists();
         }
 
-        if (str_starts_with($path, '/helpdesk')) {
+        if (str_starts_with($path, '/helpdesk') || str_starts_with($path, '/operator')) {
             return $this->isOperator() || $this->isAdmin();
         }
 
-        // Halaman khusus peserta: portal rider, formulir pendaftaran race, & ruang tunggu antrean.
+        // Halaman peserta & penyelenggara: portal rider, formulir pendaftaran race, & ruang tunggu antrean.
         if (in_array($path, ['/dashboard', '/checkout', '/waiting-room'], true)) {
-            return $this->isPeserta();
+            return $this->isPeserta() || $this->isPenyelenggara();
         }
 
         // Halaman publik (/, /events, /ticket, dst.) bebas diakses siapa pun.
@@ -217,6 +223,15 @@ class User extends Authenticatable implements FilamentUser
     public function landingUrl(): string
     {
         $intended = session()->pull('url.intended');
+
+        if ($this->isPenyelenggara()) {
+            $intendedPath = $intended ? (parse_url($intended, PHP_URL_PATH) ?: '/') : null;
+            if ($intendedPath && str_starts_with($intendedPath, '/organisasi/')) {
+                return $intended;
+            }
+
+            return $this->home();
+        }
 
         return $this->canVisit($intended) ? $intended : $this->home();
     }

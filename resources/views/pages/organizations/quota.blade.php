@@ -1,172 +1,199 @@
-@extends('layouts.app', ['title' => 'Paket Kuota Event — ' . $organization->name])
+@extends('layouts.app', ['title' => 'Paket Kuota Event — ' . $organization->name, 'nav' => false])
 
 @section('content')
-<div class="bg-velosurfacealt min-h-[calc(100vh-140px)] py-10">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+<x-layout.organizer-navbar :organization="$organization" />
 
-        {{-- Notifikasi Status & Error --}}
+<section class="py-8 px-4 sm:px-6 lg:px-8 bg-[var(--paper)] min-h-[calc(100vh-64px)]">
+    <div class="max-w-6xl mx-auto space-y-8">
+
+        {{-- Flash Messages --}}
         @if (session('status'))
-        <div class="p-4 bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-semibold velo-box-1 flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 shrink-0"></i>
-                <span>{{ session('status') }}</span>
+            <div class="p-4 bg-[var(--pine-l)] border-2 border-[var(--ink)] text-[var(--ink)] rounded-xl shadow-[3px_3px_0_var(--ink)] flex items-center justify-between font-bold text-sm">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-6 h-6 rounded-full bg-[var(--pine)] text-white flex items-center justify-center text-xs font-black">&check;</span>
+                    <span>{{ session('status') }}</span>
+                </div>
             </div>
-        </div>
         @endif
 
         @if (session('error'))
-        <div class="p-4 bg-red-50 border border-red-300 text-red-800 text-xs font-semibold velo-box-1 flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <i data-lucide="alert-circle" class="w-4 h-4 text-red-600 shrink-0"></i>
-                <span>{{ session('error') }}</span>
+            <div class="p-4 bg-[var(--red-l)] border-2 border-[var(--ink)] text-[var(--ink)] rounded-xl shadow-[3px_3px_0_var(--ink)] flex items-center justify-between font-bold text-sm">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-6 h-6 rounded-full bg-[var(--red)] text-white flex items-center justify-center text-xs font-black">&times;</span>
+                    <span>{{ session('error') }}</span>
+                </div>
             </div>
-        </div>
         @endif
 
-        {{-- Header & Saldo Kuota --}}
-        <div class="bg-white border border-veloborderstrong p-6 sm:p-8 velo-box-1 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-sm">
-            <div>
-                <span class="text-[10px] uppercase font-bold tracking-wider text-velomuted">Monetisasi SaaS &bull; Penyelenggara</span>
-                <h1 class="text-2xl font-black text-teal-900 mt-1">{{ $organization->name }}</h1>
-                <p class="text-xs text-velomuted mt-1">
+        {{-- Header Kartu Komunitas Penyelenggara (Screen-Print Neobrutalist) --}}
+        <div class="p-6 sm:p-8 rounded-2xl border-[3px] border-[var(--ink)] bg-[var(--card)] shadow-[6px_6px_0_var(--ink)] flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="space-y-2">
+                <span class="chip font-black text-xs uppercase tracking-wider">
+                    Penyelenggara
+                </span>
+
+                <h1 class="text-3xl sm:text-4xl font-black text-[var(--ink)] tracking-tight" style="font-family: 'Bricolage Grotesque', sans-serif">
+                    {{ $organization->name }}
+                </h1>
+                <p class="text-xs sm:text-sm text-[var(--mute)] max-w-2xl font-medium">
                     Kuota event digunakan setiap kali organisasi Anda menayangkan (*publish*) race bersepeda di Velosha.
                 </p>
             </div>
-            <div class="bg-velosurfacealt border border-veloborder p-4 velo-box-3 text-center sm:text-right shrink-0 min-w-[160px]">
-                <div class="text-[10px] uppercase font-bold text-velomutedlight">Saldo Kuota Aktif</div>
-                <div class="text-3xl font-black font-mono {{ $balance > 0 ? 'text-emerald-700' : 'text-red-600' }} mt-0.5">
-                    {{ $balance }} <span class="text-xs font-sans font-bold text-velomuted">Event</span>
+
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="px-4 py-2.5 bg-[var(--paper)] border-2 border-[var(--ink)] rounded-xl shadow-[3px_3px_0_var(--ink)] text-center">
+                    <div class="text-[10px] uppercase font-black text-[var(--mute)]">Saldo Kuota Aktif</div>
+                    <div class="text-2xl font-black {{ $balance > 0 ? 'text-[var(--pine)]' : 'text-[var(--red)]' }}" style="font-family: 'Bricolage Grotesque', sans-serif">
+                        {{ $balance }} <span class="text-xs font-bold text-[var(--ink)]">Race</span>
+                    </div>
                 </div>
+
+                <a href="{{ route('organizations.events.create', $organization) }}"
+                   class="inline-flex items-center gap-2 px-5 py-3 bg-[var(--orange)] text-white font-extrabold text-sm rounded-xl border-2 border-[var(--ink)] shadow-[3px_3px_0_var(--ink)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <span>+ Buat Event Baru</span>
+                </a>
             </div>
         </div>
 
-        {{-- Pilihan Paket Kuota --}}
+        {{-- 4 Tab Navigasi Neobrutalist --}}
+        <div class="flex flex-wrap gap-2.5 border-b-2 border-[var(--line)] pb-2">
+            <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'events']) }}"
+               class="px-5 py-2.5 rounded-xl border-2 border-[var(--ink)] font-black text-sm transition-all flex items-center gap-2 bg-[var(--card)] text-[var(--ink)] hover:bg-[var(--paper2)]">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span>Event Saya</span>
+            </a>
+
+            <a href="{{ route('organizations.quota', $organization) }}"
+               class="px-5 py-2.5 rounded-xl border-2 border-[var(--ink)] font-black text-sm transition-all flex items-center gap-2 bg-[var(--mustard)] text-[var(--ink)] shadow-[3px_3px_0_var(--ink)] -translate-y-0.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg>
+                <span>Paket &amp; Kuota ({{ $balance }})</span>
+            </a>
+
+            <a href="{{ route('organizations.finance', $organization) }}"
+               class="px-5 py-2.5 rounded-xl border-2 border-[var(--ink)] font-black text-sm transition-all flex items-center gap-2 bg-[var(--card)] text-[var(--ink)] hover:bg-[var(--paper2)]">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                <span>Keuangan &amp; Payout</span>
+            </a>
+
+            <a href="{{ route('organizations.verification', $organization) }}"
+               class="px-5 py-2.5 rounded-xl border-2 border-[var(--ink)] font-black text-sm transition-all flex items-center gap-2 bg-[var(--card)] text-[var(--ink)] hover:bg-[var(--paper2)]">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>Verifikasi Identitas</span>
+            </a>
+        </div>
+
+        {{-- Pilihan 3 Paket Kuota --}}
         <div class="space-y-4">
             <div>
-                <h2 class="text-lg font-bold text-teal-900">Pilih Paket Kuota Event</h2>
-                <p class="text-xs text-velomuted">Beli sekali, berlaku selamanya tanpa batas masa aktif (*no expiry date*).</p>
+                <h2 class="text-2xl font-black text-[var(--ink)]" style="font-family: 'Bricolage Grotesque', sans-serif">
+                    Pilih Paket Kuota Event
+                </h2>
+                <p class="text-xs sm:text-sm text-[var(--mute)] font-medium">Beli sekali, berlaku selamanya tanpa batas masa aktif (*no expiry date*).</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                @foreach ($packages as $package)
-                @php($isBest = $package->events_count === 3)
-                <div class="relative bg-white border {{ $isBest ? 'border-race-500 ring-2 ring-race-100 shadow-md' : 'border-veloborderstrong' }} p-6 velo-box-1 flex flex-col justify-between">
-                    @if ($isBest)
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[var(--orange)] text-[var(--ink)] text-[10px] font-extrabold px-3 py-0.5 velo-box-3 uppercase tracking-wider">
-                        Paling Populer
-                    </div>
-                    @endif
-
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="text-base font-extrabold text-teal-900">{{ $package->name }}</h3>
-                                <div class="text-xs text-velomutedlight font-medium">{{ $package->events_count }} Kuota Event</div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch pt-2">
+                @foreach ($packages as $pkg)
+                    @php($isPopular = $pkg->events_count === 3)
+                    <div class="p-6 rounded-2xl border-[3px] border-[var(--ink)] bg-[var(--card)] {{ $isPopular ? 'shadow-[7px_7px_0_var(--ink)] ring-2 ring-[var(--orange)]' : 'shadow-[4px_4px_0_var(--ink)]' }} flex flex-col justify-between space-y-6">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-black text-[var(--ink)]" style="font-family: 'Bricolage Grotesque', sans-serif">
+                                    {{ $pkg->name }}
+                                </h3>
+                                <span class="px-2.5 py-0.5 text-xs font-black border-2 border-[var(--ink)] rounded-md bg-[var(--paper)] shadow-[1.5px_1.5px_0_var(--ink)]">
+                                    {{ $pkg->events_count }} Race
+                                </span>
                             </div>
-                            <span class="text-xs font-mono font-bold bg-velosurfacealt border border-veloborder px-2 py-0.5 velo-box-3 text-teal-800">
-                                {{ $package->events_count }} Race
-                            </span>
+
+                            <p class="text-xs text-[var(--mute)] leading-relaxed min-h-[36px] font-medium">
+                                {{ $pkg->description }}
+                            </p>
+
+                            <div class="border-y-2 border-[var(--line)] py-3">
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-xs font-bold text-[var(--mute)]">Rp</span>
+                                    <span class="text-3xl font-black text-[var(--ink)]" style="font-family: 'Bricolage Grotesque', sans-serif">
+                                        {{ number_format($pkg->price, 0, ',', '.') }}
+                                    </span>
+                                </div>
+                                <div class="text-[11px] font-bold text-[var(--pine)] mt-0.5">
+                                    (Rp {{ number_format($pkg->price / $pkg->events_count, 0, ',', '.') }} / race)
+                                </div>
+                            </div>
+
+                            <ul class="space-y-2 text-xs font-semibold text-[var(--ink)]">
+                                <li class="flex items-center gap-2">
+                                    <span class="w-4 h-4 rounded-full bg-[var(--pine)] text-white flex items-center justify-center text-[10px] font-black">&check;</span>
+                                    <span><strong>{{ $pkg->events_count }} Event</strong> aktif di kalender</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="w-4 h-4 rounded-full bg-[var(--pine)] text-white flex items-center justify-center text-[10px] font-black">&check;</span>
+                                    <span>Penerbitan nomor BIB &amp; QR otomatis</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="w-4 h-4 rounded-full bg-[var(--pine)] text-white flex items-center justify-center text-[10px] font-black">&check;</span>
+                                    <span>Tanpa batas masa aktif</span>
+                                </li>
+                            </ul>
                         </div>
 
-                        <p class="text-xs text-velomuted leading-relaxed">
-                            {{ $package->description }}
-                        </p>
-
-                        <div class="pt-3 border-t border-veloborder">
-                            <div class="text-[10px] text-velomuted uppercase font-bold">Harga Paket</div>
-                            <div class="text-2xl font-black text-race-600">
-                                Rp {{ \App\Support\EventCardPresenter::angka((float) $package->price) }}
-                            </div>
-                            <div class="text-[10px] text-velomutedlight mt-0.5">
-                                (Rp {{ \App\Support\EventCardPresenter::angka((float) ($package->price / $package->events_count)) }} / event)
-                            </div>
-                        </div>
+                        <form action="{{ route('organizations.quota.purchase', $organization) }}" method="POST" class="pt-2">
+                            @csrf
+                            <input type="hidden" name="package_id" value="{{ $pkg->id }}">
+                            <button type="submit"
+                                    class="w-full py-3 px-4 rounded-xl border-2 border-[var(--ink)] font-black text-xs uppercase tracking-wider {{ $isPopular ? 'bg-[var(--orange)] text-white hover:bg-[var(--orange-d)]' : 'bg-[var(--card)] text-[var(--ink)] hover:bg-[var(--paper2)]' }} shadow-[3px_3px_0_var(--ink)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all flex items-center justify-center gap-2">
+                                <span>Beli Kuota (Rp {{ number_format($pkg->price, 0, ',', '.') }})</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                            </button>
+                        </form>
                     </div>
-
-                    <form action="{{ route('organizations.quota.purchase', ['organization' => $organization->slug]) }}" method="POST" class="mt-6">
-                        @csrf
-                        <input type="hidden" name="package_id" value="{{ $package->id }}">
-                        <button type="submit"
-                                class="w-full flex items-center justify-center font-bold py-3 text-xs velo-box-1 shadow-sm transition {{ $isBest ? 'bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)]' : 'bg-white hover:bg-velosurfacealt text-teal-900 border border-veloborderstrong' }}">
-                            <i data-lucide="shopping-bag" class="w-3.5 h-3.5 mr-1.5"></i>
-                            <span>Beli Paket Ini</span>
-                        </button>
-                    </form>
-                </div>
                 @endforeach
             </div>
         </div>
 
-        {{-- Riwayat Mutasi Kuota (Ledger) --}}
-        <div class="bg-white border border-veloborderstrong p-6 velo-box-1 space-y-4">
-            <div class="flex items-center justify-between border-b border-veloborder pb-3">
-                <h3 class="text-sm font-bold text-teal-900 uppercase tracking-wider">
-                    Riwayat Mutasi Kuota (Ledger)
-                </h3>
-                <span class="text-[10px] text-velomuted">Pencatatan Finansial Transparan</span>
-            </div>
+        {{-- Riwayat Mutasi Kuota --}}
+        <div class="p-6 sm:p-8 rounded-2xl border-[3px] border-[var(--ink)] bg-[var(--card)] shadow-[5px_5px_0_var(--ink)] space-y-4">
+            <h3 class="text-xl font-black text-[var(--ink)]" style="font-family: 'Bricolage Grotesque', sans-serif">
+                Riwayat Mutasi Kuota Event
+            </h3>
 
             @if ($ledger->isEmpty())
-            <div class="p-8 text-center text-xs text-velomuted border border-dashed border-veloborder velo-box-3">
-                Belum ada transaksi kuota untuk organisasi ini.
-            </div>
+                <p class="text-xs text-[var(--mute)] font-medium">Belum ada riwayat mutasi kuota.</p>
             @else
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
-                    <thead>
-                        <tr class="border-b border-veloborder text-[11px] font-bold text-velomuted uppercase">
-                            <th class="py-2.5 px-3">Waktu</th>
-                            <th class="py-2.5 px-3">Aktivitas</th>
-                            <th class="py-2.5 px-3">Terkait Event / Paket</th>
-                            <th class="py-2.5 px-3 text-right">Perubahan</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-veloborder">
-                        @foreach ($ledger as $item)
-                        <tr>
-                            <td class="py-2.5 px-3 text-velomuted font-mono text-[11px]">
-                                {{ $item->created_at?->format('d M Y, H:i') ?? '—' }}
-                            </td>
-                            <td class="py-2.5 px-3">
-                                @if ($item->reason === 'purchase')
-                                <span class="inline-flex items-center px-2 py-0.5 velo-box-3 text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                                    Beli Kuota
-                                </span>
-                                @elseif ($item->reason === 'publish_event')
-                                <span class="inline-flex items-center px-2 py-0.5 velo-box-3 text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">
-                                    Publish Event
-                                </span>
-                                @elseif ($item->reason === 'refund_event')
-                                <span class="inline-flex items-center px-2 py-0.5 velo-box-3 text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
-                                    Refund Pembatalan
-                                </span>
-                                @else
-                                <span class="inline-flex items-center px-2 py-0.5 velo-box-3 text-[10px] font-bold bg-gray-50 text-gray-800 border border-gray-200">
-                                    {{ $item->reason }}
-                                </span>
-                                @endif
-                            </td>
-                            <td class="py-2.5 px-3 text-teal-900">
-                                @if ($item->purchase)
-                                    Paket: {{ $item->purchase->package?->name ?? 'Paket Kuota' }}
-                                @elseif ($item->event)
-                                    Event: {{ $item->event->title }}
-                                @else
-                                    —
-                                @endif
-                            </td>
-                            <td class="py-2.5 px-3 text-right font-mono font-bold text-xs {{ $item->delta > 0 ? 'text-emerald-700' : 'text-red-600' }}">
-                                {{ $item->delta > 0 ? '+' . $item->delta : $item->delta }} Kuota
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b-2 border-[var(--ink)] font-black text-[var(--ink)]">
+                                <th class="py-2.5 px-3">Tanggal</th>
+                                <th class="py-2.5 px-3">Aktivitas</th>
+                                <th class="py-2.5 px-3">Perubahan</th>
+                                <th class="py-2.5 px-3">Referensi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[var(--line)] font-medium">
+                            @foreach ($ledger as $entry)
+                                <tr class="hover:bg-[var(--paper)]">
+                                    <td class="py-3 px-3 text-[var(--mute)]">
+                                        {{ $entry->created_at->format('d/m/Y H:i') }}
+                                    </td>
+                                    <td class="py-3 px-3 font-bold text-[var(--ink)]">
+                                        {{ $entry->reasonLabel() }}
+                                    </td>
+                                    <td class="py-3 px-3 font-black {{ $entry->delta > 0 ? 'text-[var(--pine)]' : 'text-[var(--red)]' }}">
+                                        {{ $entry->delta > 0 ? "+{$entry->delta}" : $entry->delta }} Event
+                                    </td>
+                                    <td class="py-3 px-3 text-[var(--mute)]">
+                                        {{ $entry->reference() }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             @endif
         </div>
 
     </div>
-</div>
+</section>
 @endsection
-

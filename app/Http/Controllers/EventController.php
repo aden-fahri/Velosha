@@ -16,15 +16,23 @@ class EventController extends Controller
     }
 
     /**
-     * Detail event berdasarkan slug (hanya event published).
+     * Detail event berdasarkan slug.
+     * Penyelenggara, admin, dan operator dapat melihat pratinjau draf event mereka.
      */
     public function show(string $slug): Response
     {
-        $event = Event::query()
-            ->published()
-            ->with(['categories', 'photos'])
-            ->where('slug', $slug)
-            ->firstOrFail();
+        $query = Event::query()
+            ->with(['categories', 'photos', 'organization'])
+            ->where('slug', $slug);
+
+        $user = auth()->user();
+        $canPreview = $user && ($user->isAdmin() || $user->isOperator() || $user->isPenyelenggara());
+
+        if (! $canPreview) {
+            $query->published();
+        }
+
+        $event = $query->firstOrFail();
 
         return response()->view('pages.event-detail', compact('event'));
     }

@@ -29,6 +29,21 @@ class Role
             return $next($request);
         }
 
+        // Penyelenggara selalu memiliki akses penuh ke seluruh fitur peserta
+        if ($user->isPenyelenggara() && in_array('peserta', $roles, true)) {
+            return $next($request);
+        }
+
+        // Pengguna dengan organisasi memiliki akses ke fitur penyelenggara
+        if ($user->isPenyelenggara() && in_array('penyelenggara', $roles, true)) {
+            return $next($request);
+        }
+
+        // Admin selalu memiliki akses ke seluruh fitur
+        if ($user->isAdmin()) {
+            return $next($request);
+        }
+
         $allowed = implode(' / ', $roles);
         $message = "Halaman ini hanya untuk peran {$allowed}. Anda login sebagai {$user->role} — "
             .'silakan keluar dan masuk dengan akun yang sesuai.';

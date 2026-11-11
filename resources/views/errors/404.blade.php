@@ -3,122 +3,157 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>404 — Rute Tidak Ditemukan | Velosha</title>
+    <title>404 — Halaman Tidak Ditemukan | Velosha</title>
+    <link rel="stylesheet" href="/fonts/bricolage/bricolage.css">
+    <link rel="stylesheet" href="/fonts/inter/inter.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --paper: #FBF4E6;
+            --paper2: #F4ECE1;
+            --ink: #10282E;
+            --card: #FFFFFF;
+            --orange: #DE7119;
+            --orange-l: #F6B777;
+            --mustard: #F4BE3F;
+            --mute: #5A7175;
         }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 24px;
-            background: #2e343b;
-            color: #0a353e;
-            font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'Inter', system-ui, sans-serif;
+            position: relative;
         }
-
+        .dots {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(var(--ink) 1.2px, transparent 1.2px);
+            background-size: 18px 18px;
+            opacity: 0.12;
+            pointer-events: none;
+        }
         .card {
             width: 100%;
-            max-width: 440px;
-            background: #ffffff;
-            border: 1px solid #b8bfbe;
-            border-radius: 1px;
-            padding: 32px;
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+            max-width: 480px;
+            background: var(--card);
+            border: 3px solid var(--ink);
+            border-radius: 18px;
+            padding: 36px 32px;
+            box-shadow: 8px 8px 0 var(--ink);
+            position: relative;
+            z-index: 10;
+            text-align: center;
         }
-
-        .code {
-            display: inline-block;
-            background: #0a353e;
-            color: #e58f42;
-            font-size: 12px;
-            font-weight: 800;
-            letter-spacing: 0.18em;
-            padding: 6px 10px;
-            border-radius: 1px;
-        }
-
-        h1 {
-            margin-top: 18px;
-            font-size: 24px;
-            font-weight: 800;
-        }
-
-        .lead {
-            margin-top: 10px;
-            font-size: 14px;
-            line-height: 1.6;
-            color: #556066;
-        }
-
-        .actions {
-            margin-top: 24px;
-            display: flex;
-            flex-wrap: wrap;
+        .logo-wrap {
+            display: inline-flex;
+            align-items: center;
             gap: 10px;
+            margin-bottom: 24px;
+            text-decoration: none;
+            color: var(--ink);
         }
-
+        .logo-img { height: 32px; width: auto; }
+        .logo-txt { font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 800; }
+        .badge {
+            display: inline-block;
+            background: var(--mustard);
+            color: var(--ink);
+            border: 2px solid var(--ink);
+            box-shadow: 2.5px 2.5px 0 var(--ink);
+            border-radius: 8px;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+        h1 {
+            font-family: 'Bricolage Grotesque', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            line-height: 1.15;
+            color: var(--ink);
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        .lead {
+            font-size: 14px;
+            color: var(--mute);
+            line-height: 1.6;
+            margin-bottom: 28px;
+            font-weight: 500;
+        }
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 10px 16px;
+            gap: 8px;
+            padding: 13px 20px;
             font-size: 13px;
-            font-weight: 700;
-            border: 1px solid transparent;
-            border-radius: 1px;
+            font-weight: 800;
+            border-radius: 12px;
+            border: 2.5px solid var(--ink);
             text-decoration: none;
             cursor: pointer;
+            transition: all 0.15s ease;
         }
-
         .btn-primary {
-            background: #b2590f;
+            background: var(--orange);
             color: #ffffff;
+            box-shadow: 4px 4px 0 var(--ink);
         }
-
         .btn-primary:hover {
-            background: #a0520c;
+            transform: translate(1px, 1px);
+            box-shadow: 3px 3px 0 var(--ink);
+            background: var(--orange-l);
+            color: var(--ink);
         }
-
-        .btn-ghost {
-            background: transparent;
-            color: #0a353e;
-            border-color: #b8bfbe;
+        .btn-secondary {
+            background: var(--paper);
+            color: var(--ink);
+            box-shadow: 2px 2px 0 var(--ink);
         }
-
-        .btn-ghost:hover {
-            background: #f1f4f4;
-        }
-
-        .hint {
-            margin-top: 18px;
-            font-size: 12px;
-            color: #5f6a70;
+        .btn-secondary:hover {
+            background: #ffffff;
+            transform: translate(1px, 1px);
         }
     </style>
 </head>
 <body>
-    <main class="card">
-        <span class="code">404</span>
-        <h1>Rute Tidak Ditemukan</h1>
-        <p class="lead">
-            Halaman yang Anda tuju tidak ada — mungkin sudah dipensiunkan,
-            tautannya salah ketik, atau event sudah dihapus dari katalog.
-        </p>
+    <div class="dots"></div>
+    <div class="card">
+        <a href="/" class="logo-wrap">
+            <img src="/images/logo-velosha.png" alt="Velosha" class="logo-img">
+            <span class="logo-txt">Velosha</span>
+        </a>
 
-        <div class="actions">
-            <a class="btn btn-ghost" href="#"
-               onclick="history.length > 1 ? history.back() : (window.location.href = '/'); return false;">Kembali</a>
-            <a class="btn btn-primary" href="/">Ke Beranda</a>
-            <a class="btn btn-ghost" href="/events">Lihat Katalog Event</a>
+        <div>
+            <span class="badge">404 &mdash; Rute Terputus</span>
+            <h1>Keluar dari Sirkuit</h1>
+            <p class="lead">
+                Rute atau halaman yang Anda cari tidak tersedia, telah berganti tautan, atau sedang dalam perawatan kalender balap kami.
+            </p>
         </div>
 
-        <div class="hint">Cek kembali tautan, atau telusuri balap lainnya di katalog resmi Velosha.</div>
-    </main>
+        <div class="actions">
+            <a href="/" class="btn btn-primary">
+                &larr; Kembali ke Beranda
+            </a>
+            <a href="/events" class="btn btn-secondary">
+                Jelajahi Kalender Balap
+            </a>
+        </div>
+    </div>
 </body>
 </html>

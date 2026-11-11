@@ -385,17 +385,17 @@
                     </div>
                 </a>
 
-                <!-- 03 Arsip Race History (Orange Light #F6B777) -->
-                <a href="/riwayat" wire:navigate class="card racecard" style="background: #F6B777; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 200px">
+                <!-- 03 Paket Penyelenggara & Kuota (Orange Light #F6B777) -->
+                <a href="/paket" wire:navigate class="card racecard" style="background: #F6B777; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 200px">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start">
                         <div class="ico" style="background: #FFFDF8">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                         </div>
                         <span class="disp numo">03</span>
                     </div>
                     <div>
-                        <h3 class="h3" style="font-size: 22px">Arsip race history</h3>
-                        <p style="margin: 6px 0 0; font-size: 14px; color: #10282E">Daftar balapan yang pernah diselenggarakan.</p>
+                        <h3 class="h3" style="font-size: 22px">Paket kuota EO</h3>
+                        <p style="margin: 6px 0 0; font-size: 14px; color: #10282E">Publikasikan race komunitas &amp; kelola pendaftaran tiket.</p>
                     </div>
                     <div style="margin-top: auto; display: flex; align-items: center; gap: 10px; font-weight: 700">
                         Buka

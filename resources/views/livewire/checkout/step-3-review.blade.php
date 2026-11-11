@@ -20,14 +20,14 @@
     @endif
 
     <!-- Kartu Data Peserta -->
-    <div class="bg-white border border-veloborder velo-box-1 p-6">
-        <div class="flex items-center justify-between border-b border-velosurface pb-3 mb-4">
-            <h3 class="text-sm font-bold text-teal-900 uppercase tracking-wider flex items-center">
-                <span class="w-2 h-2 bg-race-500 velo-box-1 mr-2"></span>
-                Data Peserta
+    <div class="rounded-2xl border-[2.5px] border-[var(--ink)] bg-white shadow-[4px_4px_0_var(--ink)] p-6">
+        <div class="flex items-center justify-between border-b-2 border-[var(--ink)] pb-3 mb-4">
+            <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-sm bg-[var(--orange)] border border-[var(--ink)]"></span>
+                <span>Data Peserta</span>
             </h3>
-            <button type="button" wire:click="backToStep2" class="inline-flex items-center text-[11px] font-bold text-race-600 hover:text-race-700 border border-race-300 bg-race-50 hover:bg-race-100 px-3 py-1.5 velo-box-3 transition">
-                <i data-lucide="pencil" class="w-3 h-3 mr-1.5"></i>
+            <button type="button" wire:click="backToStep2" class="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--orange)] hover:underline border-2 border-[var(--ink)] bg-[var(--paper)] hover:bg-[var(--butter)] px-3 py-1.5 rounded-xl shadow-[2px_2px_0_var(--ink)] transition-all cursor-pointer">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                 <span>Edit Data</span>
             </button>
         </div>
@@ -81,23 +81,23 @@
     </div>
 
     <!-- Strip Paket -->
-    <div class="bg-white border border-veloborder velo-box-1 p-5">
-        <h3 class="text-[10px] font-bold text-velomuted uppercase tracking-wider mb-3">Yang Anda Dapatkan</h3>
+    <div class="rounded-2xl border-[2.5px] border-[var(--ink)] bg-white shadow-[4px_4px_0_var(--ink)] p-5">
+        <h3 class="text-xs font-black text-[var(--ink)] uppercase tracking-wider mb-3">Yang Anda Dapatkan</h3>
         <div class="grid grid-cols-3 gap-3">
-            <div class="border border-velosurface velo-box-3 bg-velosurfacealt p-3 text-center">
-                <i data-lucide="shirt" class="w-4 h-4 text-teal-700 mx-auto mb-1.5"></i>
-                <div class="text-[11px] font-bold text-teal-900">Racepack</div>
-                <div class="text-[10px] text-velomutedlight mt-0.5">Jersey &amp; BIB Tag</div>
+            <div class="border-2 border-[var(--ink)] rounded-xl bg-[var(--paper)] p-3.5 text-center shadow-[2px_2px_0_var(--ink)]">
+                <i data-lucide="shirt" class="w-5 h-5 text-[var(--pine)] mx-auto mb-1.5"></i>
+                <div class="text-xs font-black text-[var(--ink)]">Racepack</div>
+                <div class="text-[10px] text-[var(--mute)] font-medium mt-0.5">Jersey &amp; BIB Tag</div>
             </div>
-            <div class="border border-velosurface velo-box-3 bg-velosurfacealt p-3 text-center">
-                <i data-lucide="shield-check" class="w-4 h-4 text-teal-700 mx-auto mb-1.5"></i>
-                <div class="text-[11px] font-bold text-teal-900">Pendukung</div>
-                <div class="text-[10px] text-velomutedlight mt-0.5">Premi Asuransi Penuh</div>
+            <div class="border-2 border-[var(--ink)] rounded-xl bg-[var(--paper)] p-3.5 text-center shadow-[2px_2px_0_var(--ink)]">
+                <i data-lucide="shield-check" class="w-5 h-5 text-[var(--pine)] mx-auto mb-1.5"></i>
+                <div class="text-xs font-black text-[var(--ink)]">Pendukung</div>
+                <div class="text-[10px] text-[var(--mute)] font-medium mt-0.5">Premi Asuransi Penuh</div>
             </div>
-            <div class="border border-velosurface velo-box-3 bg-velosurfacealt p-3 text-center">
-                <i data-lucide="medal" class="w-4 h-4 text-teal-700 mx-auto mb-1.5"></i>
-                <div class="text-[11px] font-bold text-teal-900">Finisir</div>
-                <div class="text-[10px] text-velomutedlight mt-0.5">Medali &amp; Kaos Finish</div>
+            <div class="border-2 border-[var(--ink)] rounded-xl bg-[var(--paper)] p-3.5 text-center shadow-[2px_2px_0_var(--ink)]">
+                <i data-lucide="medal" class="w-5 h-5 text-[var(--pine)] mx-auto mb-1.5"></i>
+                <div class="text-xs font-black text-[var(--ink)]">Finisir</div>
+                <div class="text-[10px] text-[var(--mute)] font-medium mt-0.5">Medali &amp; Kaos Finish</div>
             </div>
         </div>
     </div>

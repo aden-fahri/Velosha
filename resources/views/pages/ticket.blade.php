@@ -3,41 +3,67 @@
 
 @section('content')
 <div class="vs page pb-16 min-h-[calc(100vh-140px)] bg-[#F3E7CF] relative">
-    <div class="dots absolute inset-0 opacity-50 pointer-events-none"></div>
 
     @if ($registration === null || $registration->category === null || $registration->category->event === null)
 
-        <!-- Belum ada pendaftaran -->
-        <div class="max-w-2xl mx-auto px-4 pt-16 text-center relative z-10">
-            <div class="w-16 h-16 bg-[#FFFDF8] text-[var(--ink)] flex items-center justify-center border-[3px] border-[var(--ink)] rounded-2xl mx-auto mb-4 shadow-[4px_4px_0_var(--ink)]">
-                <i data-lucide="ticket" class="w-8 h-8"></i>
+        <!-- PAGE HEADER: Belum Ada Pendaftaran (Konsisten dengan Kalender, Tentang, Regulasi, & Bantuan) -->
+        <section class="relative overflow-hidden" style="background: var(--butter, #F8E3B5); border-bottom: 3.5px solid var(--ink, #10282E); padding: 52px 0;">
+            <svg aria-hidden="true" style="position:absolute; top:0; right:0; width:520px; max-width:45%; height:100%; z-index:1; pointer-events:none;" viewBox="0 0 520 280">
+                <g stroke="#10282E" stroke-width="3" stroke-linejoin="round">
+                    <circle cx="90" cy="65" r="9" fill="#DE7119"></circle>
+                    <rect x="160" y="145" width="20" height="20" rx="3" fill="#1F6F4A" transform="rotate(20 170 155)"></rect>
+                    <path d="M250 215 l12 -20 l12 20z" fill="#F4BE3F"></path>
+                    <circle cx="230" cy="55" r="7" fill="#9B3D5A"></circle>
+                    <rect x="320" y="115" width="18" height="18" rx="3" fill="#F4BE3F" transform="rotate(-15 329 124)"></rect>
+                    <path d="M420 65 l12 -20 l12 20z" fill="#DE7119"></path>
+                    <circle cx="475" cy="165" r="8" fill="#1F6F4A"></circle>
+                </g>
+            </svg>
+            <div class="wrap relative z-10">
+                <div class="flex items-center gap-2.5 mb-3">
+                    <span class="chip font-bold bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">E-Ticket &amp; Pendaftaran</span>
+                </div>
+                <h1 class="font-heading font-black text-4xl sm:text-5xl md:text-6xl text-[var(--ink)] leading-[1.08] tracking-tight mb-4">
+                    Belum Ada E-Ticket Aktif
+                </h1>
+                <p class="text-base sm:text-lg text-[var(--ink)]/85 leading-relaxed font-medium max-w-2xl">
+                    Anda belum terdaftar pada race manapun. Pilih event di kalender balap untuk memesan tiket dan menerbitkan nomor BIB resmi.
+                </p>
+                <div class="mt-6">
+                    <a href="{{ route('events.index') }}" wire:navigate class="btn btn-sm btn-pine">
+                        <i data-lucide="calendar" class="w-4 h-4 mr-2"></i>
+                        <span>Jelajahi Kalender Balap</span>
+                    </a>
+                </div>
             </div>
-            <span class="chip chip-mustard font-extrabold uppercase">Belum Ada E-Ticket</span>
-            <h1 class="h2 text-3xl sm:text-4xl mt-3">
-                Anda Belum Terdaftar pada Race Manapun
-            </h1>
-            <p class="lead text-base mt-3">
-                E-Ticket dan nomor BIB akan terbit otomatis begitu Anda menyelesaikan pendaftaran di event balap Velosha.
-            </p>
-            <div class="mt-8">
-                <a href="{{ route('events.index') }}" wire:navigate class="btn">
-                    <i data-lucide="calendar" class="w-4 h-4 mr-2"></i>
-                    <span>Jelajahi Kalender Balap</span>
-                </a>
-            </div>
-        </div>
+        </section>
 
     @elseif (! $registration->isPaid())
 
-        <!-- Menunggu Pembayaran -->
-        <section class="pagehead slim">
+        <!-- PAGE HEADER: Menunggu Pembayaran (Konsisten dengan Kalender, Tentang, Regulasi, & Bantuan) -->
+        <section class="relative overflow-hidden" style="background: var(--butter, #F8E3B5); border-bottom: 3.5px solid var(--ink, #10282E); padding: 52px 0;">
+            <svg aria-hidden="true" style="position:absolute; top:0; right:0; width:520px; max-width:45%; height:100%; z-index:1; pointer-events:none;" viewBox="0 0 520 280">
+                <g stroke="#10282E" stroke-width="3" stroke-linejoin="round">
+                    <circle cx="90" cy="65" r="9" fill="#DE7119"></circle>
+                    <rect x="160" y="145" width="20" height="20" rx="3" fill="#1F6F4A" transform="rotate(20 170 155)"></rect>
+                    <path d="M250 215 l12 -20 l12 20z" fill="#F4BE3F"></path>
+                    <circle cx="230" cy="55" r="7" fill="#9B3D5A"></circle>
+                    <rect x="320" y="115" width="18" height="18" rx="3" fill="#F4BE3F" transform="rotate(-15 329 124)"></rect>
+                    <path d="M420 65 l12 -20 l12 20z" fill="#DE7119"></path>
+                    <circle cx="475" cy="165" r="8" fill="#1F6F4A"></circle>
+                </g>
+            </svg>
             <div class="wrap relative z-10">
-                <div class="flex gap-2.5">
-                    <span class="chip chip-mustard font-bold">Menunggu Pembayaran</span>
-                    <span class="chip">REG-{{ str_pad((string) $registration->id, 6, '0', STR_PAD_LEFT) }}</span>
+                <div class="flex items-center gap-2.5 mb-3 flex-wrap">
+                    <span class="chip font-bold bg-[var(--orange)] text-white border border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">Menunggu Pembayaran</span>
+                    <span class="chip bg-white border border-[var(--ink)] font-mono text-xs shadow-[2px_2px_0_var(--ink)]">REG-{{ str_pad((string) $registration->id, 6, '0', STR_PAD_LEFT) }}</span>
                 </div>
-                <h1 class="h2 text-4xl mt-3">Pendaftaran Belum Lunas</h1>
-                <p class="lead mt-2">Selesaikan pembayaran untuk mengunci nomor BIB dan menerbitkan E-Ticket resmi Anda.</p>
+                <h1 class="font-heading font-black text-4xl sm:text-5xl md:text-6xl text-[var(--ink)] leading-[1.08] tracking-tight mb-4">
+                    Pendaftaran Belum Lunas
+                </h1>
+                <p class="text-base sm:text-lg text-[var(--ink)]/85 leading-relaxed font-medium max-w-2xl">
+                    Selesaikan pembayaran untuk mengunci slot race, alokasi nomor BIB resmi, dan penerbitan E-Ticket Anda.
+                </p>
             </div>
         </section>
 
@@ -94,45 +120,52 @@
             $scanCode = strtoupper(substr(hash('sha256', $qrData !== '' ? $qrData : (string) $registration->id), 0, 4)).'-'.$bibSuffix.'-VLS';
         @endphp
 
-        <!-- PAGEHEAD SUKSES DENGAN ARTWORK MINUM.PNG PERSIS MOCKUP (Sukses.dc.html) -->
-        <section class="pagehead" style="min-height: 420px">
-            <!-- Confetti SVG Decorator -->
-            <svg aria-hidden="true" width="100%" height="100%" style="position: absolute; inset: 0; z-index: 1" preserveAspectRatio="none" viewBox="0 0 1440 380">
+        <!-- PAGE HEADER: Pembayaran Berhasil & E-Ticket (Konsisten dengan Kalender, Tentang, Regulasi, & Bantuan) -->
+        <section class="relative overflow-hidden" style="background: var(--butter, #F8E3B5); border-bottom: 3.5px solid var(--ink, #10282E); padding: 52px 0;">
+            {{-- Elemen Dekorasi Geometris Neobrutalism di Sisi Kanan --}}
+            <svg aria-hidden="true" style="position:absolute; top:0; right:0; width:520px; max-width:45%; height:100%; z-index:1; pointer-events:none;" viewBox="0 0 520 280">
                 <g stroke="#10282E" stroke-width="3" stroke-linejoin="round">
-                    <circle cx="760" cy="70" r="9" fill="#DE7119"/>
-                    <rect x="840" y="150" width="20" height="20" rx="3" fill="#1F6F4A" transform="rotate(20 850 160)"/>
-                    <path d="M690 230 l12 -20 l12 20z" fill="#F4BE3F"/>
-                    <circle cx="900" cy="60" r="7" fill="#9B3D5A"/>
-                    <rect x="1010" y="110" width="18" height="18" rx="3" fill="#F4BE3F" transform="rotate(-15 1019 119)"/>
-                    <path d="M1180 60 l12 -20 l12 20z" fill="#DE7119"/>
-                    <circle cx="1280" cy="170" r="8" fill="#1F6F4A"/>
+                    <circle cx="90" cy="65" r="9" fill="#DE7119"></circle>
+                    <rect x="160" y="145" width="20" height="20" rx="3" fill="#1F6F4A" transform="rotate(20 170 155)"></rect>
+                    <path d="M250 215 l12 -20 l12 20z" fill="#F4BE3F"></path>
+                    <circle cx="230" cy="55" r="7" fill="#9B3D5A"></circle>
+                    <rect x="320" y="115" width="18" height="18" rx="3" fill="#F4BE3F" transform="rotate(-15 329 124)"></rect>
+                    <path d="M420 65 l12 -20 l12 20z" fill="#DE7119"></path>
+                    <circle cx="475" cy="165" r="8" fill="#1F6F4A"></circle>
                 </g>
             </svg>
 
             <div class="wrap relative z-10">
-                <div style="display: flex; gap: 10px; flex-wrap: wrap">
-                    <span class="chip p">{{ $registration->status === \App\Models\Registration::STATUS_CHECKED_IN ? 'Sudah Check-In' : 'Lunas' }}</span>
-                    <span class="chip">Order #VLS-REG-{{ str_pad((string) $registration->id, 6, '0', STR_PAD_LEFT) }}</span>
+                <div class="flex items-center gap-2.5 mb-3 flex-wrap">
+                    <span class="chip font-bold bg-[var(--pine)] text-white border border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
+                        {{ $registration->status === \App\Models\Registration::STATUS_CHECKED_IN ? 'Sudah Check-In' : 'Pembayaran Berhasil' }}
+                    </span>
+                    <span class="chip bg-white border border-[var(--ink)] font-mono text-xs shadow-[2px_2px_0_var(--ink)]">
+                        Order #VLS-REG-{{ str_pad((string) $registration->id, 6, '0', STR_PAD_LEFT) }}
+                    </span>
+                    <span class="chip font-bold bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
+                        {{ $event->title }}
+                    </span>
                 </div>
-                <h1 class="h2" style="margin-top: 18px">Pembayaran berhasil!</h1>
-                <p class="lead" style="margin: 16px 0 0; color: #10282E; max-width: 600px">
-                    Tiket dan nomor BIB-mu sudah aktif. Sampai jumpa di garis start {{ $event->location_name }}.
+                <h1 class="font-heading font-black text-4xl sm:text-5xl md:text-6xl text-[var(--ink)] leading-[1.08] tracking-tight mb-4">
+                    E-Ticket &amp; BIB Resmi
+                </h1>
+                <p class="text-base sm:text-lg text-[var(--ink)]/85 leading-relaxed font-medium max-w-2xl mb-6">
+                    Tiket balap dan nomor BIB RFID kamu sudah aktif. Tunjukkan QR code di bawah saat pengambilan Racepack di {{ $event->location_name }}.
                 </p>
-                <div style="display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap">
-                    <a href="#eticket" class="btn">Lihat e-ticket</a>
+                <div class="flex items-center gap-3 flex-wrap">
+                    <a href="#eticket" class="btn btn-sm btn-pine">
+                        <i data-lucide="ticket" class="w-4 h-4 mr-1"></i>
+                        <span>Lihat E-Ticket &amp; QR</span>
+                    </a>
                     <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text={{ rawurlencode('Velosha '.$event->title) }}&dates={{ $event->event_date->format('Ymd') }}T050000Z/{{ $event->event_date->format('Ymd') }}T130000Z&details={{ rawurlencode('Maraton Sepeda '.P::distance($category->distance_km).' Velosha. BIB: '.($registration->bib_number ?? '-')) }}&location={{ rawurlencode($event->location_name) }}"
                        target="_blank"
-                       class="btn btn-ghost">
-                        Tambah ke kalender
+                       class="btn btn-sm btn-ghost">
+                        <i data-lucide="calendar-plus" class="w-4 h-4 mr-1"></i>
+                        <span>Tambah ke Google Calendar</span>
                     </a>
                 </div>
             </div>
-
-            <!-- Pesepeda Minum Botol Air Minum (minum.png) -->
-            <img class="band-art"
-                 src="/images/mockup/minum.png"
-                 alt="Pesepeda minum botol setelah finis"
-                 style="height: 420px">
         </section>
 
         <!-- KONTEN UTAMA: 2-COLUMN RINGKASAN & TIMELINE LANGKAH BERIKUTNYA -->

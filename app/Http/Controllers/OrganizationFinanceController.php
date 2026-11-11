@@ -15,21 +15,11 @@ class OrganizationFinanceController extends Controller
     /**
      * Tampilkan dasbor keuangan, rekening pencairan, buku kas ledger, dan pengajuan penarikan dana.
      */
-    public function index(Organization $organization): View
+    public function index(Organization $organization): RedirectResponse
     {
         $this->authorizeMember($organization);
 
-        return view('pages.organizations.finance', [
-            'organization' => $organization,
-            'balance' => $organization->financialBalance(),
-            'availableBalance' => $organization->availablePayoutBalance(),
-            'pendingPayout' => $organization->pendingPayoutAmount(),
-            'totalSales' => $organization->totalGrossSales(),
-            'totalPaidOut' => $organization->totalPaidOut(),
-            'accounts' => $organization->payoutAccounts()->latest()->get(),
-            'ledger' => $organization->financialLedger()->with('event')->latest('id')->take(30)->get(),
-            'payoutRequests' => $organization->payoutRequests()->with('account')->latest('id')->take(10)->get(),
-        ]);
+        return redirect()->route('organizations.show', ['organization' => $organization->slug, 'tab' => 'keuangan']);
     }
 
     /**
@@ -54,7 +44,7 @@ class OrganizationFinanceController extends Controller
             'is_primary' => ! $hasPrimary,
         ]);
 
-        return redirect()->route('organizations.finance', ['organization' => $organization->slug])
+        return redirect()->route('organizations.show', ['organization' => $organization->slug, 'tab' => 'keuangan'])
             ->with('status', 'Rekening bank pencairan berhasil ditambahkan.');
     }
 
@@ -67,20 +57,15 @@ class OrganizationFinanceController extends Controller
 
         $validated = $request->validate([
             'payout_account_id' => ['required', 'exists:payout_accounts,id'],
-            'amount' => ['required', 'integer', 'min:50000'],
+            'amount' => ['required', 'integer', 'min:10000'],
         ]);
-
-        if (! $organization->isVerified()) {
-            return redirect()->route('organizations.finance', ['organization' => $organization->slug])
-                ->with('error', 'Komunitas / organisasi harus berstatus terverifikasi sebelum dapat mengajukan pencairan dana.');
-        }
 
         $account = $organization->payoutAccounts()->findOrFail($validated['payout_account_id']);
         $amount = (int) $validated['amount'];
         $available = $organization->availablePayoutBalance();
 
         if ($amount > $available) {
-            return redirect()->route('organizations.finance', ['organization' => $organization->slug])
+            return redirect()->route('organizations.show', ['organization' => $organization->slug, 'tab' => 'keuangan'])
                 ->with('error', 'Nominal penarikan (Rp ' . number_format($amount, 0, ',', '.') . ') melebihi saldo yang tersedia (Rp ' . number_format($available, 0, ',', '.') . ').');
         }
 
@@ -92,7 +77,7 @@ class OrganizationFinanceController extends Controller
             'requested_by' => Auth::id(),
         ]);
 
-        return redirect()->route('organizations.finance', ['organization' => $organization->slug])
+        return redirect()->route('organizations.show', ['organization' => $organization->slug, 'tab' => 'keuangan'])
             ->with('status', 'Pengajuan pencairan dana sebesar Rp ' . number_format($amount, 0, ',', '.') . ' berhasil dikirimkan. Tim finance Velosha akan memproses transfer.');
     }
 

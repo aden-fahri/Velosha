@@ -11,16 +11,16 @@
         {{-- LEFT: Branding & Illustration --}}
         <div class="hidden lg:flex flex-col justify-between relative bg-[var(--butter)] border-r-[2.5px] border-[var(--ink)] p-9 min-h-[640px] overflow-hidden">
             {{-- Logo --}}
-            <a href="{{ route('home') }}" class="logo inline-flex items-center gap-2.5 text-2xl relative z-10" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; letter-spacing: -0.03em; text-decoration: none">
-                <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="16" fill="var(--card)" stroke="var(--ink)" stroke-width="3"/><circle cx="20" cy="20" r="3.5" fill="var(--orange)" stroke="var(--ink)" stroke-width="2"/><path d="M20 4v12M20 24v12M4 20h12M24 20h12M8.7 8.7l8.5 8.5M22.8 22.8l8.5 8.5M31.3 8.7l-8.5 8.5M17.2 22.8l-8.5 8.5" stroke="var(--ink)" stroke-width="2"/></svg>
-                Velosha
+            <a href="{{ route('home') }}" class="logo inline-flex items-center gap-3 text-2xl relative z-10" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; letter-spacing: -0.03em; text-decoration: none">
+                <img src="/images/logo-velosha.png" alt="Velosha" class="h-9 w-auto object-contain" />
+                <span class="font-extrabold text-2xl tracking-tight text-[var(--ink)]">Velosha</span>
             </a>
 
-            {{-- Pesepeda berjersey oranye berdiri di samping sepedanya sambil memegang botol minum (berdiri.png) --}}
+            {{-- Pesepeda atletik yang sedang meminum botol hidrasi (minum.png) --}}
             <img class="float"
-                 src="/images/mockup/berdiri.png"
-                 alt="Pesepeda berjersey oranye berdiri di samping sepedanya sambil memegang botol minum"
-                 style="position: absolute; left: -40px; top: 90px; width: 480px; height: 480px; object-fit: contain; display: block; filter: drop-shadow(6px 6px 0 rgba(16, 40, 46, 0.12)); pointer-events: none">
+                 src="/images/mockup/minum.png"
+                 alt="Pesepeda berjersey oranye sedang meminum botol hidrasi"
+                 style="position: absolute; left: -10px; top: 90px; width: 480px; height: 480px; object-fit: contain; display: block; filter: drop-shadow(6px 6px 0 rgba(16, 40, 46, 0.12)); pointer-events: none">
 
             {{-- Tagline --}}
             <h1 class="h3 relative z-10" style="font-size: 30px; line-height: 1.1; max-width: 300px">
@@ -169,26 +169,20 @@
                 </form>
             @endif
 
-            {{-- Social login divider & buttons --}}
-            @if (config('app.demo_login'))
+            {{-- Social login divider & buttons (Google Only) --}}
+            @if (config('app.demo_login') || config('services.google.client_id'))
                 <div class="flex items-center gap-3 text-sm text-[var(--mute)]">
                     <i class="flex-1 border-t-2 border-[var(--line)]"></i>
-                    atau lanjutkan dengan
+                    <span>atau lanjutkan dengan</span>
                     <i class="flex-1 border-t-2 border-[var(--line)]"></i>
                 </div>
 
-                <div class="grid grid-cols-3 gap-3">
-                    <a href="/auth/demo/google" class="flex items-center justify-center gap-2 h-[52px] border-[2.5px] border-[var(--ink)] rounded-lg bg-[var(--card)] font-bold text-sm hover:bg-[var(--paper2)] transition" style="text-decoration: none">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.85 0-5.27-1.93-6.14-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-                        Google
-                    </a>
-                    <a href="/auth/demo/facebook" class="flex items-center justify-center gap-2 h-[52px] border-[2.5px] border-[var(--ink)] rounded-lg bg-[var(--card)] font-bold text-sm hover:bg-[var(--paper2)] transition" style="text-decoration: none">
-                        <svg class="w-5 h-5 text-[#1877F2] fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                        Facebook
-                    </a>
-                    <a href="/auth/demo/tiktok" class="flex items-center justify-center gap-2 h-[52px] border-[2.5px] border-[var(--ink)] rounded-lg bg-[var(--card)] font-bold text-sm hover:bg-[var(--paper2)] transition" style="text-decoration: none">
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.97v7.54c-.01 2.3-.92 4.57-2.61 6.13-2.12 2-5.21 2.64-7.88 1.61-2.67-1.03-4.54-3.57-4.68-6.44-.19-3.23 1.93-6.2 5.06-6.98 1.05-.27 2.15-.24 3.2-.01v4.18c-.68-.23-1.44-.24-2.14-.06-1.15.28-2.02 1.28-2.12 2.46-.14 1.45.85 2.77 2.27 3.02 1.48.27 2.98-.6 3.37-2.02.11-.42.17-.86.17-1.3V.02h-1.61z"/></svg>
-                        TikTok
+                <div>
+                    <a href="{{ config('services.google.client_id') && Route::has('auth.google') ? route('auth.google') : '/auth/demo/google' }}"
+                       class="flex items-center justify-center gap-3 w-full h-[52px] border-[2.5px] border-[var(--ink)] rounded-xl bg-white font-black text-sm text-[var(--ink)] shadow-[3px_3px_0_var(--ink)] hover:translate-x-0.5 hover:translate-y-0.5 hover:bg-[var(--paper)] transition cursor-pointer"
+                       style="text-decoration: none">
+                        <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.85 0-5.27-1.93-6.14-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+                        <span>Lanjutkan dengan Google</span>
                     </a>
                 </div>
             @endif

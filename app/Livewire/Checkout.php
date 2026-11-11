@@ -305,14 +305,71 @@ class Checkout extends Component
         }
         RateLimiter::hit($key, 60);
 
-        if ($this->registrationId === null) {
-            $this->error = 'Lengkapi langkah data diri sebelum melakukan pembayaran.';
+        $registration = $this->registration();
+
+        if (! $registration instanceof Registration) {
+            $registration = Registration::query()
+                ->where('user_id', auth()->id())
+                ->where('event_category_id', $this->categoryId)
+                ->first();
+        }
+
+        if (! $registration instanceof Registration) {
+            $this->error = 'Data pendaftaran tidak ditemukan. Ulangi langkah data diri.';
+
+            return;
+        }
+
+        if ($registration->isPaid()) {
+            $this->redirect('/ticket/'.$registration->id);
 
             return;
         }
 
         $this->error = '';
-        $this->showPaymentModal = true;
+
+        try {
+            /** @var \App\Services\MidtransService $midtrans */
+            $midtrans = app(\App\Services\MidtransService::class);
+            $result = $midtrans->createSnapTransaction($registration, $this->total());
+
+            if (! empty($result['snap_token'])) {
+                $this->dispatch('open-midtrans-snap', [
+                    'token' => $result['snap_token'],
+                    'registrationId' => $registration->id,
+                    'redirectUrl' => $result['redirect_url'] ?? null,
+                ]);
+
+                return;
+            }
+
+            if (! empty($result['redirect_url'])) {
+                $this->redirect($result['redirect_url'], navigate: false);
+
+                return;
+            }
+
+            if ($result['is_mock']) {
+                $action = app(\App\Actions\CompleteRegistrationAction::class);
+                $registration = $action->execute($registration);
+
+                if (isset($result['payment_id'])) {
+                    \App\Models\Payment::whereKey($result['payment_id'])->update([
+                        'status' => \App\Models\Payment::STATUS_SETTLEMENT,
+                        'paid_at' => now(),
+                    ]);
+                }
+
+                $this->redirect('/ticket/'.$registration->id);
+
+                return;
+            }
+
+            $this->redirect('/ticket/'.$registration->id);
+        } catch (\Throwable $exception) {
+            \Illuminate\Support\Facades\Log::error('Midtrans Checkout Exception: ' . $exception->getMessage());
+            $this->error = 'Gagal memproses pembayaran Midtrans: ' . $exception->getMessage();
+        }
     }
 
     public function closePayment(): void

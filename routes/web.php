@@ -21,12 +21,6 @@ Route::get('/rule', function () {
     return view('pages.rule');
 })->name('rule');
 
-Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat');
-
-Route::get('/ranking', function () {
-    return view('pages.ranking');
-})->name('ranking');
-
 Route::get('/help', function () {
     return view('pages.help');
 })->name('help');
@@ -49,13 +43,13 @@ Route::get('/auth/demo/{provider}', DemoSocialController::class)
 Route::get('/admin/login', fn () => redirect()->route('login'))
     ->name('admin.login.redirect');
 
-// 5. Checkout & Formulir Pendaftaran (Livewire 3 langkah — wajib login peserta)
+// 5. Checkout & Formulir Pendaftaran (Livewire 3 langkah — peserta & penyelenggara)
 Route::get('/checkout', function (Request $request) {
     return view('pages.checkout', [
         'eventSlug' => (string) $request->query('event', ''),
         'categoryId' => $request->filled('category') ? (int) $request->query('category') : null,
     ]);
-})->middleware(['auth', 'role:peserta'])->name('checkout');
+})->middleware(['auth', 'role:peserta,penyelenggara'])->name('checkout');
 
 // 5b. Ruang Tunggu Antrean Pendaftaran (Waiting Room)
 Route::get('/waiting-room', function (Request $request) {
@@ -63,7 +57,7 @@ Route::get('/waiting-room', function (Request $request) {
         'eventSlug' => (string) $request->query('event', ''),
         'categoryId' => $request->filled('category') ? (int) $request->query('category') : null,
     ]);
-})->middleware(['auth', 'role:peserta'])->name('waiting-room');
+})->middleware(['auth', 'role:peserta,penyelenggara'])->name('waiting-room');
 
 // 6. Konfirmasi Pembayaran & E-Ticket Resmi (hanya pemilik pendaftaran / admin)
 Route::get('/ticket/{registration?}', [TicketController::class, 'show'])
@@ -72,27 +66,34 @@ Route::get('/ticket/{registration?}', [TicketController::class, 'show'])
 
 // 7. Dashboard Peserta (Portal Rider — data & filter live via Livewire PortalDashboard)
 Route::view('/dashboard', 'pages.dashboard')
-    ->middleware(['auth', 'role:peserta'])
+    ->middleware(['auth', 'role:peserta,penyelenggara'])
     ->name('dashboard');
 
-// 7b. Helpdesk Pelapor (Peserta di Portal Rider)
+// 7b. Helpdesk Pelapor (Peserta & Penyelenggara di Portal Rider)
 Route::view('/dashboard/bantuan/buat', 'pages.helpdesk.create')
-    ->middleware(['auth', 'role:peserta'])
+    ->middleware(['auth', 'role:peserta,penyelenggara'])
     ->name('helpdesk.create-ticket');
 
 Route::get('/dashboard/bantuan/{ticket?}', function ($ticket = null) {
     return view('pages.helpdesk.my-tickets', ['ticket' => $ticket]);
-})->middleware(['auth', 'role:peserta'])->name('helpdesk.my-tickets');
+})->middleware(['auth', 'role:peserta,penyelenggara'])->name('helpdesk.my-tickets');
 
-// 8. Helpdesk Operator & Admin (Antrian Tiket & Detail)
-Route::view('/helpdesk', 'pages.helpdesk.index')
+// 8. Helpdesk Operator & Admin (Antrian Tiket & Detail Khusus Operator/Admin)
+Route::view('/operator/helpdesk', 'pages.helpdesk.index')
     ->middleware(['auth', 'role:operator,admin'])
     ->name('helpdesk.index');
 
-Route::get('/helpdesk/tickets/{ticket}', function ($ticket) {
+Route::get('/helpdesk', fn () => redirect()->route('helpdesk.index'))
+    ->middleware(['auth', 'role:operator,admin']);
+
+Route::get('/operator/helpdesk/tickets/{ticket}', function ($ticket) {
     return view('pages.helpdesk.detail', ['ticketId' => (int) $ticket]);
 })->middleware(['auth', 'role:operator,admin'])
   ->name('helpdesk.detail');
+
+Route::get('/helpdesk/tickets/{ticket}', function ($ticket) {
+    return redirect()->route('helpdesk.detail', ['ticket' => $ticket]);
+})->middleware(['auth', 'role:operator,admin']);
 
 Route::get('/helpdesk/operator/tickets/{ticket}', function ($ticket) {
     return redirect()->route('helpdesk.detail', ['ticket' => $ticket]);
@@ -120,10 +121,31 @@ Route::get('/organisasi/dasbor', function () {
     $user = auth()->user();
     $org = $user?->organizations()->first() ?? $user?->ownedOrganizations()->first();
     if ($org) {
-        return redirect()->route('organizations.finance', $org);
+        return redirect()->route('organizations.show', ['organization' => $org->slug, 'tab' => 'overview']);
     }
     return redirect()->route('organizations.create')->with('info', 'Silakan daftarkan komunitas atau EO Anda terlebih dahulu.');
 })->middleware('auth')->name('organizer.dashboard');
+
+// 10a. Hub Dasbor Penyelenggara & Buat Event (SaaS)
+Route::get('/organisasi/{organization:slug}', [App\Http\Controllers\OrganizationController::class, 'show'])
+    ->middleware('auth')
+    ->name('organizations.show');
+
+Route::get('/organisasi/{organization:slug}/events/create', [App\Http\Controllers\OrganizationController::class, 'createEvent'])
+    ->middleware('auth')
+    ->name('organizations.events.create');
+
+Route::post('/organisasi/{organization:slug}/events/create', [App\Http\Controllers\OrganizationController::class, 'storeEvent'])
+    ->middleware('auth')
+    ->name('organizations.events.store');
+
+Route::get('/organisasi/{organization:slug}/events/{event:slug}/edit', [App\Http\Controllers\OrganizationController::class, 'editEvent'])
+    ->middleware('auth')
+    ->name('organizations.events.edit');
+
+Route::put('/organisasi/{organization:slug}/events/{event:slug}', [App\Http\Controllers\OrganizationController::class, 'updateEvent'])
+    ->middleware('auth')
+    ->name('organizations.events.update');
 
 // 10b. Manajemen Paket Kuota Event Penyelenggara (SaaS)
 Route::get('/paket', [App\Http\Controllers\OrganizationQuotaController::class, 'publicPackages'])
@@ -166,9 +188,13 @@ Route::post('/organisasi/{organization:slug}/keuangan/payout', [App\Http\Control
     ->middleware('auth')
     ->name('organizations.finance.payout');
 
+
+
 // 11. Midtrans Webhook (Pembayaran Tiket Race & Kuota SaaS)
 Route::post('/payment/midtrans-webhook', [App\Http\Controllers\PaymentWebhookController::class, 'handle'])
     ->name('payment.midtrans.webhook');
+
+
 
 
 

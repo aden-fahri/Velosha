@@ -42,5 +42,29 @@ class QuotaLedger extends Model
     {
         return $this->belongsTo(Event::class);
     }
+
+    public function reasonLabel(): string
+    {
+        return match ($this->reason) {
+            'purchase' => 'Pembelian Paket Kuota',
+            'publish_event', 'event_creation', 'create_event' => 'Pembuatan / Publikasi Event',
+            'event_refund', 'refund' => 'Pengembalian Kuota Event',
+            'adjustment' => 'Penyesuaian Manual Admin',
+            default => ucfirst(str_replace('_', ' ', (string) $this->reason)),
+        };
+    }
+
+    public function reference(): string
+    {
+        if ($this->purchase) {
+            return $this->purchase->package?->name ?? ('Order #' . $this->purchase->order_id);
+        }
+
+        if ($this->event) {
+            return $this->event->title;
+        }
+
+        return '—';
+    }
 }
 

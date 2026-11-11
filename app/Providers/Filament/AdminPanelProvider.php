@@ -35,28 +35,40 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('Velosha')
-            ->brandLogo('/images/logo-velosha.png')
+            ->brandLogo(fn () => view('filament.brand-logo'))
+            ->brandLogoHeight('2.5rem')
             ->favicon('/images/logo-velosha.png')
+            ->font('Inter')
             ->colors([
                 'primary' => Color::Amber,
             ])
             ->spa()
+            ->navigationGroups([
+                \Filament\Navigation\NavigationGroup::make('Operasional Balap')
+                    ->icon('heroicon-o-trophy'),
+                \Filament\Navigation\NavigationGroup::make('Komunitas & Pengguna')
+                    ->icon('heroicon-o-user-group'),
+                \Filament\Navigation\NavigationGroup::make('Layanan Bantuan')
+                    ->icon('heroicon-o-chat-bubble-left-right'),
+                \Filament\Navigation\NavigationGroup::make('Konten & Halaman')
+                    ->icon('heroicon-o-document-text'),
+            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
                 Dashboard::class,
             ])
             ->navigationItems([
-                NavigationItem::make('Antrian tiket')
-                    ->url('/helpdesk')
-                    ->icon('heroicon-o-ticket')
-                    ->group('Helpdesk')
+                NavigationItem::make('Antrian Tiket Operator')
+                    ->url('/operator/helpdesk')
+                    ->icon('heroicon-o-inbox-stack')
+                    ->group('Layanan Bantuan')
                     ->sort(1)
                     ->visible(fn (): bool => auth()->user()?->isAdmin() ?? false),
-                NavigationItem::make('Analitik helpdesk')
+                NavigationItem::make('Analitik Helpdesk')
                     ->url('/helpdesk/analitik')
-                    ->icon('heroicon-o-chart-bar')
-                    ->group('Helpdesk')
+                    ->icon('heroicon-o-chart-bar-square')
+                    ->group('Layanan Bantuan')
                     ->sort(2)
                     ->visible(fn (): bool => auth()->user()?->isAdmin() ?? false),
             ])
@@ -84,6 +96,23 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->renderHook(
+                PanelsRenderHook::HEAD_START,
+                fn (): string => <<<'HTML'
+                    <link rel="preconnect" href="https://fonts.googleapis.com">
+                    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800;12..96,900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+                    <style>
+                        body, .fi-body, .fi-sidebar, .fi-topbar {
+                            font-family: 'Inter', system-ui, sans-serif !important;
+                        }
+                        h1, h2, h3, .fi-header-heading, .fi-ta-header-title {
+                            font-family: 'Bricolage Grotesque', 'Inter', sans-serif !important;
+                            letter-spacing: -0.02em;
+                        }
+                    </style>
+                HTML,
+            )
             ->renderHook(
                 PanelsRenderHook::BODY_END,
                 fn (): string => self::gridAddCardStyle(),
