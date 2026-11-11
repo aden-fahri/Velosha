@@ -35,6 +35,25 @@ class EventCategory extends Model
         'cut_off_hours' => 'decimal:2',
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(function (self $category) {
+            if ($category->is_primary && $category->event_id) {
+                static::where('event_id', $category->event_id)
+                    ->where('id', '!=', $category->id)
+                    ->where('is_primary', true)
+                    ->update(['is_primary' => false]);
+            }
+        });
+
+        static::deleted(function (self $category) {
+            if ($category->is_primary && $category->event_id) {
+                $next = static::where('event_id', $category->event_id)->first();
+                $next?->update(['is_primary' => true]);
+            }
+        });
+    }
+
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);

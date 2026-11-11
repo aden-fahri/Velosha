@@ -3,12 +3,18 @@ $footer = \App\Models\FooterContent::current();
 
 // Check existence of Organizer routes per instruction
 $organizerLinks = [];
-if (\Illuminate\Support\Facades\Route::has('organizer.register')) {
+if (\Illuminate\Support\Facades\Route::has('organizations.create')) {
+    $organizerLinks[] = ['label' => 'Jadi penyelenggara', 'url' => route('organizations.create')];
+} elseif (\Illuminate\Support\Facades\Route::has('organizer.register')) {
     $organizerLinks[] = ['label' => 'Jadi penyelenggara', 'url' => route('organizer.register')];
 }
-if (\Illuminate\Support\Facades\Route::has('organizer.packages')) {
+
+if (\Illuminate\Support\Facades\Route::has('packages.index')) {
+    $organizerLinks[] = ['label' => 'Paket kuota event', 'url' => route('packages.index')];
+} elseif (\Illuminate\Support\Facades\Route::has('organizer.packages')) {
     $organizerLinks[] = ['label' => 'Paket kuota event', 'url' => route('organizer.packages')];
 }
+
 if (\Illuminate\Support\Facades\Route::has('organizer.dashboard')) {
     $organizerLinks[] = ['label' => 'Masuk ke dasbor', 'url' => route('organizer.dashboard')];
 }
@@ -364,6 +370,14 @@ $portalTarget = auth()->check() ? (Route::has('dashboard') ? route('dashboard') 
                                 <span>Portal peserta</span>
                             </a>
                         </li>
+                        @foreach ($organizerLinks as $orgLink)
+                        <li>
+                            <a href="{{ $orgLink['url'] }}" wire:navigate.hover class="footer-link">
+                                <span class="footer-link-chevron">&rsaquo;</span>
+                                <span>{{ $orgLink['label'] }}</span>
+                            </a>
+                        </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>

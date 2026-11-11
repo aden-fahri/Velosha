@@ -112,7 +112,7 @@ class Checkout extends Component
         }
 
         if ($this->categoryId === null) {
-            $this->categoryId = $event->categories()->orderBy('price')->first()?->id;
+            $this->categoryId = ($event->primaryCategory ?? $event->categories()->orderBy('price')->first())?->id;
         }
     }
 

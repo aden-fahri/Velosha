@@ -61,22 +61,25 @@
 
     <script>
         // Reveal on scroll (fade + slide-up) — dijalankan ulang tiap wire:navigate
-        try {
-            if (window.__veloRevealObserver) window.__veloRevealObserver.disconnect();
-            window.__veloRevealObserver = new IntersectionObserver((entries, obs) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        obs.unobserve(entry.target);
-                    }
+        window.__veloInitReveal = function() {
+            try {
+                if (window.__veloRevealObserver) window.__veloRevealObserver.disconnect();
+                window.__veloRevealObserver = new IntersectionObserver((entries, obs) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+                document.querySelectorAll('.velo-reveal:not(.is-visible)').forEach((el) => {
+                    window.__veloRevealObserver.observe(el);
                 });
-            }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
-            document.querySelectorAll('.velo-reveal:not(.is-visible)').forEach((el) => {
-                window.__veloRevealObserver.observe(el);
-            });
-        } catch (e) {
-            document.querySelectorAll('.velo-reveal').forEach((el) => el.classList.add('is-visible'));
-        }
+            } catch (e) {
+                document.querySelectorAll('.velo-reveal').forEach((el) => el.classList.add('is-visible'));
+            }
+        };
+        window.__veloInitReveal();
 
         // Lucide Icons init dengan throttling & scoping agar tidak membebani main thread
         window.__veloRenderIcons = function(rootEl = document) {
@@ -131,6 +134,7 @@
                     }, 350);
                 }
                 window.__veloRenderIcons();
+                window.__veloInitReveal();
                 document.body.classList.remove('velo-nav-leaving');
                 document.body.classList.add('velo-nav-entering');
                 clearTimeout(enterTimer);

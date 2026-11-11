@@ -28,6 +28,14 @@ class TicketController extends Controller
                 403
             );
             $registration->loadMissing(['category.event.photos', 'ticket', 'user', 'payment']);
+        } elseif ($request->filled('order_id')) {
+            $paymentByOrder = Payment::where('order_id', (string) $request->query('order_id'))->first();
+            if ($paymentByOrder && $paymentByOrder->registration && ($paymentByOrder->registration->user_id === $user->id || $user->isAdmin())) {
+                $registration = $paymentByOrder->registration;
+                $registration->loadMissing(['category.event.photos', 'ticket', 'user', 'payment']);
+            } else {
+                $registration = $user->registrations()->with(['category.event.photos', 'ticket', 'user', 'payment'])->latest()->first();
+            }
         } else {
             $registration = $user->registrations()->with(['category.event.photos', 'ticket', 'user', 'payment'])->latest()->first();
         }
@@ -48,8 +56,11 @@ class TicketController extends Controller
                 }
             }
 
-            if (! $isPaid && $request->query('transaction_status') === 'settlement') {
-                $isPaid = true;
+            if (! $isPaid) {
+                $qStatus = (string) $request->query('transaction_status');
+                if (in_array($qStatus, ['settlement', 'capture', 'success'], true)) {
+                    $isPaid = true;
+                }
             }
 
             if ($isPaid) {

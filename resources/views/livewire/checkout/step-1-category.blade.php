@@ -34,7 +34,14 @@
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 flex items-center justify-center font-bold text-xs velo-box-3 {{ $categoryId === $cat->id ? 'bg-[var(--orange)] text-[var(--ink)]' : 'bg-velosurfacealt text-teal-700' }}">{{ $cat->code }}</div>
                 <div>
-                    <div class="text-sm font-bold text-teal-900">{{ $cat->name }} ({{ P::distance($cat->distance_km) }})</div>
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <span class="text-sm font-bold text-teal-900">{{ $cat->name }} ({{ P::distance($cat->distance_km) }})</span>
+                        @if ($cat->is_primary)
+                        <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)] shadow-[1px_1px_0_var(--ink)]">
+                            ★ Utama
+                        </span>
+                        @endif
+                    </div>
                     <div class="text-xs text-velomutedlight">Elevasi +{{ P::angka((float) $cat->elevation_gain_m) }}m &middot; COT {{ P::jam((float) $cat->cut_off_hours) }}</div>
                 </div>
             </div>
@@ -78,7 +85,14 @@
                 {{ $category->code }}
             </div>
             <div>
-                <h4 class="text-sm font-black text-[var(--ink)]">{{ $category->name }} ({{ P::distance($category->distance_km) }})</h4>
+                <div class="flex items-center gap-1.5 flex-wrap">
+                    <h4 class="text-sm font-black text-[var(--ink)]">{{ $category->name }} ({{ P::distance($category->distance_km) }})</h4>
+                    @if ($category->is_primary)
+                    <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)] shadow-[1px_1px_0_var(--ink)]">
+                        ★ Utama
+                    </span>
+                    @endif
+                </div>
                 <div class="text-xs text-[var(--mute)] font-medium">Elevasi +{{ P::angka((float) $category->elevation_gain_m) }}m &middot; COT {{ P::jam((float) $category->cut_off_hours) }}</div>
             </div>
         </div>

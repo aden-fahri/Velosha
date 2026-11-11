@@ -80,9 +80,10 @@ class OrganizationController extends Controller
     {
         $this->authorizeMember($organization);
 
-        // Sinkronisasi otomatis pembayaran paket kuota Midtrans (hanya saat kembali dari callback dengan parameter order_id)
-        if ($request->filled('order_id')) {
-            $orderId = (string) $request->query('order_id');
+        // Sinkronisasi otomatis pembayaran paket kuota Midtrans (hanya saat kembali dari callback dengan parameter order_id atau id)
+        $orderIdParam = $request->query('order_id') ?: $request->query('id');
+        if (! empty($orderIdParam)) {
+            $orderId = (string) $orderIdParam;
             $purchase = $organization->quotaPurchases()
                 ->where('order_id', $orderId)
                 ->where('status', QuotaPurchase::STATUS_PENDING)
@@ -252,7 +253,9 @@ class OrganizationController extends Controller
                 }
                 $catName = trim($catData['name']);
                 $catCode = Str::upper(substr(preg_replace('/[^A-Za-z0-9]/', '', $catName), 0, 6)) ?: 'CAT';
-                $isPrimary = ($idx === $primaryIndex) || (! empty($catData['is_primary']) && filter_var($catData['is_primary'], FILTER_VALIDATE_BOOLEAN));
+                $isPrimary = $request->has('primary_category_index')
+                    ? ($idx === $primaryIndex)
+                    : (! empty($catData['is_primary']) && filter_var($catData['is_primary'], FILTER_VALIDATE_BOOLEAN));
 
                 $event->categories()->create([
                     'name' => $catName,
@@ -371,8 +374,9 @@ class OrganizationController extends Controller
                 }
                 $catName = trim($catData['name']);
                 $catCode = Str::upper(substr(preg_replace('/[^A-Za-z0-9]/', '', $catName), 0, 6)) ?: 'CAT';
-                $isPrimary = ($primaryIndex !== null && $idx === $primaryIndex)
-                    || (! empty($catData['is_primary']) && filter_var($catData['is_primary'], FILTER_VALIDATE_BOOLEAN));
+                $isPrimary = $primaryIndex !== null
+                    ? ($idx === $primaryIndex)
+                    : (! empty($catData['is_primary']) && filter_var($catData['is_primary'], FILTER_VALIDATE_BOOLEAN));
 
                 $catId = ! empty($catData['id']) ? (int) $catData['id'] : null;
                 $cat = $catId ? $event->categories()->where('id', $catId)->first() : null;
