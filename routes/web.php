@@ -60,6 +60,10 @@ Route::get('/ticket/{registration?}', [TicketController::class, 'show'])
     ->middleware('auth')
     ->name('ticket.show');
 
+Route::get('/ticket/{registration?}/download', [TicketController::class, 'download'])
+    ->middleware('auth')
+    ->name('ticket.download');
+
 // 7. Dashboard Peserta (Portal Rider — data & filter live via Livewire PortalDashboard)
 Route::view('/dashboard', 'pages.dashboard')
     ->middleware(['auth', 'role:peserta,penyelenggara'])

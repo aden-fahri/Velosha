@@ -158,6 +158,10 @@
                         <i data-lucide="ticket" class="w-4 h-4 mr-1"></i>
                         <span>Lihat E-Ticket &amp; QR</span>
                     </a>
+                    <a href="{{ route('ticket.download', $registration) }}" target="_blank" class="btn btn-sm btn-mustard font-black">
+                        <i data-lucide="download" class="w-4 h-4 mr-1"></i>
+                        <span>Unduh Paspor PDF</span>
+                    </a>
                     <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text={{ rawurlencode('Velosha '.$event->title) }}&dates={{ $event->event_date->format('Ymd') }}T050000Z/{{ $event->event_date->format('Ymd') }}T130000Z&details={{ rawurlencode('Maraton Sepeda '.P::distance($category->distance_km).' Velosha. BIB: '.($registration->bib_number ?? '-')) }}&location={{ rawurlencode($event->location_name) }}"
                        target="_blank"
                        class="btn btn-sm btn-ghost">
@@ -206,6 +210,10 @@
                     </div>
 
                     <div style="display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap" class="no-print">
+                        <a href="{{ route('ticket.download', $registration) }}" target="_blank" class="btn btn-sm btn-mustard font-black">
+                            <i data-lucide="download" class="w-4 h-4 mr-1.5"></i>
+                            <span>Unduh Paspor PDF (A4)</span>
+                        </a>
                         <button type="button" onclick="window.print()" class="btn btn-sm btn-ghost">
                             <i data-lucide="printer" class="w-4 h-4 mr-1.5"></i>
                             <span>Cetak e-ticket</span>

@@ -80,4 +80,32 @@ class TicketController extends Controller
 
         return response()->view('pages.ticket', ['registration' => $registration]);
     }
+
+    /**
+     * Halaman cetak / unduh resmi A4 E-Ticket PDF.
+     */
+    public function download(Request $request, ?Registration $registration = null): Response
+    {
+        $user = auth()->user();
+
+        if ($registration instanceof Registration) {
+            abort_unless(
+                $registration->user_id === $user->id
+                || $user->isAdmin()
+                || ($user->isPenyelenggara() && $registration->category?->event?->user_id === $user->id),
+                403
+            );
+            $registration->loadMissing(['category.event', 'ticket', 'user', 'payment']);
+        } else {
+            $registration = $user->registrations()
+                ->whereIn('status', [Registration::STATUS_PAID, Registration::STATUS_CHECKED_IN])
+                ->with(['category.event', 'ticket', 'user', 'payment'])
+                ->latest()
+                ->first();
+        }
+
+        abort_if(! $registration || ! $registration->isPaid(), 404, 'E-Ticket belum diterbitkan atau pembayaran belum lunas.');
+
+        return response()->view('pages.ticket-pdf', ['registration' => $registration]);
+    }
 }
