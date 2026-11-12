@@ -1,9 +1,6 @@
 @use('App\Support\EventCardPresenter', 'P')
-@php
-    $loggedInNonPeserta = Auth::check() && ! Auth::user()->isPeserta();
-@endphp
 {{-- Sticky booking box: pilihan kategori, inklusi paket, CTA checkout (Neobrutalisme Velosha) --}}
-<div id="daftar" class="lg:col-span-4 sticky top-24" x-data="{ selected: '{{ ($categories->firstWhere('is_primary', true) ?? $categories->first())?->id }}', roleWarning: false }">
+<div id="daftar" class="lg:col-span-4 sticky top-24" x-data="{ selected: '{{ ($categories->firstWhere('is_primary', true) ?? $categories->first())?->id }}' }">
     <div class="bg-white border-[3px] border-[var(--ink)] rounded-2xl p-6 sm:p-7 shadow-[6px_6px_0_var(--ink)]">
 
         <div class="pb-4 border-b-2 border-[var(--ink)] flex justify-between items-start gap-3">
@@ -112,12 +109,6 @@
             Mode Pratinjau &mdash; Pendaftaran dibuka saat event resmi dipublikasikan.
         </div>
         @else
-        @if ($loggedInNonPeserta)
-        <button type="button" @click="roleWarning = true" class="mt-4 w-full flex items-center justify-center gap-2 bg-[var(--orange)] hover:bg-[var(--orange-l)] text-white font-black py-4 text-sm rounded-xl border-2 border-[var(--ink)] shadow-[4px_4px_0_var(--ink)] hover:translate-x-0.5 hover:translate-y-0.5 transition-all cursor-pointer">
-            <span>Lanjut ke Formulir Pendaftaran</span>
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </button>
-        @else
         <a href="/waiting-room?event={{ $event->slug }}"
            id="checkout-cta"
            wire:navigate
@@ -127,15 +118,10 @@
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
         @endif
-        @endif
 
         <div class="mt-3 text-center text-[11px] text-[var(--mute)] font-semibold">
             Konfirmasi instan via Midtrans &mdash; E-Ticket langsung terbit
         </div>
 
     </div>
-
-    @if ($loggedInNonPeserta)
-    @include('pages.event-detail.partials.role-modal')
-    @endif
 </div>

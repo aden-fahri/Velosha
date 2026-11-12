@@ -48,18 +48,18 @@
         {{-- Grid metode pembayaran (interaktif) --}}
         <div class="border-t-2 border-[var(--ink)] pt-4">
             <div class="text-[10px] uppercase font-black tracking-wider text-[var(--mute)] mb-2.5">Metode Pembayaran Midtrans</div>
-            <div class="grid grid-cols-3 gap-2">
+            <div class="grid grid-cols-2 gap-2.5">
                 @foreach ($methods as $key => $method)
                 @if ($key === 'card')
-                <div class="border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 p-2 text-center opacity-60 cursor-not-allowed" title="Segera hadir">
-                    <div class="text-[10px] font-bold text-gray-500">{{ $method['label'] }}</div>
-                    <div class="text-[9px] text-gray-400 mt-0.5">{{ $method['hint'] }}</div>
+                <div class="border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 py-2.5 px-2 text-center opacity-60 cursor-not-allowed" title="Segera hadir">
+                    <div class="text-[11px] font-bold text-gray-500">{{ $method['label'] }}</div>
+                    <div class="text-[10px] text-gray-400 mt-0.5">{{ $method['hint'] }}</div>
                 </div>
                 @else
                 <button type="button" wire:click="selectPaymentMethod('{{ $key }}')"
-                    class="border-2 border-[var(--ink)] rounded-xl p-2 text-center transition cursor-pointer {{ $paymentMethod === $key ? 'bg-[var(--mustard)] shadow-[2px_2px_0_var(--ink)] font-black' : 'bg-white hover:bg-[var(--paper)] text-[var(--ink)] font-bold' }}">
-                    <div class="text-[10px]">{{ $method['label'] }}</div>
-                    <div class="text-[9px] text-[var(--mute)] mt-0.5">{{ $method['hint'] }}</div>
+                    class="border-2 border-[var(--ink)] rounded-xl py-2.5 px-2 text-center transition cursor-pointer {{ $paymentMethod === $key ? 'bg-[#F4BE3F] shadow-[2.5px_2.5px_0_var(--ink)] font-black' : 'bg-white hover:bg-[#FAF9F5] text-[var(--ink)] font-bold' }}">
+                    <div class="text-[11px] font-black leading-tight">{{ $method['label'] }}</div>
+                    <div class="text-[10px] text-[var(--mute)] mt-0.5 leading-tight">{{ $method['hint'] }}</div>
                 </button>
                 @endif
                 @endforeach

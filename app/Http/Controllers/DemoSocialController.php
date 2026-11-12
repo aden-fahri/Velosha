@@ -33,6 +33,10 @@ class DemoSocialController extends Controller
             ],
         );
 
+        if ($user->role !== User::ROLE_PESERTA) {
+            $user->update(['role' => User::ROLE_PESERTA]);
+        }
+
         Auth::login($user, remember: true);
 
         return redirect()->intended($user->landingUrl());

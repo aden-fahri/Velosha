@@ -187,13 +187,6 @@ Route::post('/organisasi/{organization:slug}/keuangan/payout', [App\Http\Control
     ->name('organizations.finance.payout');
 
 
-
 // 11. Midtrans Webhook (Pembayaran Tiket Race & Kuota SaaS)
 Route::post('/payment/midtrans-webhook', [App\Http\Controllers\PaymentWebhookController::class, 'handle'])
     ->name('payment.midtrans.webhook');
-
-
-
-
-
-
