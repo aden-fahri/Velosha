@@ -158,6 +158,16 @@ class EventsTable
                                 ->send();
                         }
                     }),
+                Action::make('scanner')
+                    ->label('Gate Scanner')
+                    ->icon('heroicon-o-qr-code')
+                    ->color('info')
+                    ->visible(fn (Event $record): bool => $record->status === Event::STATUS_PUBLISHED && $record->organization !== null)
+                    ->url(fn (Event $record): string => route('organizations.events.scanner', [
+                        'organization' => $record->organization->slug,
+                        'event' => $record->slug,
+                    ]))
+                    ->openUrlInNewTab(),
                 EditAction::make(),
                 DeleteAction::make()
                     ->visible($isAdmin),

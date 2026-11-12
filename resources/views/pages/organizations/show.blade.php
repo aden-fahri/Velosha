@@ -637,7 +637,13 @@
 
                                 <div class="pt-3 border-t border-[var(--ink)]/15 flex flex-wrap items-center justify-between gap-2">
                                     <span class="text-xs text-[var(--mute)] font-bold">/events/{{ $event->slug }}</span>
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <a href="{{ route('organizations.events.scanner', ['organization' => $organization->slug, 'event' => $event->slug]) }}"
+                                           class="btn btn-pine btn-sm font-black flex items-center gap-1.5 shadow-[1px_1px_0_var(--ink)]"
+                                           title="Buka Gate Scanner Hari-H untuk Check-in Racepack">
+                                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                            <span>Gate Scanner</span>
+                                        </a>
                                         <a href="{{ route('organizations.events.edit', ['organization' => $organization->slug, 'event' => $event->slug]) }}"
                                            class="btn btn-mustard btn-sm">
                                             Edit Event

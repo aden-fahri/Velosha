@@ -135,6 +135,15 @@ Route::put('/organisasi/{organization:slug}/events/{event:slug}', [App\Http\Cont
     ->middleware('auth')
     ->name('organizations.events.update');
 
+// 10a-2. Gate Scanner Hari-H Balap (Check-in RPC)
+Route::get('/organisasi/{organization:slug}/events/{event:slug}/scanner', [App\Http\Controllers\EventCheckInController::class, 'index'])
+    ->middleware('auth')
+    ->name('organizations.events.scanner');
+
+Route::post('/organisasi/{organization:slug}/events/{event:slug}/scanner/verify', [App\Http\Controllers\EventCheckInController::class, 'verify'])
+    ->middleware('auth')
+    ->name('organizations.events.scanner.verify');
+
 // 10b. Manajemen Paket Kuota Event Penyelenggara (SaaS)
 Route::get('/paket', [App\Http\Controllers\OrganizationQuotaController::class, 'publicPackages'])
     ->name('packages.index');
