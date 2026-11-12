@@ -39,6 +39,14 @@ Route::get('/auth/demo/{provider}', DemoSocialController::class)
     ->middleware('guest')
     ->name('auth.demo');
 
+// 4c. Google OAuth 2.0 Resmi (menggunakan API Google dari .env)
+Route::get('/auth/google', [App\Http\Controllers\GoogleAuthController::class, 'redirect'])
+    ->middleware('guest')
+    ->name('auth.google');
+Route::get('/auth/google/callback', [App\Http\Controllers\GoogleAuthController::class, 'callback'])
+    ->middleware('guest')
+    ->name('auth.google.callback');
+
 // 5. Checkout & Formulir Pendaftaran (Livewire 3 langkah — peserta & penyelenggara)
 Route::get('/checkout', function (Request $request) {
     return view('pages.checkout', [
