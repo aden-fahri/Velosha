@@ -12,6 +12,8 @@ class RaceCards extends Component
     #[Url(as: 'type', history: true, except: 'all')]
     public string $category = 'all';
 
+    public int $limit = 3;
+
     public function filter(string $category): void
     {
         if (in_array($category, $this->categories(), true)) {
@@ -60,7 +62,7 @@ class RaceCards extends Component
         }
 
         return $query
-            ->limit(8)
+            ->limit($this->limit)
             ->get()
             ->map(fn (Event $event): array => EventCardPresenter::card($event))
             ->values()

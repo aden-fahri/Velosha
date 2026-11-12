@@ -35,6 +35,6 @@ class DemoSocialController extends Controller
 
         Auth::login($user, remember: true);
 
-        return redirect()->to($user->landingUrl());
+        return redirect()->intended($user->landingUrl());
     }
 }

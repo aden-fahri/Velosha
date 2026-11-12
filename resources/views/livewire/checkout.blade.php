@@ -91,51 +91,51 @@
         </div>
 
     </div>
-</div>
 
-<!-- Midtrans Snap Simulation Modal -->
-@include('livewire.checkout.payment-modal')
+    <!-- Midtrans Snap Simulation Modal -->
+    @include('livewire.checkout.payment-modal')
 
-{{-- Midtrans Snap Popup with Blurred Backdrop --}}
-<div id="midtrans-blur-overlay" class="fixed inset-0 z-50 bg-[#10282E]/60 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center pointer-events-none"></div>
+    {{-- Midtrans Snap Popup with Blurred Backdrop --}}
+    <div id="midtrans-blur-overlay" class="fixed inset-0 z-50 bg-[#10282E]/60 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center pointer-events-none"></div>
 
-<script src="{{ config('services.midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
+    <script src="{{ config('services.midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
 
-<script>
-    document.addEventListener('livewire:init', () => {
-        Livewire.on('open-midtrans-snap', (data) => {
-            const payload = Array.isArray(data) ? data[0] : data;
-            const token = payload?.token;
-            const regId = payload?.registrationId;
-            const redirectUrl = payload?.redirectUrl;
-            const overlay = document.getElementById('midtrans-blur-overlay');
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('open-midtrans-snap', (data) => {
+                const payload = Array.isArray(data) ? data[0] : data;
+                const token = payload?.token;
+                const regId = payload?.registrationId;
+                const redirectUrl = payload?.redirectUrl;
+                const overlay = document.getElementById('midtrans-blur-overlay');
 
-            if (overlay) overlay.classList.remove('hidden');
+                if (overlay) overlay.classList.remove('hidden');
 
-            if (window.snap && token) {
-                window.snap.pay(token, {
-                    onSuccess: function(result) {
-                        if (overlay) overlay.classList.add('hidden');
-                        window.location.href = '/ticket/' + regId;
-                    },
-                    onPending: function(result) {
-                        if (overlay) overlay.classList.add('hidden');
-                        window.location.href = '/ticket/' + regId;
-                    },
-                    onError: function(result) {
-                        if (overlay) overlay.classList.add('hidden');
-                        alert('Pembayaran tidak berhasil atau dibatalkan.');
-                    },
-                    onClose: function() {
-                        if (overlay) overlay.classList.add('hidden');
-                    }
-                });
-            } else if (redirectUrl) {
-                window.location.href = redirectUrl;
-            } else {
-                if (overlay) overlay.classList.add('hidden');
-                alert('Gagal memuat jendela pembayaran Midtrans. Silakan coba kembali.');
-            }
+                if (window.snap && token) {
+                    window.snap.pay(token, {
+                        onSuccess: function(result) {
+                            if (overlay) overlay.classList.add('hidden');
+                            window.location.href = '/ticket/' + regId;
+                        },
+                        onPending: function(result) {
+                            if (overlay) overlay.classList.add('hidden');
+                            window.location.href = '/ticket/' + regId;
+                        },
+                        onError: function(result) {
+                            if (overlay) overlay.classList.add('hidden');
+                            alert('Pembayaran tidak berhasil atau dibatalkan.');
+                        },
+                        onClose: function() {
+                            if (overlay) overlay.classList.add('hidden');
+                        }
+                    });
+                } else if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                } else {
+                    if (overlay) overlay.classList.add('hidden');
+                    alert('Gagal memuat jendela pembayaran Midtrans. Silakan coba kembali.');
+                }
+            });
         });
-    });
-</script>
+    </script>
+</div>

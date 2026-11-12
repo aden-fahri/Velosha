@@ -1,5 +1,7 @@
 @use('App\Support\EventCardPresenter', 'P')
-@php($loggedInNonPeserta = Auth::check() && ! Auth::user()->isPeserta())
+@php
+    $loggedInNonPeserta = Auth::check() && ! Auth::user()->isPeserta();
+@endphp
 {{-- Sticky booking box: pilihan kategori, inklusi paket, CTA checkout (Neobrutalisme Velosha) --}}
 <div id="daftar" class="lg:col-span-4 sticky top-24" x-data="{ selected: '{{ ($categories->firstWhere('is_primary', true) ?? $categories->first())?->id }}', roleWarning: false }">
     <div class="bg-white border-[3px] border-[var(--ink)] rounded-2xl p-6 sm:p-7 shadow-[6px_6px_0_var(--ink)]">
@@ -22,26 +24,47 @@
         <!-- Select Category Radios -->
         <div class="my-5 space-y-3">
             @forelse ($categories as $category)
-            <label class="flex items-center justify-between p-3.5 rounded-xl border-2 border-[var(--ink)] cursor-pointer transition-all"
-                   :class="selected == '{{ $category->id }}' ? 'bg-[var(--mustard)] shadow-[3px_3px_0_var(--ink)]' : 'bg-[var(--paper)] hover:bg-white shadow-[1px_1px_0_var(--ink)]'">
-                <div class="flex items-center space-x-3">
-                    <input type="radio" name="race_category" x-model="selected" value="{{ $category->id }}" class="text-[var(--ink)] focus:ring-[var(--mustard)]">
-                    <div>
-                        <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="text-xs font-black text-[var(--ink)]">{{ $category->name }} ({{ P::distance($category->distance_km) }})</span>
+            @php
+                $catDist = P::distance($category->distance_km);
+                $hasDist = \Illuminate\Support\Str::contains(strtolower($category->name), [strtolower($catDist), (string)(int)$category->distance_km . 'km', (string)(int)$category->distance_km . ' km']);
+                $displayName = $hasDist ? $category->name : "{$category->name} ({$catDist})";
+            @endphp
+            <label class="group relative flex items-center justify-between p-4 rounded-xl border-2 transition-all cursor-pointer"
+                   :class="selected == '{{ $category->id }}'
+                       ? 'bg-white border-[var(--ink)] shadow-[3.5px_3.5px_0_var(--ink)] ring-2 ring-[var(--mustard)]/40'
+                       : 'bg-white/80 border-[var(--line)] hover:border-[var(--ink)] hover:bg-white shadow-[1px_1px_0_var(--line)]'">
+                <div class="flex items-start gap-3.5 min-w-0">
+                    <div class="pt-0.5">
+                        <input type="radio" name="race_category" x-model="selected" value="{{ $category->id }}"
+                               class="w-4 h-4 text-[var(--orange)] focus:ring-[var(--orange)] border-2 border-[var(--ink)] cursor-pointer">
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="font-heading font-black text-sm text-[var(--ink)] leading-snug">
+                                {{ $displayName }}
+                            </span>
                             @if ($category->is_primary)
-                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)] shadow-[1px_1px_0_var(--ink)]">
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)] shadow-[1px_1px_0_var(--ink)]">
                                 ★ Kategori Utama
                             </span>
                             @endif
                         </div>
-                        <div class="text-[10px] text-[var(--mute)] font-semibold">Elevasi +{{ P::angka((float) $category->elevation_gain_m) }}m &middot; COT {{ P::jam((float) $category->cut_off_hours) }}</div>
-                        <div class="text-[11px] font-bold {{ $category->remaining > 0 ? 'text-[#1F6F4A]' : 'text-[#A02F1A]' }} mt-0.5">
-                            {{ $category->remaining > 0 ? 'Sisa ' . $category->remaining . ' Slot' : 'Slot Penuh' }}
+                        <div class="text-[11px] text-[var(--mute)] font-medium mt-1 flex items-center gap-1.5 flex-wrap">
+                            <span>Elevasi +{{ P::angka((float) $category->elevation_gain_m) }}m</span>
+                            <span>&bull;</span>
+                            <span>COT {{ P::jam((float) $category->cut_off_hours) }}</span>
+                        </div>
+                        <div class="mt-1.5">
+                            <span class="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded {{ $category->remaining > 0 ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' : 'bg-red-50 text-red-800 border border-red-300' }}">
+                                {{ $category->remaining > 0 ? 'Sisa ' . $category->remaining . ' Slot' : 'Slot Penuh' }}
+                            </span>
                         </div>
                     </div>
                 </div>
-                <div class="text-xs font-black text-[var(--ink)]">Rp {{ P::angka((float) $category->price) }}</div>
+                <div class="text-right shrink-0 pl-3">
+                    <div class="text-[10px] uppercase font-bold text-[var(--mute)] tracking-wider">Harga</div>
+                    <div class="font-heading font-black text-base text-[var(--ink)]">Rp {{ P::angka((float) $category->price) }}</div>
+                </div>
             </label>
             @empty
             <div class="p-4 border-2 border-dashed border-[var(--ink)]/30 rounded-xl bg-[var(--paper)] text-xs text-[var(--mute)] text-center font-bold">

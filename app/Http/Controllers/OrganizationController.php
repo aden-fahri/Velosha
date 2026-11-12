@@ -206,6 +206,7 @@ class OrganizationController extends Controller
             'location_name' => ['required', 'string', 'max:200'],
             'description' => ['required', 'string'],
             'poster' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:3072'],
+            'map_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
             'categories' => ['nullable', 'array', 'min:1'],
             'categories.*.name' => ['required_with:categories', 'string', 'max:100'],
             'categories.*.price' => ['required_with:categories', 'numeric', 'min:0'],
@@ -241,6 +242,11 @@ class OrganizationController extends Controller
                 'photo_path' => $path,
                 'sort_order' => 1,
             ]);
+        }
+
+        if ($request->hasFile('map_image')) {
+            $mapPath = $request->file('map_image')->store('event-maps', 'public');
+            $event->update(['map_image_path' => $mapPath]);
         }
 
         // Simpan kategori-kategori tiket balap
@@ -342,6 +348,7 @@ class OrganizationController extends Controller
             'location_name' => ['required', 'string', 'max:200'],
             'description' => ['required', 'string'],
             'poster' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:3072'],
+            'map_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
             'categories' => ['nullable', 'array', 'min:1'],
             'categories.*.name' => ['required_with:categories', 'string', 'max:100'],
             'categories.*.price' => ['required_with:categories', 'numeric', 'min:0'],
@@ -446,6 +453,11 @@ class OrganizationController extends Controller
                     'sort_order' => 1,
                 ]);
             }
+        }
+
+        if ($request->hasFile('map_image')) {
+            $mapPath = $request->file('map_image')->store('event-maps', 'public');
+            $event->update(['map_image_path' => $mapPath]);
         }
 
         return redirect()->route('organizations.show', ['organization' => $organization->slug, 'tab' => 'events'])

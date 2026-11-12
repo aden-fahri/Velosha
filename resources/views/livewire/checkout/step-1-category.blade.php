@@ -12,12 +12,17 @@
 
     <div class="space-y-3">
         @forelse ($event->categories as $cat)
+        @php
+            $catDist = P::distance($cat->distance_km);
+            $hasDist = \Illuminate\Support\Str::contains(strtolower($cat->name), [strtolower($catDist), (string)(int)$cat->distance_km . 'km', (string)(int)$cat->distance_km . ' km']);
+            $displayName = $hasDist ? $cat->name : "{$cat->name} ({$catDist})";
+        @endphp
         @if ($this->isCategoryPaid((int) $cat->id))
         <div class="w-full p-4 velo-box-3 flex items-center justify-between border-2 border-emerald-300 bg-emerald-50/50">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 flex items-center justify-center font-bold text-xs velo-box-3 bg-emerald-700 text-white">{{ $cat->code }}</div>
                 <div>
-                    <div class="text-sm font-bold text-teal-900">{{ $cat->name }} ({{ P::distance($cat->distance_km) }})</div>
+                    <div class="text-sm font-bold text-teal-900">{{ $displayName }}</div>
                     <div class="text-xs text-emerald-800 font-semibold">Anda sudah terdaftar di kategori ini</div>
                 </div>
             </div>
@@ -30,24 +35,24 @@
         </div>
         @else
         <button type="button" wire:click="selectCategory({{ $cat->id }})"
-            class="w-full text-left p-4 velo-box-3 flex items-center justify-between {{ $categoryId === $cat->id ? 'border-2 border-race-500 bg-race-50/40' : 'border border-veloborderstrong bg-white hover:border-[#93a0a1] cursor-pointer' }}">
+            class="w-full text-left p-4 rounded-xl flex items-center justify-between transition-all cursor-pointer {{ $categoryId === $cat->id ? 'border-2 border-[var(--ink)] bg-white shadow-[3px_3px_0_var(--ink)] ring-2 ring-[var(--mustard)]/40' : 'border-2 border-[var(--line)] bg-white/80 hover:border-[var(--ink)] hover:bg-white shadow-[1px_1px_0_var(--line)]' }}">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 flex items-center justify-center font-bold text-xs velo-box-3 {{ $categoryId === $cat->id ? 'bg-[var(--orange)] text-[var(--ink)]' : 'bg-velosurfacealt text-teal-700' }}">{{ $cat->code }}</div>
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center font-black text-xs border-2 border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] {{ $categoryId === $cat->id ? 'bg-[var(--orange)] text-white' : 'bg-[var(--paper)] text-[var(--ink)]' }}">{{ $cat->code }}</div>
                 <div>
                     <div class="flex items-center gap-1.5 flex-wrap">
-                        <span class="text-sm font-bold text-teal-900">{{ $cat->name }} ({{ P::distance($cat->distance_km) }})</span>
+                        <span class="text-sm font-black text-[var(--ink)]">{{ $displayName }}</span>
                         @if ($cat->is_primary)
                         <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)] shadow-[1px_1px_0_var(--ink)]">
                             ★ Utama
                         </span>
                         @endif
                     </div>
-                    <div class="text-xs text-velomutedlight">Elevasi +{{ P::angka((float) $cat->elevation_gain_m) }}m &middot; COT {{ P::jam((float) $cat->cut_off_hours) }}</div>
+                    <div class="text-xs text-[var(--mute)] font-medium">Elevasi +{{ P::angka((float) $cat->elevation_gain_m) }}m &middot; COT {{ P::jam((float) $cat->cut_off_hours) }}</div>
                 </div>
             </div>
             <div class="text-right">
-                <div class="text-sm font-extrabold text-teal-900">Rp {{ P::angka((float) $cat->price) }}</div>
-                <span class="text-[10px] px-1.5 py-0.5 velo-box-3 font-semibold {{ $cat->remaining > 0 ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' : 'text-red-700 bg-red-50 border border-red-200' }}">
+                <div class="text-sm font-black text-[var(--ink)]">Rp {{ P::angka((float) $cat->price) }}</div>
+                <span class="text-[10px] px-2 py-0.5 rounded font-bold inline-block mt-0.5 {{ $cat->remaining > 0 ? 'text-emerald-800 bg-emerald-50 border border-emerald-300' : 'text-red-800 bg-red-50 border border-red-300' }}">
                     {{ $cat->remaining > 0 ? 'Sisa slot '.$cat->remaining : 'Slot Penuh' }}
                 </span>
             </div>
@@ -85,8 +90,13 @@
                 {{ $category->code }}
             </div>
             <div>
+                @php
+                    $catDist = P::distance($category->distance_km);
+                    $hasDist = \Illuminate\Support\Str::contains(strtolower($category->name), [strtolower($catDist), (string)(int)$category->distance_km . 'km', (string)(int)$category->distance_km . ' km']);
+                    $displayName = $hasDist ? $category->name : "{$category->name} ({$catDist})";
+                @endphp
                 <div class="flex items-center gap-1.5 flex-wrap">
-                    <h4 class="text-sm font-black text-[var(--ink)]">{{ $category->name }} ({{ P::distance($category->distance_km) }})</h4>
+                    <h4 class="text-sm font-black text-[var(--ink)]">{{ $displayName }}</h4>
                     @if ($category->is_primary)
                     <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)] shadow-[1px_1px_0_var(--ink)]">
                         ★ Utama

@@ -316,6 +316,27 @@
                         </div>
                     </div>
 
+                    {{-- Foto Peta Sirkuit / Rute Balap --}}
+                    <div class="space-y-2">
+                        <label for="map_image" class="label block font-bold text-xs uppercase tracking-wider text-[var(--ink)]">
+                            Foto Peta Sirkuit / Rute Balap (Tampil di Halaman Detail Event)
+                        </label>
+                        <div class="p-4 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] space-y-3">
+                            @if ($event->map_image_path)
+                                <div class="flex items-center gap-3">
+                                    <img src="{{ asset('storage/' . ltrim($event->map_image_path, '/')) }}" alt="Peta Sirkuit Saat Ini" class="w-20 h-14 object-cover rounded-lg border-2 border-[var(--ink)]">
+                                    <div class="text-xs text-[var(--mute)]">
+                                        <strong class="text-[var(--ink)] block">Peta Sirkuit Aktif</strong>
+                                        Unggah berkas gambar baru di bawah jika ingin mengganti peta sirkuit.
+                                    </div>
+                                </div>
+                            @endif
+                            <input type="file" id="map_image" name="map_image" accept="image/*"
+                                   class="block w-full text-xs font-bold text-[var(--ink)] file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-2 file:border-[var(--ink)] file:text-xs file:font-black file:bg-[var(--mustard)] file:text-[var(--ink)] file:shadow-[2px_2px_0_var(--ink)] file:cursor-pointer hover:file:bg-[var(--butter)]">
+                            <span class="text-[11px] text-[var(--mute)] font-medium block">Format: JPG, PNG, atau WEBP (Maksimal 5 MB). Peta teknis sirkuit atau gambaran rute balap.</span>
+                        </div>
+                    </div>
+
                     {{-- Kategori Tiket & Repeater --}}
                     <div class="space-y-4 pt-2">
                         <div class="flex items-center justify-between pb-2 border-b border-[var(--ink)]/15">
