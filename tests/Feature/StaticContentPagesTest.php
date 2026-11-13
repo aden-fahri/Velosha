@@ -22,7 +22,7 @@ class StaticContentPagesTest extends TestCase
         $response->assertSee('Tentang Velosha');
         $response->assertSee('Platform Registrasi Balap Sepeda Indonesia');
         $response->assertSee('Nilai Utama');
-        $response->assertSee('Siap mulai musim 2026?');
+        $response->assertDontSee('Siap mulai musim 2026?');
         $response->assertDontSee('Sirkuit Resmi');
         $response->assertDontSee('Termasuk Paket');
     }
@@ -55,14 +55,14 @@ class StaticContentPagesTest extends TestCase
     {
         $data = AboutContent::defaults();
         $data['manifesto_title'] = 'Judul Manifesto Dari Database';
-        $data['cta_title'] = 'CTA Khusus Dari Database';
+        $data['header_title'] = 'Header Khusus Dari Database';
         AboutContent::create($data);
 
         $response = $this->get('/about');
 
         $response->assertOk();
         $response->assertSee('Judul Manifesto Dari Database');
-        $response->assertSee('CTA Khusus Dari Database');
+        $response->assertSee('Header Khusus Dari Database');
         $response->assertDontSee('Kami Menghidupkan Budaya Sepeda di Sini');
     }
 

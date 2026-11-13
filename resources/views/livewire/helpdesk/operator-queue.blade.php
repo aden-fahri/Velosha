@@ -27,7 +27,7 @@
                         class="w-full flex items-center justify-between {{ $tab === 'queue' && $filter === 'all' ? 'on' : '' }}">
                     <div class="flex items-center gap-2.5 min-w-0">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>
-                        <span class="whitespace-nowrap font-bold text-sm">Antrian tiket</span>
+                        <span class="whitespace-nowrap font-bold text-sm">Antrian Tiket</span>
                     </div>
                     @if ($kpiOpen > 0)
                         <span class="text-[10px] font-black px-2 py-0.5 rounded bg-[var(--orange)] text-white border border-[var(--ink)] shadow-[1px_1px_0_var(--ink)] shrink-0">
@@ -64,7 +64,7 @@
                 </a>
                 <a href="/admin" class="w-full flex items-center gap-2.5">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    <span class="whitespace-nowrap font-bold text-sm">Admin Panel</span>
+                    <span class="whitespace-nowrap font-bold text-sm">Panel Admin</span>
                 </a>
                 @endif
             </nav>
@@ -85,7 +85,7 @@
             <form method="POST" action="{{ route('logout') }}" class="mt-3">
                 @csrf
                 <button type="submit" class="btn btn-ghost btn-block btn-sm text-[#C23B22] hover:bg-red-50">
-                    Keluar Akun
+                    Keluar akun
                 </button>
             </form>
         </div>
@@ -119,7 +119,7 @@
                         class="w-full flex items-center justify-between {{ $tab === 'queue' && $filter === 'all' ? 'on' : '' }}">
                     <div class="flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>
-                        <span>Antrian tiket</span>
+                        <span>Antrian Tiket</span>
                     </div>
                     @if ($kpiOpen > 0)
                         <span class="text-[10px] font-black px-2 py-0.5 rounded bg-[var(--orange)] text-white border border-[var(--ink)]">{{ $kpiOpen }}</span>
@@ -149,7 +149,7 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btn btn-ghost btn-block btn-sm text-[#C23B22]">
-                        Keluar Akun
+                        Keluar akun
                     </button>
                 </form>
             </div>
@@ -467,7 +467,7 @@
                             </button>
                             <button type="button" wire:click="setFilter('open')"
                                     class="px-3.5 py-1.5 rounded-xl border-2 border-[var(--ink)] text-xs font-black transition-all cursor-pointer {{ $filter === 'open' ? 'bg-[var(--mustard)] shadow-[2px_2px_0_var(--ink)]' : 'bg-white hover:bg-[var(--paper)] text-[var(--ink)]' }}">
-                                Baru (Open) ({{ $kpiOpen }})
+                                Menunggu Respons ({{ $kpiOpen }})
                             </button>
                             <button type="button" wire:click="setFilter('in_progress')"
                                     class="px-3.5 py-1.5 rounded-xl border-2 border-[var(--ink)] text-xs font-black transition-all cursor-pointer {{ $filter === 'in_progress' ? 'bg-[var(--mustard)] shadow-[2px_2px_0_var(--ink)]' : 'bg-white hover:bg-[var(--paper)] text-[var(--ink)]' }}">

@@ -164,9 +164,6 @@
                 <a href="{{ $destUrl }}" class="btn btn-primary">
                     {{ $destLabel }}
                 </a>
-                <a href="/" class="btn btn-secondary">
-                    &larr; Kembali ke Beranda
-                </a>
                 <form method="POST" action="/logout">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn btn-secondary" style="width: 100%;">

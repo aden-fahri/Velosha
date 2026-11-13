@@ -46,9 +46,9 @@ class EventSeeder extends Seeder
                 'user_id' => $owner->id,
                 'description' => 'Grand depart dari pelataran Candi Borobudur saat fajar. Rute perbukitan Menoreh, jembatan gantung Kali Progo, dan KOM Summit di KM 98.',
                 'categories' => [
-                    ['name' => 'Gran Fondo', 'code' => 'GF', 'distance_km' => 130.00, 'elevation_gain_m' => 1450.00, 'price' => 500000.00, 'quota' => 500, 'registered_count' => 452, 'wave_start_time' => 'Wave 1 - 05:45 WIB', 'cut_off_hours' => 7.00],
-                    ['name' => 'Medio Fondo', 'code' => 'MF', 'distance_km' => 75.00, 'elevation_gain_m' => 680.00, 'price' => 350000.00, 'quota' => 400, 'registered_count' => 210, 'wave_start_time' => 'Wave 2 - 06:15 WIB', 'cut_off_hours' => 4.50],
-                    ['name' => 'Fun Ride', 'code' => 'FR', 'distance_km' => 30.00, 'elevation_gain_m' => 250.00, 'price' => 200000.00, 'quota' => 300, 'registered_count' => 88, 'wave_start_time' => 'Wave 3 - 06:45 WIB', 'cut_off_hours' => 3.00],
+                    ['name' => 'Gran Fondo 130 KM', 'code' => 'GF130', 'is_primary' => true, 'distance_km' => 130.00, 'elevation_gain_m' => 1450.00, 'price' => 500000.00, 'quota' => 500, 'registered_count' => 452, 'wave_start_time' => 'Wave 1 - 05:45 WIB', 'cut_off_hours' => 7.00],
+                    ['name' => 'Medio Fondo 75 KM', 'code' => 'MF75', 'is_primary' => false, 'distance_km' => 75.00, 'elevation_gain_m' => 680.00, 'price' => 350000.00, 'quota' => 400, 'registered_count' => 210, 'wave_start_time' => 'Wave 2 - 06:15 WIB', 'cut_off_hours' => 4.50],
+                    ['name' => 'Fun Ride 30 KM', 'code' => 'FR30', 'is_primary' => false, 'distance_km' => 30.00, 'elevation_gain_m' => 250.00, 'price' => 200000.00, 'quota' => 300, 'registered_count' => 88, 'wave_start_time' => 'Wave 3 - 06:45 WIB', 'cut_off_hours' => 3.00],
                 ],
             ],
             [
@@ -59,8 +59,8 @@ class EventSeeder extends Seeder
                 'user_id' => $owner->id,
                 'description' => 'Tantangan murni tanjakan menuju kawasan Tengger. Total elevasi +2.480m dengan KOM terverifikasi di tiga pos.',
                 'categories' => [
-                    ['name' => 'KOM Climb', 'code' => 'KOM', 'distance_km' => 95.00, 'elevation_gain_m' => 2480.00, 'price' => 650000.00, 'quota' => 250, 'registered_count' => 187, 'wave_start_time' => 'Wave 1 - 05:30 WIB', 'cut_off_hours' => 6.00],
-                    ['name' => 'Medio Fondo', 'code' => 'MF', 'distance_km' => 60.00, 'elevation_gain_m' => 1100.00, 'price' => 400000.00, 'quota' => 300, 'registered_count' => 96, 'wave_start_time' => 'Wave 2 - 06:15 WIB', 'cut_off_hours' => 4.50],
+                    ['name' => 'KOM Climb 95 KM', 'code' => 'KOM95', 'is_primary' => true, 'distance_km' => 95.00, 'elevation_gain_m' => 2480.00, 'price' => 650000.00, 'quota' => 250, 'registered_count' => 187, 'wave_start_time' => 'Wave 1 - 05:30 WIB', 'cut_off_hours' => 6.00],
+                    ['name' => 'Medio Fondo 60 KM', 'code' => 'MF60', 'is_primary' => false, 'distance_km' => 60.00, 'elevation_gain_m' => 1100.00, 'price' => 400000.00, 'quota' => 300, 'registered_count' => 96, 'wave_start_time' => 'Wave 2 - 06:15 WIB', 'cut_off_hours' => 4.50],
                 ],
             ],
             [
@@ -71,8 +71,8 @@ class EventSeeder extends Seeder
                 'user_id' => $owner->id,
                 'description' => 'Rute tepi pantai dari Kuta menuju Bukit Peninsula. Angin sepoi dan pemandangan sunrise Uluwatu di kilometer akhir.',
                 'categories' => [
-                    ['name' => 'Medio Fondo', 'code' => 'MF', 'distance_km' => 75.00, 'elevation_gain_m' => 720.00, 'price' => 400000.00, 'quota' => 350, 'registered_count' => 143, 'wave_start_time' => 'Wave 1 - 05:45 WIB', 'cut_off_hours' => 4.50],
-                    ['name' => 'Fun Ride', 'code' => 'FR', 'distance_km' => 35.00, 'elevation_gain_m' => 280.00, 'price' => 250000.00, 'quota' => 250, 'registered_count' => 61, 'wave_start_time' => 'Wave 2 - 06:30 WIB', 'cut_off_hours' => 3.00],
+                    ['name' => 'Medio Fondo 75 KM', 'code' => 'MF75', 'is_primary' => true, 'distance_km' => 75.00, 'elevation_gain_m' => 720.00, 'price' => 400000.00, 'quota' => 350, 'registered_count' => 143, 'wave_start_time' => 'Wave 1 - 05:45 WIB', 'cut_off_hours' => 4.50],
+                    ['name' => 'Fun Ride 35 KM', 'code' => 'FR35', 'is_primary' => false, 'distance_km' => 35.00, 'elevation_gain_m' => 280.00, 'price' => 250000.00, 'quota' => 250, 'registered_count' => 61, 'wave_start_time' => 'Wave 2 - 06:30 WIB', 'cut_off_hours' => 3.00],
                 ],
             ],
             [
@@ -83,8 +83,8 @@ class EventSeeder extends Seeder
                 'user_id' => $owner->id,
                 'description' => 'Loop penuh mengelilingi kawasan Mandalika International Street Circuit dengan kombinasi tanjakan pegunungan dan jalan lurus pantai.',
                 'categories' => [
-                    ['name' => 'Gran Fondo', 'code' => 'GF', 'distance_km' => 140.00, 'elevation_gain_m' => 1600.00, 'price' => 550000.00, 'quota' => 400, 'registered_count' => 176, 'wave_start_time' => 'Wave 1 - 05:45 WIB', 'cut_off_hours' => 7.00],
-                    ['name' => 'Medio Fondo', 'code' => 'MF', 'distance_km' => 80.00, 'elevation_gain_m' => 750.00, 'price' => 380000.00, 'quota' => 350, 'registered_count' => 102, 'wave_start_time' => 'Wave 2 - 06:15 WIB', 'cut_off_hours' => 4.50],
+                    ['name' => 'Gran Fondo 140 KM', 'code' => 'GF140', 'is_primary' => true, 'distance_km' => 140.00, 'elevation_gain_m' => 1600.00, 'price' => 550000.00, 'quota' => 400, 'registered_count' => 176, 'wave_start_time' => 'Wave 1 - 05:45 WIB', 'cut_off_hours' => 7.00],
+                    ['name' => 'Medio Fondo 80 KM', 'code' => 'MF80', 'is_primary' => false, 'distance_km' => 80.00, 'elevation_gain_m' => 750.00, 'price' => 380000.00, 'quota' => 350, 'registered_count' => 102, 'wave_start_time' => 'Wave 2 - 06:15 WIB', 'cut_off_hours' => 4.50],
                 ],
             ],
             [
@@ -95,9 +95,9 @@ class EventSeeder extends Seeder
                 'user_id' => $admin->id,
                 'description' => 'Rute dataran tinggi Lembang dengan tanjakan ikonik Dago Gunung dan turunan cepat menuju Padalarang.',
                 'categories' => [
-                    ['name' => 'Gran Fondo', 'code' => 'GF', 'distance_km' => 120.00, 'elevation_gain_m' => 1350.00, 'price' => 480000.00, 'quota' => 450, 'registered_count' => 301, 'wave_start_time' => 'Wave 1 - 05:45 WIB', 'cut_off_hours' => 7.00],
-                    ['name' => 'Medio Fondo', 'code' => 'MF', 'distance_km' => 70.00, 'elevation_gain_m' => 650.00, 'price' => 350000.00, 'quota' => 350, 'registered_count' => 154, 'wave_start_time' => 'Wave 2 - 06:15 WIB', 'cut_off_hours' => 4.50],
-                    ['name' => 'Fun Ride', 'code' => 'FR', 'distance_km' => 25.00, 'elevation_gain_m' => 180.00, 'price' => 200000.00, 'quota' => 300, 'registered_count' => 47, 'wave_start_time' => 'Wave 3 - 06:45 WIB', 'cut_off_hours' => 3.00],
+                    ['name' => 'Gran Fondo 120 KM', 'code' => 'GF120', 'is_primary' => true, 'distance_km' => 120.00, 'elevation_gain_m' => 1350.00, 'price' => 480000.00, 'quota' => 450, 'registered_count' => 301, 'wave_start_time' => 'Wave 1 - 05:45 WIB', 'cut_off_hours' => 7.00],
+                    ['name' => 'Medio Fondo 70 KM', 'code' => 'MF70', 'is_primary' => false, 'distance_km' => 70.00, 'elevation_gain_m' => 650.00, 'price' => 350000.00, 'quota' => 350, 'registered_count' => 154, 'wave_start_time' => 'Wave 2 - 06:15 WIB', 'cut_off_hours' => 4.50],
+                    ['name' => 'Fun Ride 25 KM', 'code' => 'FR25', 'is_primary' => false, 'distance_km' => 25.00, 'elevation_gain_m' => 180.00, 'price' => 200000.00, 'quota' => 300, 'registered_count' => 47, 'wave_start_time' => 'Wave 3 - 06:45 WIB', 'cut_off_hours' => 3.00],
                 ],
             ],
             [
@@ -108,8 +108,8 @@ class EventSeeder extends Seeder
                 'user_id' => $owner->id,
                 'description' => 'Rute keluarga santai melintasi Candi Prambanan, Keraton, dan alun-alun. Cocok untuk ride pertama dan peserta usia 15+.',
                 'categories' => [
-                    ['name' => 'Fun Ride', 'code' => 'FR', 'distance_km' => 40.00, 'elevation_gain_m' => 300.00, 'price' => 250000.00, 'quota' => 600, 'registered_count' => 233, 'wave_start_time' => 'Wave 1 - 06:00 WIB', 'cut_off_hours' => 3.00],
-                    ['name' => 'Medio Fondo', 'code' => 'MF', 'distance_km' => 65.00, 'elevation_gain_m' => 520.00, 'price' => 320000.00, 'quota' => 300, 'registered_count' => 74, 'wave_start_time' => 'Wave 2 - 06:30 WIB', 'cut_off_hours' => 4.50],
+                    ['name' => 'Fun Ride 40 KM', 'code' => 'FR40', 'is_primary' => true, 'distance_km' => 40.00, 'elevation_gain_m' => 300.00, 'price' => 250000.00, 'quota' => 600, 'registered_count' => 233, 'wave_start_time' => 'Wave 1 - 06:00 WIB', 'cut_off_hours' => 3.00],
+                    ['name' => 'Medio Fondo 65 KM', 'code' => 'MF65', 'is_primary' => false, 'distance_km' => 65.00, 'elevation_gain_m' => 520.00, 'price' => 320000.00, 'quota' => 300, 'registered_count' => 74, 'wave_start_time' => 'Wave 2 - 06:30 WIB', 'cut_off_hours' => 4.50],
                 ],
             ],
             [
@@ -161,11 +161,15 @@ class EventSeeder extends Seeder
                 'organization_id' => $orgId,
                 'status' => $status,
                 'start_time' => '05:45:00',
+                'map_image_path' => 'images/events/kartu-' . (($index % 8) + 1) . '.jpg',
                 'youtube_video_id' => null,
                 'gpx_file_path' => null,
             ]);
 
-            foreach ($categories as $category) {
+            foreach ($categories as $catIdx => $category) {
+                if ($catIdx === 0 && !isset($category['is_primary'])) {
+                    $category['is_primary'] = true;
+                }
                 $event->categories()->create($category);
             }
 

@@ -48,8 +48,8 @@ class ExtraEventSeeder extends Seeder
                 'user_id' => $owner->id,
                 'description' => 'Kriterium kota berlampu neon di kawasan Cikini. Dua kategori jarak untuk pemula dan peloton cepat, start malam hari.',
                 'categories' => [
-                    ['name' => 'Fun Ride', 'code' => 'FR', 'distance_km' => 25.00, 'elevation_gain_m' => 120.00, 'price' => 175000.00, 'quota' => 400, 'registered_count' => 0, 'wave_start_time' => 'Wave 1 - 19:00 WIB', 'cut_off_hours' => 2.50],
-                    ['name' => 'Medio Fondo', 'code' => 'MF', 'distance_km' => 55.00, 'elevation_gain_m' => 380.00, 'price' => 275000.00, 'quota' => 250, 'registered_count' => 0, 'wave_start_time' => 'Wave 2 - 19:30 WIB', 'cut_off_hours' => 3.50],
+                    ['name' => 'Fun Ride 25 KM', 'code' => 'FR25', 'is_primary' => true, 'distance_km' => 25.00, 'elevation_gain_m' => 120.00, 'price' => 175000.00, 'quota' => 400, 'registered_count' => 0, 'wave_start_time' => 'Wave 1 - 19:00 WIB', 'cut_off_hours' => 2.50],
+                    ['name' => 'Medio Fondo 55 KM', 'code' => 'MF55', 'is_primary' => false, 'distance_km' => 55.00, 'elevation_gain_m' => 380.00, 'price' => 275000.00, 'quota' => 250, 'registered_count' => 0, 'wave_start_time' => 'Wave 2 - 19:30 WIB', 'cut_off_hours' => 3.50],
                 ],
             ],
             [
@@ -60,9 +60,9 @@ class ExtraEventSeeder extends Seeder
                 'user_id' => $owner->id,
                 'description' => 'Pendakian lembut menuju lereng Merapi dengan pemandangan kabut pagi di Kaliurang dan turunan aspal mulus.',
                 'categories' => [
-                    ['name' => 'Medio Fondo', 'code' => 'MF', 'distance_km' => 80.00, 'elevation_gain_m' => 900.00, 'price' => 375000.00, 'quota' => 350, 'registered_count' => 0, 'wave_start_time' => 'Wave 1 - 06:00 WIB', 'cut_off_hours' => 5.00],
-                    ['name' => 'Fun Ride', 'code' => 'FR', 'distance_km' => 35.00, 'elevation_gain_m' => 240.00, 'price' => 225000.00, 'quota' => 300, 'registered_count' => 0, 'wave_start_time' => 'Wave 2 - 06:30 WIB', 'cut_off_hours' => 3.00],
-                    ['name' => 'Gran Fondo', 'code' => 'GF', 'distance_km' => 125.00, 'elevation_gain_m' => 1550.00, 'price' => 525000.00, 'quota' => 250, 'registered_count' => 0, 'wave_start_time' => 'Wave 3 - 05:30 WIB', 'cut_off_hours' => 7.00],
+                    ['name' => 'Medio Fondo 80 KM', 'code' => 'MF80', 'is_primary' => true, 'distance_km' => 80.00, 'elevation_gain_m' => 900.00, 'price' => 375000.00, 'quota' => 350, 'registered_count' => 0, 'wave_start_time' => 'Wave 1 - 06:00 WIB', 'cut_off_hours' => 5.00],
+                    ['name' => 'Fun Ride 35 KM', 'code' => 'FR35', 'is_primary' => false, 'distance_km' => 35.00, 'elevation_gain_m' => 240.00, 'price' => 225000.00, 'quota' => 300, 'registered_count' => 0, 'wave_start_time' => 'Wave 2 - 06:30 WIB', 'cut_off_hours' => 3.00],
+                    ['name' => 'Gran Fondo 125 KM', 'code' => 'GF125', 'is_primary' => false, 'distance_km' => 125.00, 'elevation_gain_m' => 1550.00, 'price' => 525000.00, 'quota' => 250, 'registered_count' => 0, 'wave_start_time' => 'Wave 3 - 05:30 WIB', 'cut_off_hours' => 7.00],
                 ],
             ],
             [
@@ -73,8 +73,8 @@ class ExtraEventSeeder extends Seeder
                 'user_id' => $owner->id,
                 'description' => 'Grand depart dari Pantai Losari menuju pegunungan Bugis Raya. Angin laut pagi dan tanjakan panjang di kilometer 60.',
                 'categories' => [
-                    ['name' => 'Gran Fondo', 'code' => 'GF', 'distance_km' => 145.00, 'elevation_gain_m' => 1700.00, 'price' => 575000.00, 'quota' => 350, 'registered_count' => 0, 'wave_start_time' => 'Wave 1 - 05:30 WITA', 'cut_off_hours' => 7.50],
-                    ['name' => 'Medio Fondo', 'code' => 'MF', 'distance_km' => 70.00, 'elevation_gain_m' => 620.00, 'price' => 350000.00, 'quota' => 300, 'registered_count' => 0, 'wave_start_time' => 'Wave 2 - 06:15 WITA', 'cut_off_hours' => 4.50],
+                    ['name' => 'Gran Fondo 145 KM', 'code' => 'GF145', 'is_primary' => true, 'distance_km' => 145.00, 'elevation_gain_m' => 1700.00, 'price' => 575000.00, 'quota' => 350, 'registered_count' => 0, 'wave_start_time' => 'Wave 1 - 05:30 WITA', 'cut_off_hours' => 7.50],
+                    ['name' => 'Medio Fondo 70 KM', 'code' => 'MF70', 'is_primary' => false, 'distance_km' => 70.00, 'elevation_gain_m' => 620.00, 'price' => 350000.00, 'quota' => 300, 'registered_count' => 0, 'wave_start_time' => 'Wave 2 - 06:15 WITA', 'cut_off_hours' => 4.50],
                 ],
             ],
             [
@@ -85,8 +85,8 @@ class ExtraEventSeeder extends Seeder
                 'user_id' => $owner->id,
                 'description' => 'Tantangan murni tanjakan ke dataran tinggi Dieng. Udara tipis, jalan menanjak konsisten, dan KOM terverifikasi di empat pos.',
                 'categories' => [
-                    ['name' => 'KOM Climb', 'code' => 'KOM', 'distance_km' => 85.00, 'elevation_gain_m' => 2100.00, 'price' => 625000.00, 'quota' => 200, 'registered_count' => 0, 'wave_start_time' => 'Wave 1 - 05:45 WIB', 'cut_off_hours' => 6.00],
-                    ['name' => 'Medio Fondo', 'code' => 'MF', 'distance_km' => 55.00, 'elevation_gain_m' => 980.00, 'price' => 340000.00, 'quota' => 250, 'registered_count' => 0, 'wave_start_time' => 'Wave 2 - 06:15 WIB', 'cut_off_hours' => 4.00],
+                    ['name' => 'KOM Climb 85 KM', 'code' => 'KOM85', 'is_primary' => true, 'distance_km' => 85.00, 'elevation_gain_m' => 2100.00, 'price' => 625000.00, 'quota' => 200, 'registered_count' => 0, 'wave_start_time' => 'Wave 1 - 05:45 WIB', 'cut_off_hours' => 6.00],
+                    ['name' => 'Medio Fondo 55 KM', 'code' => 'MF55', 'is_primary' => false, 'distance_km' => 55.00, 'elevation_gain_m' => 980.00, 'price' => 340000.00, 'quota' => 250, 'registered_count' => 0, 'wave_start_time' => 'Wave 2 - 06:15 WIB', 'cut_off_hours' => 4.00],
                 ],
             ],
         ];
@@ -106,11 +106,15 @@ class ExtraEventSeeder extends Seeder
                 'organization_id' => $bromoOrg?->id,
                 'status' => Event::STATUS_PUBLISHED,
                 'start_time' => '05:45:00',
+                'map_image_path' => 'images/events/kartu-' . (($index % 8) + 1) . '.jpg',
                 'youtube_video_id' => null,
                 'gpx_file_path' => null,
             ]);
 
-            foreach ($categories as $category) {
+            foreach ($categories as $catIdx => $category) {
+                if ($catIdx === 0 && !isset($category['is_primary'])) {
+                    $category['is_primary'] = true;
+                }
                 $event->categories()->create($category);
             }
 

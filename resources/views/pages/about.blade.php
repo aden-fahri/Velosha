@@ -70,24 +70,4 @@
     </div>
 </section>
 
-<!-- 3. CTA BANNER -->
-<section style="padding: 56px 0; background: var(--ink)">
-    <div class="wrap">
-        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px">
-            <div>
-                <h2 style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 28px; color: var(--paper); line-height: 1.15">
-                    {{ $content->cta_title ?? 'Siap mulai musim 2026?' }}
-                </h2>
-                <p style="font-size: 15px; color: var(--paper2); margin-top: 6px">
-                    {{ $content->cta_desc ?? 'Daftar sekali, kelola semua race Anda lewat satu portal.' }}
-                </p>
-            </div>
-            <a href="{{ $content->cta_url ?? '/events' }}" wire:navigate class="btn text-base">
-                <span>{{ $content->cta_label ?? 'Lihat Semua Race' }}</span>
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </a>
-        </div>
-    </div>
-</section>
-
 @endsection
