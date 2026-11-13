@@ -506,6 +506,14 @@
                         <!-- KOLOM KANAN: Pesepeda No 2 & Floating Dashboard Card -->
                         <div style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; min-height: 260px; width: 100%;">
                             
+                            @php
+                                $realTotalRegs = \App\Models\Registration::count();
+                                $realPaidRegs = \App\Models\Registration::whereIn('status', ['paid', 'checked_in'])->count();
+                                $realCategoryBooked = (int) \App\Models\EventCategory::sum('registered_count');
+                                $promoPesertaCount = max($realTotalRegs, $realCategoryBooked);
+                                $promoRateLunas = $realTotalRegs > 0 ? (int) round(($realPaidRegs / $realTotalRegs) * 100) : 98;
+                            @endphp
+
                             <!-- Floating Stat Card (Dashboard Penyelenggara) di Kanan Atas Pesepeda -->
                             <a href="{{ $targetDaftar }}" wire:navigate
                                style="position: absolute; top: -6px; right: 0; background: #FFFDF8; border: 2.5px solid #10282E; border-radius: 12px; box-shadow: 3px 3px 0 #10282E; padding: 8px 12px; z-index: 20; min-width: 150px; text-decoration: none; color: inherit;"
@@ -514,10 +522,10 @@
                                     DASHBOARD PENYELENGGARA
                                 </div>
                                 <div style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; font-weight: 900; color: #10282E; line-height: 1.1; margin: 2px 0;">
-                                    1.284
+                                    {{ number_format($promoPesertaCount > 0 ? $promoPesertaCount : 1284, 0, ',', '.') }}
                                 </div>
                                 <div style="font-size: 9.5px; font-weight: 700; color: #1F6F4A; margin-bottom: 5px;">
-                                    peserta terdaftar · 98% lunas
+                                    peserta terdaftar · {{ $promoRateLunas }}% lunas
                                 </div>
                                 <!-- Mini Bar Chart -->
                                 <div style="display: flex; align-items: flex-end; gap: 3px; height: 14px;">
