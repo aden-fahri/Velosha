@@ -22,7 +22,7 @@
                 <a href="{{ route('helpdesk.index') }}?filter=all" wire:navigate
                    class="w-full flex items-center gap-2.5 on">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>
-                    <span class="whitespace-nowrap font-bold text-sm">Antrian Tiket</span>
+                    <span class="whitespace-nowrap font-bold text-sm">Antrian tiket</span>
                 </a>
 
                 {{-- 3. Tiket Selesai --}}
@@ -49,7 +49,7 @@
                 @if(Auth::user()->isAdmin())
                 <a href="/admin" class="w-full flex items-center gap-2.5">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    <span class="whitespace-nowrap font-bold text-sm">Panel Admin</span>
+                    <span class="whitespace-nowrap font-bold text-sm">Admin Panel</span>
                 </a>
                 @endif
             </nav>
@@ -122,7 +122,7 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btn btn-ghost btn-block btn-sm text-[#C23B22]">
-                        Keluar akun
+                        Keluar Akun
                     </button>
                 </form>
             </div>

@@ -343,13 +343,7 @@ class Checkout extends Component
                 return;
             }
 
-            if (! empty($result['redirect_url'])) {
-                $this->redirect($result['redirect_url'], navigate: false);
-
-                return;
-            }
-
-            if ($result['is_mock']) {
+            if (! empty($result['is_mock'])) {
                 $action = app(\App\Actions\CompleteRegistrationAction::class);
                 $registration = $action->execute($registration);
 
@@ -361,6 +355,12 @@ class Checkout extends Component
                 }
 
                 $this->redirect('/ticket/'.$registration->id);
+
+                return;
+            }
+
+            if (! empty($result['redirect_url'])) {
+                $this->redirect($result['redirect_url'], navigate: false);
 
                 return;
             }
@@ -389,6 +389,12 @@ class Checkout extends Component
      */
     public function simulatePaid(): void
     {
+        if (! config('payments.simulation')) {
+            $this->error = 'Simulasi pembayaran dinonaktifkan.';
+
+            return;
+        }
+
         $key = 'checkout:'.(auth()->id() ?: request()->ip());
         if (RateLimiter::tooManyAttempts($key, 10)) {
             $this->error = 'Terlalu banyak permintaan. Coba lagi sebentar.';

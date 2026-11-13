@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\DemoSocialController;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\TicketController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +32,7 @@ Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.show');
 
 // 4. Autentikasi: Login & Register Peserta (Laravel Breeze)
+Route::redirect('/admin/login', '/login');
 require __DIR__.'/auth.php';
 
 // 4b. Social login (mode demo — Socialite asli menyusul)
@@ -87,20 +88,20 @@ Route::get('/dashboard/bantuan/{ticket?}', function ($ticket = null) {
 })->middleware(['auth', 'role:peserta,penyelenggara'])->name('helpdesk.my-tickets');
 
 // 8. Helpdesk Operator & Admin (Antrian Tiket & Detail Khusus Operator/Admin)
-Route::view('/operator/helpdesk', 'pages.helpdesk.index')
+Route::view('/helpdesk', 'pages.helpdesk.index')
     ->middleware(['auth', 'role:operator,admin'])
     ->name('helpdesk.index');
 
-Route::get('/helpdesk', fn () => redirect()->route('helpdesk.index'))
+Route::view('/operator/helpdesk', 'pages.helpdesk.index')
     ->middleware(['auth', 'role:operator,admin']);
 
-Route::get('/operator/helpdesk/tickets/{ticket}', function ($ticket) {
+Route::get('/helpdesk/tickets/{ticket}', function ($ticket) {
     return view('pages.helpdesk.detail', ['ticketId' => (int) $ticket]);
 })->middleware(['auth', 'role:operator,admin'])
   ->name('helpdesk.detail');
 
-Route::get('/helpdesk/tickets/{ticket}', function ($ticket) {
-    return redirect()->route('helpdesk.detail', ['ticket' => $ticket]);
+Route::get('/operator/helpdesk/tickets/{ticket}', function ($ticket) {
+    return view('pages.helpdesk.detail', ['ticketId' => (int) $ticket]);
 })->middleware(['auth', 'role:operator,admin']);
 
 // 9. Helpdesk Admin Analitik (Khusus Administrator)
@@ -118,6 +119,7 @@ Route::post('/organisasi/daftar', [App\Http\Controllers\OrganizationController::
     ->name('organizations.store');
 
 Route::get('/organisasi/dasbor', function () {
+    /** @var User|null $user */
     $user = auth()->user();
     $org = $user?->organizations()->first() ?? $user?->ownedOrganizations()->first();
     if ($org) {

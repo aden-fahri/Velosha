@@ -56,6 +56,11 @@ class Registration extends Model
         return $this->belongsTo(EventCategory::class, 'event_category_id');
     }
 
+    public function eventCategory(): BelongsTo
+    {
+        return $this->category();
+    }
+
     public function ticket(): HasOne
     {
         return $this->hasOne(Ticket::class);

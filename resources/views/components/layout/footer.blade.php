@@ -265,7 +265,7 @@ $portalTarget = auth()->check() ? (Route::has('dashboard') ? route('dashboard') 
 
                 {{-- Deskripsi Singkat di Bawah Logo --}}
                 <p style="color: #FFFFFF !important; font-size: 14.5px !important; line-height: 1.6 !important; max-width: 290px; margin-bottom: 24px; opacity: 1 !important; display: block !important;">
-                    Platform resmi pendaftaran dan kurasi maraton sepeda endurance, Gran Fondo, dan cycling experience di Indonesia.
+                    {{ $footer->brand_description ?? 'Platform resmi pendaftaran dan kurasi maraton sepeda endurance, Gran Fondo, dan cycling experience di Indonesia.' }}
                 </p>
 
                 <div>
@@ -299,77 +299,99 @@ $portalTarget = auth()->check() ? (Route::has('dashboard') ? route('dashboard') 
 
             {{-- Wrapper untuk Navigasi Tengah di Mobile --}}
             <div class="footer-links-row contents md:contents">
-                {{-- Kolom 2: Jelajahi --}}
+                {{-- Kolom 2: Jelajahi / Kategori --}}
                 <div class="flex flex-col">
-                    <h3 class="footer-col-heading">Jelajahi</h3>
+                    <h3 class="footer-col-heading">{{ $footer->kategori_title ?? 'Jelajahi' }}</h3>
                     <ul class="flex flex-col space-y-1">
-                        <li>
-                            <a href="/events" wire:navigate.hover class="footer-link">
-                                <span class="footer-link-chevron">&rsaquo;</span>
-                                <span>Kalender balap</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/events?type=gran-fondo" wire:navigate.hover class="footer-link">
-                                <span class="footer-link-chevron">&rsaquo;</span>
-                                <span>Gran Fondo</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/events?type=medio-fondo" wire:navigate.hover class="footer-link">
-                                <span class="footer-link-chevron">&rsaquo;</span>
-                                <span>Medio Fondo</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/events?type=fun-ride" wire:navigate.hover class="footer-link">
-                                <span class="footer-link-chevron">&rsaquo;</span>
-                                <span>Fun Ride</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/events?type=climb" wire:navigate.hover class="footer-link">
-                                <span class="footer-link-chevron">&rsaquo;</span>
-                                <span>KOM Climb</span>
-                            </a>
-                        </li>
+                        @if (! empty($footer->kategori_links))
+                            @foreach ($footer->kategori_links as $katLink)
+                            <li>
+                                <a href="{{ $katLink['url'] ?? '/events' }}" wire:navigate.hover class="footer-link">
+                                    <span class="footer-link-chevron">&rsaquo;</span>
+                                    <span>{{ $katLink['label'] ?? '' }}</span>
+                                </a>
+                            </li>
+                            @endforeach
+                        @else
+                            <li>
+                                <a href="/events" wire:navigate.hover class="footer-link">
+                                    <span class="footer-link-chevron">&rsaquo;</span>
+                                    <span>Kalender balap</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/events?type=gran-fondo" wire:navigate.hover class="footer-link">
+                                    <span class="footer-link-chevron">&rsaquo;</span>
+                                    <span>Gran Fondo</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/events?type=medio-fondo" wire:navigate.hover class="footer-link">
+                                    <span class="footer-link-chevron">&rsaquo;</span>
+                                    <span>Medio Fondo</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/events?type=fun-ride" wire:navigate.hover class="footer-link">
+                                    <span class="footer-link-chevron">&rsaquo;</span>
+                                    <span>Fun Ride</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/events?type=climb" wire:navigate.hover class="footer-link">
+                                    <span class="footer-link-chevron">&rsaquo;</span>
+                                    <span>KOM Climb</span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
 
                 {{-- Kolom 3: Bantuan & info --}}
                 <div class="flex flex-col">
-                    <h3 class="footer-col-heading">Bantuan & info</h3>
+                    <h3 class="footer-col-heading">{{ $footer->bantuan_title ?? 'Bantuan & info' }}</h3>
                     <ul class="flex flex-col space-y-1">
-                        <li>
-                            <a href="/help" wire:navigate.hover class="footer-link">
-                                <span class="footer-link-chevron">&rsaquo;</span>
-                                <span>Pusat bantuan</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/rule" wire:navigate.hover class="footer-link">
-                                <span class="footer-link-chevron">&rsaquo;</span>
-                                <span>Aturan & kode etik</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/about" wire:navigate.hover class="footer-link">
-                                <span class="footer-link-chevron">&rsaquo;</span>
-                                <span>Tentang Velosha</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ $portalTarget }}" wire:navigate.hover class="footer-link">
-                                <span class="footer-link-chevron">&rsaquo;</span>
-                                <span>Cek e-ticket</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ $portalTarget }}" wire:navigate.hover class="footer-link">
-                                <span class="footer-link-chevron">&rsaquo;</span>
-                                <span>Portal peserta</span>
-                            </a>
-                        </li>
+                        @if (! empty($footer->bantuan_links))
+                            @foreach ($footer->bantuan_links as $bLink)
+                            <li>
+                                <a href="{{ $bLink['url'] ?? '/help' }}" wire:navigate.hover class="footer-link">
+                                    <span class="footer-link-chevron">&rsaquo;</span>
+                                    <span>{{ $bLink['label'] ?? '' }}</span>
+                                </a>
+                            </li>
+                            @endforeach
+                        @else
+                            <li>
+                                <a href="/help" wire:navigate.hover class="footer-link">
+                                    <span class="footer-link-chevron">&rsaquo;</span>
+                                    <span>Pusat bantuan</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/rule" wire:navigate.hover class="footer-link">
+                                    <span class="footer-link-chevron">&rsaquo;</span>
+                                    <span>Aturan & kode etik</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/about" wire:navigate.hover class="footer-link">
+                                    <span class="footer-link-chevron">&rsaquo;</span>
+                                    <span>Tentang Velosha</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ $portalTarget }}" wire:navigate.hover class="footer-link">
+                                    <span class="footer-link-chevron">&rsaquo;</span>
+                                    <span>Cek e-ticket</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ $portalTarget }}" wire:navigate.hover class="footer-link">
+                                    <span class="footer-link-chevron">&rsaquo;</span>
+                                    <span>Portal peserta</span>
+                                </a>
+                            </li>
+                        @endif
                         @foreach ($organizerLinks as $orgLink)
                         <li>
                             <a href="{{ $orgLink['url'] }}" wire:navigate.hover class="footer-link">
@@ -384,17 +406,23 @@ $portalTarget = auth()->check() ? (Route::has('dashboard') ? route('dashboard') 
 
             {{-- Kolom 4: Pembayaran (Disimpan di Samping Bantuan & Info) --}}
             <div class="flex flex-col">
-                <h3 class="footer-col-heading">Pembayaran</h3>
+                <h3 class="footer-col-heading">{{ $footer->payment_title ?? 'Pembayaran' }}</h3>
                 <p class="text-xs text-[#E8DFCB] opacity-80 leading-relaxed mb-3">
                     Verifikasi instan, nomor BIB langsung terbit:
                 </p>
                 <div class="footer-pay-chips-grid">
-                    <div class="footer-pay-chip">QRIS Instant</div>
-                    <div class="footer-pay-chip">BCA Virtual</div>
-                    <div class="footer-pay-chip">Mandiri VA</div>
-                    <div class="footer-pay-chip">Bank BRI</div>
-                    <div class="footer-pay-chip">Bank BNI</div>
-                    <div class="footer-pay-chip">Visa / Master</div>
+                    @if (! empty($footer->payment_methods))
+                        @foreach ($footer->payment_methods as $pm)
+                            <div class="footer-pay-chip">{{ is_array($pm) ? ($pm['label'] ?? '') : $pm }}</div>
+                        @endforeach
+                    @else
+                        <div class="footer-pay-chip">QRIS Instant</div>
+                        <div class="footer-pay-chip">BCA Virtual</div>
+                        <div class="footer-pay-chip">Mandiri VA</div>
+                        <div class="footer-pay-chip">Bank BRI</div>
+                        <div class="footer-pay-chip">Bank BNI</div>
+                        <div class="footer-pay-chip">Visa / Master</div>
+                    @endif
                 </div>
             </div>
 
@@ -407,8 +435,14 @@ $portalTarget = auth()->check() ? (Route::has('dashboard') ? route('dashboard') 
             </p>
 
             <div class="flex flex-wrap items-center gap-6">
-                <a href="/rule" wire:navigate.hover class="text-inherit hover:text-[#F4BE3F] transition-colors">Privasi</a>
-                <a href="/rule" wire:navigate.hover class="text-inherit hover:text-[#F4BE3F] transition-colors">Ketentuan</a>
+                @if (! empty($footer->bottom_links))
+                    @foreach ($footer->bottom_links as $botLink)
+                        <a href="{{ $botLink['url'] ?? '/rule' }}" wire:navigate.hover class="text-inherit hover:text-[#F4BE3F] transition-colors">{{ $botLink['label'] ?? '' }}</a>
+                    @endforeach
+                @else
+                    <a href="/rule" wire:navigate.hover class="text-inherit hover:text-[#F4BE3F] transition-colors">Privasi</a>
+                    <a href="/rule" wire:navigate.hover class="text-inherit hover:text-[#F4BE3F] transition-colors">Ketentuan</a>
+                @endif
 
                 <button type="button"
                         onclick="window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })"

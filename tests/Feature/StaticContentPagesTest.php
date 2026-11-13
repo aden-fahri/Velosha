@@ -32,7 +32,7 @@ class StaticContentPagesTest extends TestCase
         $response = $this->get('/rule');
 
         $response->assertOk();
-        $response->assertSee('Aturan balap & kode etik', false);
+        $response->assertSee('Aturan Balap & Kode Etik');
         $response->assertSee('Kendaraan');
         $response->assertSee('Sanksi & diskualifikasi', false);
         $response->assertSee('Seluruh keputusan Race Comisaris');
@@ -43,7 +43,7 @@ class StaticContentPagesTest extends TestCase
         $response = $this->get('/help');
 
         $response->assertOk();
-        $response->assertSee('Pusat bantuan');
+        $response->assertSee('Pusat Bantuan');
         $response->assertSee('WhatsApp');
         $response->assertSee('Bagaimana cara mendaftar?');
         $response->assertSee('Istilah Sepeda');

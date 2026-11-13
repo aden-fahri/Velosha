@@ -144,15 +144,29 @@
             <span class="badge">403 &mdash; Akses Dibatasi</span>
             <h1>Jalur Ini Dikhususkan</h1>
             <p class="lead">
-                {{ $exception->getMessage() ?: 'Halaman ini memerlukan hak akses khusus (Peserta, Penyelenggara, atau Operator). Silakan masuk dengan akun yang sesuai.' }}
+                {{ (! empty($exception) && method_exists($exception, 'getMessage') && $exception->getMessage()) ? $exception->getMessage() : 'Halaman ini memerlukan hak akses khusus (Peserta, Penyelenggara, atau Operator). Silakan masuk dengan akun yang sesuai.' }}
             </p>
         </div>
 
         <div class="actions">
-            <a href="/" class="btn btn-primary">
-                &larr; Kembali ke Beranda
-            </a>
             @auth
+                @php
+                    $u = auth()->user();
+                    $destUrl = $u->home();
+                    if ($u->isAdmin() || $u->isPenyelenggara()) {
+                        $destLabel = 'Ke Panel Admin';
+                    } elseif ($u->isOperator()) {
+                        $destLabel = 'Antrian Helpdesk';
+                    } else {
+                        $destLabel = 'Ke Dashboard Saya';
+                    }
+                @endphp
+                <a href="{{ $destUrl }}" class="btn btn-primary">
+                    {{ $destLabel }}
+                </a>
+                <a href="/" class="btn btn-secondary">
+                    &larr; Kembali ke Beranda
+                </a>
                 <form method="POST" action="/logout">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn btn-secondary" style="width: 100%;">
@@ -160,6 +174,9 @@
                     </button>
                 </form>
             @else
+                <a href="/" class="btn btn-primary">
+                    &larr; Kembali ke Beranda
+                </a>
                 <a href="/login" class="btn btn-secondary">
                     Masuk ke Akun Lain
                 </a>

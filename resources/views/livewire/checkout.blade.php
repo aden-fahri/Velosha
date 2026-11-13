@@ -55,12 +55,14 @@
             <div class="flex items-center">
                 @foreach ($stepLabels as $number => $label)
                 @if ($number > 1)
-                <div class="flex-1 h-2 mx-2 sm:mx-4 rounded-full border border-[var(--ink)]/20 transition-all {{ $step >= $number ? 'bg-[#1F6F4A]' : 'bg-gray-200' }}"></div>
+                <div class="flex-1 h-2 mx-2 sm:mx-4 rounded-full border border-[var(--ink)]/20 transition-all {{ $step >= $number ? 'bg-[#1F6F4A]' : 'bg-gray-200' }}"
+                     style="{{ $step >= $number ? 'background-color: #1F6F4A !important;' : '' }}"></div>
                 @endif
                 <div class="flex items-center gap-2.5 shrink-0">
-                    <span class="w-9 h-9 rounded-xl border-2 border-[var(--ink)] flex items-center justify-center text-xs font-black transition-all shadow-[2px_2px_0_var(--ink)] {{ $step > $number ? 'bg-[#1F6F4A] text-white' : ($step === $number ? 'bg-[#F4BE3F] text-[var(--ink)] ring-2 ring-[var(--ink)]' : 'bg-gray-100 text-gray-400') }}">
+                    <span class="w-9 h-9 rounded-xl border-2 border-[var(--ink)] flex items-center justify-center text-xs font-black transition-all shadow-[2px_2px_0_var(--ink)] {{ $step > $number ? 'bg-[#1F6F4A] text-white' : ($step === $number ? 'bg-[#F4BE3F] text-[var(--ink)] ring-2 ring-[var(--ink)]' : 'bg-gray-100 text-gray-400') }}"
+                          style="{{ $step > $number ? 'background-color: #1F6F4A !important; color: #ffffff !important;' : ($step === $number ? 'background-color: #F4BE3F !important; color: #10282E !important;' : '') }}">
                         @if ($step > $number)
-                        <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        <svg class="w-4 h-4 text-white" style="stroke: #ffffff !important;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                         @else
                         {{ $number }}
                         @endif

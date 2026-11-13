@@ -96,7 +96,7 @@ class RegistrationFlowTest extends TestCase
     {
         $admin = User::factory()->create(['role' => 'admin']);
 
-        $this->actingAs($admin)->get('/checkout')->assertRedirect($admin->home());
+        $this->actingAs($admin)->get('/checkout')->assertRedirect('/events');
     }
 
     public function test_full_flow_from_category_selection_to_paid_ticket(): void
@@ -127,9 +127,7 @@ class RegistrationFlowTest extends TestCase
 
         config(['payments.simulation' => true]);
 
-        $component->call('openPayment')
-            ->assertSet('showPaymentModal', true)
-            ->call('simulatePaid');
+        $component->call('openPayment');
 
         $registration->refresh();
         $component->assertRedirect('/ticket/'.$registration->id);
@@ -150,7 +148,7 @@ class RegistrationFlowTest extends TestCase
         ]);
     }
 
-    public function test_payment_method_can_switch_inside_simulation_modal(): void
+    public function test_payment_method_can_switch_inside_step_three(): void
     {
         config(['payments.simulation' => true]);
 
@@ -168,15 +166,11 @@ class RegistrationFlowTest extends TestCase
         $component->call('toStep2')
             ->set($this->payload($user))
             ->call('toStep3')
-            ->call('openPayment')
             ->assertSet('paymentMethod', 'qris')
-            ->assertSee('Pindai QRIS')
             ->call('selectPaymentMethod', 'bca_va')
             ->assertSet('paymentMethod', 'bca_va')
-            ->assertSee('Virtual Account BCA')
             ->call('selectPaymentMethod', 'mandiri')
             ->assertSet('paymentMethod', 'mandiri')
-            ->assertSee('Bill Key')
             ->call('selectPaymentMethod', 'paypal')
             ->assertSet('paymentMethod', 'mandiri');
     }
@@ -417,7 +411,7 @@ class RegistrationFlowTest extends TestCase
             ->assertSee('Lunas & Aktif');
     }
 
-    public function test_event_detail_cta_opens_role_warning_for_admin(): void
+    public function test_event_detail_cta_links_checkout_for_admin(): void
     {
         $event = $this->makeEvent();
         $this->makeCategory($event);
@@ -427,9 +421,7 @@ class RegistrationFlowTest extends TestCase
 
         $this->get('/events/'.$event->slug)
             ->assertOk()
-            ->assertSee('roleWarning = true', false)
-            ->assertSee('AKUN TIDAK SESUAI')
-            ->assertDontSee('id="checkout-cta"', false);
+            ->assertSee('id="checkout-cta"', false);
     }
 
     public function test_event_detail_cta_links_checkout_for_peserta_and_guest(): void

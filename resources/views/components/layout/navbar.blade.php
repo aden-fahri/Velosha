@@ -37,17 +37,14 @@
                 @php
                     $u = auth()->user();
                     $homeUrl = $u->home();
-                    if ($u->isAdmin()) {
+                    if ($u->isAdmin() || $u->isPenyelenggara()) {
                         $homeLabel = 'Panel Admin';
                         $homeIcon = 'layout-dashboard';
                     } elseif ($u->isOperator()) {
                         $homeLabel = 'Antrian Helpdesk';
                         $homeIcon = 'ticket';
-                    } elseif ($u->isPenyelenggara()) {
-                        $homeLabel = 'Dasbor Penyelenggara';
-                        $homeIcon = 'briefcase';
                     } else {
-                        $homeLabel = 'Dashboard Rider';
+                        $homeLabel = 'Portal Saya';
                         $homeIcon = 'gauge';
                     }
                 @endphp

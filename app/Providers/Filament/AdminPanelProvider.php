@@ -44,14 +44,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->spa()
             ->navigationGroups([
-                \Filament\Navigation\NavigationGroup::make('Operasional Balap')
-                    ->icon('heroicon-o-trophy'),
-                \Filament\Navigation\NavigationGroup::make('Komunitas & Pengguna')
-                    ->icon('heroicon-o-user-group'),
-                \Filament\Navigation\NavigationGroup::make('Layanan Bantuan')
-                    ->icon('heroicon-o-chat-bubble-left-right'),
-                \Filament\Navigation\NavigationGroup::make('Konten & Halaman')
-                    ->icon('heroicon-o-document-text'),
+                \Filament\Navigation\NavigationGroup::make('Operasional Balap'),
+                \Filament\Navigation\NavigationGroup::make('Komunitas & Pengguna'),
+                \Filament\Navigation\NavigationGroup::make('Layanan Bantuan'),
+                \Filament\Navigation\NavigationGroup::make('Konten & Halaman'),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
@@ -59,16 +55,16 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->navigationItems([
-                NavigationItem::make('Antrian Tiket Operator')
-                    ->url('/operator/helpdesk')
-                    ->icon('heroicon-o-inbox-stack')
-                    ->group('Layanan Bantuan')
+                NavigationItem::make('Antrian tiket')
+                    ->url('/helpdesk')
+                    ->icon('heroicon-o-ticket')
+                    ->group('Helpdesk')
                     ->sort(1)
                     ->visible(fn (): bool => auth()->user()?->isAdmin() ?? false),
-                NavigationItem::make('Analitik Helpdesk')
+                NavigationItem::make('Analitik helpdesk')
                     ->url('/helpdesk/analitik')
-                    ->icon('heroicon-o-chart-bar-square')
-                    ->group('Layanan Bantuan')
+                    ->icon('heroicon-o-chart-bar')
+                    ->group('Helpdesk')
                     ->sort(2)
                     ->visible(fn (): bool => auth()->user()?->isAdmin() ?? false),
             ])

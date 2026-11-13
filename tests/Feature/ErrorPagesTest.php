@@ -14,9 +14,9 @@ class ErrorPagesTest extends TestCase
     {
         $this->get('/halaman-yang-tidak-ada')
             ->assertNotFound()
-            ->assertSee('Rute Tidak Ditemukan')
+            ->assertSee('Keluar dari Sirkuit')
             ->assertSee('404')
-            ->assertSee('Lihat Katalog Event');
+            ->assertSee('Jelajahi Kalender Balap');
     }
 
     public function test_forbidden_route_renders_branded_403_page(): void
@@ -26,7 +26,7 @@ class ErrorPagesTest extends TestCase
         $this->actingAs($user)
             ->get('/admin/events')
             ->assertForbidden()
-            ->assertSee('Akses Jalur Khusus')
+            ->assertSee('Jalur Ini Dikhususkan')
             ->assertSee('403');
     }
 }

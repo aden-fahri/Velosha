@@ -12,6 +12,7 @@
             </div>
 
             {{-- Main Navigation Menu (Sesuai Gaya Peserta & EO) --}}
+            <span class="sr-only">Helpdesk Operator Panel</span>
             <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 mb-2 mt-2">NAVIGASI OPERATOR</div>
             <nav class="space-y-1 text-sm font-semibold">
                 {{-- 1. Dasbor Operator (Statistik Pribadi & Ringkasan) --}}
@@ -26,7 +27,7 @@
                         class="w-full flex items-center justify-between {{ $tab === 'queue' && $filter === 'all' ? 'on' : '' }}">
                     <div class="flex items-center gap-2.5 min-w-0">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>
-                        <span class="whitespace-nowrap font-bold text-sm">Antrian Tiket</span>
+                        <span class="whitespace-nowrap font-bold text-sm">Antrian tiket</span>
                     </div>
                     @if ($kpiOpen > 0)
                         <span class="text-[10px] font-black px-2 py-0.5 rounded bg-[var(--orange)] text-white border border-[var(--ink)] shadow-[1px_1px_0_var(--ink)] shrink-0">
@@ -57,9 +58,13 @@
                 </a>
 
                 @if(Auth::user()->isAdmin())
+                <a href="/helpdesk/analitik" wire:navigate class="w-full flex items-center gap-2.5">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+                    <span class="whitespace-nowrap font-bold text-sm">Analitik Helpdesk</span>
+                </a>
                 <a href="/admin" class="w-full flex items-center gap-2.5">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    <span class="whitespace-nowrap font-bold text-sm">Panel Admin</span>
+                    <span class="whitespace-nowrap font-bold text-sm">Admin Panel</span>
                 </a>
                 @endif
             </nav>
@@ -80,7 +85,7 @@
             <form method="POST" action="{{ route('logout') }}" class="mt-3">
                 @csrf
                 <button type="submit" class="btn btn-ghost btn-block btn-sm text-[#C23B22] hover:bg-red-50">
-                    Keluar akun
+                    Keluar Akun
                 </button>
             </form>
         </div>
@@ -114,7 +119,7 @@
                         class="w-full flex items-center justify-between {{ $tab === 'queue' && $filter === 'all' ? 'on' : '' }}">
                     <div class="flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>
-                        <span>Antrian Tiket</span>
+                        <span>Antrian tiket</span>
                     </div>
                     @if ($kpiOpen > 0)
                         <span class="text-[10px] font-black px-2 py-0.5 rounded bg-[var(--orange)] text-white border border-[var(--ink)]">{{ $kpiOpen }}</span>
@@ -144,7 +149,7 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btn btn-ghost btn-block btn-sm text-[#C23B22]">
-                        Keluar akun
+                        Keluar Akun
                     </button>
                 </form>
             </div>
@@ -462,7 +467,7 @@
                             </button>
                             <button type="button" wire:click="setFilter('open')"
                                     class="px-3.5 py-1.5 rounded-xl border-2 border-[var(--ink)] text-xs font-black transition-all cursor-pointer {{ $filter === 'open' ? 'bg-[var(--mustard)] shadow-[2px_2px_0_var(--ink)]' : 'bg-white hover:bg-[var(--paper)] text-[var(--ink)]' }}">
-                                Menunggu Respons ({{ $kpiOpen }})
+                                Baru (Open) ({{ $kpiOpen }})
                             </button>
                             <button type="button" wire:click="setFilter('in_progress')"
                                     class="px-3.5 py-1.5 rounded-xl border-2 border-[var(--ink)] text-xs font-black transition-all cursor-pointer {{ $filter === 'in_progress' ? 'bg-[var(--mustard)] shadow-[2px_2px_0_var(--ink)]' : 'bg-white hover:bg-[var(--paper)] text-[var(--ink)]' }}">

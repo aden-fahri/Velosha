@@ -68,7 +68,7 @@ class OrganizationQuotaController extends Controller
 
             $redirectRoute = $request->input('redirect_to') === 'events.create'
                 ? route('organizations.events.create', ['organization' => $organization->slug])
-                : route('organizations.show', ['organization' => $organization->slug, 'tab' => 'kuota']);
+                : route('organizations.quota', ['organization' => $organization->slug]);
 
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([

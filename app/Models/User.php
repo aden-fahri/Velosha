@@ -139,11 +139,15 @@ class User extends Authenticatable implements FilamentUser
         }
 
         if ($this->isPenyelenggara()) {
-            return '/organisasi/dasbor';
+            if ($this->ownedOrganizations()->exists() || $this->organizations()->exists()) {
+                return '/organisasi/dasbor';
+            }
+
+            return '/admin';
         }
 
         if ($this->isOperator()) {
-            return '/operator/helpdesk';
+            return '/helpdesk';
         }
 
         return '/dashboard';

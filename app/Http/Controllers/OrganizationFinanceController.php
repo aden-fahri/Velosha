@@ -44,7 +44,7 @@ class OrganizationFinanceController extends Controller
             'is_primary' => ! $hasPrimary,
         ]);
 
-        return redirect()->route('organizations.show', ['organization' => $organization->slug, 'tab' => 'keuangan'])
+        return redirect()->route('organizations.finance', ['organization' => $organization->slug])
             ->with('status', 'Rekening bank pencairan berhasil ditambahkan.');
     }
 
@@ -54,6 +54,11 @@ class OrganizationFinanceController extends Controller
     public function requestPayout(Request $request, Organization $organization): RedirectResponse
     {
         $this->authorizeMember($organization);
+
+        if (! $organization->isVerified()) {
+            return redirect()->route('organizations.finance', ['organization' => $organization->slug])
+                ->with('error', 'Komunitas / organisasi harus berstatus terverifikasi sebelum dapat mengajukan pencairan dana.');
+        }
 
         $validated = $request->validate([
             'payout_account_id' => ['required', 'exists:payout_accounts,id'],
@@ -65,7 +70,7 @@ class OrganizationFinanceController extends Controller
         $available = $organization->availablePayoutBalance();
 
         if ($amount > $available) {
-            return redirect()->route('organizations.show', ['organization' => $organization->slug, 'tab' => 'keuangan'])
+            return redirect()->route('organizations.finance', ['organization' => $organization->slug])
                 ->with('error', 'Nominal penarikan (Rp ' . number_format($amount, 0, ',', '.') . ') melebihi saldo yang tersedia (Rp ' . number_format($available, 0, ',', '.') . ').');
         }
 
@@ -77,7 +82,7 @@ class OrganizationFinanceController extends Controller
             'requested_by' => Auth::id(),
         ]);
 
-        return redirect()->route('organizations.show', ['organization' => $organization->slug, 'tab' => 'keuangan'])
+        return redirect()->route('organizations.finance', ['organization' => $organization->slug])
             ->with('status', 'Pengajuan pencairan dana sebesar Rp ' . number_format($amount, 0, ',', '.') . ' berhasil dikirimkan. Tim finance Velosha akan memproses transfer.');
     }
 

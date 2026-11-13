@@ -69,8 +69,8 @@ class AdminContentPagesTest extends TestCase
         $response = $this->actingAs($admin)->get('/admin');
 
         $response->assertOk();
-        $response->assertSee('About Page');
-        $response->assertSee('Rules Page');
-        $response->assertSee('Help Page');
+        $response->assertSee('Halaman Tentang (About)');
+        $response->assertSee('Halaman Regulasi (Rules)');
+        $response->assertSee('Halaman Bantuan (FAQ)');
     }
 }

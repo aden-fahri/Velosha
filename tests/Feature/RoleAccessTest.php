@@ -111,8 +111,8 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get('/admin')
             ->assertForbidden()
-            ->assertSee('Akses Jalur Khusus')
-            ->assertSee('Ke Dashboard Saya');
+            ->assertSee('Jalur Ini Dikhususkan')
+            ->assertSee('Kembali ke Beranda');
     }
 
     public function test_panel_renders_flash_error_banner(): void
@@ -127,11 +127,11 @@ class RoleAccessTest extends TestCase
             ->assertSee('Tutup');
     }
 
-    public function test_admin_is_redirected_home_when_accessing_peserta_dashboard(): void
+    public function test_admin_can_access_peserta_dashboard(): void
     {
         $admin = $this->makeUser(User::ROLE_ADMIN);
 
-        $this->actingAs($admin)->get('/dashboard')->assertRedirect('/admin');
+        $this->actingAs($admin)->get('/dashboard')->assertOk();
     }
 
     public function test_penyelenggara_can_access_admin_panel(): void
@@ -219,34 +219,13 @@ class RoleAccessTest extends TestCase
         $this->get('/auth/demo/twitter')->assertNotFound();
     }
 
-    public function test_admin_bounced_back_to_origin_page_with_flash_when_opening_checkout(): void
-    {
-        $admin = $this->makeUser(User::ROLE_ADMIN);
-        $origin = url('/events/velosha-gran-fondo-borobudur-2026');
-
-        $response = $this->actingAs($admin)->get('/checkout', [
-            'HTTP_REFERER' => $origin,
-        ]);
-
-        $response->assertRedirect($origin);
-        $response->assertSessionHas('error');
-    }
-
-    public function test_admin_redirected_home_when_referer_is_unsafe(): void
+    public function test_admin_can_open_checkout_and_redirects_to_events_catalog_when_no_slug(): void
     {
         $admin = $this->makeUser(User::ROLE_ADMIN);
 
-        $this->actingAs($admin)
-            ->get('/checkout', ['HTTP_REFERER' => url('/login')])
-            ->assertRedirect('/admin');
+        $response = $this->actingAs($admin)->get('/checkout');
 
-        $this->actingAs($admin)
-            ->get('/checkout', ['HTTP_REFERER' => url('/admin')])
-            ->assertRedirect('/admin');
-
-        $this->actingAs($admin)
-            ->get('/checkout', ['HTTP_REFERER' => 'http://evil.example.com/phish'])
-            ->assertRedirect('/admin');
+        $response->assertRedirect('/events');
     }
 
     public function test_admin_with_intended_checkout_url_lands_on_panel_after_login(): void

@@ -25,7 +25,7 @@ class OperatorQueue extends Component
 {
     use WithPagination;
 
-    public string $tab = 'overview'; // 'overview', 'queue', 'profile'
+    public string $tab = 'queue'; // 'overview', 'queue', 'profile'
     public string $filter = 'all'; // all, open, in_progress, closed, my_tickets
     public string $priorityFilter = 'all'; // all, High, Mid, Low
     public string $categoryFilter = 'all'; // all, Pendaftaran, Pembayaran, Teknis, Penyelenggara

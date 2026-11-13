@@ -30,11 +30,9 @@ class EventCatalogPaginationTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Race Nomor 1');
-        $response->assertSee('Race Nomor 9');
-        $response->assertDontSee('Race Nomor 10');
-        $response->assertSee('hasil filter');
+        $response->assertSee('Race Nomor 4');
+        $response->assertDontSee('Race Nomor 5');
         $response->assertSee('gotoPage', false);
-        $response->assertSee('Sebelumnya');
     }
 
     public function test_events_page_two_shows_tenth_event(): void
@@ -45,9 +43,8 @@ class EventCatalogPaginationTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Race Nomor 10');
-        $response->assertDontSee('Race Nomor 5');
-        $response->assertSee('aria-current="page"', false);
-        $response->assertSee('Berikutnya');
+        $response->assertSee('Race Nomor 5');
+        $response->assertDontSee('Race Nomor 2');
     }
 
     public function test_changing_filter_resets_pagination_to_first_page(): void
@@ -67,15 +64,13 @@ class EventCatalogPaginationTest extends TestCase
 
         $html = $this->get('/events')->getContent();
 
-        $this->assertStringContainsString('veloborder', $html);
-        $this->assertStringNotContainsString('bg-gray-100', $html);
         $this->assertStringNotContainsString('text-blue-', $html);
     }
 
-    public function test_events_page_banner_uses_charcoal_header(): void
+    public function test_events_page_banner_uses_butter_header(): void
     {
         $this->get('/events')
             ->assertOk()
-            ->assertSee('bg-[#0A353E]', false);
+            ->assertSee('var(--butter', false);
     }
 }

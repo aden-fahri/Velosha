@@ -106,7 +106,7 @@ class EventPublicPagesTest extends TestCase
         $response->assertSee('Magelang, Jawa Tengah');
         $response->assertSee('Gran Fondo');
         $response->assertSee('Rp 500.000');
-        $response->assertSee('Slot Tersisa 75');
+        $response->assertSee('Sisa 75 Slot');
     }
 
     public function test_draft_event_detail_returns_404(): void

@@ -20,7 +20,7 @@ class TicketController extends Controller
     {
         $user = auth()->user();
 
-        if ($registration instanceof Registration) {
+        if ($registration instanceof Registration && $registration->exists) {
             abort_unless(
                 $registration->user_id === $user->id
                 || $user->isAdmin()
@@ -88,7 +88,7 @@ class TicketController extends Controller
     {
         $user = auth()->user();
 
-        if ($registration instanceof Registration) {
+        if ($registration instanceof Registration && $registration->exists) {
             abort_unless(
                 $registration->user_id === $user->id
                 || $user->isAdmin()

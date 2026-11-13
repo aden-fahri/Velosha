@@ -20,7 +20,7 @@
         @if ($this->isCategoryPaid((int) $cat->id))
         <div class="w-full p-4 sm:p-5 rounded-2xl flex items-center justify-between gap-4 border-2 border-emerald-300 bg-emerald-50/50 shadow-[2px_2px_0_var(--ink)]">
             <div class="flex items-center gap-3.5 min-w-0">
-                <div class="min-w-[52px] px-2.5 h-10 flex items-center justify-center font-black text-xs rounded-lg shrink-0 border-2 border-emerald-800 bg-emerald-700 text-white shadow-[2px_2px_0_var(--ink)]">{{ $cat->code }}</div>
+                <div class="px-3 py-1.5 min-w-[52px] max-w-[120px] h-9 flex items-center justify-center font-black text-xs rounded-lg shrink-0 border-2 border-emerald-800 bg-emerald-700 text-white shadow-[2px_2px_0_var(--ink)] truncate">{{ $cat->code }}</div>
                 <div class="min-w-0">
                     <div class="text-sm font-black text-teal-900 truncate">{{ $displayName }}</div>
                     <div class="text-xs text-emerald-800 font-semibold mt-0.5">Anda sudah terdaftar di kategori ini</div>
@@ -37,7 +37,7 @@
         <button type="button" wire:click="selectCategory({{ $cat->id }})"
             class="w-full text-left p-4 sm:p-5 rounded-2xl flex items-center justify-between gap-4 transition-all cursor-pointer {{ $categoryId === $cat->id ? 'border-2 border-[var(--ink)] bg-white shadow-[3.5px_3.5px_0_var(--ink)] ring-2 ring-[var(--mustard)]/40' : 'border-2 border-[var(--line)] bg-white/80 hover:border-[var(--ink)] hover:bg-white shadow-[1px_1px_0_var(--line)]' }}">
             <div class="flex items-center gap-3.5 min-w-0">
-                <div class="min-w-[52px] px-2.5 h-10 rounded-lg flex items-center justify-center font-black text-xs shrink-0 border-2 border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] {{ $categoryId === $cat->id ? 'bg-[#DE7119] text-white' : 'bg-[var(--paper)] text-[var(--ink)]' }}">{{ $cat->code }}</div>
+                <div class="px-3 py-1.5 min-w-[52px] max-w-[120px] h-9 rounded-lg flex items-center justify-center font-black text-xs shrink-0 border-2 border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] truncate {{ $categoryId === $cat->id ? 'bg-[#DE7119] text-white' : 'bg-[var(--paper)] text-[var(--ink)]' }}">{{ $cat->code }}</div>
                 <div class="min-w-0">
                     <div class="flex items-center gap-2 flex-wrap">
                         <span class="text-sm font-black text-[var(--ink)] leading-snug">{{ $displayName }}</span>
@@ -86,7 +86,7 @@
 
     <div class="border-2 border-[var(--ink)] bg-[var(--paper)] p-4 rounded-xl shadow-[2px_2px_0_var(--ink)] flex items-center justify-between">
         <div class="flex items-center gap-3.5 min-w-0">
-            <div class="min-w-[52px] px-2.5 h-10 bg-[#DE7119] text-white border-2 border-[var(--ink)] rounded-lg flex items-center justify-center font-black text-xs shrink-0 shadow-[2px_2px_0_var(--ink)]">
+            <div class="px-3 py-1.5 min-w-[52px] max-w-[120px] h-9 bg-[#DE7119] text-white border-2 border-[var(--ink)] rounded-lg flex items-center justify-center font-black text-xs shrink-0 shadow-[2px_2px_0_var(--ink)] truncate">
                 {{ $category->code }}
             </div>
             <div>

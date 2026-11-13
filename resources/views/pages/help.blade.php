@@ -230,6 +230,11 @@ $hasRiderImage = file_exists(public_path('images/art/rider-standing.png'));
 
         <div class="wrap relative z-10">
             <div style="max-width: 720px; width: 100%;">
+                @if(!empty($content->header_eyebrow))
+                <div class="inline-block px-3 py-1 bg-[#F4BE3F] text-[#10282E] font-extrabold text-xs uppercase tracking-wider border-2 border-[#10282E] rounded-md mb-3 shadow-[2px_2px_0_#10282E]">
+                    {{ $content->header_eyebrow }}
+                </div>
+                @endif
                 <h1 class="font-bricolage text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#10282E] tracking-tight leading-none mb-3">
                     {{ $content->header_title ?? 'Help Center' }}
                 </h1>

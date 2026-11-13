@@ -48,7 +48,7 @@ class EventCrudTest extends TestCase
     {
         $this->seed([DemoUserSeeder::class, EventSeeder::class]);
 
-        $this->assertSame(6, Event::count());
+        $this->assertSame(8, Event::count());
         $this->assertSame(6, Event::published()->count());
         $this->assertSame(6, Event::published()->upcoming()->count());
         $this->assertGreaterThan(0, Event::first()->categories()->count());
@@ -56,7 +56,7 @@ class EventCrudTest extends TestCase
         $this->assertNotNull(Event::first()->minRemainingSlots);
 
         $this->seed(EventSeeder::class);
-        $this->assertSame(6, Event::count());
+        $this->assertSame(8, Event::count());
     }
 
     public function test_scope_published_excludes_draft_events(): void
