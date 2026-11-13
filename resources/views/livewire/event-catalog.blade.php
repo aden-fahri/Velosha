@@ -347,12 +347,12 @@
                                 </span>
                             </div>
 
-                            <h3 class="font-heading font-black text-xl text-[var(--ink)] mt-2.5 mb-3 leading-snug line-clamp-2">
+                            <h3 class="font-heading font-black text-xl text-[var(--ink)] mt-2.5 mb-2 leading-snug line-clamp-2 min-h-[54px] flex items-center">
                                 {{ $card['title'] }}
                             </h3>
 
                             {{-- 3-Col Stats: Elevasi, Cut-off, Kuota --}}
-                            <div class="spec mb-3.5">
+                            <div class="spec" style="margin: 8px 0; padding: 8px 0;">
                                 @foreach ($card['specs'] as $label => $value)
                                 <div>
                                     <span>{{ $label }}</span>
@@ -363,7 +363,7 @@
 
                             {{-- Kuota Progress Bar (380 ======------ 500) --}}
                             @if(($card['totalQuota'] ?? 0) > 0)
-                            <div class="my-3 pt-2.5 border-t border-[var(--ink)]/10">
+                            <div class="mt-2.5 mb-1">
                                 <div class="flex items-center justify-between text-[11px] font-extrabold text-[var(--ink)] mb-1">
                                     <span class="flex items-center gap-1.5 text-[var(--orange)]">
                                         <span class="w-1.5 h-1.5 rounded-full bg-[var(--orange)] animate-pulse"></span>
@@ -373,7 +373,7 @@
                                         kuota <b>{{ number_format($card['totalQuota'] ?? 0, 0, ',', '.') }}</b>
                                     </span>
                                 </div>
-                                <div class="w-full h-3 bg-[#F3E7CF] border-[2px] border-[var(--ink)] rounded-full overflow-hidden p-[1px] shadow-[inset_1px_1px_0_rgba(16,40,46,0.12)]">
+                                <div class="w-full h-2.5 bg-[#F3E7CF] border-[1.5px] border-[var(--ink)] rounded-full overflow-hidden p-[1px] shadow-[inset_1px_1px_0_rgba(16,40,46,0.1)]">
                                     <div class="h-full bg-gradient-to-r from-[#F4BE3F] to-[#DE7119] rounded-full border-r-[1.5px] border-[var(--ink)] transition-all duration-500"
                                          style="width: {{ max(4, min(100, $card['percentBooked'] ?? 0)) }}%"></div>
                                 </div>
