@@ -10,29 +10,35 @@
      x-init="scrollBottom()"
      @mizu-opened.window="scrollBottom()"
      @mizu-answered.window="scrollBottom()"
-     style="position: fixed; right: 20px; bottom: 20px; z-index: 40;"
+     style="position: fixed; right: 24px; bottom: 24px; z-index: 50;"
      class="flex flex-col items-end w-fit">
 
     <style>
         .mizu-trigger-btn {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background-color: #0A353E;
+            gap: 10px;
+            background-color: #10282E;
             color: #FFFFFF;
-            border: 2px solid #10282E;
-            box-shadow: 3px 3px 0 #10282E;
-            padding: 12px 18px;
-            font-family: 'Inter', sans-serif;
-            font-size: 13.5px;
-            font-weight: 700;
+            border: 2.5px solid #10282E;
+            border-radius: 9999px;
+            box-shadow: 4px 4px 0 #10282E;
+            padding: 10px 18px 10px 12px;
+            font-family: 'Bricolage Grotesque', 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 800;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: all 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
             white-space: nowrap;
         }
         .mizu-trigger-btn:hover {
             background-color: #1F6F4A;
-            transform: translateY(-2px);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #10282E;
+        }
+        .mizu-trigger-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #10282E;
         }
         @media (max-width: 639.98px) {
             .mizu-trigger-btn {
@@ -42,7 +48,7 @@
                 padding: 0 !important;
                 justify-content: center !important;
             }
-            .mizu-trigger-btn span {
+            .mizu-trigger-btn .mizu-label {
                 display: none !important;
             }
         }
@@ -57,47 +63,53 @@
          x-transition:leave-start="opacity-100 translate-y-0 scale-100"
          x-transition:leave-end="opacity-0 translate-y-2 scale-95"
          style="transform-origin: bottom right"
-         class="absolute bottom-full right-0 mb-3 w-[calc(100vw-3rem)] max-w-sm bg-white border border-veloborderstrong velo-box-1 shadow-xl flex flex-col max-h-[70vh] sm:max-h-[32rem]"
+         class="absolute bottom-full right-0 mb-3.5 w-[calc(100vw-2.5rem)] sm:w-[390px] bg-[#FFFDF8] border-[2.5px] border-[#10282E] rounded-2xl shadow-[6px_6px_0_#10282E] flex flex-col max-h-[75vh] sm:max-h-[34rem] overflow-hidden"
          role="dialog" aria-label="Asisten Mizu">
 
-        {{-- Header --}}
-        <div class="bg-[#0A353E] text-white px-4 py-3 flex items-center justify-between border-b border-white/10 shrink-0">
-            <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 bg-white/10 border border-white/15 flex items-center justify-center velo-box-1 shrink-0">
-                    <img src="/images/logo-velosha.png" alt="" class="h-5 w-auto object-contain invert">
+        {{-- Header Neobrutalist --}}
+        <div class="bg-[#10282E] text-white px-4 py-3.5 flex items-center justify-between border-b-[2.5px] border-[#10282E] shrink-0">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-[#F4BE3F] border-2 border-[#10282E] shadow-[2px_2px_0_rgba(0,0,0,0.35)] flex items-center justify-center shrink-0">
+                    <i data-lucide="bot" class="w-5 h-5 text-[#10282E]"></i>
                 </div>
                 <div class="min-w-0">
-                    <div class="text-xs font-bold leading-tight">Tanya Mizu</div>
-                    <div class="text-[10px] text-teal-100/70 leading-tight truncate">Asisten Balap Velosha</div>
+                    <div class="font-['Bricolage_Grotesque',sans-serif] text-sm font-extrabold tracking-tight text-white leading-tight">Tanya Mizu</div>
+                    <div class="flex items-center gap-1.5 text-[11px] text-[#F8E3B5] font-semibold leading-tight mt-0.5 truncate">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Asisten Balap Velosha
+                    </div>
                 </div>
             </div>
-            <div class="flex items-center gap-1 shrink-0">
+            <div class="flex items-center gap-1.5 shrink-0">
                 @if (count($messages) > 0)
                 <button type="button" wire:click="resetChat" title="Mulai ulang obrolan"
-                        class="text-white/60 hover:text-white p-1 transition" aria-label="Mulai ulang obrolan">
+                        class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center transition cursor-pointer" aria-label="Mulai ulang obrolan">
                     <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
                 </button>
                 @endif
                 <button type="button" @click="open = false" title="Tutup"
-                        class="text-white/60 hover:text-white p-1 transition" aria-label="Tutup asisten">
+                        class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center transition cursor-pointer" aria-label="Tutup asisten">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
         </div>
 
         {{-- Area pesan --}}
-        <div x-ref="scroller" class="flex-1 overflow-y-auto p-3.5 space-y-3 bg-velosurfacealt" aria-live="polite">
+        <div x-ref="scroller" class="flex-1 overflow-y-auto p-4 space-y-3.5 bg-[#FBF4E6]" aria-live="polite">
 
             @if ($notice !== '')
-            <div class="text-[10px] text-center text-race-800 bg-race-50 border border-race-300 velo-box-3 px-2.5 py-1.5">
+            <div class="text-[11px] text-center font-bold text-[#10282E] bg-[#F8E3B5] border-2 border-[#10282E] rounded-xl shadow-[2px_2px_0_#10282E] px-3 py-2 leading-snug">
                 {{ $notice }}
             </div>
             @endif
 
             {{-- Sapaan pembuka --}}
-            <div class="flex justify-start">
-                <div class="max-w-[85%] bg-white border border-veloborder p-2.5 velo-box-3 text-xs text-teal-800 leading-relaxed">
-                    Halo! Aku Mizu, asisten Velosha. Tanya saja soal pendaftaran, Race Pack, regulasi, atau istilah balap yang bikin bingung.
+            <div class="flex items-start gap-2.5">
+                <div class="w-7 h-7 rounded-lg bg-[#F4BE3F] border-[2px] border-[#10282E] shadow-[1.5px_1.5px_0_#10282E] flex items-center justify-center shrink-0 mt-0.5">
+                    <i data-lucide="bot" class="w-4 h-4 text-[#10282E]"></i>
+                </div>
+                <div class="max-w-[85%] bg-white border-[2px] border-[#10282E] rounded-2xl rounded-tl-sm p-3.5 shadow-[2.5px_2.5px_0_#10282E] text-xs text-[#10282E] font-medium leading-relaxed">
+                    Halo! Aku <strong>Mizu</strong>, asisten Velosha 🚴‍♂️. Tanya saja soal pendaftaran, Race Pack, regulasi, atau istilah balap yang bikin bingung.
                 </div>
             </div>
 
@@ -105,16 +117,16 @@
             @foreach ($messages as $message)
                 @if ($message['role'] === 'user')
                 <div class="flex justify-end">
-                    <div class="max-w-[85%] bg-[#DE7119] text-[var(--ink)] p-2.5 velo-box-3 text-xs leading-relaxed">
+                    <div class="max-w-[85%] bg-[#DE7119] text-white border-[2px] border-[#10282E] rounded-2xl rounded-tr-sm p-3 shadow-[2.5px_2.5px_0_#10282E] text-xs font-semibold leading-relaxed">
                         {{ $message['text'] }}
                     </div>
                 </div>
                 @else
-                <div class="flex justify-start gap-2">
-                    <div class="w-6 h-6 bg-[#0A353E] flex items-center justify-center velo-box-3 shrink-0 mt-0.5">
-                        <img src="/images/logo-velosha.png" alt="" class="h-3.5 w-auto object-contain invert">
+                <div class="flex items-start gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-[#F4BE3F] border-[2px] border-[#10282E] shadow-[1.5px_1.5px_0_#10282E] flex items-center justify-center shrink-0 mt-0.5">
+                        <i data-lucide="bot" class="w-4 h-4 text-[#10282E]"></i>
                     </div>
-                    <div class="max-w-[85%] bg-white border border-veloborder p-2.5 velo-box-3 text-xs text-teal-800 leading-relaxed whitespace-pre-line">
+                    <div class="max-w-[85%] bg-white border-[2px] border-[#10282E] rounded-2xl rounded-tl-sm p-3.5 shadow-[2.5px_2.5px_0_#10282E] text-xs text-[#10282E] font-medium leading-relaxed whitespace-pre-line">
                         {{ $message['text'] }}
                     </div>
                 </div>
@@ -122,14 +134,14 @@
             @endforeach
 
             {{-- Indikator Mizu sedang menjawab --}}
-            <div wire:loading wire:target="ask,askQuick" class="flex justify-start gap-2">
-                <div class="w-6 h-6 bg-[#0A353E] flex items-center justify-center velo-box-3 shrink-0 mt-0.5">
-                    <img src="/images/logo-velosha.png" alt="" class="h-3.5 w-auto object-contain invert">
+            <div wire:loading wire:target="ask,askQuick" class="flex items-start gap-2.5">
+                <div class="w-7 h-7 rounded-lg bg-[#F4BE3F] border-[2px] border-[#10282E] shadow-[1.5px_1.5px_0_#10282E] flex items-center justify-center shrink-0 mt-0.5">
+                    <i data-lucide="bot" class="w-4 h-4 text-[#10282E]"></i>
                 </div>
-                <div class="bg-white border border-veloborder px-3 py-2.5 velo-box-3 flex items-center gap-1" role="status">
-                    <span class="w-1.5 h-1.5 rounded-full bg-velomutedlight animate-pulse"></span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-velomutedlight animate-pulse" style="animation-delay:150ms"></span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-velomutedlight animate-pulse" style="animation-delay:300ms"></span>
+                <div class="bg-white border-[2px] border-[#10282E] rounded-2xl rounded-tl-sm px-4 py-3 shadow-[2.5px_2.5px_0_#10282E] flex items-center gap-1.5" role="status">
+                    <span class="w-2 h-2 rounded-full bg-[#DE7119] animate-pulse"></span>
+                    <span class="w-2 h-2 rounded-full bg-[#F4BE3F] animate-pulse" style="animation-delay:150ms"></span>
+                    <span class="w-2 h-2 rounded-full bg-[#1F6F4A] animate-pulse" style="animation-delay:300ms"></span>
                     <span class="sr-only">Mizu sedang menjawab</span>
                 </div>
             </div>
@@ -137,12 +149,15 @@
 
         {{-- Quick prompt --}}
         @if (count($messages) === 0)
-        <div class="px-3.5 pt-3 shrink-0">
-            <div class="text-[10px] font-bold uppercase tracking-wider text-velomutedlight mb-2">Pertanyaan umum</div>
+        <div class="px-4 py-3 bg-[#FFFDF8] border-t-2 border-[#10282E]/10 shrink-0">
+            <div class="text-[10px] font-black uppercase tracking-wider text-[#56666A] mb-2 flex items-center gap-1.5">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#DE7119]"></i>
+                Pertanyaan umum
+            </div>
             <div class="flex flex-wrap gap-1.5">
                 @foreach ($quickPrompts as $prompt)
                 <button type="button" wire:click="askQuick(@js($prompt))"
-                        class="text-left text-[10px] font-semibold bg-white border border-veloborderstrong text-teal-800 hover:border-race-500 hover:text-race-700 px-2.5 py-1.5 velo-box-3 transition">
+                        class="text-left text-[11px] font-bold bg-[#FFFDF8] hover:bg-[#F4BE3F] text-[#10282E] border-2 border-[#10282E] rounded-xl px-2.5 py-1.5 shadow-[2px_2px_0_#10282E] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer">
                     {{ $prompt }}
                 </button>
                 @endforeach
@@ -151,13 +166,13 @@
         @endif
 
         {{-- Input --}}
-        <form wire:submit="ask" class="p-2.5 flex items-center gap-2 bg-white border-t border-veloborder shrink-0">
+        <form wire:submit="ask" class="p-3 flex items-center gap-2 bg-[#FFFDF8] border-t-[2.5px] border-[#10282E] shrink-0">
             <label for="mizu-question" class="sr-only">Tulis pertanyaan untuk Mizu</label>
             <input id="mizu-question" type="text" wire:model="question" maxlength="500"
                    placeholder="Tanya seputar balapan…"
-                   class="flex-grow px-3 py-2 text-xs border border-veloborderstrong bg-white velo-box-1 focus:outline-none focus:border-teal-600">
+                   class="flex-grow px-3.5 py-2.5 text-xs font-semibold border-2 border-[#10282E] rounded-xl bg-white text-[#10282E] placeholder-[#56666A] focus:outline-none focus:ring-2 focus:ring-[#F4BE3F] shadow-[inset_1.5px_1.5px_0_rgba(16,40,46,0.06)]">
             <button type="submit" wire:loading.attr="disabled" wire:target="ask"
-                    class="bg-teal-700 hover:bg-teal-800 text-white px-3.5 py-2 velo-box-1 disabled:opacity-50 transition shrink-0"
+                    class="bg-[#1F6F4A] hover:bg-[#18593B] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none text-white px-3.5 py-2.5 border-2 border-[#10282E] rounded-xl shadow-[2.5px_2.5px_0_#10282E] disabled:opacity-50 transition-all shrink-0 flex items-center justify-center cursor-pointer"
                     aria-label="Kirim pertanyaan">
                 <i data-lucide="send" class="w-4 h-4"></i>
             </button>
@@ -169,8 +184,11 @@
             :aria-expanded="open.toString()"
             aria-label="Tanya Mizu"
             class="mizu-trigger-btn">
-        <i x-show="!open" data-lucide="bot" class="w-4 h-4"></i>
-        <i x-show="open" data-lucide="x" class="w-4 h-4" x-cloak></i>
-        <span>Tanya Mizu</span>
+        <span class="w-7 h-7 rounded-full bg-[#F4BE3F] border-[2px] border-[#10282E] flex items-center justify-center shrink-0">
+            <i x-show="!open" data-lucide="bot" class="w-4 h-4 text-[#10282E]"></i>
+            <i x-show="open" data-lucide="x" class="w-4 h-4 text-[#10282E]" x-cloak></i>
+        </span>
+        <span class="mizu-label" x-show="!open">Tanya Mizu</span>
+        <span class="mizu-label" x-show="open" x-cloak>Tutup</span>
     </button>
 </div>

@@ -63,9 +63,9 @@
         </svg>
 
         <!-- Garis Kecepatan Kartun (Speed Lines) -->
-        <div class="a-trail" style="position: absolute; left: 470px; top: 300px; width: 150px; height: 6px; border-radius: 3px; background: #F4BE3F; border: 2px solid #10282E; z-index: 3"></div>
-        <div class="a-trail" style="position: absolute; left: 520px; top: 326px; width: 100px; height: 6px; border-radius: 3px; background: #1F6F4A; border: 2px solid #10282E; z-index: 3"></div>
-        <div class="a-trail" style="position: absolute; left: 450px; top: 352px; width: 170px; height: 6px; border-radius: 3px; background: #DE7119; border: 2px solid #10282E; z-index: 3"></div>
+        <div class="a-trail" style="position: absolute; left: 520px; top: 250px; width: 140px; height: 6px; border-radius: 3px; background: #F4BE3F; border: 2px solid #10282E; z-index: 3"></div>
+        <div class="a-trail" style="position: absolute; left: 550px; top: 278px; width: 100px; height: 6px; border-radius: 3px; background: #1F6F4A; border: 2px solid #10282E; z-index: 3"></div>
+        <div class="a-trail" style="position: absolute; left: 500px; top: 306px; width: 160px; height: 6px; border-radius: 3px; background: #DE7119; border: 2px solid #10282E; z-index: 3"></div>
 
         <!-- Pesepeda Berjersey Oranye (rider_final.png - Autentik) -->
         <div class="a-ride" id="hero-rider" style="position: absolute; left: 610px; top: -40px; width: 640px; height: 640px; z-index: 10; pointer-events: none">
@@ -78,15 +78,15 @@
         </div>
 
         <!-- Kolom Kiri -->
-        <div style="position: absolute; left: 0; top: 64px; width: 500px; z-index: 5">
+        <div style="position: absolute; left: 0; top: 40px; width: 500px; z-index: 5">
             <h1 class="a-rise" style="animation-delay: .2s; font-size: 72px; line-height: .98; font-weight: 800; letter-spacing: -0.04em; color: var(--ink); margin: 0">
                 Siap gowes<br>
                 sampai <span class="squig">finis?<svg viewBox="0 0 100 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 Q14 1 26 8 T50 8 T74 8 T98 8" fill="none" stroke="#DE7119" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg></span>
             </h1>
-            <p class="a-rise" style="animation-delay: .35s; margin: 28px 0 0; max-width: 400px; font-size: 18px; line-height: 1.5; color: #10282E; font-weight: 500">
+            <p class="a-rise" style="animation-delay: .35s; margin: 20px 0 0; max-width: 400px; font-size: 17px; line-height: 1.5; color: #10282E; font-weight: 500">
                 Daftar Gran Fondo, Medio Fondo, dan Fun Ride di seluruh Indonesia. Tiket dan nomor BIB langsung jadi.
             </p>
-            <div class="a-rise" style="animation-delay: .5s; margin-top: 28px">
+            <div class="a-rise" style="animation-delay: .5s; margin-top: 22px">
                 <a href="#event" class="btn">
                     Cari event
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
@@ -96,7 +96,7 @@
 
         <!-- Slider Media Kiri Bawah (Maks 3 Gambar Ilustrasi dengan Dot & Panah) -->
         <div class="a-rise"
-             style="animation-delay: .7s; position: absolute; left: 0; top: 400px; width: 480px; height: 220px; z-index: 5"
+             style="animation-delay: .7s; position: absolute; left: 0; top: 425px; width: 480px; height: 215px; z-index: 5"
              x-data="{
                 slide: 0,
                 timer: null,
@@ -116,7 +116,7 @@
              @focusout="start()"
              @visibilitychange.window="document.hidden ? stop() : start()">
 
-            <div class="card" style="position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 14px">
+            <div class="card" style="position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 16px; border: 2.5px solid #10282E; box-shadow: 4px 4px 0 #10282E">
                 <!-- Slide 0: Foto Nyata Gran Fondo Borobudur -->
                 <div x-show="slide === 0" style="position: absolute; inset: 0">
                     <img src="/images/events/kartu-1.jpg"
@@ -139,18 +139,18 @@
                 </div>
 
                 <!-- Bar Kontrol Slider Bawah (Dot + Navigasi) -->
-                <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; background: #FFFDF8; border-top: 2.5px solid #10282E">
+                <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; background: #FFFDF8; border-top: 2.5px solid #10282E">
                     <div style="display: flex; align-items: center">
                         <button type="button" class="dotbtn" :class="{ 'on': slide === 0 }" @click="slide = 0" aria-label="Gambar 1"><i></i></button>
                         <button type="button" class="dotbtn" :class="{ 'on': slide === 1 }" @click="slide = 1" aria-label="Gambar 2"><i></i></button>
                         <button type="button" class="dotbtn" :class="{ 'on': slide === 2 }" @click="slide = 2" aria-label="Gambar 3"><i></i></button>
                     </div>
                     <div style="display: flex; gap: 8px">
-                        <button type="button" class="btn btn-ghost btn-sm" @click="prev()" aria-label="Gambar sebelumnya" style="width: 34px; height: 30px; padding: 0; min-height: 30px;">
+                        <button type="button" class="btn btn-ghost btn-sm" @click="prev()" aria-label="Gambar sebelumnya" style="width: 32px; height: 28px; padding: 0; min-height: 28px; border: 2px solid #10282E; border-radius: 8px; background: #FFFDF8; box-shadow: 2px 2px 0 #10282E;">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
                         </button>
-                        <button type="button" class="btn btn-sm" @click="next()" aria-label="Gambar berikutnya" style="width: 34px; height: 30px; padding: 0; min-height: 30px;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+                        <button type="button" class="btn btn-sm" @click="next()" aria-label="Gambar berikutnya" style="width: 32px; height: 28px; padding: 0; min-height: 28px; border: 2px solid #10282E; border-radius: 8px; background: #DE7119; color: #FFF; box-shadow: 2px 2px 0 #10282E;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
                         </button>
                     </div>
                 </div>
