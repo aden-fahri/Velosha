@@ -23,7 +23,7 @@
             border: 2.5px solid #10282E;
             border-radius: 9999px;
             box-shadow: 4px 4px 0 #10282E;
-            padding: 10px 18px 10px 12px;
+            padding: 9px 18px 9px 10px;
             font-family: 'Bricolage Grotesque', 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 800;
@@ -70,7 +70,14 @@
         <div class="bg-[#10282E] text-white px-4 py-3.5 flex items-center justify-between border-b-[2.5px] border-[#10282E] shrink-0">
             <div class="flex items-center gap-3 min-w-0">
                 <div class="w-9 h-9 rounded-xl bg-[#F4BE3F] border-2 border-[#10282E] shadow-[2px_2px_0_rgba(0,0,0,0.35)] flex items-center justify-center shrink-0">
-                    <i data-lucide="bot" class="w-5 h-5 text-[#10282E]"></i>
+                    <svg class="w-5 h-5 text-[#10282E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 8V4H8"/>
+                        <rect width="16" height="12" x="4" y="8" rx="2"/>
+                        <path d="M2 14h2"/>
+                        <path d="M20 14h2"/>
+                        <path d="M15 13v2"/>
+                        <path d="M9 13v2"/>
+                    </svg>
                 </div>
                 <div class="min-w-0">
                     <div class="font-['Bricolage_Grotesque',sans-serif] text-sm font-extrabold tracking-tight text-white leading-tight">Tanya Mizu</div>
@@ -84,12 +91,18 @@
                 @if (count($messages) > 0)
                 <button type="button" wire:click="resetChat" title="Mulai ulang obrolan"
                         class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center transition cursor-pointer" aria-label="Mulai ulang obrolan">
-                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                        <path d="M3 3v5h5"/>
+                    </svg>
                 </button>
                 @endif
                 <button type="button" @click="open = false" title="Tutup"
                         class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center transition cursor-pointer" aria-label="Tutup asisten">
-                    <i data-lucide="x" class="w-4 h-4"></i>
+                    <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 6 6 18"/>
+                        <path d="m6 6 12 12"/>
+                    </svg>
                 </button>
             </div>
         </div>
@@ -106,7 +119,14 @@
             {{-- Sapaan pembuka --}}
             <div class="flex items-start gap-2.5">
                 <div class="w-7 h-7 rounded-lg bg-[#F4BE3F] border-[2px] border-[#10282E] shadow-[1.5px_1.5px_0_#10282E] flex items-center justify-center shrink-0 mt-0.5">
-                    <i data-lucide="bot" class="w-4 h-4 text-[#10282E]"></i>
+                    <svg class="w-4 h-4 text-[#10282E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 8V4H8"/>
+                        <rect width="16" height="12" x="4" y="8" rx="2"/>
+                        <path d="M2 14h2"/>
+                        <path d="M20 14h2"/>
+                        <path d="M15 13v2"/>
+                        <path d="M9 13v2"/>
+                    </svg>
                 </div>
                 <div class="max-w-[85%] bg-white border-[2px] border-[#10282E] rounded-2xl rounded-tl-sm p-3.5 shadow-[2.5px_2.5px_0_#10282E] text-xs text-[#10282E] font-medium leading-relaxed">
                     Halo! Aku <strong>Mizu</strong>, asisten Velosha 🚴‍♂️. Tanya saja soal pendaftaran, Race Pack, regulasi, atau istilah balap yang bikin bingung.
@@ -124,7 +144,14 @@
                 @else
                 <div class="flex items-start gap-2.5">
                     <div class="w-7 h-7 rounded-lg bg-[#F4BE3F] border-[2px] border-[#10282E] shadow-[1.5px_1.5px_0_#10282E] flex items-center justify-center shrink-0 mt-0.5">
-                        <i data-lucide="bot" class="w-4 h-4 text-[#10282E]"></i>
+                        <svg class="w-4 h-4 text-[#10282E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 8V4H8"/>
+                            <rect width="16" height="12" x="4" y="8" rx="2"/>
+                            <path d="M2 14h2"/>
+                            <path d="M20 14h2"/>
+                            <path d="M15 13v2"/>
+                            <path d="M9 13v2"/>
+                        </svg>
                     </div>
                     <div class="max-w-[85%] bg-white border-[2px] border-[#10282E] rounded-2xl rounded-tl-sm p-3.5 shadow-[2.5px_2.5px_0_#10282E] text-xs text-[#10282E] font-medium leading-relaxed whitespace-pre-line">
                         {{ $message['text'] }}
@@ -136,7 +163,14 @@
             {{-- Indikator Mizu sedang menjawab --}}
             <div wire:loading wire:target="ask,askQuick" class="flex items-start gap-2.5">
                 <div class="w-7 h-7 rounded-lg bg-[#F4BE3F] border-[2px] border-[#10282E] shadow-[1.5px_1.5px_0_#10282E] flex items-center justify-center shrink-0 mt-0.5">
-                    <i data-lucide="bot" class="w-4 h-4 text-[#10282E]"></i>
+                    <svg class="w-4 h-4 text-[#10282E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 8V4H8"/>
+                        <rect width="16" height="12" x="4" y="8" rx="2"/>
+                        <path d="M2 14h2"/>
+                        <path d="M20 14h2"/>
+                        <path d="M15 13v2"/>
+                        <path d="M9 13v2"/>
+                    </svg>
                 </div>
                 <div class="bg-white border-[2px] border-[#10282E] rounded-2xl rounded-tl-sm px-4 py-3 shadow-[2.5px_2.5px_0_#10282E] flex items-center gap-1.5" role="status">
                     <span class="w-2 h-2 rounded-full bg-[#DE7119] animate-pulse"></span>
@@ -151,7 +185,9 @@
         @if (count($messages) === 0)
         <div class="px-4 py-3 bg-[#FFFDF8] border-t-2 border-[#10282E]/10 shrink-0">
             <div class="text-[10px] font-black uppercase tracking-wider text-[#56666A] mb-2 flex items-center gap-1.5">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#DE7119]"></i>
+                <svg class="w-3.5 h-3.5 text-[#DE7119]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                </svg>
                 Pertanyaan umum
             </div>
             <div class="flex flex-wrap gap-1.5">
@@ -174,7 +210,10 @@
             <button type="submit" wire:loading.attr="disabled" wire:target="ask"
                     class="bg-[#1F6F4A] hover:bg-[#18593B] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none text-white px-3.5 py-2.5 border-2 border-[#10282E] rounded-xl shadow-[2.5px_2.5px_0_#10282E] disabled:opacity-50 transition-all shrink-0 flex items-center justify-center cursor-pointer"
                     aria-label="Kirim pertanyaan">
-                <i data-lucide="send" class="w-4 h-4"></i>
+                <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="m22 2-7 20-4-9-9-4Z"/>
+                    <path d="M22 2 11 13"/>
+                </svg>
             </button>
         </form>
     </div>
@@ -185,8 +224,18 @@
             aria-label="Tanya Mizu"
             class="mizu-trigger-btn">
         <span class="w-7 h-7 rounded-full bg-[#F4BE3F] border-[2px] border-[#10282E] flex items-center justify-center shrink-0">
-            <i x-show="!open" data-lucide="bot" class="w-4 h-4 text-[#10282E]"></i>
-            <i x-show="open" data-lucide="x" class="w-4 h-4 text-[#10282E]" x-cloak></i>
+            <svg x-show="!open" class="w-4 h-4 text-[#10282E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 8V4H8"/>
+                <rect width="16" height="12" x="4" y="8" rx="2"/>
+                <path d="M2 14h2"/>
+                <path d="M20 14h2"/>
+                <path d="M15 13v2"/>
+                <path d="M9 13v2"/>
+            </svg>
+            <svg x-show="open" x-cloak class="w-4 h-4 text-[#10282E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 6 6 18"/>
+                <path d="m6 6 12 12"/>
+            </svg>
         </span>
         <span class="mizu-label" x-show="!open">Tanya Mizu</span>
         <span class="mizu-label" x-show="open" x-cloak>Tutup</span>

@@ -33,7 +33,12 @@ class EventCardPresenter
         $displayDistance = $primary?->distance_km ?? $categories->max('distance_km');
         $lowestPrice = $primary?->price ?? $categories->min('price');
         $totalQuota = (int) $categories->sum('quota');
+        $bookedQuota = (int) $categories->sum('registered_count');
         $remaining = (int) $categories->sum(fn (mixed $category): int => $category->remaining);
+        if ($bookedQuota === 0 && $totalQuota > 0 && $remaining < $totalQuota) {
+            $bookedQuota = max(0, $totalQuota - $remaining);
+        }
+        $percentBooked = $totalQuota > 0 ? min(100, (int) round(($bookedQuota / $totalQuota) * 100)) : 0;
 
         return [
             'slug' => $event->slug,
@@ -46,6 +51,10 @@ class EventCardPresenter
             'loc' => $event->location_name,
             'title' => $event->title,
             'excerpt' => Str::limit(strip_tags((string) $event->description), 150),
+            'totalQuota' => $totalQuota,
+            'bookedQuota' => $bookedQuota,
+            'remainingQuota' => $remaining,
+            'percentBooked' => $percentBooked,
             'specs' => [
                 'Elevasi' => $displayElevation === null ? '—' : '+'.static::angka((float) $displayElevation).' M',
                 'Cut-Off' => $displayCutOff === null ? '—' : static::jam((float) $displayCutOff),
