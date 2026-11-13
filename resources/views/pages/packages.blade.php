@@ -193,15 +193,40 @@
 
     </div>
 
-    {{-- Midtrans Snap Backdrop Blur Overlay --}}
-    <div id="midtrans-blur-overlay" class="fixed inset-0 z-50 bg-[#10282E]/60 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center pointer-events-none"></div>
+    {{-- Midtrans Snap Popup with 100% Blurred Backdrop --}}
+    <div id="snap-embed-modal" class="fixed inset-0 z-[999999] bg-[#10282E]/65 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center p-4">
+        <div class="relative w-full max-w-[460px] bg-white rounded-2xl border-[3.5px] border-[var(--ink)] shadow-[8px_8px_0_var(--ink)] overflow-hidden">
+            <div class="flex items-center justify-between px-5 py-3.5 bg-[var(--butter)] border-b-[2.5px] border-[var(--ink)]">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-3 h-3 rounded-full bg-[var(--orange)] border border-[var(--ink)]"></span>
+                    <span class="font-heading font-black text-sm text-[var(--ink)] tracking-tight">Pembayaran Paket Kuota Midtrans</span>
+                </div>
+                <button type="button" id="close-snap-modal-btn" class="w-7 h-7 rounded-lg border-2 border-[var(--ink)] bg-white hover:bg-red-100 text-[var(--ink)] flex items-center justify-center text-xs font-black cursor-pointer shadow-[1.5px_1.5px_0_var(--ink)] transition">✕</button>
+            </div>
+            <div id="snap-container" class="w-full min-h-[540px] flex items-center justify-center bg-[#FAF9F5]">
+                <div id="snap-loading-state" class="text-xs font-bold text-[var(--mute)] p-8 text-center flex flex-col items-center gap-2">
+                    <svg class="animate-spin h-6 w-6 text-[var(--orange)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                    <span>Menyiapkan gerbang pembayaran Midtrans...</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="{{ config('services.midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
     <script>
         function buyQuotaSnap(e, form) {
             e.preventDefault();
-            const overlay = document.getElementById('midtrans-blur-overlay');
-            if (overlay) overlay.classList.remove('hidden');
+            const modal = document.getElementById('snap-embed-modal');
+            const container = document.getElementById('snap-container');
+            const closeBtn = document.getElementById('close-snap-modal-btn');
+
+            if (closeBtn) {
+                closeBtn.onclick = () => {
+                    if (modal) modal.classList.add('hidden');
+                };
+            }
+
+            if (modal) modal.classList.remove('hidden');
 
             const submitBtn = form.querySelector('button[type="submit"]');
             const originalText = submitBtn ? submitBtn.innerHTML : '';
@@ -228,6 +253,48 @@
                 }
 
                 if (data.snap_token && window.snap) {
+                    try {
+                        if (typeof window.snap.embed === 'function') {
+                            container.innerHTML = '';
+                            window.snap.embed(data.snap_token, {
+                                embedId: 'snap-container',
+                                onSuccess: function(result) {
+                                    const finishBase = data.finish_url || window.location.href;
+                                    const sep = finishBase.includes('?') ? '&' : '?';
+                                    window.location.href = finishBase + sep +
+                                        'order_id=' + (result.order_id || data.order_id) +
+                                        '&transaction_status=' + (result.transaction_status || 'settlement');
+                                },
+                                onPending: function(result) {
+                                    const finishBase = data.finish_url || window.location.href;
+                                    const sep = finishBase.includes('?') ? '&' : '?';
+                                    window.location.href = finishBase + sep +
+                                        'order_id=' + (result.order_id || data.order_id) +
+                                        '&transaction_status=' + (result.transaction_status || 'pending');
+                                },
+                                onError: function(result) {
+                                    if (modal) modal.classList.add('hidden');
+                                    if (submitBtn) {
+                                        submitBtn.disabled = false;
+                                        submitBtn.innerHTML = originalText;
+                                    }
+                                    alert('Pembayaran Midtrans tidak berhasil atau dibatalkan.');
+                                },
+                                onClose: function() {
+                                    if (modal) modal.classList.add('hidden');
+                                    if (submitBtn) {
+                                        submitBtn.disabled = false;
+                                        submitBtn.innerHTML = originalText;
+                                    }
+                                }
+                            });
+                            return;
+                        }
+                    } catch (err) {
+                        console.warn('snap.embed failed, fallback to snap.pay', err);
+                    }
+
+                    // Fallback to snap.pay
                     window.snap.pay(data.snap_token, {
                         onSuccess: function(result) {
                             const finishBase = data.finish_url || window.location.href;
@@ -244,7 +311,7 @@
                                 '&transaction_status=' + (result.transaction_status || 'pending');
                         },
                         onError: function(result) {
-                            if (overlay) overlay.classList.add('hidden');
+                            if (modal) modal.classList.add('hidden');
                             if (submitBtn) {
                                 submitBtn.disabled = false;
                                 submitBtn.innerHTML = originalText;
@@ -252,7 +319,7 @@
                             alert('Pembayaran Midtrans tidak berhasil atau dibatalkan.');
                         },
                         onClose: function() {
-                            if (overlay) overlay.classList.add('hidden');
+                            if (modal) modal.classList.add('hidden');
                             if (submitBtn) {
                                 submitBtn.disabled = false;
                                 submitBtn.innerHTML = originalText;
@@ -262,7 +329,7 @@
                 } else if (data.redirect_url) {
                     window.location.href = data.redirect_url;
                 } else {
-                    if (overlay) overlay.classList.add('hidden');
+                    if (modal) modal.classList.add('hidden');
                     if (submitBtn) {
                         submitBtn.disabled = false;
                         submitBtn.innerHTML = originalText;
@@ -271,7 +338,7 @@
                 }
             })
             .catch(err => {
-                if (overlay) overlay.classList.add('hidden');
+                if (modal) modal.classList.add('hidden');
                 if (submitBtn) {
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = originalText;
@@ -279,6 +346,19 @@
                 alert('Terjadi kendala jaringan saat menghubungi gateway Midtrans.');
             });
         }
+
+        // Auto trigger jika diarahkan dari pembuatan komunitas baru dengan paket terpilih
+        document.addEventListener('DOMContentLoaded', function() {
+            @if(request()->filled('auto_pay') && isset($userOrg) && $userOrg)
+                const autoPayId = "{{ request('auto_pay') }}";
+                const autoForm = document.querySelector('form input[name="package_id"][value="' + autoPayId + '"]')?.closest('form');
+                if (autoForm) {
+                    setTimeout(() => {
+                        autoForm.dispatchEvent(new Event('submit', { cancelable: true }));
+                    }, 400);
+                }
+            @endif
+        });
     </script>
 </section>
 @endsection

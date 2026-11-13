@@ -97,8 +97,24 @@
     <!-- Midtrans Snap Simulation Modal -->
     @include('livewire.checkout.payment-modal')
 
-    {{-- Midtrans Snap Popup with Blurred Backdrop --}}
-    <div id="midtrans-blur-overlay" class="fixed inset-0 z-50 bg-[#10282E]/60 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center pointer-events-none"></div>
+    {{-- Midtrans Snap Popup with 100% Blurred Backdrop --}}
+    <div id="snap-embed-modal" class="fixed inset-0 z-[999999] bg-[#10282E]/65 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center p-4">
+        <div class="relative w-full max-w-[460px] bg-white rounded-2xl border-[3.5px] border-[var(--ink)] shadow-[8px_8px_0_var(--ink)] overflow-hidden">
+            <div class="flex items-center justify-between px-5 py-3.5 bg-[var(--butter)] border-b-[2.5px] border-[var(--ink)]">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-3 h-3 rounded-full bg-[var(--orange)] border border-[var(--ink)]"></span>
+                    <span class="font-heading font-black text-sm text-[var(--ink)] tracking-tight">Pembayaran Resmi Midtrans</span>
+                </div>
+                <button type="button" id="close-snap-modal-btn" class="w-7 h-7 rounded-lg border-2 border-[var(--ink)] bg-white hover:bg-red-100 text-[var(--ink)] flex items-center justify-center text-xs font-black cursor-pointer shadow-[1.5px_1.5px_0_var(--ink)] transition">✕</button>
+            </div>
+            <div id="snap-container" class="w-full min-h-[540px] flex items-center justify-center bg-[#FAF9F5]">
+                <div id="snap-loading-state" class="text-xs font-bold text-[var(--mute)] p-8 text-center flex flex-col items-center gap-2">
+                    <svg class="animate-spin h-6 w-6 text-[var(--orange)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                    <span>Memuat gerbang pembayaran Midtrans...</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="{{ config('services.midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
 
@@ -109,32 +125,68 @@
                 const token = payload?.token;
                 const regId = payload?.registrationId;
                 const redirectUrl = payload?.redirectUrl;
-                const overlay = document.getElementById('midtrans-blur-overlay');
+                const modal = document.getElementById('snap-embed-modal');
+                const container = document.getElementById('snap-container');
+                const closeBtn = document.getElementById('close-snap-modal-btn');
 
-                if (overlay) overlay.classList.remove('hidden');
+                if (closeBtn) {
+                    closeBtn.onclick = () => {
+                        if (modal) modal.classList.add('hidden');
+                    };
+                }
 
                 if (window.snap && token) {
+                    if (modal) modal.classList.remove('hidden');
+
+                    try {
+                        if (typeof window.snap.embed === 'function') {
+                            container.innerHTML = '';
+                            window.snap.embed(token, {
+                                embedId: 'snap-container',
+                                onSuccess: function(result) {
+                                    if (modal) modal.classList.add('hidden');
+                                    window.location.href = '/ticket/' + regId;
+                                },
+                                onPending: function(result) {
+                                    if (modal) modal.classList.add('hidden');
+                                    window.location.href = '/ticket/' + regId;
+                                },
+                                onError: function(result) {
+                                    if (modal) modal.classList.add('hidden');
+                                    alert('Pembayaran tidak berhasil atau dibatalkan.');
+                                },
+                                onClose: function() {
+                                    if (modal) modal.classList.add('hidden');
+                                }
+                            });
+                            return;
+                        }
+                    } catch (err) {
+                        console.warn('snap.embed failed, falling back to snap.pay', err);
+                    }
+
+                    // Fallback ke snap.pay
                     window.snap.pay(token, {
                         onSuccess: function(result) {
-                            if (overlay) overlay.classList.add('hidden');
+                            if (modal) modal.classList.add('hidden');
                             window.location.href = '/ticket/' + regId;
                         },
                         onPending: function(result) {
-                            if (overlay) overlay.classList.add('hidden');
+                            if (modal) modal.classList.add('hidden');
                             window.location.href = '/ticket/' + regId;
                         },
                         onError: function(result) {
-                            if (overlay) overlay.classList.add('hidden');
+                            if (modal) modal.classList.add('hidden');
                             alert('Pembayaran tidak berhasil atau dibatalkan.');
                         },
                         onClose: function() {
-                            if (overlay) overlay.classList.add('hidden');
+                            if (modal) modal.classList.add('hidden');
                         }
                     });
                 } else if (redirectUrl) {
                     window.location.href = redirectUrl;
                 } else {
-                    if (overlay) overlay.classList.add('hidden');
+                    if (modal) modal.classList.add('hidden');
                     alert('Gagal memuat jendela pembayaran Midtrans. Silakan coba kembali.');
                 }
             });

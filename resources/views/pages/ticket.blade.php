@@ -158,6 +158,10 @@
                         <i data-lucide="ticket" class="w-4 h-4 mr-1"></i>
                         <span>Lihat E-Ticket &amp; QR</span>
                     </a>
+                    <a href="{{ route('ticket.bib', $registration) }}" target="_blank" class="btn btn-sm btn-orange font-black">
+                        <i data-lucide="tag" class="w-4 h-4 mr-1"></i>
+                        <span>Cetak Nomor BIB</span>
+                    </a>
                     <a href="{{ route('ticket.download', $registration) }}" target="_blank" class="btn btn-sm btn-mustard font-black">
                         <i data-lucide="download" class="w-4 h-4 mr-1"></i>
                         <span>Unduh Paspor PDF</span>
@@ -171,6 +175,72 @@
                 </div>
             </div>
         </section>
+
+        {{-- SWITCHER MULTI-TIKET: Jika user punya lebih dari 1 tiket / kategori --}}
+        @if (isset($userRegistrations) && $userRegistrations->count() > 1)
+        <section class="border-b-[3px] border-[var(--ink)] bg-[#FFFDF8] py-5 px-4 sm:px-8 no-print shadow-sm">
+            <div class="wrap">
+                <div class="flex items-center justify-between mb-3.5 flex-wrap gap-2">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-[var(--orange)] border border-[var(--ink)]"></span>
+                        <span class="font-heading font-black text-xs uppercase tracking-wider text-[var(--ink)]">
+                            Pilih Tiket &amp; Kategori Race Anda ({{ $userRegistrations->count() }} Tiket Terdaftar)
+                        </span>
+                    </div>
+                    <span class="text-xs font-bold text-[var(--mute)]">
+                        Pilih kategori untuk melihat E-Ticket atau cetak nomor dada (BIB)
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                    @foreach ($userRegistrations as $item)
+                        @php
+                            $isCurrent = $item->id === $registration->id;
+                            $itemCat = $item->category;
+                            $itemEvent = $itemCat?->event;
+                        @endphp
+                        @if ($itemCat && $itemEvent)
+                        <div class="p-4 rounded-xl border-2 transition-all flex items-center justify-between gap-3 {{ $isCurrent ? 'border-[var(--ink)] bg-[var(--butter)] shadow-[3px_3px_0_var(--ink)] ring-2 ring-[var(--ink)]' : 'border-[var(--line)] bg-[var(--paper)] hover:border-[var(--ink)] hover:bg-white shadow-[1px_1px_0_var(--ink)]' }}">
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="font-black text-xs text-[var(--ink)] truncate max-w-[170px]">{{ $itemEvent->title }}</span>
+                                    @if ($isCurrent)
+                                    <span class="px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)] rounded shadow-xs">Aktif</span>
+                                    @endif
+                                </div>
+                                <div class="text-xs font-black text-[var(--pine)] mt-1 truncate">
+                                    {{ $itemCat->name }} ({{ P::distance($itemCat->distance_km) }})
+                                </div>
+                                <div class="text-[11px] text-[var(--mute)] font-semibold mt-0.5">
+                                    BIB: <strong class="font-mono text-[var(--ink)] font-black">{{ $item->bib_number ?? 'Menunggu Bayar' }}</strong>
+                                </div>
+                            </div>
+
+                            <div class="shrink-0 flex flex-col items-end gap-1.5">
+                                @if ($isCurrent)
+                                    <span class="text-xs font-black text-[var(--pine)] flex items-center gap-1">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                        <span>Terbuka</span>
+                                    </span>
+                                @else
+                                    <a href="{{ route('ticket.show', $item) }}" class="btn btn-sm btn-ghost text-xs py-1 px-3 font-black hover:bg-[var(--mustard)]">
+                                        <span>Buka &rarr;</span>
+                                    </a>
+                                @endif
+                                @if ($item->isPaid())
+                                    <a href="{{ route('ticket.bib', $item) }}" target="_blank" class="text-[10px] font-extrabold text-[var(--orange)] hover:underline flex items-center gap-0.5">
+                                        <span>Cetak BIB</span>
+                                        <span>&rarr;</span>
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+        </section>
+        @endif
 
         <!-- KONTEN UTAMA: 2-COLUMN RINGKASAN & TIMELINE LANGKAH BERIKUTNYA -->
         <section class="sec" style="padding: 56px 0 40px; position: relative">
@@ -210,6 +280,10 @@
                     </div>
 
                     <div style="display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap" class="no-print">
+                        <a href="{{ route('ticket.bib', $registration) }}" target="_blank" class="btn btn-sm btn-orange font-black">
+                            <i data-lucide="tag" class="w-4 h-4 mr-1.5"></i>
+                            <span>Cetak Nomor BIB</span>
+                        </a>
                         <a href="{{ route('ticket.download', $registration) }}" target="_blank" class="btn btn-sm btn-mustard font-black">
                             <i data-lucide="download" class="w-4 h-4 mr-1.5"></i>
                             <span>Unduh Paspor PDF (A4)</span>
@@ -218,10 +292,6 @@
                             <i data-lucide="printer" class="w-4 h-4 mr-1.5"></i>
                             <span>Cetak e-ticket</span>
                         </button>
-                        <a href="mailto:{{ $registration->email }}?subject=E-Ticket%20{{ rawurlencode($event->title) }}&body=Nomor%20BIB:%20{{ $registration->bib_number }}" class="btn btn-sm btn-ghost">
-                            <i data-lucide="mail" class="w-4 h-4 mr-1.5"></i>
-                            <span>Kirim ke email</span>
-                        </a>
                     </div>
                 </div>
 
@@ -299,6 +369,10 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 36px; flex-wrap: wrap; gap: 16px">
                     <h2 class="h2" style="font-size: 44px">E-ticket resmi kamu</h2>
                     <div style="display: flex; gap: 12px" class="no-print">
+                        <a href="{{ route('ticket.bib', $registration) }}" target="_blank" class="btn btn-sm btn-orange font-black">
+                            <i data-lucide="tag" class="w-4 h-4 mr-1.5"></i>
+                            <span>Cetak Nomor BIB</span>
+                        </a>
                         <button type="button" onclick="window.print()" class="btn btn-sm">
                             <i data-lucide="printer" class="w-4 h-4 mr-1.5"></i>
                             <span>Unduh / Cetak PDF</span>

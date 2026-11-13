@@ -1490,5 +1490,16 @@ h1, h2, h3, h4, .disp, .font-heading {
     box-shadow: 12px 12px 0 var(--ink, #10282E);
 }
 
+/* Midtrans Snap Modal & Backdrop Enhancements */
+#snap-midtrans, iframe[id*="snap"] {
+    backdrop-filter: blur(8px) !important;
+    background-color: rgba(16, 40, 46, 0.65) !important;
+}
+
+#snap-container iframe {
+    border-radius: 14px !important;
+    max-width: 100% !important;
+}
+
 
 

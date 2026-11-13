@@ -37,7 +37,12 @@ class TicketController extends Controller
                 $registration = $user->registrations()->with(['category.event.photos', 'ticket', 'user', 'payment'])->latest()->first();
             }
         } else {
-            $registration = $user->registrations()->with(['category.event.photos', 'ticket', 'user', 'payment'])->latest()->first();
+            $registration = $user->registrations()
+                ->whereIn('status', [Registration::STATUS_PAID, Registration::STATUS_CHECKED_IN])
+                ->with(['category.event.photos', 'ticket', 'user', 'payment'])
+                ->latest()
+                ->first()
+                ?? $user->registrations()->with(['category.event.photos', 'ticket', 'user', 'payment'])->latest()->first();
         }
 
         // Auto-sync status pembayaran tiket jika masih pending (berguna untuk lingkungan lokal & webhook tertunda)
@@ -78,7 +83,15 @@ class TicketController extends Controller
             }
         }
 
-        return response()->view('pages.ticket', ['registration' => $registration]);
+        $userRegistrations = $user ? $user->registrations()
+            ->with(['category.event', 'ticket', 'payment'])
+            ->latest()
+            ->get() : collect();
+
+        return response()->view('pages.ticket', [
+            'registration' => $registration,
+            'userRegistrations' => $userRegistrations,
+        ]);
     }
 
     /**
@@ -107,5 +120,33 @@ class TicketController extends Controller
         abort_if(! $registration || ! $registration->isPaid(), 404, 'E-Ticket belum diterbitkan atau pembayaran belum lunas.');
 
         return response()->view('pages.ticket-pdf', ['registration' => $registration]);
+    }
+
+    /**
+     * Halaman cetak resmi nomor dada (BIB) resmi peserta.
+     */
+    public function bib(Request $request, ?Registration $registration = null): Response
+    {
+        $user = auth()->user();
+
+        if ($registration instanceof Registration && $registration->exists) {
+            abort_unless(
+                $registration->user_id === $user->id
+                || $user->isAdmin()
+                || ($user->isPenyelenggara() && $registration->category?->event?->user_id === $user->id),
+                403
+            );
+            $registration->loadMissing(['category.event', 'ticket', 'user', 'payment']);
+        } else {
+            $registration = $user->registrations()
+                ->whereIn('status', [Registration::STATUS_PAID, Registration::STATUS_CHECKED_IN])
+                ->with(['category.event', 'ticket', 'user', 'payment'])
+                ->latest()
+                ->first();
+        }
+
+        abort_if(! $registration || ! $registration->isPaid(), 404, 'Nomor BIB belum diterbitkan atau pembayaran belum lunas.');
+
+        return response()->view('pages.bib-print', ['registration' => $registration]);
     }
 }

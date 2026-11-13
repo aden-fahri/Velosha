@@ -3,7 +3,9 @@ $footer = \App\Models\FooterContent::current();
 
 // Check existence of Organizer routes per instruction
 $organizerLinks = [];
-if (\Illuminate\Support\Facades\Route::has('organizations.create')) {
+if (\Illuminate\Support\Facades\Route::has('packages.index')) {
+    $organizerLinks[] = ['label' => 'Jadi penyelenggara', 'url' => route('packages.index')];
+} elseif (\Illuminate\Support\Facades\Route::has('organizations.create')) {
     $organizerLinks[] = ['label' => 'Jadi penyelenggara', 'url' => route('organizations.create')];
 } elseif (\Illuminate\Support\Facades\Route::has('organizer.register')) {
     $organizerLinks[] = ['label' => 'Jadi penyelenggara', 'url' => route('organizer.register')];

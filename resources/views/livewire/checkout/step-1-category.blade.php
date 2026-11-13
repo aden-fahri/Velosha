@@ -37,7 +37,7 @@
         <button type="button" wire:click="selectCategory({{ $cat->id }})"
             class="w-full text-left p-4 sm:p-5 rounded-2xl flex items-center justify-between gap-4 transition-all cursor-pointer {{ $categoryId === $cat->id ? 'border-2 border-[var(--ink)] bg-white shadow-[3.5px_3.5px_0_var(--ink)] ring-2 ring-[var(--mustard)]/40' : 'border-2 border-[var(--line)] bg-white/80 hover:border-[var(--ink)] hover:bg-white shadow-[1px_1px_0_var(--line)]' }}">
             <div class="flex items-center gap-3.5 min-w-0">
-                <div class="px-3 py-1.5 min-w-[52px] max-w-[120px] h-9 rounded-lg flex items-center justify-center font-black text-xs shrink-0 border-2 border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] truncate {{ $categoryId === $cat->id ? 'bg-[#DE7119] text-white' : 'bg-[var(--paper)] text-[var(--ink)]' }}">{{ $cat->code }}</div>
+                <div class="px-3 py-1.5 min-w-[64px] max-w-[140px] h-9 rounded-lg flex items-center justify-center font-black text-xs shrink-0 border-2 border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] truncate tracking-wide {{ $categoryId === $cat->id ? 'bg-[#DE7119] text-white' : 'bg-[var(--paper)] text-[var(--ink)]' }}">{{ $cat->code }}</div>
                 <div class="min-w-0">
                     <div class="flex items-center gap-2 flex-wrap">
                         <span class="text-sm font-black text-[var(--ink)] leading-snug">{{ $displayName }}</span>
@@ -52,7 +52,7 @@
             </div>
             <div class="text-right shrink-0 pl-2">
                 <div class="text-sm font-black text-[var(--ink)]">Rp {{ P::angka((float) $cat->price) }}</div>
-                <span class="text-[10px] px-2 py-0.5 rounded font-bold inline-block mt-1 {{ $cat->remaining > 0 ? 'text-emerald-800 bg-emerald-50 border border-emerald-300' : 'text-red-800 bg-red-50 border border-red-300' }}">
+                <span class="text-[11px] px-2.5 py-0.5 rounded-lg font-black inline-block mt-1 border-[1.5px] border-[var(--ink)] shadow-[1px_1px_0_var(--ink)] {{ $cat->remaining > 0 ? 'bg-[#E7F8EE] text-[#0D5B3A]' : 'bg-[#FEECEC] text-[#B91C1C]' }}">
                     {{ $cat->remaining > 0 ? 'Sisa slot '.$cat->remaining : 'Slot Penuh' }}
                 </span>
             </div>
@@ -106,10 +106,11 @@
                 <div class="text-xs text-[var(--mute)] font-medium">Elevasi +{{ P::angka((float) $category->elevation_gain_m) }}m &middot; COT {{ P::jam((float) $category->cut_off_hours) }}</div>
             </div>
         </div>
-        <div class="text-right">
-            <div class="text-sm font-black text-[var(--ink)]">Rp {{ P::angka((float) $category->price) }}</div>
-            <span class="text-[10px] px-2 py-0.5 font-black rounded border border-[var(--ink)] {{ $category->remaining > 0 ? 'bg-[var(--pine)] text-white' : 'bg-red-500 text-white' }}">
-                {{ $category->remaining > 0 ? 'Tersedia' : 'Slot Penuh' }}
+        <div class="text-right shrink-0">
+            <div class="text-sm font-black text-[var(--ink)] mb-1">Rp {{ P::angka((float) $category->price) }}</div>
+            <span class="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 font-black rounded-lg border-[1.5px] border-[var(--ink)] shadow-[1.5px_1.5px_0_var(--ink)] {{ $category->remaining > 0 ? 'bg-[#1F6F4A] text-white' : 'bg-[#DE3618] text-white' }}">
+                <span class="w-1.5 h-1.5 rounded-full {{ $category->remaining > 0 ? 'bg-[#85E3B3]' : 'bg-white' }}"></span>
+                <span>{{ $category->remaining > 0 ? 'Tersedia' : 'Slot Penuh' }}</span>
             </span>
         </div>
     </div>

@@ -73,6 +73,10 @@ Route::get('/ticket/{registration?}/download', [TicketController::class, 'downlo
     ->middleware('auth')
     ->name('ticket.download');
 
+Route::get('/ticket/{registration?}/bib', [TicketController::class, 'bib'])
+    ->middleware('auth')
+    ->name('ticket.bib');
+
 // 7. Dashboard Peserta (Portal Rider — data & filter live via Livewire PortalDashboard)
 Route::view('/dashboard', 'pages.dashboard')
     ->middleware(['auth', 'role:peserta,penyelenggara'])
@@ -124,6 +128,9 @@ Route::get('/organisasi/dasbor', function () {
     $org = $user?->organizations()->first() ?? $user?->ownedOrganizations()->first();
     if ($org) {
         return redirect()->route('organizations.show', ['organization' => $org->slug, 'tab' => 'overview']);
+    }
+    if ($user && $user->isPeserta()) {
+        return redirect()->route('dashboard');
     }
     return redirect()->route('organizations.create')->with('info', 'Silakan daftarkan komunitas atau EO Anda terlebih dahulu.');
 })->middleware('auth')->name('organizer.dashboard');

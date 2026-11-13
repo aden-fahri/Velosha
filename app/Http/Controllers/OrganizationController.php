@@ -65,8 +65,10 @@ class OrganizationController extends Controller
         ]);
 
         if (! empty($validated['package_id'])) {
-            return redirect()->route('organizations.quota', ['organization' => $organization->slug, 'selected' => $validated['package_id']])
-                ->with('status', 'Komunitas berhasil didaftarkan! Silakan selesaikan pembelian paket kuota untuk mulai membuat event.');
+            return redirect()->route('packages.index', [
+                'auto_pay' => $validated['package_id'],
+                'org' => $organization->slug,
+            ])->with('status', 'Komunitas "'.$organization->name.'" berhasil didaftarkan! Membuka gerbang pembayaran kuota...');
         }
 
         return redirect()->route('organizations.verification', ['organization' => $organization->slug])

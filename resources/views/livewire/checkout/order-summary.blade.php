@@ -1,13 +1,5 @@
 @use('App\Support\EventCardPresenter', 'P')
-{{-- Panel sticky ringkasan biaya, pemilihan metode Midtrans, & pemicu pembayaran --}}
-@php($methods = [
-    'qris' => ['label' => 'QRIS', 'hint' => 'GoPay, OVO, ShopeePay'],
-    'bca_va' => ['label' => 'BCA VA', 'hint' => 'Virtual Account'],
-    'mandiri' => ['label' => 'Mandiri', 'hint' => 'Bill Payment'],
-    'bri_va' => ['label' => 'BRI VA', 'hint' => 'Virtual Account'],
-    'bni_va' => ['label' => 'BNI VA', 'hint' => 'Virtual Account'],
-    'card' => ['label' => 'Kartu Kredit', 'hint' => 'Segera'],
-])
+{{-- Panel sticky ringkasan biaya & pemicu pembayaran Midtrans Snap --}}
 <div class="lg:col-span-4 sticky top-24 space-y-4">
     <div class="bg-white border-[2.5px] border-[var(--ink)] rounded-2xl p-6 shadow-[4px_4px_0_var(--ink)]">
         <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider border-b-2 border-[var(--ink)] pb-3">
@@ -45,24 +37,13 @@
         </div>
 
         @if ($step === 3)
-        {{-- Grid metode pembayaran (interaktif) --}}
         <div class="border-t-2 border-[var(--ink)] pt-4">
-            <div class="text-[10px] uppercase font-black tracking-wider text-[var(--mute)] mb-2.5">Metode Pembayaran Midtrans</div>
-            <div class="grid grid-cols-2 gap-2.5">
-                @foreach ($methods as $key => $method)
-                @if ($key === 'card')
-                <div class="border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 py-2.5 px-2 text-center opacity-60 cursor-not-allowed" title="Segera hadir">
-                    <div class="text-[11px] font-bold text-gray-500">{{ $method['label'] }}</div>
-                    <div class="text-[10px] text-gray-400 mt-0.5">{{ $method['hint'] }}</div>
+            <div class="p-3 bg-[var(--paper)] border-2 border-[var(--ink)] rounded-xl shadow-[2px_2px_0_var(--ink)] flex items-start gap-2.5">
+                <svg class="w-4 h-4 text-[var(--pine)] shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <div class="text-[11px] leading-snug">
+                    <span class="font-black text-[var(--ink)] block">Gateway Resmi Midtrans Snap</span>
+                    <span class="text-[var(--mute)] font-medium">Pilih metode pembayaran (QRIS, GoPay, BCA/Mandiri/BRI VA, Kartu) langsung di jendela pembayaran Midtrans.</span>
                 </div>
-                @else
-                <button type="button" wire:click="selectPaymentMethod('{{ $key }}')"
-                    class="border-2 border-[var(--ink)] rounded-xl py-2.5 px-2 text-center transition cursor-pointer {{ $paymentMethod === $key ? 'bg-[#F4BE3F] shadow-[2.5px_2.5px_0_var(--ink)] font-black' : 'bg-white hover:bg-[#FAF9F5] text-[var(--ink)] font-bold' }}">
-                    <div class="text-[11px] font-black leading-tight">{{ $method['label'] }}</div>
-                    <div class="text-[10px] text-[var(--mute)] mt-0.5 leading-tight">{{ $method['hint'] }}</div>
-                </button>
-                @endif
-                @endforeach
             </div>
         </div>
 
