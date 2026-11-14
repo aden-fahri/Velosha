@@ -273,6 +273,8 @@
                 background: #ffffff !important;
                 padding: 0 !important;
                 margin: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
             .no-print {
                 display: none !important;
@@ -281,6 +283,8 @@
                 box-shadow: none !important;
                 max-width: 100% !important;
                 border: 2.5px solid #10282E !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
         }
     </style>

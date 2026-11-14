@@ -20,7 +20,7 @@ class HelpdeskTicketPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->isAdmin() || $user->isOperator() || $user->isPeserta();
+        return $user->isAdmin() || $user->isOperator() || $user->isPeserta() || $user->isPenyelenggara();
     }
 
     /**
@@ -50,7 +50,7 @@ class HelpdeskTicketPolicy
      */
     public function create(User $user): bool
     {
-        return $user->isPeserta() || $user->isAdmin();
+        return $user->isPeserta() || $user->isPenyelenggara() || $user->isAdmin();
     }
 
     /**

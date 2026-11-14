@@ -100,98 +100,141 @@
                 </div>
             </div>
 
-            <!-- Kartu Event (Pas 3 Kartu, Transisi Spring Halus, Hover 3D Tactile, Bersih Tanpa Tumpukan) -->
-            <div class="race-cards-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-                 id="race-cards-grid"
-                 wire:loading.class="opacity-60"
-                 wire:target="filter">
+            <!-- Kartu Event (1 Card Slider di Mobile, Grid 3 Kolom di Desktop) -->
+            <div x-data="{
+                    scrollNext() {
+                        const slider = this.$refs.slider;
+                        if (!slider) return;
+                        slider.scrollBy({ left: slider.clientWidth * 0.88, behavior: 'smooth' });
+                    },
+                    scrollPrev() {
+                        const slider = this.$refs.slider;
+                        if (!slider) return;
+                        slider.scrollBy({ left: -slider.clientWidth * 0.88, behavior: 'smooth' });
+                    }
+                 }"
+                 class="relative">
 
-                @forelse($races as $race)
-                <article wire:key="race-{{ $loop->index }}"
-                         class="race-card group"
-                         data-c="{{ $race['cat'] }}">
-
-                    <div class="race-card-inner c flex flex-col h-full bg-[var(--card)] rounded-[18px] border-[3px] border-[var(--ink)] shadow-[6px_6px_0_var(--ink)] overflow-hidden">
-                        {{-- Header Poster Image / Art --}}
-                        <div class="race-card-thumb relative overflow-hidden border-b-[3px] border-[var(--ink)] bg-[var(--paper2)]"
-                             style="height: 200px; min-height: 200px; max-height: 200px; width: 100%; position: relative;">
-                            <img src="{{ $race['img'] }}"
-                                 alt="{{ $race['title'] }}"
-                                 class="race-card-img w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
-                                 style="width: 100%; height: 100%; object-fit: cover; display: block;" />
-                            <div class="absolute top-3 left-3 flex gap-2 z-10">
-                                <span class="chip chip-orange">{{ $race['cat'] }}</span>
-                                <span class="chip bg-[var(--card)]">{{ $race['dist'] }}</span>
-                            </div>
-                        </div>
-
-                        {{-- Card Body --}}
-                        <div class="p-5 flex flex-col flex-grow justify-between bg-[var(--card)]">
-                            <div>
-                                <div class="flex items-center text-xs font-bold gap-2 text-[var(--mute)]">
-                                    <span class="flex items-center">
-                                        <i data-lucide="calendar" class="w-3.5 h-3.5 mr-1 text-[var(--orange)]"></i>{{ $race['date'] }}
-                                    </span>
-                                    <span>•</span>
-                                    <span class="truncate flex items-center">
-                                        <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-1 text-[var(--orange)]"></i>{{ $race['loc'] }}
-                                    </span>
-                                </div>
-
-                                <h3 class="font-heading font-black text-xl text-[var(--ink)] mt-2.5 mb-2 leading-snug line-clamp-2 min-h-[54px] flex items-center">
-                                    {{ $race['title'] }}
-                                </h3>
-
-                                {{-- Stats 3-Col --}}
-                                <div class="spec" style="margin: 8px 0; padding: 8px 0;">
-                                    @foreach($race['specs'] as $label => $value)
-                                    <div>
-                                        <span>{{ $label }}</span>
-                                        <b>{{ $value }}</b>
-                                    </div>
-                                    @endforeach
-                                </div>
-
-                                {{-- Kuota Progress Bar (380 ======------ 500) --}}
-                                @if(($race['totalQuota'] ?? 0) > 0)
-                                <div class="mt-2.5 mb-1">
-                                    <div class="flex items-center justify-between text-[11px] font-extrabold text-[var(--ink)] mb-1">
-                                        <span class="text-[var(--orange)] font-black">
-                                            <b>{{ number_format($race['bookedQuota'] ?? 0, 0, ',', '.') }}</b> slot terisi
-                                        </span>
-                                        <span class="text-[var(--mute)] font-bold text-[11px]">
-                                            kuota <b>{{ number_format($race['totalQuota'] ?? 0, 0, ',', '.') }}</b>
-                                        </span>
-                                    </div>
-                                    <div class="w-full h-2.5 bg-[#F3E7CF] border-[1.5px] border-[var(--ink)] rounded-md overflow-hidden p-[1px] shadow-[inset_1px_1px_0_rgba(16,40,46,0.1)]">
-                                        <div class="h-full bg-gradient-to-r from-[#F4BE3F] to-[#DE7119] rounded-sm border-r-[1.5px] border-[var(--ink)] transition-all duration-500"
-                                             style="width: {{ max(4, min(100, $race['percentBooked'] ?? 0)) }}%"></div>
-                                    </div>
-                                </div>
-                                @endif
-                            </div>
-
-                            {{-- Footer with Price & CTA Button --}}
-                            <div class="pt-3 border-t-2 border-[var(--ink)]/15 flex items-center justify-between gap-3">
-                                <div>
-                                    <div class="text-[10px] uppercase tracking-wider text-[var(--mute)] font-bold">Mulai dari</div>
-                                    <b class="font-heading font-black text-xl text-[var(--ink)]">Rp {{ $race['price'] }}</b>
-                                </div>
-                                <a href="{{ $race['url'] }}" wire:navigate.hover class="btn btn-sm">
-                                    <span>Lihat detail</span>
-                                    <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
-                                </a>
-                            </div>
-                        </div>
+                <!-- Header Navigasi Slider Mobile (Hanya tampil di layar kecil < md) -->
+                <div class="flex md:hidden items-center justify-between mb-4 px-1">
+                    <span class="font-heading font-black text-xs uppercase tracking-wider text-[var(--ink)]">
+                        Pilihan Event Balap
+                    </span>
+                    <div class="flex items-center gap-2">
+                        <button type="button"
+                                @click="scrollPrev()"
+                                aria-label="Event sebelumnya"
+                                class="w-8 h-8 rounded-lg border-2 border-[var(--ink)] bg-white hover:bg-[var(--butter)] text-[var(--ink)] flex items-center justify-center font-black text-sm shadow-[1.5px_1.5px_0_var(--ink)] active:translate-x-0.5 active:translate-y-0.5 transition cursor-pointer">
+                            &larr;
+                        </button>
+                        <button type="button"
+                                @click="scrollNext()"
+                                aria-label="Event berikutnya"
+                                class="w-8 h-8 rounded-lg border-2 border-[var(--ink)] bg-[var(--orange)] hover:bg-[var(--orange-l)] text-white flex items-center justify-center font-black text-sm shadow-[1.5px_1.5px_0_var(--ink)] active:translate-x-0.5 active:translate-y-0.5 transition cursor-pointer">
+                            &rarr;
+                        </button>
                     </div>
-                </article>
-                @empty
-                <div class="col-span-full py-16 text-center card bg-[var(--paper2)] p-8">
-                    <p class="font-heading font-extrabold text-xl text-[var(--ink)]">Belum ada race pada kategori ini</p>
-                    <p class="text-sm text-[var(--mute)] mt-1">Coba pilih kategori balap lainnya di atas.</p>
                 </div>
-                @endforelse
 
+                <div x-ref="slider"
+                     class="race-cards-grid flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scrollbar-none pb-4 px-1 -mx-1"
+                     id="race-cards-grid"
+                     wire:loading.class="opacity-60"
+                     wire:target="filter">
+
+                    @forelse($races as $race)
+                    <article wire:key="race-{{ $loop->index }}"
+                             class="race-card group w-[85vw] sm:w-[380px] md:w-auto shrink-0 snap-center"
+                             data-c="{{ $race['cat'] }}">
+
+                        <div class="race-card-inner c flex flex-col h-full bg-[var(--card)] rounded-[18px] border-[3px] border-[var(--ink)] shadow-[6px_6px_0_var(--ink)] overflow-hidden">
+                            {{-- Header Poster Image / Art --}}
+                            <div class="race-card-thumb relative overflow-hidden border-b-[3px] border-[var(--ink)] bg-[var(--paper2)]"
+                                 style="height: 200px; min-height: 200px; max-height: 200px; width: 100%; position: relative;">
+                                <img src="{{ $race['img'] }}"
+                                     alt="{{ $race['title'] }}"
+                                     class="race-card-img w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                                     style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+                                <div class="absolute top-3 left-3 flex gap-2 z-10">
+                                    <span class="chip chip-orange">{{ $race['cat'] }}</span>
+                                    <span class="chip bg-[var(--card)]">{{ $race['dist'] }}</span>
+                                </div>
+                            </div>
+
+                            {{-- Card Body --}}
+                            <div class="p-5 flex flex-col flex-grow justify-between bg-[var(--card)]">
+                                <div>
+                                    <div class="flex items-center text-xs font-bold gap-2 text-[var(--mute)]">
+                                        <span class="flex items-center">
+                                            <i data-lucide="calendar" class="w-3.5 h-3.5 mr-1 text-[var(--orange)]"></i>{{ $race['date'] }}
+                                        </span>
+                                        <span>•</span>
+                                        <span class="truncate flex items-center">
+                                            <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-1 text-[var(--orange)]"></i>{{ $race['loc'] }}
+                                        </span>
+                                    </div>
+
+                                    <h3 class="font-heading font-black text-xl text-[var(--ink)] mt-2.5 mb-2 leading-snug line-clamp-2 min-h-[54px] flex items-center">
+                                        {{ $race['title'] }}
+                                    </h3>
+
+                                    {{-- Stats 3-Col --}}
+                                    <div class="spec" style="margin: 8px 0; padding: 8px 0;">
+                                        @foreach($race['specs'] as $label => $value)
+                                        <div>
+                                            <span>{{ $label }}</span>
+                                            <b>{{ $value }}</b>
+                                        </div>
+                                        @endforeach
+                                    </div>
+
+                                    {{-- Kuota Progress Bar (380 ======------ 500) --}}
+                                    @if(($race['totalQuota'] ?? 0) > 0)
+                                    <div class="mt-3 mb-1.5 space-y-1.5">
+                                        <div class="flex items-center justify-between text-xs font-bold">
+                                            <span class="text-[var(--orange)] font-black">
+                                                <b>{{ number_format($race['bookedQuota'] ?? 0, 0, ',', '.') }}</b> slot terisi
+                                            </span>
+                                            <span class="text-[var(--mute)] font-semibold text-[11px]">
+                                                kuota <b>{{ number_format($race['totalQuota'] ?? 0, 0, ',', '.') }}</b>
+                                            </span>
+                                        </div>
+                                        <div class="w-full h-3 bg-[#FAF8F3] border-2 border-[var(--ink)] rounded-lg overflow-hidden p-0.5 shadow-[1.5px_1.5px_0_var(--ink)]">
+                                            <div class="h-full bg-gradient-to-r from-[#F4BE3F] to-[#DE7119] rounded-[4px] border-r-2 border-[var(--ink)] transition-all duration-500"
+                                                 style="width: {{ max(4, min(100, $race['percentBooked'] ?? 0)) }}%"></div>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+
+                                {{-- Footer with Price & CTA Button --}}
+                                <div class="pt-3 border-t-2 border-[var(--ink)]/15 flex items-center justify-between gap-3">
+                                    <div>
+                                        <div class="text-[10px] uppercase tracking-wider text-[var(--mute)] font-bold">Mulai dari</div>
+                                        <b class="font-heading font-black text-xl text-[var(--ink)]">Rp {{ $race['price'] }}</b>
+                                    </div>
+                                    <a href="{{ $race['url'] }}" wire:navigate.hover class="btn btn-sm">
+                                        <span>Lihat detail</span>
+                                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    @empty
+                    <div class="col-span-full py-16 text-center card bg-[var(--paper2)] p-8">
+                        <p class="font-heading font-extrabold text-xl text-[var(--ink)]">Belum ada race pada kategori ini</p>
+                        <p class="text-sm text-[var(--mute)] mt-1">Coba pilih kategori balap lainnya di atas.</p>
+                    </div>
+                    @endforelse
+
+                </div>
+
+                <!-- Petunjuk Geser di Layar Mobile -->
+                <div class="md:hidden flex items-center justify-center gap-1.5 mt-2 text-xs font-bold text-[var(--mute)]">
+                    <span>Geser kartu untuk melihat event lainnya</span>
+                    <span>&rarr;</span>
+                </div>
             </div>
 
         </div>

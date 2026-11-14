@@ -37,16 +37,8 @@
                 @php
                     $u = auth()->user();
                     $homeUrl = $u->home();
-                    if ($u->isAdmin() || $u->isPenyelenggara()) {
-                        $homeLabel = 'Panel Admin';
-                        $homeIcon = 'layout-dashboard';
-                    } elseif ($u->isOperator()) {
-                        $homeLabel = 'Antrian Helpdesk';
-                        $homeIcon = 'ticket';
-                    } else {
-                        $homeLabel = 'Portal Saya';
-                        $homeIcon = 'gauge';
-                    }
+                    $homeLabel = 'Dashboard';
+                    $homeIcon = 'layout-dashboard';
                 @endphp
                 <a href="{{ $homeUrl }}" {{ $u->isAdmin() ? '' : 'wire:navigate.hover' }} class="btn btn-sm btn-ghost">
                     <i data-lucide="{{ $homeIcon }}" class="w-4 h-4 mr-1 text-[var(--ink)]"></i>

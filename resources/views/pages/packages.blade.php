@@ -179,8 +179,8 @@
 
     </div>
 
-    {{-- Midtrans Snap Popup with 100% Blurred Backdrop --}}
-    <div id="snap-embed-modal" class="fixed inset-0 z-[999999] bg-[#10282E]/75 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center p-4">
+    {{-- Midtrans Snap Popup with 100% Strong Blurred Backdrop --}}
+    <div id="snap-embed-modal" class="fixed inset-0 z-[999999] hidden transition-all duration-300 flex items-center justify-center p-4" style="backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background-color: rgba(16, 40, 46, 0.78);">
         <div class="relative bg-white rounded-2xl border-[3.5px] border-[var(--ink)] shadow-[8px_8px_0_var(--ink)] overflow-hidden" style="max-width: 460px; width: 100%; margin: auto;">
             <div class="flex items-center justify-between px-5 py-3.5 bg-[var(--butter)] border-b-[2.5px] border-[var(--ink)]">
                 <span class="font-heading font-black text-sm text-[var(--ink)] tracking-tight">Pembayaran Paket Kuota Midtrans</span>

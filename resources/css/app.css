@@ -628,6 +628,62 @@ h1, h2, h3, h4, .disp, .font-heading {
     .stage .a-trail { opacity: 0 !important; }
 }
 
+/* Responsif Layar Tablet & Mobile untuk Hero Neobrutalist Stage */
+@media (max-width: 1199px) {
+    #hero-section {
+        min-height: auto !important;
+        padding-bottom: 48px;
+    }
+    .stage {
+        width: 100% !important;
+        max-width: 720px !important;
+        height: auto !important;
+        padding: 32px 16px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 28px !important;
+    }
+    .stage .hero-left-col {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        width: 100% !important;
+        max-width: 600px !important;
+        text-align: center;
+        margin: 0 auto;
+    }
+    .stage .hero-left-col h1 {
+        font-size: clamp(38px, 9vw, 64px) !important;
+        line-height: 1.02 !important;
+    }
+    .stage .hero-left-col p {
+        margin: 16px auto 0 !important;
+    }
+    .stage .hero-rider-col {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        width: 100% !important;
+        max-width: 440px !important;
+        height: 340px !important;
+        margin: 0 auto;
+    }
+    .stage .hero-ticket-col {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        width: 100% !important;
+        max-width: 480px !important;
+        margin: 0 auto;
+    }
+    .stage .a-amber,
+    .stage .a-panel,
+    .stage .a-trail {
+        display: none !important;
+    }
+}
+
 /* Dots Button Carousel */
 .dotbtn {
     width: 44px;

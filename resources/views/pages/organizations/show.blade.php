@@ -64,12 +64,12 @@
                     <span class="whitespace-nowrap font-bold text-sm">Paket &amp; Kuota</span>
                 </a>
 
-                {{-- 5. Keuangan & Payout --}}
+                {{-- 5. Laporan Penjualan Tiket --}}
                 <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'keuangan']) }}"
                    wire:navigate.hover
                    class="w-full flex items-center gap-2.5 {{ $activeTab === 'keuangan' ? 'on' : '' }}">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-                    <span class="whitespace-nowrap font-bold text-sm">Keuangan &amp; Payout</span>
+                    <span class="whitespace-nowrap font-bold text-sm">Laporan Penjualan</span>
                 </a>
 
                 {{-- 6. Tiket Bantuan / Chat Petugas --}}
@@ -292,20 +292,25 @@
                         </div>
                     </div>
 
-                    {{-- 4. Saldo Siap Tarik --}}
+                    {{-- 4. Tiket Terjual --}}
+                    @php
+                        $totalTicketsSold = $events->sum(function($ev) {
+                            return $ev->registrations()->whereIn('status', ['paid', 'checked_in'])->count();
+                        });
+                    @endphp
                     <div class="p-6 bg-white border-[3px] border-[var(--ink)] shadow-[5px_5px_0_var(--ink)] rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition-all">
                         <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-black tracking-wider text-[var(--mute)] uppercase">SALDO SIAP TARIK</span>
+                            <span class="text-[11px] font-black tracking-wider text-[var(--mute)] uppercase">TIKET TERJUAL</span>
                             <div class="w-10 h-10 rounded-xl bg-[#E6F4EA] border-2 border-[var(--ink)] flex items-center justify-center text-[var(--pine)] shadow-[2px_2px_0_var(--ink)]">
-                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path><path d="M13 5v2"></path><path d="M13 17v2"></path><path d="M13 11v2"></path></svg>
                             </div>
                         </div>
                         <div class="mt-4">
                             <div class="font-heading font-black text-2xl sm:text-3xl text-[var(--pine)] tracking-tight">
-                                Rp {{ number_format($availableBalance, 0, ',', '.') }}
+                                {{ number_format($totalTicketsSold, 0, ',', '.') }} Peserta
                             </div>
                             <div class="text-xs text-[var(--mute)] font-bold mt-1.5">
-                                Bebas dicairkan ke rekening
+                                Tiket terkonfirmasi di semua event
                             </div>
                         </div>
                     </div>
@@ -741,108 +746,105 @@
                 </div>
             @endif
 
-            {{-- ==================== TAB: KEUANGAN & PAYOUT ==================== --}}
+            {{-- ==================== TAB: LAPORAN PENJUALAN TIKET ==================== --}}
             @if ($activeTab === 'keuangan')
                 <div>
                     <div class="text-[13px] font-bold tracking-[.08em] text-[var(--mute)] uppercase">PORTAL PENYELENGGARA</div>
-                    <h1 class="h3 font-heading text-3xl font-black mt-0.5">Keuangan &amp; Penarikan Dana</h1>
+                    <h1 class="h3 font-heading text-3xl font-black mt-0.5">Laporan Penjualan Tiket Event</h1>
+                    <p class="text-xs text-[var(--mute)] font-medium mt-1">Pantau performa pendaftaran peserta, tiket terjual, dan ringkasan omzet per kategori balap secara transparan.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {{-- Rekening Bank --}}
-                    <div class="card p-6 bg-white shadow-[4px_4px_0_#10282E] space-y-4">
-                        <h3 class="font-heading text-xl font-black text-[var(--ink)]">Rekening Bank Komunitas</h3>
-                        @if ($bankAccounts->isEmpty())
-                            <p class="text-xs text-[var(--mute)]">Belum ada rekening bank yang didaftarkan.</p>
-                        @else
-                            <div class="space-y-2">
-                                @foreach ($bankAccounts as $acc)
-                                    <div class="p-3 rounded-lg border-2 border-[var(--ink)] bg-[var(--paper)] flex items-center justify-between">
-                                        <div>
-                                            <div class="font-black text-xs text-[var(--ink)]">{{ $acc->bank_name }} - {{ $acc->account_number }}</div>
-                                            <div class="text-[11px] text-[var(--mute)]">a.n. {{ $acc->account_name }}</div>
-                                        </div>
-                                        @if ($acc->is_primary)
-                                            <span class="chip p text-[9px]">Utama</span>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
-
-                        <form action="{{ route('organizations.finance.account.store', $organization) }}" method="POST" class="pt-4 border-t border-[var(--ink)]/15 space-y-3">
-                            @csrf
-                            <div class="text-xs font-black uppercase text-[var(--ink)]">+ Tambah Rekening</div>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                <input type="text" name="bank_name" placeholder="Bank" required class="px-2.5 py-1.5 text-xs font-bold rounded-lg border-2 border-[var(--ink)] bg-[var(--paper)]">
-                                <input type="text" name="account_number" placeholder="No. Rekening" required class="px-2.5 py-1.5 text-xs font-bold rounded-lg border-2 border-[var(--ink)] bg-[var(--paper)]">
-                                <input type="text" name="account_name" placeholder="Nama Pemilik" required class="px-2.5 py-1.5 text-xs font-bold rounded-lg border-2 border-[var(--ink)] bg-[var(--paper)]">
-                            </div>
-                            <button type="submit" class="btn btn-sm btn-ghost">Simpan Rekening</button>
-                        </form>
+                {{-- Ringkasan 3 Metrik Penjualan --}}
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                    <div class="card p-5 bg-white border-2 border-[var(--ink)] shadow-[4px_4px_0_var(--ink)]">
+                        <div class="text-[11px] font-black uppercase text-[var(--mute)] tracking-wider">TOTAL OMZET TIKET</div>
+                        <div class="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)] mt-2">
+                            Rp {{ number_format($totalSales, 0, ',', '.') }}
+                        </div>
+                        <div class="text-[11px] text-[var(--mute)] font-semibold mt-1">Akumulasi seluruh transaksi lunas</div>
                     </div>
 
-                    {{-- Form Penarikan Dana --}}
-                    <div class="card p-6 bg-white shadow-[4px_4px_0_#10282E] space-y-4">
-                        <h3 class="font-heading text-xl font-black text-[var(--ink)]">Ajukan Penarikan Dana</h3>
-                        @if ($bankAccounts->isEmpty())
-                            <div class="p-4 rounded-xl bg-[var(--butter)] text-xs font-bold text-[var(--ink)]">
-                                Daftarkan minimal 1 rekening bank untuk mencairkan saldo.
-                            </div>
-                        @else
-                            <form action="{{ route('organizations.finance.payout', $organization) }}" method="POST" class="space-y-3">
-                                @csrf
-                                <div>
-                                    <label class="block text-xs font-bold text-[var(--ink)] mb-1">Rekening Tujuan</label>
-                                    <select name="payout_account_id" required class="w-full px-3 py-2 text-xs font-bold rounded-lg border-2 border-[var(--ink)] bg-[var(--paper)]">
-                                        @foreach ($bankAccounts as $acc)
-                                            <option value="{{ $acc->id }}">{{ $acc->bank_name }} - {{ $acc->account_number }} (a.n. {{ $acc->account_name }})</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-[var(--ink)] mb-1">Nominal (Rp) &bull; Maks: Rp {{ number_format($availableBalance, 0, ',', '.') }}</label>
-                                    <input type="number" name="amount" min="10000" max="{{ $availableBalance }}" required placeholder="Contoh: 500000"
-                                           class="w-full px-3 py-2 text-xs font-bold rounded-lg border-2 border-[var(--ink)] bg-[var(--paper)]">
-                                </div>
-                                <button type="submit" {{ $availableBalance < 10000 ? 'disabled' : '' }} class="btn w-full btn-sm">
-                                    Ajukan Pencairan Dana &rarr;
-                                </button>
-                            </form>
-                        @endif
+                    <div class="card p-5 bg-white border-2 border-[var(--ink)] shadow-[4px_4px_0_var(--ink)]">
+                        <div class="text-[11px] font-black uppercase text-[var(--mute)] tracking-wider">PESERTA TERDAFTAR</div>
+                        <div class="font-heading font-black text-2xl sm:text-3xl text-[var(--pine)] mt-2">
+                            {{ number_format($totalTicketsSold, 0, ',', '.') }} Rider
+                        </div>
+                        <div class="text-[11px] text-[var(--mute)] font-semibold mt-1">Tiket aktif &amp; memiliki nomor BIB</div>
+                    </div>
+
+                    <div class="card p-5 bg-white border-2 border-[var(--ink)] shadow-[4px_4px_0_var(--ink)]">
+                        <div class="text-[11px] font-black uppercase text-[var(--mute)] tracking-wider">EVENT DIPUBLIKASIKAN</div>
+                        <div class="font-heading font-black text-2xl sm:text-3xl text-[var(--orange)] mt-2">
+                            {{ $events->count() }} Event
+                        </div>
+                        <div class="text-[11px] text-[var(--mute)] font-semibold mt-1">Tersedia di kalender resmi Velosha</div>
                     </div>
                 </div>
 
-                {{-- Riwayat Payout --}}
+                {{-- Tabel Detail Penjualan per Event --}}
                 <div class="card p-6 bg-white shadow-[4px_4px_0_#10282E] space-y-4">
-                    <h3 class="font-heading text-xl font-black text-[var(--ink)]">Riwayat Pencairan Dana</h3>
-                    @if ($payoutRequests->isEmpty())
-                        <p class="text-xs text-[var(--mute)] font-medium">Belum ada pengajuan pencairan dana.</p>
+                    <div class="flex items-center justify-between border-b-2 border-[var(--ink)] pb-3 flex-wrap gap-2">
+                        <h3 class="font-heading text-xl font-black text-[var(--ink)]">Rincian Penjualan Tiket per Event</h3>
+                        <span class="text-xs font-bold text-[var(--mute)]">Sinkronisasi otomatis real-time</span>
+                    </div>
+
+                    @if ($events->isEmpty())
+                        <div class="p-8 text-center bg-[var(--paper)] rounded-xl border-2 border-dashed border-[var(--ink)]/30">
+                            <p class="font-heading font-bold text-base text-[var(--ink)]">Belum ada event yang dipublikasikan</p>
+                            <p class="text-xs text-[var(--mute)] mt-1">Buat event balap pertamamu untuk mulai menerima pendaftaran peserta.</p>
+                            <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'create_event']) }}" class="btn btn-sm mt-3 inline-flex">
+                                + Buat Event Sekarang
+                            </a>
+                        </div>
                     @else
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-xs">
                                 <thead>
                                     <tr class="border-b-2 border-[var(--ink)] font-black text-[var(--ink)]">
-                                        <th class="py-2.5 px-3">Tanggal</th>
-                                        <th class="py-2.5 px-3">Rekening</th>
-                                        <th class="py-2.5 px-3">Nominal</th>
-                                        <th class="py-2.5 px-3">Status</th>
+                                        <th class="py-3 px-3">Nama Event &amp; Lokasi</th>
+                                        <th class="py-3 px-3">Tanggal Pelaksanaan</th>
+                                        <th class="py-3 px-3">Kategori Tiket</th>
+                                        <th class="py-3 px-3 text-center">Peserta</th>
+                                        <th class="py-3 px-3 text-right">Pendapatan Kotor</th>
+                                        <th class="py-3 px-3 text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-[var(--line)]">
-                                    @foreach ($payoutRequests as $pr)
-                                        <tr>
-                                            <td class="py-3 px-3 text-[var(--mute)]">{{ $pr->created_at->format('d/m/Y H:i') }}</td>
-                                            <td class="py-3 px-3 font-bold text-[var(--ink)]">{{ $pr->account->bank_name ?? '-' }} ({{ $pr->account->account_number ?? '-' }})</td>
-                                            <td class="py-3 px-3 font-black text-[var(--ink)]">Rp {{ number_format($pr->amount, 0, ',', '.') }}</td>
-                                            <td class="py-3 px-3">
-                                                @if ($pr->status === 'approved')
-                                                    <span class="chip p text-[9px]">Selesai</span>
-                                                @elseif ($pr->status === 'rejected')
-                                                    <span class="chip r text-[9px]">Ditolak</span>
-                                                @else
-                                                    <span class="chip m text-[9px]">Menunggu Review</span>
-                                                @endif
+                                    @foreach ($events as $ev)
+                                        @php
+                                            $evRegistrations = $ev->registrations()->whereIn('status', ['paid', 'checked_in'])->get();
+                                            $evSales = $evRegistrations->sum(fn($r) => (int) $r->amount);
+                                            $evParticipants = $evRegistrations->count();
+                                        @endphp
+                                        <tr class="hover:bg-[var(--paper)]/60 transition">
+                                            <td class="py-3.5 px-3">
+                                                <div class="font-heading font-black text-sm text-[var(--ink)]">{{ $ev->title }}</div>
+                                                <div class="text-[11px] text-[var(--mute)] font-semibold mt-0.5">{{ $ev->location_name }}</div>
+                                            </td>
+                                            <td class="py-3.5 px-3 font-semibold text-[var(--ink)]">
+                                                {{ \Carbon\Carbon::parse($ev->event_date)->translatedFormat('d F Y') }}
+                                            </td>
+                                            <td class="py-3.5 px-3">
+                                                <div class="flex flex-wrap gap-1">
+                                                    @foreach ($ev->categories as $cat)
+                                                        <span class="px-1.5 py-0.5 rounded bg-[var(--paper)] border border-[var(--ink)] text-[10px] font-bold">
+                                                            {{ $cat->name }}
+                                                        </span>
+                                                    @endforeach
+                                                </div>
+                                            </td>
+                                            <td class="py-3.5 px-3 text-center font-black text-[var(--pine)] text-sm">
+                                                {{ $evParticipants }}
+                                            </td>
+                                            <td class="py-3.5 px-3 text-right font-black text-sm text-[var(--ink)]">
+                                                Rp {{ number_format($evSales, 0, ',', '.') }}
+                                            </td>
+                                            <td class="py-3.5 px-3 text-center">
+                                                <a href="{{ route('organizations.events.scanner', ['organization' => $organization->slug, 'event' => $ev->slug]) }}"
+                                                   class="btn btn-sm btn-ghost text-[11px] py-1 px-2.5 font-bold"
+                                                   title="Buka Scanner Check-in">
+                                                    Gate Scanner &rarr;
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -851,6 +853,29 @@
                         </div>
                     @endif
                 </div>
+
+                {{-- Banner Informasi Integrasi Midtrans --}}
+                <div class="p-5 rounded-2xl border-2 border-[var(--ink)] bg-[var(--butter)] shadow-[3px_3px_0_var(--ink)] flex items-start gap-4">
+                    <div class="w-9 h-9 rounded-xl border-2 border-[var(--ink)] bg-white flex items-center justify-center shrink-0 shadow-[1.5px_1.5px_0_var(--ink)]">
+                        <svg class="w-5 h-5 text-[var(--orange)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    </div>
+                    <div>
+                        <h4 class="font-heading font-black text-sm text-[var(--ink)]">Sistem Pembayaran Terpadu Midtrans</h4>
+                        <p class="text-xs text-[var(--ink)]/85 leading-relaxed mt-0.5">
+                            Setiap pendaftaran peserta diverifikasi secara otomatis melalui Midtrans (QRIS, VA Bank, &amp; Kartu). Pembayaran yang berhasil otomatis menerbitkan tiket dan mengunci nomor BIB RFID peserta tanpa perlu konfirmasi manual.
+                        </p>
+                    </div>
+                </div>
+
+                {{--
+                ================================================================================
+                PAYOUT WORKFLOW (DEACTIVATED TEMPORARILY AS REQUESTED):
+                ================================================================================
+                Alur penarikan dana (bank accounts + payout requests) dinonaktifkan sementara.
+                Data mutasi & saldo tetap terjaga di database dan dapat diaktifkan kembali
+                kapan saja saat dibutuhkan.
+                ================================================================================
+                --}}
             @endif
 
         </main>
@@ -899,8 +924,8 @@
         </div>
     </div>
 
-    {{-- Midtrans Snap Popup with 100% Blurred Backdrop --}}
-    <div id="snap-embed-modal" class="fixed inset-0 z-[999999] bg-[#10282E]/75 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center p-4">
+    {{-- Midtrans Snap Popup with 100% Strong Blurred Backdrop --}}
+    <div id="snap-embed-modal" class="fixed inset-0 z-[999999] hidden transition-all duration-300 flex items-center justify-center p-4" style="backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background-color: rgba(16, 40, 46, 0.78);">
         <div class="relative bg-white rounded-2xl border-[3.5px] border-[var(--ink)] shadow-[8px_8px_0_var(--ink)] overflow-hidden" style="max-width: 460px; width: 100%; margin: auto;">
             <div class="flex items-center justify-between px-5 py-3.5 bg-[var(--butter)] border-b-[2.5px] border-[var(--ink)]">
                 <span class="font-heading font-black text-sm text-[var(--ink)] tracking-tight">Pembayaran Paket Kuota Midtrans</span>

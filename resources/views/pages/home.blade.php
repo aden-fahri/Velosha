@@ -68,7 +68,7 @@
         <div class="a-trail" style="position: absolute; left: 500px; top: 306px; width: 160px; height: 6px; border-radius: 3px; background: #DE7119; border: 2px solid #10282E; z-index: 3"></div>
 
         <!-- Pesepeda Berjersey Oranye (rider_final.png - Autentik) -->
-        <div class="a-ride" id="hero-rider" style="position: absolute; left: 610px; top: -40px; width: 640px; height: 640px; z-index: 10; pointer-events: none">
+        <div class="a-ride hero-rider-col" id="hero-rider" style="position: absolute; left: 610px; top: -40px; width: 640px; height: 640px; z-index: 10; pointer-events: none">
             <div class="a-bob" style="width: 100%; height: 100%">
                 <img src="/images/hero/rider_final.png"
                      alt="Pesepeda berjersey oranye melaju"
@@ -78,7 +78,7 @@
         </div>
 
         <!-- Kolom Kiri -->
-        <div style="position: absolute; left: 0; top: 40px; width: 500px; z-index: 5">
+        <div class="hero-left-col" style="position: absolute; left: 0; top: 40px; width: 500px; z-index: 5">
             <h1 class="a-rise" style="animation-delay: .2s; font-size: 72px; line-height: .98; font-weight: 800; letter-spacing: -0.04em; color: var(--ink); margin: 0">
                 Siap gowes<br>
                 sampai <span class="squig">finis?<svg viewBox="0 0 100 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 Q14 1 26 8 T50 8 T74 8 T98 8" fill="none" stroke="#DE7119" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg></span>
@@ -94,65 +94,54 @@
             </div>
         </div>
 
-        <!-- Slider Media Kiri Bawah (Maks 3 Gambar Ilustrasi dengan Dot & Panah) -->
-        <div class="a-rise"
-             style="animation-delay: .7s; position: absolute; left: 0; top: 425px; width: 480px; height: 215px; z-index: 5"
-             x-data="{
-                slide: 0,
-                timer: null,
-                reduced: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-                start() {
-                    if (this.reduced || this.timer) return;
-                    this.timer = setInterval(() => { this.slide = (this.slide + 1) % 3; }, 5000);
-                },
-                stop() { clearInterval(this.timer); this.timer = null; },
-                next() { this.slide = (this.slide + 1) % 3; },
-                prev() { this.slide = (this.slide - 1 + 3) % 3; }
-             }"
-             x-init="start()"
-             @mouseenter="stop()"
-             @mouseleave="start()"
-             @focusin="stop()"
-             @focusout="start()"
-             @visibilitychange.window="document.hidden ? stop() : start()">
-
-            <div class="card" style="position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 16px; border: 2.5px solid #10282E; box-shadow: 4px 4px 0 #10282E">
-                <!-- Slide 0: Foto Nyata Gran Fondo Borobudur -->
-                <div x-show="slide === 0" style="position: absolute; inset: 0">
-                    <img src="/images/events/kartu-1.jpg"
-                         alt="Foto Gran Fondo Borobudur"
-                         style="position: absolute; left: 0; top: 0; width: 100%; height: calc(100% - 46px); object-fit: cover; display: block;">
-                </div>
-
-                <!-- Slide 1: Foto Nyata Peloton Cycling -->
-                <div x-show="slide === 1" style="position: absolute; inset: 0">
-                    <img src="/images/hero-peloton.jpg"
-                         alt="Foto Peloton Balap Sepeda"
-                         style="position: absolute; left: 0; top: 0; width: 100%; height: calc(100% - 46px); object-fit: cover; display: block;">
-                </div>
-
-                <!-- Slide 2: Foto Nyata Tanjakan Kaldera Bromo -->
-                <div x-show="slide === 2" style="position: absolute; inset: 0">
-                    <img src="/images/events/kartu-6.jpg"
-                         alt="Foto Bromo KOM Challenge"
-                         style="position: absolute; left: 0; top: 0; width: 100%; height: calc(100% - 46px); object-fit: cover; display: block;">
-                </div>
-
-                <!-- Bar Kontrol Slider Bawah (Dot + Navigasi) -->
-                <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; background: #FFFDF8; border-top: 2.5px solid #10282E">
-                    <div style="display: flex; align-items: center">
-                        <button type="button" class="dotbtn" :class="{ 'on': slide === 0 }" @click="slide = 0" aria-label="Gambar 1"><i></i></button>
-                        <button type="button" class="dotbtn" :class="{ 'on': slide === 1 }" @click="slide = 1" aria-label="Gambar 2"><i></i></button>
-                        <button type="button" class="dotbtn" :class="{ 'on': slide === 2 }" @click="slide = 2" aria-label="Gambar 3"><i></i></button>
+        <!-- Mockup E-Ticket & BIB Resmi Kiri Bawah (Pengganti Slider Foto) -->
+        <div class="a-rise hero-ticket-col"
+             style="animation-delay: .7s; position: absolute; left: 0; top: 415px; width: 480px; z-index: 5">
+            <div class="bg-white rounded-2xl border-[3px] border-[var(--ink)] shadow-[5px_5px_0_var(--ink)] overflow-hidden transition-transform hover:-translate-y-0.5">
+                <!-- Header Karcis Mockup -->
+                <div class="flex items-center justify-between px-4 py-2.5 bg-[var(--butter)] border-b-2 border-[var(--ink)]">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[var(--orange)] border border-[var(--ink)]"></span>
+                        <span class="font-heading font-black text-xs uppercase tracking-wider text-[var(--ink)]">Contoh E-Ticket &amp; BIB Peserta</span>
                     </div>
-                    <div style="display: flex; gap: 8px">
-                        <button type="button" class="btn btn-ghost btn-sm" @click="prev()" aria-label="Gambar sebelumnya" style="width: 32px; height: 28px; padding: 0; min-height: 28px; border: 2px solid #10282E; border-radius: 8px; background: #FFFDF8; box-shadow: 2px 2px 0 #10282E;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
-                        </button>
-                        <button type="button" class="btn btn-sm" @click="next()" aria-label="Gambar berikutnya" style="width: 32px; height: 28px; padding: 0; min-height: 28px; border: 2px solid #10282E; border-radius: 8px; background: #DE7119; color: #FFF; box-shadow: 2px 2px 0 #10282E;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
-                        </button>
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#1F6F4A] text-white text-[9px] font-black uppercase tracking-wider border border-[var(--ink)]">
+                        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        Terverifikasi RFID
+                    </span>
+                </div>
+
+                <!-- Konten Tiket: 2 Bagian (Info Race + Stub BIB Monospace) -->
+                <div class="p-4 flex items-center justify-between gap-3 bg-[#FFFDF8]">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="px-2 py-0.5 text-[9px] font-black uppercase rounded bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)]">Gran Fondo 130K</span>
+                            <span class="text-[10px] font-bold text-[var(--mute)]">Wave A &bull; 05.30 WIB</span>
+                        </div>
+                        <h4 class="font-heading font-black text-base text-[var(--ink)] truncate">Borobudur Gran Fondo 2026</h4>
+                        <div class="text-xs font-bold text-[var(--ink)] mt-1 flex items-center gap-1.5">
+                            <span class="text-[var(--mute)] font-medium">Peserta:</span>
+                            <span class="font-black">Budi Pratama</span>
+                            <span class="text-[10px] text-[var(--mute)]">&bull; Grand Zio</span>
+                        </div>
                     </div>
+
+                    <!-- Stub Nomor BIB & QR Code -->
+                    <div class="shrink-0 flex items-center gap-3 pl-3 border-l-2 border-dashed border-[var(--ink)]/40 text-center">
+                        <div>
+                            <div class="text-[8px] font-black uppercase tracking-widest text-[var(--mute)]">No. Dada BIB</div>
+                            <div class="font-mono font-black text-2xl text-[var(--orange)] leading-none my-1 tracking-tight">0081</div>
+                            <div class="font-mono text-[9px] font-bold text-[var(--ink)]">VLS-GF130</div>
+                        </div>
+                        <div class="p-1.5 bg-white border-2 border-[var(--ink)] rounded-lg shadow-[1.5px_1.5px_0_var(--ink)]">
+                            <img src="{{ \App\Support\QrCodeService::uri('VELOSHA-DEMO-TICKET-VLS-GF130-0081') }}" alt="QR Demo" class="w-12 h-12">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Perforasi -->
+                <div class="px-4 py-2 bg-[var(--paper)] border-t-2 border-[var(--ink)] flex items-center justify-between text-[10px] font-bold text-[var(--mute)]">
+                    <span>Order #VLS-REG-000245</span>
+                    <span class="text-[var(--ink)] font-black">Langsung aktif &amp; siap cetak setelah checkout &rarr;</span>
                 </div>
             </div>
         </div>
@@ -308,11 +297,11 @@
             <p class="lead" style="max-width: 400px; margin: 0; color: #10282E">Semua yang perlu kamu tahu sebelum start: regulasi resmi balap, pusat bantuan peserta, dan paket kuota penyelenggara.</p>
         </div>
 
-        <div style="display: grid; grid-template-columns: 5fr 7fr; gap: 32px; margin-top: 48px; align-items: stretch">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-12">
             <!-- Left Help Center Card (Warna Hijau Pine #1F6F4A dengan Balon Obrolan Melayang) -->
-            <div class="card" style="background: #1F6F4A; color: #fff; padding: 36px; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 28px; min-height: 470px">
+            <div class="card lg:col-span-5" style="background: #1F6F4A; color: #fff; padding: 36px; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 28px; min-height: 440px">
                 <!-- SVG Chat Bubble Float -->
-                <svg class="float" width="200" height="150" viewBox="0 0 200 150" aria-hidden="true" style="position: absolute; right: 18px; top: 20px">
+                <svg class="float hidden sm:block" width="200" height="150" viewBox="0 0 200 150" aria-hidden="true" style="position: absolute; right: 18px; top: 20px">
                     <path d="M14 18 H128 Q140 18 140 30 V74 Q140 86 128 86 H64 L40 106 V86 H26 Q14 86 14 74Z" fill="#F4BE3F" stroke="#10282E" stroke-width="4" stroke-linejoin="round"></path>
                     <path d="M70 50 Q70 36 84 36 Q98 36 98 48 Q98 56 88 60 V66" fill="none" stroke="#10282E" stroke-width="5" stroke-linecap="round"></path>
                     <circle cx="88" cy="76" r="3.5" fill="#10282E"></circle>
@@ -320,13 +309,13 @@
                     <path d="M114 108 H174 M114 122 H154" stroke="#10282E" stroke-width="4" stroke-linecap="round"></path>
                 </svg>
 
-                <div style="position: relative; margin-top: 108px">
+                <div style="position: relative; margin-top: 24px" class="sm:mt-24">
                     <span class="chip m">Bantuan 24/7</span>
-                    <h3 class="h3" style="font-size: 34px; margin-top: 16px; color: #fff; line-height: 1.05">Help Center &amp; layanan peserta</h3>
-                    <p style="margin: 14px 0 0; font-size: 16px; line-height: 1.55; max-width: 380px">Cara bayar, ambil race pack, ganti nomor BIB, asuransi, dan info darurat.</p>
+                    <h3 class="h3" style="font-size: 32px; margin-top: 16px; color: #fff; line-height: 1.05">Help Center &amp; layanan peserta</h3>
+                    <p style="margin: 14px 0 0; font-size: 15px; line-height: 1.55; max-width: 380px">Cara bayar, ambil race pack, ganti nomor BIB, asuransi, dan info darurat.</p>
                 </div>
 
-                <div style="position: relative; display: grid; gap: 0; font-size: 15px">
+                <div style="position: relative; display: grid; gap: 0; font-size: 14px">
                     <div style="display: flex; justify-content: space-between; padding: 12px 0; border-top: 2px dashed rgba(255,255,255,.45)">
                         <b>WhatsApp</b><span>09.00–18.00 WIB</span>
                     </div>
@@ -344,9 +333,9 @@
             </div>
 
             <!-- Right 3 Regulation Hub Cards (.numo outline 01-03, Ranking dihapus) -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px">
+            <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <!-- 01 Tentang Velosha (Butter #F8E3B5 - Spans 2 Cols) -->
-                <a href="/about" wire:navigate.hover class="card racecard" style="grid-column: 1 / -1; background: #F8E3B5; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 190px">
+                <a href="/about" wire:navigate.hover class="card racecard sm:col-span-2" style="background: #F8E3B5; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 180px">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start">
                         <div class="ico" style="background: #FFFDF8">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v6M12 7.500v.01"></path></svg>
@@ -354,8 +343,8 @@
                         <span class="disp numo">01</span>
                     </div>
                     <div>
-                        <h3 class="h3" style="font-size: 24px">Tentang Velosha</h3>
-                        <p style="margin: 6px 0 0; font-size: 15px; color: #10282E">Platform kurasi dan registrasi resmi maraton sepeda serta Gran Fondo Indonesia.</p>
+                        <h3 class="h3" style="font-size: 22px">Tentang Velosha</h3>
+                        <p style="margin: 6px 0 0; font-size: 14px; color: #10282E">Platform kurasi dan registrasi resmi maraton sepeda serta Gran Fondo Indonesia.</p>
                     </div>
                     <div style="margin-top: auto; display: flex; align-items: center; gap: 10px; font-weight: 700">
                         Buka
@@ -366,7 +355,7 @@
                 </a>
 
                 <!-- 02 Aturan & Kode Etik (Pine Light #D5EBD9) -->
-                <a href="/rule" wire:navigate.hover class="card racecard" style="background: #D5EBD9; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 200px">
+                <a href="/rule" wire:navigate.hover class="card racecard" style="background: #D5EBD9; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 190px">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start">
                         <div class="ico" style="background: #FFFDF8">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg>
@@ -374,8 +363,8 @@
                         <span class="disp numo">02</span>
                     </div>
                     <div>
-                        <h3 class="h3" style="font-size: 22px">Aturan &amp; kode etik</h3>
-                        <p style="margin: 6px 0 0; font-size: 14px; color: #10282E">Helm wajib, etika peloton, penalti, dan diskualifikasi.</p>
+                        <h3 class="h3" style="font-size: 20px">Aturan &amp; kode etik</h3>
+                        <p style="margin: 6px 0 0; font-size: 13px; color: #10282E">Helm wajib, etika peloton, penalti, dan diskualifikasi.</p>
                     </div>
                     <div style="margin-top: auto; display: flex; align-items: center; gap: 10px; font-weight: 700">
                         Buka
@@ -386,7 +375,7 @@
                 </a>
 
                 <!-- 03 Paket Penyelenggara & Kuota (Orange Light #F6B777) -->
-                <a href="/paket" wire:navigate.hover class="card racecard" style="background: #F6B777; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 200px">
+                <a href="/paket" wire:navigate.hover class="card racecard" style="background: #F6B777; padding: 26px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; min-height: 190px">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start">
                         <div class="ico" style="background: #FFFDF8">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
@@ -394,8 +383,8 @@
                         <span class="disp numo">03</span>
                     </div>
                     <div>
-                        <h3 class="h3" style="font-size: 22px">Paket kuota EO</h3>
-                        <p style="margin: 6px 0 0; font-size: 14px; color: #10282E">Publikasikan race komunitas &amp; kelola pendaftaran tiket.</p>
+                        <h3 class="h3" style="font-size: 20px">Paket kuota EO</h3>
+                        <p style="margin: 6px 0 0; font-size: 13px; color: #10282E">Publikasikan race komunitas &amp; kelola pendaftaran tiket.</p>
                     </div>
                     <div style="margin-top: auto; display: flex; align-items: center; gap: 10px; font-weight: 700">
                         Buka
@@ -407,33 +396,33 @@
             </div>
         </div>
 
-        <!-- Cek Cepat Sebelum Hari-H (Dark Strip with Mustard Checkboxes) -->
-        <div class="card-flat" style="margin-top: 32px; background: #10282E; color: #FBF4E6; padding: 24px 32px; display: flex; align-items: center; gap: 32px; box-shadow: 5px 5px 0 #DE7119; flex-wrap: wrap">
-            <div class="disp" style="font-size: 22px; font-weight: 800; color: #F4BE3F; line-height: 1.1">Cek cepat<br>sebelum hari-H</div>
-            <div style="flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; min-width: 640px">
-                <div style="display: flex; gap: 12px; align-items: center; font-size: 15px; font-weight: 600">
-                    <span style="width: 32px; height: 32px; flex: none; border: 2.5px solid #FBF4E6; border-radius: 6px; background: #F4BE3F; display: flex; align-items: center; justify-content: center">
+        <!-- Cek Cepat Sebelum Hari-H (Responsive Grid, Bebas Overflow Mobile) -->
+        <div class="card-flat mt-8 p-6 sm:p-8 bg-[#10282E] text-[#FBF4E6] rounded-2xl flex flex-col md:flex-row items-start md:items-center gap-6 shadow-[5px_5px_0_#DE7119]">
+            <div class="disp text-xl sm:text-2xl font-black text-[#F4BE3F] leading-tight shrink-0">Cek cepat<br>sebelum hari-H</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full flex-1">
+                <div class="flex gap-3 items-center text-sm font-semibold">
+                    <span class="w-8 h-8 shrink-0 rounded-md border-2 border-[#FBF4E6] bg-[#F4BE3F] flex items-center justify-center shadow-xs">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
                     </span>
-                    Helm terpasang kencang
+                    <span>Helm terpasang kencang</span>
                 </div>
-                <div style="display: flex; gap: 12px; align-items: center; font-size: 15px; font-weight: 600">
-                    <span style="width: 32px; height: 32px; flex: none; border: 2.5px solid #FBF4E6; border-radius: 6px; background: #F4BE3F; display: flex; align-items: center; justify-content: center">
+                <div class="flex gap-3 items-center text-sm font-semibold">
+                    <span class="w-8 h-8 shrink-0 rounded-md border-2 border-[#FBF4E6] bg-[#F4BE3F] flex items-center justify-center shadow-xs">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
                     </span>
-                    Rem depan-belakang jalan
+                    <span>Rem depan-belakang jalan</span>
                 </div>
-                <div style="display: flex; gap: 12px; align-items: center; font-size: 15px; font-weight: 600">
-                    <span style="width: 32px; height: 32px; flex: none; border: 2.5px solid #FBF4E6; border-radius: 6px; background: #F4BE3F; display: flex; align-items: center; justify-content: center">
+                <div class="flex gap-3 items-center text-sm font-semibold">
+                    <span class="w-8 h-8 shrink-0 rounded-md border-2 border-[#FBF4E6] bg-[#F4BE3F] flex items-center justify-center shadow-xs">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
                     </span>
-                    Chip RFID di nomor BIB
+                    <span>Chip RFID di nomor BIB</span>
                 </div>
-                <div style="display: flex; gap: 12px; align-items: center; font-size: 15px; font-weight: 600">
-                    <span style="width: 32px; height: 32px; flex: none; border: 2.5px solid #FBF4E6; border-radius: 6px; background: #F4BE3F; display: flex; align-items: center; justify-content: center">
+                <div class="flex gap-3 items-center text-sm font-semibold">
+                    <span class="w-8 h-8 shrink-0 rounded-md border-2 border-[#FBF4E6] bg-[#F4BE3F] flex items-center justify-center shadow-xs">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
                     </span>
-                    E-ticket QR siap di HP
+                    <span>E-ticket QR siap di HP</span>
                 </div>
             </div>
         </div>

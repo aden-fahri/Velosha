@@ -363,17 +363,17 @@
 
                             {{-- Kuota Progress Bar (380 ======------ 500) --}}
                             @if(($card['totalQuota'] ?? 0) > 0)
-                            <div class="mt-2.5 mb-1">
-                                <div class="flex items-center justify-between text-[11px] font-extrabold text-[var(--ink)] mb-1">
+                            <div class="mt-3 mb-1.5 space-y-1.5">
+                                <div class="flex items-center justify-between text-xs font-bold">
                                     <span class="text-[var(--orange)] font-black">
                                         <b>{{ number_format($card['bookedQuota'] ?? 0, 0, ',', '.') }}</b> slot terisi
                                     </span>
-                                    <span class="text-[var(--mute)] font-bold text-[11px]">
+                                    <span class="text-[var(--mute)] font-semibold text-[11px]">
                                         kuota <b>{{ number_format($card['totalQuota'] ?? 0, 0, ',', '.') }}</b>
                                     </span>
                                 </div>
-                                <div class="w-full h-2.5 bg-[#F3E7CF] border-[1.5px] border-[var(--ink)] rounded-md overflow-hidden p-[1px] shadow-[inset_1px_1px_0_rgba(16,40,46,0.1)]">
-                                    <div class="h-full bg-gradient-to-r from-[#F4BE3F] to-[#DE7119] rounded-sm border-r-[1.5px] border-[var(--ink)] transition-all duration-500"
+                                <div class="w-full h-3 bg-[#FAF8F3] border-2 border-[var(--ink)] rounded-lg overflow-hidden p-0.5 shadow-[1.5px_1.5px_0_var(--ink)]">
+                                    <div class="h-full bg-gradient-to-r from-[#F4BE3F] to-[#DE7119] rounded-[4px] border-r-2 border-[var(--ink)] transition-all duration-500"
                                          style="width: {{ max(4, min(100, $card['percentBooked'] ?? 0)) }}%"></div>
                                 </div>
                             </div>
