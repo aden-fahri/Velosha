@@ -89,13 +89,13 @@
     @include('livewire.checkout.payment-modal')
 
     {{-- Midtrans Snap Popup with 100% Blurred Backdrop --}}
-    <div id="snap-embed-modal" class="fixed inset-0 z-[999999] bg-[#10282E]/70 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center p-4">
-        <div class="relative w-full max-w-[460px] bg-white rounded-2xl border-[3.5px] border-[var(--ink)] shadow-[8px_8px_0_var(--ink)] overflow-hidden">
+    <div id="snap-embed-modal" class="fixed inset-0 z-[999999] bg-[#10282E]/75 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center p-4">
+        <div class="relative bg-white rounded-2xl border-[3.5px] border-[var(--ink)] shadow-[8px_8px_0_var(--ink)] overflow-hidden" style="max-width: 460px; width: 100%; margin: auto;">
             <div class="flex items-center justify-between px-5 py-3.5 bg-[var(--butter)] border-b-[2.5px] border-[var(--ink)]">
                 <span class="font-heading font-black text-sm text-[var(--ink)] tracking-tight">Pembayaran Resmi Midtrans</span>
                 <button type="button" id="close-snap-modal-btn" class="w-7 h-7 rounded-lg border-2 border-[var(--ink)] bg-white hover:bg-red-100 text-[var(--ink)] flex items-center justify-center text-xs font-black cursor-pointer shadow-[1.5px_1.5px_0_var(--ink)] transition">✕</button>
             </div>
-            <div id="snap-container" class="w-full min-h-[540px] flex items-center justify-center bg-[#FAF9F5]">
+            <div id="snap-container" class="w-full flex items-center justify-center bg-[#FAF9F5]" style="min-height: 540px;">
                 <div id="snap-loading-state" class="text-xs font-bold text-[var(--mute)] p-8 text-center flex flex-col items-center gap-2">
                     <svg class="animate-spin h-6 w-6 text-[var(--orange)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
                     <span>Memuat gerbang pembayaran Midtrans...</span>

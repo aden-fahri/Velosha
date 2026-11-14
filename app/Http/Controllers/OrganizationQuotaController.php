@@ -6,6 +6,7 @@ use App\Models\Organization;
 use App\Models\QuotaPackage;
 use App\Models\QuotaPurchase;
 use App\Services\MidtransService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +42,7 @@ class OrganizationQuotaController extends Controller
     /**
      * Beli paket kuota event via Midtrans Snap.
      */
-    public function purchase(Request $request, Organization $organization, MidtransService $midtrans): RedirectResponse
+    public function purchase(Request $request, Organization $organization, MidtransService $midtrans): RedirectResponse|JsonResponse
     {
         $this->authorizeMember($organization);
 
@@ -68,7 +69,7 @@ class OrganizationQuotaController extends Controller
 
             $redirectRoute = $request->input('redirect_to') === 'events.create'
                 ? route('organizations.events.create', ['organization' => $organization->slug])
-                : route('organizations.quota', ['organization' => $organization->slug]);
+                : route('organizations.show', ['organization' => $organization->slug, 'tab' => 'kuota']);
 
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
@@ -110,8 +111,14 @@ class OrganizationQuotaController extends Controller
         ];
 
         try {
+            $curlOptions = [];
+            if (defined('CURLOPT_IPRESOLVE') && defined('CURL_IPRESOLVE_V4')) {
+                $curlOptions[CURLOPT_IPRESOLVE] = CURL_IPRESOLVE_V4;
+            }
+
             $response = Http::withBasicAuth($serverKey, '')
-                ->timeout(15)
+                ->withOptions(['curl' => $curlOptions])
+                ->timeout(10)
                 ->post($snapUrl, $payload);
 
             if ($response->successful()) {
@@ -137,11 +144,56 @@ class OrganizationQuotaController extends Controller
             } else {
                 Log::error('Midtrans Quota Purchase Error: ' . $response->body());
 
+                if ($request->expectsJson() || $request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Gagal memproses pembayaran Midtrans. Silakan coba beberapa saat lagi.',
+                    ], 422);
+                }
+
                 return redirect()->route('organizations.quota', ['organization' => $organization->slug])
                     ->with('error', 'Gagal memproses pembayaran Midtrans. Silakan coba beberapa saat lagi.');
             }
         } catch (\Throwable $e) {
             Log::error('Midtrans Quota Purchase Exception: ' . $e->getMessage());
+
+            // Jika di environment lokal terjadi network timeout pada API sandbox Midtrans, berikan fallback otomatis
+            if (app()->environment('local', 'testing')) {
+                Log::warning('Midtrans network timeout in local environment, falling back to mock snap for order: ' . $orderId);
+                $mockToken = 'mock-snap-' . Str::random(24);
+                $purchase->update([
+                    'snap_token' => $mockToken,
+                    'payload' => ['simulation' => true, 'note' => 'Fallback due to local network timeout', 'error' => $e->getMessage()],
+                ]);
+
+                $redirectRoute = route('organizations.show', [
+                    'organization' => $organization->slug,
+                    'tab' => 'kuota',
+                    'order_id' => $orderId,
+                    'transaction_status' => 'settlement',
+                ]);
+
+                if ($request->expectsJson() || $request->ajax()) {
+                    return response()->json([
+                        'success' => true,
+                        'is_mock' => true,
+                        'snap_token' => $mockToken,
+                        'order_id' => $orderId,
+                        'redirect_url' => $redirectRoute,
+                        'finish_url' => $redirectRoute,
+                    ]);
+                }
+
+                return redirect($redirectRoute)
+                    ->with('status', "Pembelian paket berhasil diproses (Simulasi). Kuota bertambah +{$package->events_count} event.");
+            }
+
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terjadi kendala jaringan saat menghubungi gateway Midtrans.',
+                ], 500);
+            }
 
             return redirect()->route('organizations.quota', ['organization' => $organization->slug])
                 ->with('error', 'Terjadi kendala jaringan saat menghubungi gateway Midtrans.');

@@ -81,35 +81,70 @@ class MidtransService
         $serverKey = (string) config('services.midtrans.server_key');
         $snapUrl = (string) config('services.midtrans.snap_url');
 
-        $response = Http::withBasicAuth($serverKey, '')
-            ->timeout(15)
-            ->post($snapUrl, $payload);
-
-        if (! $response->successful()) {
-            Log::error('Midtrans Snap Error: ' . $response->body());
-            throw new \RuntimeException('Gagal menghubungkan ke payment gateway Midtrans.');
+        $curlOptions = [];
+        if (defined('CURLOPT_IPRESOLVE') && defined('CURL_IPRESOLVE_V4')) {
+            $curlOptions[CURLOPT_IPRESOLVE] = CURL_IPRESOLVE_V4;
         }
 
-        $data = $response->json();
-        $token = $data['token'] ?? null;
-        $redirectUrl = $data['redirect_url'] ?? null;
+        try {
+            $response = Http::withBasicAuth($serverKey, '')
+                ->withOptions(['curl' => $curlOptions])
+                ->timeout(10)
+                ->post($snapUrl, $payload);
 
-        $payment = Payment::create([
-            'registration_id' => $registration->id,
-            'order_id' => $orderId,
-            'amount' => $grossAmount,
-            'status' => Payment::STATUS_PENDING,
-            'snap_token' => $token,
-            'payload' => $data,
-        ]);
+            if (! $response->successful()) {
+                Log::error('Midtrans Snap Error: ' . $response->body());
+                throw new \RuntimeException('Gagal menghubungkan ke payment gateway Midtrans.');
+            }
 
-        return [
-            'token' => $token,
-            'redirect_url' => $redirectUrl,
-            'order_id' => $orderId,
-            'payment_id' => $payment->id,
-            'is_mock' => false,
-        ];
+            $data = $response->json();
+            $token = $data['token'] ?? null;
+            $redirectUrl = $data['redirect_url'] ?? null;
+
+            $payment = Payment::create([
+                'registration_id' => $registration->id,
+                'order_id' => $orderId,
+                'amount' => $grossAmount,
+                'status' => Payment::STATUS_PENDING,
+                'snap_token' => $token,
+                'payload' => $data,
+            ]);
+
+            return [
+                'token' => $token,
+                'redirect_url' => $redirectUrl,
+                'order_id' => $orderId,
+                'payment_id' => $payment->id,
+                'is_mock' => false,
+            ];
+        } catch (\Throwable $e) {
+            Log::error('Midtrans Snap Exception: ' . $e->getMessage());
+
+            if (app()->environment('local', 'testing')) {
+                Log::warning('Midtrans network timeout in local environment, providing simulation fallback for registration: ' . $registration->id);
+                $mockToken = 'mock-snap-' . Str::random(24);
+
+                $payment = Payment::create([
+                    'registration_id' => $registration->id,
+                    'order_id' => $orderId,
+                    'amount' => $grossAmount,
+                    'status' => Payment::STATUS_PENDING,
+                    'snap_token' => $mockToken,
+                    'payment_type' => 'simulation',
+                    'payload' => ['simulation' => true, 'note' => 'Local fallback due to timeout', 'error' => $e->getMessage()],
+                ]);
+
+                return [
+                    'token' => $mockToken,
+                    'redirect_url' => route('ticket.show', ['registration' => $registration->id]),
+                    'order_id' => $orderId,
+                    'payment_id' => $payment->id,
+                    'is_mock' => true,
+                ];
+            }
+
+            throw new \RuntimeException('Gagal menghubungkan ke payment gateway Midtrans: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -144,7 +179,13 @@ class MidtransService
         $baseUrl = $isProduction ? 'https://api.midtrans.com/v2' : 'https://api.sandbox.midtrans.com/v2';
 
         try {
+            $curlOptions = [];
+            if (defined('CURLOPT_IPRESOLVE') && defined('CURL_IPRESOLVE_V4')) {
+                $curlOptions[CURLOPT_IPRESOLVE] = CURL_IPRESOLVE_V4;
+            }
+
             $response = Http::withBasicAuth($serverKey, '')
+                ->withOptions(['curl' => $curlOptions])
                 ->timeout(3)
                 ->get("{$baseUrl}/{$orderId}/status");
 

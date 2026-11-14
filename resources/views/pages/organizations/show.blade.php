@@ -21,7 +21,6 @@
                     {{ $organization->name }}
                 </div>
                 <div class="flex items-center gap-1.5 text-[11px] font-bold text-[var(--pine)] mt-1">
-                    <span class="w-2 h-2 rounded-full bg-[var(--pine)] inline-block"></span>
                     <span>{{ $balance }} Kuota Event</span>
                 </div>
             </div>
@@ -190,14 +189,14 @@
             {{-- Flash Messages --}}
             @if (session('status'))
                 <div class="card p-4 bg-[var(--pine-l)] border-2 border-[var(--ink)] text-[var(--ink)] shadow-[3px_3px_0_var(--ink)] font-bold text-sm flex items-center gap-2.5">
-                    <span class="w-6 h-6 rounded-full bg-[var(--pine)] text-white flex items-center justify-center text-xs font-black">&check;</span>
+                    <span class="w-6 h-6 rounded-lg border border-[var(--ink)] bg-[var(--pine)] text-white flex items-center justify-center text-xs font-black">&check;</span>
                     <span>{{ session('status') }}</span>
                 </div>
             @endif
 
             @if (session('error'))
                 <div class="card p-4 bg-[var(--red-l)] border-2 border-[var(--ink)] text-[var(--ink)] shadow-[3px_3px_0_var(--ink)] font-bold text-sm flex items-center gap-2.5">
-                    <span class="w-6 h-6 rounded-full bg-[var(--red)] text-white flex items-center justify-center text-xs font-black">&times;</span>
+                    <span class="w-6 h-6 rounded-lg border border-[var(--ink)] bg-[var(--red)] text-white flex items-center justify-center text-xs font-black">&times;</span>
                     <span>{{ session('error') }}</span>
                 </div>
             @endif
@@ -251,9 +250,8 @@
                         </div>
                         <div class="mt-4">
                             <div class="font-heading font-black text-4xl text-[var(--ink)] tracking-tight">{{ $events->count() }}</div>
-                            <div class="text-xs text-[var(--mute)] font-bold mt-1.5 flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-[var(--pine)] inline-block"></span>
-                                <span>Balap dikelola komunitas</span>
+                            <div class="text-xs text-[var(--mute)] font-bold mt-1.5">
+                                Balap dikelola komunitas
                             </div>
                         </div>
                     </div>
@@ -270,9 +268,8 @@
                             <div class="font-heading font-black text-4xl {{ $balance > 0 ? 'text-[var(--pine)]' : 'text-red-600' }} tracking-tight">
                                 {{ $balance }}
                             </div>
-                            <div class="text-xs text-[var(--mute)] font-bold mt-1.5 flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full {{ $balance > 0 ? 'bg-[var(--pine)]' : 'bg-red-500' }} inline-block"></span>
-                                <span>Race siap dipublikasikan</span>
+                            <div class="text-xs text-[var(--mute)] font-bold mt-1.5">
+                                Race siap dipublikasikan
                             </div>
                         </div>
                     </div>
@@ -289,9 +286,8 @@
                             <div class="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)] tracking-tight">
                                 Rp {{ number_format($totalSales, 0, ',', '.') }}
                             </div>
-                            <div class="text-xs text-[var(--mute)] font-bold mt-1.5 flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-[var(--mustard)] inline-block"></span>
-                                <span>Total transaksi tiket</span>
+                            <div class="text-xs text-[var(--mute)] font-bold mt-1.5">
+                                Total transaksi tiket
                             </div>
                         </div>
                     </div>
@@ -308,9 +304,8 @@
                             <div class="font-heading font-black text-2xl sm:text-3xl text-[var(--pine)] tracking-tight">
                                 Rp {{ number_format($availableBalance, 0, ',', '.') }}
                             </div>
-                            <div class="text-xs text-[var(--mute)] font-bold mt-1.5 flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-[var(--pine)] inline-block"></span>
-                                <span>Bebas dicairkan ke rekening</span>
+                            <div class="text-xs text-[var(--mute)] font-bold mt-1.5">
+                                Bebas dicairkan ke rekening
                             </div>
                         </div>
                     </div>
@@ -877,8 +872,8 @@
     </div>
 
     {{-- Modal Edit Nama & Profil Komunitas --}}
-    <div x-cloak x-show="editOrgModal" class="fixed inset-0 z-50 bg-[#10282E]/70 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl border-[3px] border-[var(--ink)] shadow-[6px_6px_0_var(--ink)] max-w-lg w-full p-6 sm:p-7 space-y-5" @click.outside="editOrgModal = false">
+    <div x-cloak x-show="editOrgModal" class="fixed inset-0 z-50 bg-[#10282E]/75 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl border-[3px] border-[var(--ink)] shadow-[6px_6px_0_var(--ink)] p-6 sm:p-7 space-y-5" style="max-width: 480px; width: 100%; margin: auto;" @click.outside="editOrgModal = false">
             <div class="flex items-center justify-between border-b-2 border-[var(--ink)] pb-3">
                 <h3 class="font-heading font-black text-xl text-[var(--ink)]">Edit Profil Komunitas / EO</h3>
                 <button type="button" @click="editOrgModal = false" class="w-8 h-8 rounded-lg border-2 border-[var(--ink)] bg-white hover:bg-[var(--butter)] text-[var(--ink)] font-black text-sm flex items-center justify-center shadow-[1px_1px_0_var(--ink)] cursor-pointer">✕</button>
@@ -905,13 +900,13 @@
     </div>
 
     {{-- Midtrans Snap Popup with 100% Blurred Backdrop --}}
-    <div id="snap-embed-modal" class="fixed inset-0 z-[999999] bg-[#10282E]/70 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center p-4">
-        <div class="relative w-full max-w-[460px] bg-white rounded-2xl border-[3.5px] border-[var(--ink)] shadow-[8px_8px_0_var(--ink)] overflow-hidden">
+    <div id="snap-embed-modal" class="fixed inset-0 z-[999999] bg-[#10282E]/75 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center p-4">
+        <div class="relative bg-white rounded-2xl border-[3.5px] border-[var(--ink)] shadow-[8px_8px_0_var(--ink)] overflow-hidden" style="max-width: 460px; width: 100%; margin: auto;">
             <div class="flex items-center justify-between px-5 py-3.5 bg-[var(--butter)] border-b-[2.5px] border-[var(--ink)]">
                 <span class="font-heading font-black text-sm text-[var(--ink)] tracking-tight">Pembayaran Paket Kuota Midtrans</span>
                 <button type="button" id="close-snap-modal-btn" class="w-7 h-7 rounded-lg border-2 border-[var(--ink)] bg-white hover:bg-red-100 text-[var(--ink)] flex items-center justify-center text-xs font-black cursor-pointer shadow-[1.5px_1.5px_0_var(--ink)] transition">✕</button>
             </div>
-            <div id="snap-container" class="w-full min-h-[540px] flex items-center justify-center bg-[#FAF9F5]">
+            <div id="snap-container" class="w-full flex items-center justify-center bg-[#FAF9F5]" style="min-height: 540px;">
                 <div id="snap-loading-state" class="text-xs font-bold text-[var(--mute)] p-8 text-center flex flex-col items-center gap-2">
                     <svg class="animate-spin h-6 w-6 text-[var(--orange)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
                     <span>Menyiapkan gerbang pembayaran Midtrans...</span>
@@ -929,16 +924,32 @@
             const container = document.getElementById('snap-container');
             const closeBtn = document.getElementById('close-snap-modal-btn');
 
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn ? submitBtn.innerHTML : '';
+
+            const resetUi = () => {
+                if (modal) modal.classList.add('hidden');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            };
+
             if (closeBtn) {
-                closeBtn.onclick = () => {
-                    if (modal) modal.classList.add('hidden');
-                };
+                closeBtn.onclick = resetUi;
+            }
+
+            if (container) {
+                container.innerHTML = `
+                    <div id="snap-loading-state" class="text-xs font-bold text-[var(--mute)] p-8 text-center flex flex-col items-center gap-2">
+                        <svg class="animate-spin h-6 w-6 text-[var(--orange)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                        <span>Menyiapkan gerbang pembayaran Midtrans...</span>
+                    </div>
+                `;
             }
 
             if (modal) modal.classList.remove('hidden');
 
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const originalText = submitBtn ? submitBtn.innerHTML : '';
             if (submitBtn) {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<span>Menyiapkan Pembayaran...</span>';
@@ -954,8 +965,20 @@
                 },
                 body: formData
             })
-            .then(res => res.json())
+            .then(async res => {
+                const data = await res.json().catch(() => null);
+                if (!res.ok) {
+                    throw new Error((data && data.message) ? data.message : 'Gagal memproses pembayaran Midtrans.');
+                }
+                return data;
+            })
             .then(data => {
+                if (!data) {
+                    resetUi();
+                    alert('Gagal memproses respons server pembayaran.');
+                    return;
+                }
+
                 if (data.is_mock && data.redirect_url) {
                     window.location.href = data.redirect_url;
                     return;
@@ -982,47 +1005,58 @@
                                         '&transaction_status=' + (result.transaction_status || 'pending');
                                 },
                                 onError: function(result) {
-                                    if (modal) modal.classList.add('hidden');
-                                    if (submitBtn) {
-                                        submitBtn.disabled = false;
-                                        submitBtn.innerHTML = originalText;
-                                    }
+                                    resetUi();
                                     alert('Pembayaran Midtrans tidak berhasil atau dibatalkan.');
                                 },
                                 onClose: function() {
-                                    if (modal) modal.classList.add('hidden');
-                                    if (submitBtn) {
-                                        submitBtn.disabled = false;
-                                        submitBtn.innerHTML = originalText;
-                                    }
+                                    resetUi();
+                                }
+                            });
+                            return;
+                        } else if (typeof window.snap.pay === 'function') {
+                            // Alternatif jika snap.embed tidak aktif di lingkungan tertentu
+                            if (modal) modal.classList.add('hidden');
+                            window.snap.pay(data.snap_token, {
+                                onSuccess: function(result) {
+                                    const finishBase = data.finish_url || window.location.href;
+                                    const sep = finishBase.includes('?') ? '&' : '?';
+                                    window.location.href = finishBase + sep +
+                                        'order_id=' + (result.order_id || data.order_id) +
+                                        '&transaction_status=' + (result.transaction_status || 'settlement');
+                                },
+                                onPending: function(result) {
+                                    const finishBase = data.finish_url || window.location.href;
+                                    const sep = finishBase.includes('?') ? '&' : '?';
+                                    window.location.href = finishBase + sep +
+                                        'order_id=' + (result.order_id || data.order_id) +
+                                        '&transaction_status=' + (result.transaction_status || 'pending');
+                                },
+                                onError: function() {
+                                    resetUi();
+                                    alert('Pembayaran Midtrans tidak berhasil atau dibatalkan.');
+                                },
+                                onClose: function() {
+                                    resetUi();
                                 }
                             });
                             return;
                         }
                     } catch (err) {
-                        console.warn('snap.embed failed, falling back to iframe', err);
+                        console.warn('snap.embed/pay failed, falling back to iframe', err);
                     }
                 }
 
                 // If snap.embed could not be run, load in iframe inside the blur modal!
                 if (data.redirect_url) {
-                    container.innerHTML = '<iframe src="' + data.redirect_url + '" style="width:100%;height:560px;border:none;border-radius:14px;" allow="payment"></iframe>';
+                    container.innerHTML = '<iframe src="' + data.redirect_url + '" style="width:100%;height:540px;border:none;border-radius:14px;" allow="payment"></iframe>';
                 } else {
-                    if (modal) modal.classList.add('hidden');
-                    if (submitBtn) {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalText;
-                    }
+                    resetUi();
                     alert('Gagal memproses pembayaran. Silakan coba kembali.');
                 }
             })
             .catch(err => {
-                if (modal) modal.classList.add('hidden');
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalText;
-                }
-                alert('Terjadi kendala jaringan saat menghubungi gateway Midtrans.');
+                resetUi();
+                alert(err.message || 'Terjadi kendala jaringan saat menghubungi gateway Midtrans.');
             });
         }
     </script>
