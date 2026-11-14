@@ -32,7 +32,7 @@
         </div>
 
         <!-- Right Actions -->
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 sm:gap-3">
             @if (auth()->check())
                 @php
                     $u = auth()->user();
@@ -40,14 +40,18 @@
                     $homeLabel = 'Dashboard';
                     $homeIcon = 'layout-dashboard';
                 @endphp
-                <a href="{{ $homeUrl }}" {{ $u->isAdmin() ? '' : 'wire:navigate.hover' }} class="btn btn-sm btn-ghost">
-                    <i data-lucide="{{ $homeIcon }}" class="w-4 h-4 mr-1 text-[var(--ink)]"></i>
-                    <span>{{ $homeLabel }}</span>
+                <a href="{{ $homeUrl }}" {{ $u->isAdmin() ? '' : 'wire:navigate.hover' }}
+                   class="btn btn-sm btn-ghost px-2.5 sm:px-3 text-xs sm:text-sm font-bold flex items-center gap-1.5"
+                   aria-label="{{ $homeLabel }}">
+                    <i data-lucide="{{ $homeIcon }}" class="w-4 h-4 text-[var(--ink)] shrink-0"></i>
+                    <span class="hidden sm:inline">{{ $homeLabel }}</span>
                 </a>
 
-                <a href="{{ route('ticket.show') }}" wire:navigate.hover class="btn btn-sm btn-pine">
-                    <i data-lucide="ticket" class="w-4 h-4 mr-1"></i>
-                    <span>Tiket Saya</span>
+                <a href="{{ route('ticket.show') }}" wire:navigate.hover
+                   class="btn btn-sm btn-pine px-2.5 sm:px-3 text-xs sm:text-sm font-bold flex items-center gap-1.5"
+                   aria-label="Tiket Saya">
+                    <i data-lucide="ticket" class="w-4 h-4 text-white shrink-0"></i>
+                    <span class="hidden sm:inline">Tiket Saya</span>
                 </a>
             @else
                 <a href="/login" wire:navigate.hover class="btn btn-sm">
@@ -57,7 +61,9 @@
             @endif
 
             <!-- Mobile Menu Button -->
-            <button type="button" @click="mobileOpen = !mobileOpen" class="lg:hidden w-11 h-11 border-[2.5px] border-[var(--ink)] rounded-lg bg-[var(--card)] flex items-center justify-center cursor-pointer shadow-[3px_3px_0_var(--ink)]" aria-label="Menu navigasi">
+            <button type="button" @click="mobileOpen = !mobileOpen"
+                    class="lg:hidden w-10 h-10 sm:w-11 sm:h-11 border-[2.5px] border-[var(--ink)] rounded-lg bg-[var(--card)] flex items-center justify-center cursor-pointer shadow-[2px_2px_0_var(--ink)] sm:shadow-[3px_3px_0_var(--ink)] shrink-0"
+                    aria-label="Menu navigasi">
                 <i data-lucide="menu" class="w-5 h-5 text-[var(--ink)]"></i>
             </button>
         </div>

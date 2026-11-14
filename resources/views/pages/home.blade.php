@@ -5,9 +5,58 @@
 <!-- INTRO LOADING OVERLAY (Full-screen, tanpa navigasi, sekali per sesi) -->
 <x-intro-loading />
 
+@php
+$sampleTickets = [
+    [
+        'bib' => '0428',
+        'category' => 'GRAN FONDO',
+        'dist' => '120K',
+        'rider' => 'RAFI M.',
+        'title' => 'JAKARTA-BANDUNG',
+        'subtitle' => 'GRAN FONDO',
+        'date' => '28 FEB 2026',
+        'location' => 'Start: Monas, Jakarta',
+        'qr' => \App\Support\QrCodeService::uri('VELOSHA-DEMO-JB120-0428')
+    ],
+    [
+        'bib' => '0081',
+        'category' => 'GRAN FONDO',
+        'dist' => '130K',
+        'rider' => 'BUDI P.',
+        'title' => 'BOROBUDUR',
+        'subtitle' => 'GRAN FONDO',
+        'date' => '18 APR 2026',
+        'location' => 'Start: Candi Borobudur',
+        'qr' => \App\Support\QrCodeService::uri('VELOSHA-DEMO-VLS-GF130-0081')
+    ],
+    [
+        'bib' => '0016',
+        'category' => 'MEDIO FONDO',
+        'dist' => '70K',
+        'rider' => 'DIMAS S.',
+        'title' => 'BANDUNG HIGHLAND',
+        'subtitle' => 'MEDIO FONDO',
+        'date' => '23 MEI 2026',
+        'location' => 'Start: Gedung Sate',
+        'qr' => \App\Support\QrCodeService::uri('VELOSHA-DEMO-VLS-MF70-0016')
+    ],
+    [
+        'bib' => '0004',
+        'category' => 'GRAN FONDO',
+        'dist' => '145K',
+        'rider' => 'ANDI W.',
+        'title' => 'MAKASSAR LOSARI',
+        'subtitle' => 'GRAN FONDO',
+        'date' => '12 JUL 2026',
+        'location' => 'Start: Pantai Losari',
+        'qr' => \App\Support\QrCodeService::uri('VELOSHA-DEMO-VLS-GF145-0004')
+    ],
+];
+@endphp
+
 <!-- HERO SECTION (Screen-Print Neobrutalist Stage dengan Animasi 1:1 Mockup) -->
 <section id="hero-section"
-         style="position: relative; min-height: 760px; background: var(--paper); overflow: hidden; border-bottom: 3px solid var(--ink)"
+         class="relative bg-[var(--paper)] overflow-hidden border-b-[3px] border-[var(--ink)] py-8 lg:py-0 lg:min-h-[760px]"
          x-data="{
             off: false,
             replay() {
@@ -16,10 +65,10 @@
             }
          }">
 
-    <!-- Tombol Putar Ulang Animasi -->
+    <!-- Tombol Putar Ulang Animasi (Hanya di Desktop agar tidak menimpa judul mobile) -->
     <button type="button"
             id="replay-hero"
-            class="btn btn-ghost btn-sm"
+            class="btn btn-ghost btn-sm hidden lg:inline-flex"
             @click="replay()"
             style="position: absolute; top: 16px; right: 24px; z-index: 20"
             aria-label="Putar ulang animasi hero">
@@ -27,17 +76,17 @@
         <span>Putar ulang</span>
     </button>
 
-    <div class="stage" :class="off ? 'off' : 'on'" style="position: relative; width: 1200px; height: 680px; margin: 0 auto; padding: 0 24px">
+    <div class="stage" :class="off ? 'off' : 'on'">
 
         <!-- Panel Berlekuk SVG (Blok Oranye di Belakang) -->
-        <svg class="a-amber" width="580" height="445" viewBox="-2 -2 580 445" aria-hidden="true"
+        <svg class="a-amber hidden lg:block" width="580" height="445" viewBox="-2 -2 580 445" aria-hidden="true"
              style="position: absolute; left: 566px; top: 56px; z-index: 1; overflow: visible">
             <path d="M226,0 H540 Q576,0 576,36 V405 Q576,441 540,441 H36 Q0,441 0,405 V136 Q0,100 36,100 H154 Q190,100 190,64 V36 Q190,0 226,0 Z"
                   fill="#DE7119" stroke="#10282E" stroke-width="3" stroke-linejoin="round"></path>
         </svg>
 
         <!-- Panel Berlekuk SVG (Krem Bertitik Halus di Depan) -->
-        <svg class="a-panel" id="hero-panel" width="580" height="445" viewBox="-2 -2 580 445" aria-hidden="true"
+        <svg class="a-panel hidden lg:block" id="hero-panel" width="580" height="445" viewBox="-2 -2 580 445" aria-hidden="true"
              style="position: absolute; left: 552px; top: 42px; z-index: 2; overflow: visible">
             <defs>
                 <clipPath id="panelShape">
@@ -63,12 +112,12 @@
         </svg>
 
         <!-- Garis Kecepatan Kartun (Speed Lines) -->
-        <div class="a-trail" style="position: absolute; left: 520px; top: 250px; width: 140px; height: 6px; border-radius: 3px; background: #F4BE3F; border: 2px solid #10282E; z-index: 3"></div>
-        <div class="a-trail" style="position: absolute; left: 550px; top: 278px; width: 100px; height: 6px; border-radius: 3px; background: #1F6F4A; border: 2px solid #10282E; z-index: 3"></div>
-        <div class="a-trail" style="position: absolute; left: 500px; top: 306px; width: 160px; height: 6px; border-radius: 3px; background: #DE7119; border: 2px solid #10282E; z-index: 3"></div>
+        <div class="a-trail hidden lg:block" style="position: absolute; left: 520px; top: 250px; width: 140px; height: 6px; border-radius: 3px; background: #F4BE3F; border: 2px solid #10282E; z-index: 3"></div>
+        <div class="a-trail hidden lg:block" style="position: absolute; left: 550px; top: 278px; width: 100px; height: 6px; border-radius: 3px; background: #1F6F4A; border: 2px solid #10282E; z-index: 3"></div>
+        <div class="a-trail hidden lg:block" style="position: absolute; left: 500px; top: 306px; width: 160px; height: 6px; border-radius: 3px; background: #DE7119; border: 2px solid #10282E; z-index: 3"></div>
 
         <!-- Pesepeda Berjersey Oranye (rider_final.png - Autentik) -->
-        <div class="a-ride hero-rider-col" id="hero-rider" style="position: absolute; left: 610px; top: -40px; width: 640px; height: 640px; z-index: 10; pointer-events: none">
+        <div class="a-ride hero-rider-col hidden lg:block" id="hero-rider" style="position: absolute; left: 610px; top: -40px; width: 640px; height: 640px; z-index: 10; pointer-events: none">
             <div class="a-bob" style="width: 100%; height: 100%">
                 <img src="/images/hero/rider_final.png"
                      alt="Pesepeda berjersey oranye melaju"
@@ -78,15 +127,15 @@
         </div>
 
         <!-- Kolom Kiri -->
-        <div class="hero-left-col" style="position: absolute; left: 0; top: 40px; width: 500px; z-index: 5">
-            <h1 class="a-rise" style="animation-delay: .2s; font-size: 72px; line-height: .98; font-weight: 800; letter-spacing: -0.04em; color: var(--ink); margin: 0">
+        <div class="hero-left-col w-full max-w-xl lg:max-w-none lg:w-[500px] z-[5] text-left">
+            <h1 class="a-rise text-4xl sm:text-5xl md:text-6xl lg:text-[72px] leading-[1.05] sm:leading-[0.98] font-black tracking-tight text-[var(--ink)] m-0 break-words" style="animation-delay: .2s;">
                 Siap gowes<br>
                 sampai <span class="squig">finis?<svg viewBox="0 0 100 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 Q14 1 26 8 T50 8 T74 8 T98 8" fill="none" stroke="#DE7119" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg></span>
             </h1>
-            <p class="a-rise" style="animation-delay: .35s; margin: 20px 0 0; max-width: 400px; font-size: 17px; line-height: 1.5; color: #10282E; font-weight: 500">
+            <p class="a-rise text-base sm:text-[17px] leading-relaxed text-[#10282E] font-medium mt-4 sm:mt-5 max-w-[420px]" style="animation-delay: .35s;">
                 Daftar Gran Fondo, Medio Fondo, dan Fun Ride di seluruh Indonesia. Tiket dan nomor BIB langsung jadi.
             </p>
-            <div class="a-rise" style="animation-delay: .5s; margin-top: 22px">
+            <div class="a-rise mt-5 sm:mt-6" style="animation-delay: .5s;">
                 <a href="#event" class="btn">
                     Cari event
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
@@ -94,55 +143,157 @@
             </div>
         </div>
 
-        <!-- Mockup E-Ticket & BIB Resmi Kiri Bawah (Pengganti Slider Foto) -->
-        <div class="a-rise hero-ticket-col"
-             style="animation-delay: .7s; position: absolute; left: 0; top: 415px; width: 480px; z-index: 5">
-            <div class="bg-white rounded-2xl border-[3px] border-[var(--ink)] shadow-[5px_5px_0_var(--ink)] overflow-hidden transition-transform hover:-translate-y-0.5">
-                <!-- Header Karcis Mockup -->
-                <div class="flex items-center justify-between px-4 py-2.5 bg-[var(--butter)] border-b-2 border-[var(--ink)]">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-[var(--orange)] border border-[var(--ink)]"></span>
-                        <span class="font-heading font-black text-xs uppercase tracking-wider text-[var(--ink)]">Contoh E-Ticket &amp; BIB Peserta</span>
-                    </div>
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#1F6F4A] text-white text-[9px] font-black uppercase tracking-wider border border-[var(--ink)]">
-                        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                        Terverifikasi RFID
-                    </span>
-                </div>
+        <!-- Mockup E-Ticket & BIB Autentik Sesuai Gambar 4 Referensi User -->
+        <div class="a-rise hero-ticket-col w-full max-w-[480px] z-[5] lg:absolute lg:left-0 lg:top-[415px] lg:w-[480px]"
+             style="animation-delay: .7s;"
+             x-data="{
+                 activeIdx: 0,
+                 tickets: @js($sampleTickets),
+                 get current() {
+                     return this.tickets[this.activeIdx];
+                 },
+                 prev() {
+                     this.activeIdx = (this.activeIdx - 1 + this.tickets.length) % this.tickets.length;
+                 },
+                 next() {
+                     this.activeIdx = (this.activeIdx + 1) % this.tickets.length;
+                 }
+             }">
 
-                <!-- Konten Tiket: 2 Bagian (Info Race + Stub BIB Monospace) -->
-                <div class="p-4 flex items-center justify-between gap-3 bg-[#FFFDF8]">
-                    <div class="min-w-0 flex-1">
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="px-2 py-0.5 text-[9px] font-black uppercase rounded bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)]">Gran Fondo 130K</span>
-                            <span class="text-[10px] font-bold text-[var(--mute)]">Wave A &bull; 05.30 WIB</span>
-                        </div>
-                        <h4 class="font-heading font-black text-base text-[var(--ink)] truncate">Borobudur Gran Fondo 2026</h4>
-                        <div class="text-xs font-bold text-[var(--ink)] mt-1 flex items-center gap-1.5">
-                            <span class="text-[var(--mute)] font-medium">Peserta:</span>
-                            <span class="font-black">Budi Pratama</span>
-                            <span class="text-[10px] text-[var(--mute)]">&bull; Grand Zio</span>
-                        </div>
-                    </div>
+            <!-- Container Kartu Neobrutalist Luar (#FAF7EE / #FFFDF8) -->
+            <div class="bg-[#FAF7EE] rounded-3xl border-[3px] border-[#10282E] shadow-[5px_5px_0_#10282E] p-3 sm:p-4 transition-transform hover:-translate-y-0.5">
 
-                    <!-- Stub Nomor BIB & QR Code -->
-                    <div class="shrink-0 flex items-center gap-3 pl-3 border-l-2 border-dashed border-[var(--ink)]/40 text-center">
+                <!-- Karcis Perforasi Fisik dengan Notches (Lekukan Setengah Lingkaran) -->
+                <div class="relative bg-[#FFFDF8] rounded-2xl border-2 border-[#10282E] overflow-hidden flex flex-row items-stretch select-none">
+
+                    <!-- Semi-circle Cutout Notches (Lekukan Masuk ke Tiket) -->
+                    <!-- Notch Kiri -->
+                    <div class="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-[#FAF7EE] border-2 border-[#10282E] z-20 pointer-events-none"></div>
+                    <!-- Notch Kanan -->
+                    <div class="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-[#FAF7EE] border-2 border-[#10282E] z-20 pointer-events-none"></div>
+                    <!-- Notch Atas (Di Garis Perforasi) -->
+                    <div class="absolute left-[44%] -top-3 -translate-x-1/2 w-6 h-6 rounded-full bg-[#FAF7EE] border-2 border-[#10282E] z-20 pointer-events-none"></div>
+                    <!-- Notch Bawah (Di Garis Perforasi) -->
+                    <div class="absolute left-[44%] -bottom-3 -translate-x-1/2 w-6 h-6 rounded-full bg-[#FAF7EE] border-2 border-[#10282E] z-20 pointer-events-none"></div>
+
+                    <!-- BAGIAN KIRI TIKET (Kuning Mustard #F8E3B5: BIB, Kategori, 120K Raksasa Terracotta, Nama Rider) -->
+                    <div class="w-[44%] bg-[#F8E3B5] border-r-2 border-dashed border-[#10282E] p-3 sm:p-4 flex flex-col justify-between pl-4 sm:pl-5 relative z-10">
                         <div>
-                            <div class="text-[8px] font-black uppercase tracking-widest text-[var(--mute)]">No. Dada BIB</div>
-                            <div class="font-mono font-black text-2xl text-[var(--orange)] leading-none my-1 tracking-tight">0081</div>
-                            <div class="font-mono text-[9px] font-bold text-[var(--ink)]">VLS-GF130</div>
+                            <div class="font-mono font-black text-xs sm:text-sm text-[#10282E] tracking-tight leading-none"
+                                 x-text="'BIB: ' + current.bib">
+                                BIB: 0428
+                            </div>
+                            <div class="font-heading font-black text-xs sm:text-sm text-[#10282E] uppercase tracking-wide leading-tight mt-1 truncate"
+                                 x-text="current.category">
+                                GRAN FONDO
+                            </div>
                         </div>
-                        <div class="p-1.5 bg-white border-2 border-[var(--ink)] rounded-lg shadow-[1.5px_1.5px_0_var(--ink)]">
-                            <img src="{{ \App\Support\QrCodeService::uri('VELOSHA-DEMO-TICKET-VLS-GF130-0081') }}" alt="QR Demo" class="w-12 h-12">
+
+                        <!-- 120K Raksasa Warna Terracotta dengan Bayangan/Stroke Gelap -->
+                        <div class="my-1 sm:my-2">
+                            <span class="font-heading font-black text-3xl sm:text-4xl text-[#DE7119] tracking-tighter leading-none block drop-shadow-[2px_2px_0_#10282E]"
+                                  style="-webkit-text-stroke: 1px #10282E;"
+                                  x-text="current.dist">
+                                120K
+                            </span>
                         </div>
+
+                        <div>
+                            <div class="font-heading font-black text-sm sm:text-base text-[#10282E] uppercase tracking-tight leading-none truncate"
+                                 x-text="current.rider">
+                                RAFI M.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BAGIAN KANAN TIKET (Krem #FFFDF8: Ikon Sepeda & QR Code di Kolom Tengah, Nama Race, Badge Tanggal, Lokasi Start) -->
+                    <div class="w-[56%] bg-[#FFFDF8] p-3 sm:p-4 flex flex-row items-stretch gap-2.5 sm:gap-3 relative z-10 pr-4 sm:pr-5">
+
+                        <!-- Kolom Ikon Sepeda (Atas) & QR Code (Bawah) -->
+                        <div class="shrink-0 flex flex-col items-center justify-between py-0.5">
+                            <!-- Road Bike SVG Autentik -->
+                            <svg class="w-7 h-5 sm:w-8 sm:h-6 text-[#10282E]" viewBox="0 0 64 48" fill="none" stroke="#10282E" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="14" cy="34" r="11" />
+                                <circle cx="50" cy="34" r="11" />
+                                <path d="M14 34 L28 34 L38 18 L24 18 Z" />
+                                <path d="M28 34 L22 14" />
+                                <path d="M18 14 L26 14" />
+                                <path d="M38 18 L50 34" />
+                                <path d="M46 12 L50 16 L44 20" />
+                            </svg>
+
+                            <!-- QR Code Dinamis Sesuai Tiket Terpilih -->
+                            <div class="w-10 h-10 sm:w-11 sm:h-11 bg-white p-0.5 border border-[#10282E] rounded-md shadow-[1px_1px_0_#10282E]">
+                                <img :src="current.qr" alt="QR Tiket" class="w-full h-full object-contain">
+                            </div>
+                        </div>
+
+                        <!-- Kolom Info Event -->
+                        <div class="min-w-0 flex-1 flex flex-col justify-between py-0.5 text-left">
+                            <div>
+                                <h4 class="font-heading font-black text-xs sm:text-sm text-[#10282E] uppercase tracking-tight leading-snug truncate"
+                                    x-text="current.title">
+                                    JAKARTA-BANDUNG
+                                </h4>
+                                <div class="font-heading font-extrabold text-[11px] sm:text-xs text-[#10282E] uppercase tracking-wide leading-tight mt-0.5 truncate"
+                                     x-text="current.subtitle">
+                                    GRAN FONDO
+                                </div>
+                            </div>
+
+                            <div class="my-1">
+                                <!-- Pill Badge Oranye Terracotta Tanggal Event -->
+                                <span class="inline-block bg-[#DE7119] text-white font-heading font-black text-[10px] sm:text-xs uppercase px-2.5 py-1 rounded-lg border-2 border-[#10282E] shadow-[2px_2px_0_#10282E]"
+                                      x-text="current.date">
+                                    28 FEB 2026
+                                </span>
+                            </div>
+
+                            <div class="text-[10px] sm:text-[11px] font-bold text-[#10282E]/85 truncate"
+                                 x-text="current.location">
+                                Start: Monas, Jakarta
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- BAR BAWAH KONTROL: Dots Carousel di Kiri, Tombol Panah Neobrutalist di Kanan -->
+                <div class="flex items-center justify-between mt-3 pt-1 px-1">
+                    <!-- Dots Indikator (○ ▬ ○ ○) Sesuai Gambar 4 -->
+                    <div class="flex items-center gap-1.5 sm:gap-2">
+                        <template x-for="(t, idx) in tickets" :key="idx">
+                            <button type="button"
+                                    @click="activeIdx = idx"
+                                    class="transition-all duration-200 cursor-pointer p-0.5 focus:outline-none"
+                                    :aria-label="'Pilih tiket ' + (idx + 1)">
+                                <span class="block border-2 border-[#10282E] transition-all duration-200"
+                                      :class="activeIdx === idx 
+                                          ? 'w-6 sm:w-7 h-2.5 sm:h-3 rounded-full bg-[#DE7119]' 
+                                          : 'w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-white hover:bg-[#F8E3B5]'">
+                                </span>
+                            </button>
+                        </template>
+                    </div>
+
+                    <!-- Tombol Panah < dan > Neobrutalist Sesuai Gambar 4 -->
+                    <div class="flex items-center gap-2">
+                        <button type="button"
+                                @click="prev()"
+                                class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-[#10282E] bg-white text-[#10282E] shadow-[2px_2px_0_#10282E] flex items-center justify-center font-black text-sm hover:-translate-x-0.5 active:translate-y-0.5 transition-transform cursor-pointer"
+                                aria-label="Tiket sebelumnya">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </button>
+                        <button type="button"
+                                @click="next()"
+                                class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-[#10282E] bg-[#DE7119] text-white shadow-[2px_2px_0_#10282E] flex items-center justify-center font-black text-sm hover:translate-x-0.5 active:translate-y-0.5 transition-transform cursor-pointer"
+                                aria-label="Tiket berikutnya">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Footer Perforasi -->
-                <div class="px-4 py-2 bg-[var(--paper)] border-t-2 border-[var(--ink)] flex items-center justify-between text-[10px] font-bold text-[var(--mute)]">
-                    <span>Order #VLS-REG-000245</span>
-                    <span class="text-[var(--ink)] font-black">Langsung aktif &amp; siap cetak setelah checkout &rarr;</span>
-                </div>
             </div>
         </div>
 

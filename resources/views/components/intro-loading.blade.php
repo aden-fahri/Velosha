@@ -17,15 +17,6 @@
     <!-- Main Content Container -->
     <div style="position: relative; z-index: 10; max-width: 680px; width: 90%; display: flex; flex-direction: column; align-items: center;">
 
-        <!-- Badge Musim / Kategori (Drop in) -->
-        <div id="intro-badge"
-             class="intro-badge"
-             style="display: inline-flex; align-items: center; gap: 8px; background: #F4BE3F; border: 2.5px solid #10282E; border-radius: 6px; padding: 6px 18px; box-shadow: 3px 3px 0 #10282E; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #10282E; margin-bottom: 12px; will-change: transform, opacity;">
-            <span>GRAN FONDO &amp; ROAD CYCLING</span>
-            <span style="color: #DE7119;">•</span>
-            <span>INDONESIA 2026</span>
-        </div>
-
         <!-- Big Neobrutalist Brand Title (Stamp Effect) -->
         <h1 id="intro-logo"
             class="intro-stamp-logo"

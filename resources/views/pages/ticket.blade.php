@@ -44,6 +44,14 @@
                 </p>
             </div>
         </section>
+                <h1 class="font-heading font-black text-4xl sm:text-5xl md:text-6xl text-[var(--ink)] leading-[1.08] tracking-tight mb-4">
+                    Pendaftaran Belum Lunas
+                </h1>
+                <p class="text-base sm:text-lg text-[var(--ink)]/85 leading-relaxed font-medium max-w-2xl">
+                    Selesaikan pembayaran untuk mengunci slot race, alokasi nomor BIB resmi, dan penerbitan E-Ticket Anda.
+                </p>
+            </div>
+        </section>
 
         <div class="max-w-3xl mx-auto px-4 mt-8 relative z-10">
             <div class="card p-6 sm:p-8 bg-[#FFFDF8]">
