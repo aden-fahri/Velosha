@@ -1,8 +1,7 @@
 @if ($step === 2)
 {{-- Langkah 2: data diri peserta (sesuai KTP) --}}
 <div class="rounded-2xl border-[2.5px] border-[var(--ink)] bg-white shadow-[4px_4px_0_var(--ink)] p-6 sm:p-7 space-y-6">
-    <div class="border-b-2 border-[var(--ink)] pb-3 mb-6 flex items-center gap-2">
-        <span class="w-2.5 h-2.5 rounded-sm bg-[#DE7119] border border-[var(--ink)]"></span>
+    <div class="border-b-2 border-[var(--ink)] pb-3 mb-6">
         <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider">
             Data Pribadi Peserta (Sesuai KTP)
         </h3>
@@ -69,8 +68,7 @@
 
 {{-- Kontak darurat wajib: syarat penerbitan polis asuransi & tim medis --}}
 <div class="mt-6 rounded-2xl border-[2.5px] border-[var(--ink)] bg-white shadow-[4px_4px_0_var(--ink)] p-6 sm:p-7 space-y-6">
-    <div class="border-b-2 border-[var(--ink)] pb-3 mb-6 flex items-center gap-2">
-        <span class="w-2.5 h-2.5 bg-red-600 border border-[var(--ink)] rounded-xs"></span>
+    <div class="border-b-2 border-[var(--ink)] pb-3 mb-6">
         <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider">
             Kontak Darurat (Wajib untuk Asuransi &amp; Tim Medis)
         </h3>

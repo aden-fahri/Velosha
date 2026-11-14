@@ -5,6 +5,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\TicketController;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // 1. Landing Page / Beranda
@@ -123,8 +124,8 @@ Route::post('/organisasi/daftar', [App\Http\Controllers\OrganizationController::
     ->name('organizations.store');
 
 Route::get('/organisasi/dasbor', function () {
-    /** @var User|null $user */
-    $user = auth()->user();
+    /** @var \App\Models\User|null $user */
+    $user = Auth::user();
     $org = $user?->organizations()->first() ?? $user?->ownedOrganizations()->first();
     if ($org) {
         return redirect()->route('organizations.show', ['organization' => $org->slug, 'tab' => 'overview']);
@@ -139,6 +140,10 @@ Route::get('/organisasi/dasbor', function () {
 Route::get('/organisasi/{organization:slug}', [App\Http\Controllers\OrganizationController::class, 'show'])
     ->middleware('auth')
     ->name('organizations.show');
+
+Route::put('/organisasi/{organization:slug}', [App\Http\Controllers\OrganizationController::class, 'update'])
+    ->middleware('auth')
+    ->name('organizations.update');
 
 Route::get('/organisasi/{organization:slug}/events/create', [App\Http\Controllers\OrganizationController::class, 'createEvent'])
     ->middleware('auth')

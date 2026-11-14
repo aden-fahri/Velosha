@@ -76,6 +76,28 @@ class OrganizationController extends Controller
     }
 
     /**
+     * Perbarui nama dan profil komunitas / organisasi penyelenggara.
+     */
+    public function update(Request $request, Organization $organization): RedirectResponse
+    {
+        $this->authorizeMember($organization);
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:150'],
+            'description' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        $oldName = $organization->name;
+        $organization->update([
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? null,
+        ]);
+
+        return redirect()->route('organizations.show', ['organization' => $organization->slug, 'tab' => 'overview'])
+            ->with('status', 'Nama komunitas berhasil diperbarui menjadi "'.$organization->name.'".');
+    }
+
+    /**
      * Dasbor terpadu penyelenggara (Event Saya, Kuota, Keuangan, & Verifikasi).
      */
     public function show(Request $request, Organization $organization, MidtransService $midtrans): View

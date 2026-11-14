@@ -22,9 +22,8 @@
     <!-- Kartu Data Peserta -->
     <div class="rounded-2xl border-[2.5px] border-[var(--ink)] bg-white shadow-[4px_4px_0_var(--ink)] p-6">
         <div class="flex items-center justify-between border-b-2 border-[var(--ink)] pb-3 mb-4">
-            <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-sm bg-[var(--orange)] border border-[var(--ink)]"></span>
-                <span>Data Peserta</span>
+            <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider">
+                Data Peserta
             </h3>
             <button type="button" wire:click="backToStep2" class="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--orange)] hover:underline border-2 border-[var(--ink)] bg-[var(--paper)] hover:bg-[var(--butter)] px-3 py-1.5 rounded-xl shadow-[2px_2px_0_var(--ink)] transition-all cursor-pointer">
                 <i data-lucide="pencil" class="w-3.5 h-3.5"></i>

@@ -3,9 +3,8 @@
 @if ($step === 1 && $event !== null)
 <div class="rounded-2xl border-[2.5px] border-[var(--ink)] bg-white shadow-[4px_4px_0_var(--ink)] p-6">
     <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-[var(--ink)]">
-        <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-sm bg-[var(--orange)] border border-[var(--ink)]"></span>
-            <span>Pilih Kategori Jarak</span>
+        <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider">
+            Pilih Kategori Jarak
         </h3>
         <a href="{{ route('events.show', $event->slug) }}" wire:navigate class="text-xs font-bold text-[var(--orange)] hover:underline">Ganti Event &rarr;</a>
     </div>
@@ -77,9 +76,8 @@
 @if ($step >= 2 && $category !== null)
 <div class="rounded-2xl border-[2.5px] border-[var(--ink)] bg-white shadow-[4px_4px_0_var(--ink)] p-6">
     <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-[var(--ink)]">
-        <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-sm bg-[var(--orange)] border border-[var(--ink)]"></span>
-            <span>Kategori Jarak Dipilih</span>
+        <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider">
+            Kategori Jarak Dipilih
         </h3>
         <button type="button" wire:click="toStep1" class="text-xs font-bold text-[var(--orange)] hover:underline cursor-pointer">Ubah Kategori</button>
     </div>
@@ -108,9 +106,8 @@
         </div>
         <div class="text-right shrink-0">
             <div class="text-sm font-black text-[var(--ink)] mb-1">Rp {{ P::angka((float) $category->price) }}</div>
-            <span class="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 font-black rounded-lg border-[1.5px] border-[var(--ink)] shadow-[1.5px_1.5px_0_var(--ink)] {{ $category->remaining > 0 ? 'bg-[#1F6F4A] text-white' : 'bg-[#DE3618] text-white' }}">
-                <span class="w-1.5 h-1.5 rounded-full {{ $category->remaining > 0 ? 'bg-[#85E3B3]' : 'bg-white' }}"></span>
-                <span>{{ $category->remaining > 0 ? 'Tersedia' : 'Slot Penuh' }}</span>
+            <span class="inline-block text-[11px] px-2.5 py-0.5 font-black rounded-lg border-[1.5px] border-[var(--ink)] shadow-[1.5px_1.5px_0_var(--ink)] {{ $category->remaining > 0 ? 'bg-[#1F6F4A] text-white' : 'bg-[#DE3618] text-white' }}">
+                {{ $category->remaining > 0 ? 'Tersedia' : 'Slot Penuh' }}
             </span>
         </div>
     </div>

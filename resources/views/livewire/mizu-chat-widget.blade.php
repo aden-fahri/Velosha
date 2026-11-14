@@ -21,7 +21,7 @@
             background-color: #10282E;
             color: #FFFFFF;
             border: 2.5px solid #10282E;
-            border-radius: 9999px;
+            border-radius: 12px;
             box-shadow: 4px 4px 0 #10282E;
             padding: 9px 18px 9px 10px;
             font-family: 'Bricolage Grotesque', 'Inter', sans-serif;
@@ -44,7 +44,7 @@
             .mizu-trigger-btn {
                 width: 52px !important;
                 height: 52px !important;
-                border-radius: 9999px !important;
+                border-radius: 12px !important;
                 padding: 0 !important;
                 justify-content: center !important;
             }
@@ -82,7 +82,7 @@
                 <div class="min-w-0">
                     <div class="font-['Bricolage_Grotesque',sans-serif] text-sm font-extrabold tracking-tight text-white leading-tight">Tanya Mizu</div>
                     <div class="flex items-center gap-1.5 text-[11px] text-[#F8E3B5] font-semibold leading-tight mt-0.5 truncate">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="w-2 h-2 rounded-xs bg-emerald-400"></span>
                         Asisten Balap Velosha
                     </div>
                 </div>
@@ -173,9 +173,9 @@
                     </svg>
                 </div>
                 <div class="bg-white border-[2px] border-[#10282E] rounded-2xl rounded-tl-sm px-4 py-3 shadow-[2.5px_2.5px_0_#10282E] flex items-center gap-1.5" role="status">
-                    <span class="w-2 h-2 rounded-full bg-[#DE7119] animate-pulse"></span>
-                    <span class="w-2 h-2 rounded-full bg-[#F4BE3F] animate-pulse" style="animation-delay:150ms"></span>
-                    <span class="w-2 h-2 rounded-full bg-[#1F6F4A] animate-pulse" style="animation-delay:300ms"></span>
+                    <span class="w-2 h-2 rounded-xs bg-[#DE7119] animate-pulse"></span>
+                    <span class="w-2 h-2 rounded-xs bg-[#F4BE3F] animate-pulse" style="animation-delay:150ms"></span>
+                    <span class="w-2 h-2 rounded-xs bg-[#1F6F4A] animate-pulse" style="animation-delay:300ms"></span>
                     <span class="sr-only">Mizu sedang menjawab</span>
                 </div>
             </div>
@@ -223,7 +223,7 @@
             :aria-expanded="open.toString()"
             aria-label="Tanya Mizu"
             class="mizu-trigger-btn">
-        <span class="w-7 h-7 rounded-full bg-[#F4BE3F] border-[2px] border-[#10282E] flex items-center justify-center shrink-0">
+        <span class="w-7 h-7 rounded-lg bg-[#F4BE3F] border-[2px] border-[#10282E] flex items-center justify-center shrink-0 shadow-[1px_1px_0_#10282E]">
             <svg x-show="!open" class="w-4 h-4 text-[#10282E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M12 8V4H8"/>
                 <rect width="16" height="12" x="4" y="8" rx="2"/>

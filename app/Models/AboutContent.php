@@ -47,10 +47,10 @@ class AboutContent extends Model
                 ['icon' => 'users', 'title' => 'Inklusif', 'desc' => 'Kategori mulai Fun Ride 25KM hingga Gran Fondo 180KM untuk semua level.'],
                 ['icon' => 'heart-pulse', 'title' => 'Terawat', 'desc' => 'Tim medis dan ambulans di setiap feed zone, bukan opsional.'],
             ],
-            'cta_title' => 'Siap mulai musim 2026?',
-            'cta_desc' => 'Daftar sekali, kelola semua race Anda lewat satu portal.',
-            'cta_label' => 'Lihat Semua Race',
-            'cta_url' => '/events',
+            'cta_title' => null,
+            'cta_desc' => null,
+            'cta_label' => null,
+            'cta_url' => null,
         ];
     }
 }

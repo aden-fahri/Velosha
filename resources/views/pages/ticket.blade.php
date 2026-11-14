@@ -8,17 +8,6 @@
 
         <!-- PAGE HEADER: Belum Ada Pendaftaran (Konsisten dengan Kalender, Tentang, Regulasi, & Bantuan) -->
         <section class="relative overflow-hidden" style="background: var(--butter, #F8E3B5); border-bottom: 3.5px solid var(--ink, #10282E); padding: 52px 0;">
-            <svg aria-hidden="true" style="position:absolute; top:0; right:0; width:520px; max-width:45%; height:100%; z-index:1; pointer-events:none;" viewBox="0 0 520 280">
-                <g stroke="#10282E" stroke-width="3" stroke-linejoin="round">
-                    <circle cx="90" cy="65" r="9" fill="#DE7119"></circle>
-                    <rect x="160" y="145" width="20" height="20" rx="3" fill="#1F6F4A" transform="rotate(20 170 155)"></rect>
-                    <path d="M250 215 l12 -20 l12 20z" fill="#F4BE3F"></path>
-                    <circle cx="230" cy="55" r="7" fill="#9B3D5A"></circle>
-                    <rect x="320" y="115" width="18" height="18" rx="3" fill="#F4BE3F" transform="rotate(-15 329 124)"></rect>
-                    <path d="M420 65 l12 -20 l12 20z" fill="#DE7119"></path>
-                    <circle cx="475" cy="165" r="8" fill="#1F6F4A"></circle>
-                </g>
-            </svg>
             <div class="wrap relative z-10">
                 <div class="flex items-center gap-2.5 mb-3">
                     <span class="chip font-bold bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">E-Ticket &amp; Pendaftaran</span>
@@ -42,22 +31,19 @@
 
         <!-- PAGE HEADER: Menunggu Pembayaran (Konsisten dengan Kalender, Tentang, Regulasi, & Bantuan) -->
         <section class="relative overflow-hidden" style="background: var(--butter, #F8E3B5); border-bottom: 3.5px solid var(--ink, #10282E); padding: 52px 0;">
-            <svg aria-hidden="true" style="position:absolute; top:0; right:0; width:520px; max-width:45%; height:100%; z-index:1; pointer-events:none;" viewBox="0 0 520 280">
-                <g stroke="#10282E" stroke-width="3" stroke-linejoin="round">
-                    <circle cx="90" cy="65" r="9" fill="#DE7119"></circle>
-                    <rect x="160" y="145" width="20" height="20" rx="3" fill="#1F6F4A" transform="rotate(20 170 155)"></rect>
-                    <path d="M250 215 l12 -20 l12 20z" fill="#F4BE3F"></path>
-                    <circle cx="230" cy="55" r="7" fill="#9B3D5A"></circle>
-                    <rect x="320" y="115" width="18" height="18" rx="3" fill="#F4BE3F" transform="rotate(-15 329 124)"></rect>
-                    <path d="M420 65 l12 -20 l12 20z" fill="#DE7119"></path>
-                    <circle cx="475" cy="165" r="8" fill="#1F6F4A"></circle>
-                </g>
-            </svg>
             <div class="wrap relative z-10">
                 <div class="flex items-center gap-2.5 mb-3 flex-wrap">
                     <span class="chip font-bold bg-[var(--orange)] text-white border border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">Menunggu Pembayaran</span>
                     <span class="chip bg-white border border-[var(--ink)] font-mono text-xs shadow-[2px_2px_0_var(--ink)]">REG-{{ str_pad((string) $registration->id, 6, '0', STR_PAD_LEFT) }}</span>
                 </div>
+                <h1 class="font-heading font-black text-4xl sm:text-5xl md:text-6xl text-[var(--ink)] leading-[1.08] tracking-tight mb-4">
+                    Pendaftaran Belum Lunas
+                </h1>
+                <p class="text-base sm:text-lg text-[var(--ink)]/85 leading-relaxed font-medium max-w-2xl">
+                    Selesaikan pembayaran untuk mengunci slot race, alokasi nomor BIB resmi, dan penerbitan E-Ticket Anda.
+                </p>
+            </div>
+        </section>
                 <h1 class="font-heading font-black text-4xl sm:text-5xl md:text-6xl text-[var(--ink)] leading-[1.08] tracking-tight mb-4">
                     Pendaftaran Belum Lunas
                 </h1>
@@ -122,19 +108,6 @@
 
         <!-- PAGE HEADER: Pembayaran Berhasil & E-Ticket (Konsisten dengan Kalender, Tentang, Regulasi, & Bantuan) -->
         <section class="relative overflow-hidden" style="background: var(--butter, #F8E3B5); border-bottom: 3.5px solid var(--ink, #10282E); padding: 52px 0;">
-            {{-- Elemen Dekorasi Geometris Neobrutalism di Sisi Kanan --}}
-            <svg aria-hidden="true" style="position:absolute; top:0; right:0; width:520px; max-width:45%; height:100%; z-index:1; pointer-events:none;" viewBox="0 0 520 280">
-                <g stroke="#10282E" stroke-width="3" stroke-linejoin="round">
-                    <circle cx="90" cy="65" r="9" fill="#DE7119"></circle>
-                    <rect x="160" y="145" width="20" height="20" rx="3" fill="#1F6F4A" transform="rotate(20 170 155)"></rect>
-                    <path d="M250 215 l12 -20 l12 20z" fill="#F4BE3F"></path>
-                    <circle cx="230" cy="55" r="7" fill="#9B3D5A"></circle>
-                    <rect x="320" y="115" width="18" height="18" rx="3" fill="#F4BE3F" transform="rotate(-15 329 124)"></rect>
-                    <path d="M420 65 l12 -20 l12 20z" fill="#DE7119"></path>
-                    <circle cx="475" cy="165" r="8" fill="#1F6F4A"></circle>
-                </g>
-            </svg>
-
             <div class="wrap relative z-10">
                 <div class="flex items-center gap-2.5 mb-3 flex-wrap">
                     <span class="chip font-bold bg-[var(--pine)] text-white border border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
@@ -182,7 +155,6 @@
             <div class="wrap">
                 <div class="flex items-center justify-between mb-3.5 flex-wrap gap-2">
                     <div class="flex items-center gap-2">
-                        <span class="w-3 h-3 rounded-full bg-[var(--orange)] border border-[var(--ink)]"></span>
                         <span class="font-heading font-black text-xs uppercase tracking-wider text-[var(--ink)]">
                             Pilih Tiket &amp; Kategori Race Anda ({{ $userRegistrations->count() }} Tiket Terdaftar)
                         </span>
@@ -304,7 +276,7 @@
 
                             <!-- 1. Tiket Aktif -->
                             <li style="display: flex; gap: 16px; padding-bottom: 20px; position: relative">
-                                <span style="flex: none; width: 40px; height: 40px; border: 2.5px solid #10282E; border-radius: 50%; background: #1F6F4A; color: #fff; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1">
+                                <span style="flex: none; width: 40px; height: 40px; border: 2.5px solid #10282E; border-radius: 12px; background: #1F6F4A; color: #fff; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; box-shadow: 2px 2px 0 #10282E;">
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
                                 </span>
                                 <div>
@@ -315,7 +287,7 @@
 
                             <!-- 2. Ambil Race Pack -->
                             <li style="display: flex; gap: 16px; padding-bottom: 20px; position: relative">
-                                <span style="flex: none; width: 40px; height: 40px; border: 2.5px solid #10282E; border-radius: 50%; background: #FFFDF8; color: #10282E; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1">
+                                <span style="flex: none; width: 40px; height: 40px; border: 2.5px solid #10282E; border-radius: 12px; background: #FFFDF8; color: #10282E; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; box-shadow: 2px 2px 0 #10282E;">
                                     <b class="disp" style="font-size: 18px">2</b>
                                 </span>
                                 <div>
@@ -326,7 +298,7 @@
 
                             <!-- 3. Cek Wave Start -->
                             <li style="display: flex; gap: 16px; padding-bottom: 20px; position: relative">
-                                <span style="flex: none; width: 40px; height: 40px; border: 2.5px solid #10282E; border-radius: 50%; background: #FFFDF8; color: #10282E; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1">
+                                <span style="flex: none; width: 40px; height: 40px; border: 2.5px solid #10282E; border-radius: 12px; background: #FFFDF8; color: #10282E; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; box-shadow: 2px 2px 0 #10282E;">
                                     <b class="disp" style="font-size: 18px">3</b>
                                 </span>
                                 <div>
@@ -337,7 +309,7 @@
 
                             <!-- 4. Hari-H -->
                             <li style="display: flex; gap: 16px; position: relative">
-                                <span style="flex: none; width: 40px; height: 40px; border: 2.5px solid #10282E; border-radius: 50%; background: #FFFDF8; color: #10282E; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1">
+                                <span style="flex: none; width: 40px; height: 40px; border: 2.5px solid #10282E; border-radius: 12px; background: #FFFDF8; color: #10282E; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; box-shadow: 2px 2px 0 #10282E;">
                                     <b class="disp" style="font-size: 18px">4</b>
                                 </span>
                                 <div>

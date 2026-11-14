@@ -4,19 +4,6 @@
 
 {{-- PAGE HEADER RESMI: Konsisten dengan Kalender, Tentang, Regulasi, & Bantuan --}}
 <section class="relative overflow-hidden" style="background: var(--butter, #F8E3B5); border-bottom: 3.5px solid var(--ink, #10282E); padding: 52px 0;">
-    {{-- Elemen Dekorasi Geometris Neobrutalism di Sisi Kanan --}}
-    <svg aria-hidden="true" style="position:absolute; top:0; right:0; width:520px; max-width:45%; height:100%; z-index:1; pointer-events:none;" viewBox="0 0 520 280">
-        <g stroke="#10282E" stroke-width="3" stroke-linejoin="round">
-            <circle cx="90" cy="65" r="9" fill="#DE7119"></circle>
-            <rect x="160" y="145" width="20" height="20" rx="3" fill="#1F6F4A" transform="rotate(20 170 155)"></rect>
-            <path d="M250 215 l12 -20 l12 20z" fill="#F4BE3F"></path>
-            <circle cx="230" cy="55" r="7" fill="#9B3D5A"></circle>
-            <rect x="320" y="115" width="18" height="18" rx="3" fill="#F4BE3F" transform="rotate(-15 329 124)"></rect>
-            <path d="M420 65 l12 -20 l12 20z" fill="#DE7119"></path>
-            <circle cx="475" cy="165" r="8" fill="#1F6F4A"></circle>
-        </g>
-    </svg>
-
     <div class="wrap relative z-10">
         <div class="max-w-3xl">
             <h1 class="font-heading font-black text-4xl sm:text-5xl md:text-6xl text-[var(--ink)] leading-[1.08] tracking-tight mb-4">
@@ -32,7 +19,6 @@
                 @endphp
                 @if ($userOrg)
                     <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl border-2 border-[var(--ink)] bg-white shadow-[3px_3px_0_var(--ink)] text-xs font-bold mt-5">
-                        <span class="w-2.5 h-2.5 rounded-full bg-[var(--pine)] inline-block"></span>
                         <span>Akun Komunitas Aktif: <strong>{{ $userOrg->name }}</strong></span>
                         <span class="text-[var(--mute)]">&bull;</span>
                         <span class="text-[var(--pine)]">Saldo: {{ $userOrg->quotaBalance() }} Kuota Race</span>
@@ -194,13 +180,10 @@
     </div>
 
     {{-- Midtrans Snap Popup with 100% Blurred Backdrop --}}
-    <div id="snap-embed-modal" class="fixed inset-0 z-[999999] bg-[#10282E]/65 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center p-4">
+    <div id="snap-embed-modal" class="fixed inset-0 z-[999999] bg-[#10282E]/70 backdrop-blur-md hidden transition-all duration-300 flex items-center justify-center p-4">
         <div class="relative w-full max-w-[460px] bg-white rounded-2xl border-[3.5px] border-[var(--ink)] shadow-[8px_8px_0_var(--ink)] overflow-hidden">
             <div class="flex items-center justify-between px-5 py-3.5 bg-[var(--butter)] border-b-[2.5px] border-[var(--ink)]">
-                <div class="flex items-center gap-2.5">
-                    <span class="w-3 h-3 rounded-full bg-[var(--orange)] border border-[var(--ink)]"></span>
-                    <span class="font-heading font-black text-sm text-[var(--ink)] tracking-tight">Pembayaran Paket Kuota Midtrans</span>
-                </div>
+                <span class="font-heading font-black text-sm text-[var(--ink)] tracking-tight">Pembayaran Paket Kuota Midtrans</span>
                 <button type="button" id="close-snap-modal-btn" class="w-7 h-7 rounded-lg border-2 border-[var(--ink)] bg-white hover:bg-red-100 text-[var(--ink)] flex items-center justify-center text-xs font-black cursor-pointer shadow-[1.5px_1.5px_0_var(--ink)] transition">✕</button>
             </div>
             <div id="snap-container" class="w-full min-h-[540px] flex items-center justify-center bg-[#FAF9F5]">
@@ -326,8 +309,9 @@
                             }
                         }
                     });
-                } else if (data.redirect_url) {
-                    window.location.href = data.redirect_url;
+                // If snap.embed could not be run, load in iframe inside the blur modal!
+                if (data.redirect_url) {
+                    container.innerHTML = '<iframe src="' + data.redirect_url + '" style="width:100%;height:560px;border:none;border-radius:14px;" allow="payment"></iframe>';
                 } else {
                     if (modal) modal.classList.add('hidden');
                     if (submitBtn) {
