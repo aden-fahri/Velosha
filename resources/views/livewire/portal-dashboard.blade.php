@@ -15,12 +15,16 @@
             <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 mb-2 mt-2">NAVIGASI</div>
             <nav class="space-y-1 text-sm font-semibold">
                 <button type="button" wire:click="setTab('overview')"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="w-full flex items-center gap-2.5 {{ $activeTab === 'overview' ? 'on' : '' }}">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"></rect><rect x="14" y="3" width="7" height="7" rx="2"></rect><rect x="3" y="14" width="7" height="7" rx="2"></rect><rect x="14" y="14" width="7" height="7" rx="2"></rect></svg>
                     <span class="whitespace-nowrap font-bold text-sm">Ringkasan Balap</span>
                 </button>
 
                 <button type="button" wire:click="setTab('tickets')"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="w-full flex items-center justify-between {{ $activeTab === 'tickets' ? 'on' : '' }}">
                     <div class="flex items-center gap-2.5 min-w-0">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9a3 3 0 0 0 0 6v3h18v-3a3 3 0 0 1 0-6V6H3z"></path><path d="M14 6v12" stroke-dasharray="2 3"></path></svg>
@@ -32,18 +36,24 @@
                 </button>
 
                 <button type="button" wire:click="setTab('events')"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="w-full flex items-center gap-2.5 {{ $activeTab === 'events' ? 'on' : '' }}">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M8 3v4M16 3v4M3 11h18"></path></svg>
                     <span class="whitespace-nowrap font-bold text-sm">Jadwal balap</span>
                 </button>
 
                 <button type="button" wire:click="setTab('profile')"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="w-full flex items-center gap-2.5 {{ $activeTab === 'profile' ? 'on' : '' }}">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1-5 15-5 16 0"></path></svg>
                     <span class="whitespace-nowrap font-bold text-sm">Profil &amp; akun</span>
                 </button>
 
                 <button type="button" wire:click="setTab('help')"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="w-full flex items-center gap-2.5 {{ $activeTab === 'help' ? 'on' : '' }}">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.500 9.500a2.500 2.500 0 1 1 3.500 2.300c-.7.4-1 .9-1 1.700M12 17v.01"></path></svg>
                     <span class="whitespace-nowrap font-bold text-sm">Pusat bantuan</span>
@@ -142,22 +152,32 @@
 
             <nav class="space-y-1.5 text-sm flex-1">
                 <button type="button" wire:click="setTab('overview')" @click="sidebarOpen = false"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="w-full {{ $activeTab === 'overview' ? 'on' : '' }}">
                     Ringkasan Balap
                 </button>
                 <button type="button" wire:click="setTab('tickets')" @click="sidebarOpen = false"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="w-full {{ $activeTab === 'tickets' ? 'on' : '' }}">
                     Tiket &amp; BIB
                 </button>
                 <button type="button" wire:click="setTab('events')" @click="sidebarOpen = false"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="w-full {{ $activeTab === 'events' ? 'on' : '' }}">
                     Jadwal balap
                 </button>
                 <button type="button" wire:click="setTab('profile')" @click="sidebarOpen = false"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="w-full {{ $activeTab === 'profile' ? 'on' : '' }}">
                     Profil &amp; akun
                 </button>
                 <button type="button" wire:click="setTab('help')" @click="sidebarOpen = false"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="w-full {{ $activeTab === 'help' ? 'on' : '' }}">
                     Pusat bantuan
                 </button>
@@ -328,7 +348,7 @@
                                     <h2 class="h3 font-heading text-xl sm:text-2xl font-black">Pendaftaran terbaru</h2>
                                     <div class="text-sm text-[var(--mute)] mt-0.5">Race yang kamu daftar musim ini.</div>
                                 </div>
-                                <button type="button" wire:click="setTab('tickets')" class="font-bold text-sm text-[#B2590F] hover:underline">
+                                <button type="button" wire:click="setTab('tickets')" wire:loading.attr="disabled" wire:loading.class="opacity-60 cursor-wait" class="font-bold text-sm text-[#B2590F] hover:underline">
                                     Lihat semua tiket
                                 </button>
                             </div>
@@ -390,7 +410,7 @@
                         <section class="card p-6 bg-white">
                             <div class="flex justify-between items-baseline pb-3 border-b border-[#10282E]/10">
                                 <h2 class="h3 text-xl font-bold font-heading">Profil peserta</h2>
-                                <button type="button" wire:click="setTab('profile')" class="font-bold text-sm text-[#B2590F] hover:underline">
+                                <button type="button" wire:click="setTab('profile')" wire:loading.attr="disabled" wire:loading.class="opacity-60 cursor-wait" class="font-bold text-sm text-[#B2590F] hover:underline">
                                     Edit
                                 </button>
                             </div>
@@ -423,7 +443,7 @@
                             <p class="mt-2.5 text-sm leading-[1.55] text-white/95">
                                 Bawa e-ticket resmi dari portal ini dan kartu identitas asli (KTP/SIM/Paspor).
                             </p>
-                            <button type="button" wire:click="setTab('help')" class="inline-block mt-3.5 font-bold text-[#F4BE3F] hover:underline text-sm">
+                            <button type="button" wire:click="setTab('help')" wire:loading.attr="disabled" wire:loading.class="opacity-60 cursor-wait" class="inline-block mt-3.5 font-bold text-[#F4BE3F] hover:underline text-sm">
                                 Baca regulasi lengkap &rarr;
                             </button>
                         </section>
@@ -440,18 +460,26 @@
                         <!-- Filter Tabs -->
                         <div class="flex flex-wrap gap-2">
                             <button type="button" wire:click="filterTickets('all')"
+                                    wire:loading.attr="disabled"
+                                    wire:loading.class="opacity-60 cursor-wait"
                                     class="filter text-xs {{ $ticketStatus === 'all' ? 'on' : '' }}">
                                 Semua Tiket ({{ $statTotal }})
                             </button>
                             <button type="button" wire:click="filterTickets('paid')"
+                                    wire:loading.attr="disabled"
+                                    wire:loading.class="opacity-60 cursor-wait"
                                     class="filter text-xs {{ $ticketStatus === 'paid' ? 'on' : '' }}">
                                 Lunas ({{ $statPaid }})
                             </button>
                             <button type="button" wire:click="filterTickets('pending')"
+                                    wire:loading.attr="disabled"
+                                    wire:loading.class="opacity-60 cursor-wait"
                                     class="filter text-xs {{ $ticketStatus === 'pending' ? 'on' : '' }}">
                                 Menunggu Bayar ({{ $statPending }})
                             </button>
                             <button type="button" wire:click="filterTickets('cancelled')"
+                                    wire:loading.attr="disabled"
+                                    wire:loading.class="opacity-60 cursor-wait"
                                     class="filter text-xs {{ $ticketStatus === 'cancelled' ? 'on' : '' }}">
                                 Dibatalkan ({{ $statCancelled }})
                             </button>
@@ -621,9 +649,9 @@
                         </div>
 
                         <div class="pt-4 border-t-2 border-dashed border-[#E2D3B3] flex justify-end">
-                            <button type="submit" class="btn btn-sm">
+                            <x-ui.submit-button variant="orange" loadingText="Menyimpan profil..." size="sm" target="updateProfile">
                                 Simpan Perubahan
-                            </button>
+                            </x-ui.submit-button>
                         </div>
                     </form>
                 </div>

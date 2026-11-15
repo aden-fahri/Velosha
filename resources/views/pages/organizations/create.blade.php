@@ -81,7 +81,7 @@
 
                 {{-- Submit Button --}}
                 <div class="pt-5 border-t-2 border-[var(--ink)] flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <a href="{{ $targetPkg ? route('packages.index') : route('home') }}" class="text-xs font-black text-[var(--mute)] hover:text-[var(--ink)] transition">
+                    <a href="{{ $targetPkg ? route('packages.index') : route('home') }}" wire:navigate.hover class="text-xs font-black text-[var(--mute)] hover:text-[var(--ink)] transition">
                         &larr; Kembali
                     </a>
                     <button type="submit"

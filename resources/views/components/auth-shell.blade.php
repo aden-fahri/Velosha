@@ -11,7 +11,7 @@
         {{-- LEFT: Branding & Illustration (Desktop Only) --}}
         <div class="hidden lg:flex flex-col justify-between relative bg-[var(--butter)] border-r-[2.5px] border-[var(--ink)] p-9 min-h-[640px] overflow-hidden">
             {{-- Logo --}}
-            <a href="{{ route('home') }}" class="logo inline-flex items-center gap-3 text-2xl relative z-10" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; letter-spacing: -0.03em; text-decoration: none">
+            <a href="{{ route('home') }}" wire:navigate.hover class="logo inline-flex items-center gap-3 text-2xl relative z-10" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; letter-spacing: -0.03em; text-decoration: none">
                 <img src="/images/logo-velosha.png" alt="Velosha" class="h-9 w-auto object-contain" />
                 <span class="font-extrabold text-2xl tracking-tight text-[var(--ink)]">Velosha</span>
             </a>
@@ -33,18 +33,18 @@
 
             {{-- Mobile Brand Header (Hanya di Layar Mobile/Tablet < lg) --}}
             <div class="flex lg:hidden items-center justify-between pb-3 border-b-2 border-dashed border-[var(--ink)]/20 mb-0.5">
-                <a href="{{ route('home') }}" class="inline-flex items-center gap-2" style="text-decoration: none">
+                <a href="{{ route('home') }}" wire:navigate.hover class="inline-flex items-center gap-2" style="text-decoration: none">
                     <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
                     <span class="font-extrabold text-xl tracking-tight text-[var(--ink)]" style="font-family: 'Bricolage Grotesque', sans-serif;">Velosha</span>
                 </a>
-                <a href="{{ route('home') }}" class="inline-flex items-center gap-1.5 font-bold text-xs text-[var(--mute)] hover:text-[var(--ink)] transition" style="text-decoration: none">
+                <a href="{{ route('home') }}" wire:navigate.hover class="inline-flex items-center gap-1.5 font-bold text-xs text-[var(--mute)] hover:text-[var(--ink)] transition" style="text-decoration: none">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
                     Beranda
                 </a>
             </div>
 
             {{-- Desktop Back to home --}}
-            <a href="{{ route('home') }}" class="hidden lg:inline-flex items-center gap-2 font-bold text-sm hover:text-[var(--orange-d)] transition" style="min-height: 44px; text-decoration: none">
+            <a href="{{ route('home') }}" wire:navigate.hover class="hidden lg:inline-flex items-center gap-2 font-bold text-sm hover:text-[var(--orange-d)] transition" style="min-height: 44px; text-decoration: none">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
                 Kembali ke beranda
             </a>
@@ -59,9 +59,11 @@
                 </div>
                 <div class="inline-flex self-start sm:self-auto p-1 border-[2.5px] border-[var(--ink)] rounded-lg bg-[var(--paper2)] gap-1 shrink-0">
                     <a href="{{ route('login') }}"
+                       wire:navigate.hover
                        class="px-3.5 py-1.5 rounded-md text-xs sm:text-sm font-bold transition {{ $tab === 'login' ? 'bg-[var(--orange)] border-2 border-[var(--ink)] text-[var(--ink)] shadow-[1.5px_1.5px_0_var(--ink)]' : 'text-[var(--ink)] hover:bg-white' }}"
                        style="text-decoration: none">Masuk</a>
                     <a href="{{ route('register') }}"
+                       wire:navigate.hover
                        class="px-3.5 py-1.5 rounded-md text-xs sm:text-sm font-bold transition {{ $tab === 'register' ? 'bg-[var(--orange)] border-2 border-[var(--ink)] text-[var(--ink)] shadow-[1.5px_1.5px_0_var(--ink)]' : 'text-[var(--ink)] hover:bg-white' }}"
                        style="text-decoration: none">Daftar</a>
                 </div>
@@ -94,7 +96,7 @@
                     <div>
                         <div class="flex justify-between items-baseline mb-1">
                             <label class="label text-xs sm:text-sm font-bold text-[var(--ink)] block m-0" for="password">Kata sandi</label>
-                            <a href="{{ route('password.request') }}" class="text-xs sm:text-sm font-bold text-[var(--orange-d)] hover:underline" style="text-decoration: none">Lupa sandi?</a>
+                            <a href="{{ route('password.request') }}" wire:navigate.hover class="text-xs sm:text-sm font-bold text-[var(--orange-d)] hover:underline" style="text-decoration: none">Lupa sandi?</a>
                         </div>
                         <input id="password" name="password" type="password" required
                                placeholder="Masukkan kata sandi"

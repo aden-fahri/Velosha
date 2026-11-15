@@ -4,7 +4,7 @@
         <div>
             <!-- Brand Logo Header (Official Brand Asset) -->
             <div class="flex items-center pb-5 mb-4 border-b border-[#10282E]/15">
-                <a href="/" wire:navigate class="flex items-center gap-3 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
+                <a href="/" wire:navigate.hover class="flex items-center gap-3 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
                     <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
                     <span class="font-extrabold text-2xl tracking-tight text-[#10282E]" style="font-family: 'Bricolage Grotesque', sans-serif;">Velosha</span>
                 </a>
@@ -26,37 +26,37 @@
 
                 <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 mb-2">NAVIGASI PENYELENGGARA</div>
                 <nav class="space-y-1 text-sm font-semibold">
-                    <a href="{{ route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'overview']) }}" wire:navigate class="w-full flex items-center gap-2.5">
+                    <a href="{{ route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'overview']) }}" wire:navigate.hover class="w-full flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"></rect><rect x="14" y="3" width="7" height="7" rx="2"></rect><rect x="3" y="14" width="7" height="7" rx="2"></rect><rect x="14" y="14" width="7" height="7" rx="2"></rect></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Ringkasan EO</span>
                     </a>
-                    <a href="{{ route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'create_event']) }}" wire:navigate class="w-full flex items-center gap-2.5">
+                    <a href="{{ route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'create_event']) }}" wire:navigate.hover class="w-full flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Buat Event</span>
                     </a>
-                    <a href="{{ route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'events']) }}" wire:navigate class="w-full flex items-center gap-2.5">
+                    <a href="{{ route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'events']) }}" wire:navigate.hover class="w-full flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Event Saya</span>
                     </a>
-                    <a href="{{ route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'kuota']) }}" wire:navigate class="w-full flex items-center gap-2.5">
+                    <a href="{{ route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'kuota']) }}" wire:navigate.hover class="w-full flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Paket &amp; Kuota</span>
                     </a>
-                    <a href="{{ route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'keuangan']) }}" wire:navigate class="w-full flex items-center gap-2.5">
+                    <a href="{{ route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'keuangan']) }}" wire:navigate.hover class="w-full flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Ringkasan Kuota &amp; Penjualan</span>
                     </a>
-                    <a href="{{ route('helpdesk.my-tickets', ['from' => 'organizer']) }}" wire:navigate class="w-full flex items-center gap-2.5 on">
+                    <a href="{{ route('helpdesk.my-tickets', ['from' => 'organizer']) }}" wire:navigate.hover class="w-full flex items-center gap-2.5 on">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Chat / Bantuan</span>
                     </a>
 
                     <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 pt-5 pb-1">BERALIH</div>
-                    <a href="/dashboard" wire:navigate class="w-full flex items-center gap-2.5">
+                    <a href="/dashboard" wire:navigate.hover class="w-full flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1-5 15-5 16 0"></path></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Dashboard Rider</span>
                     </a>
-                    <a href="/" wire:navigate class="w-full flex items-center gap-2.5">
+                    <a href="/" wire:navigate.hover class="w-full flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Kembali ke website</span>
                     </a>
@@ -64,34 +64,34 @@
             @else
                 <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 mb-2 mt-2">NAVIGASI</div>
                 <nav class="space-y-1 text-sm font-semibold">
-                    <a href="/dashboard" wire:navigate class="w-full flex items-center gap-2.5">
+                    <a href="/dashboard" wire:navigate.hover class="w-full flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"></rect><rect x="14" y="3" width="7" height="7" rx="2"></rect><rect x="3" y="14" width="7" height="7" rx="2"></rect><rect x="14" y="14" width="7" height="7" rx="2"></rect></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Ringkasan Balap</span>
                     </a>
 
-                    <a href="/dashboard" wire:navigate class="w-full flex items-center gap-2.5">
+                    <a href="/dashboard" wire:navigate.hover class="w-full flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9a3 3 0 0 0 0 6v3h18v-3a3 3 0 0 1 0-6V6H3z"></path><path d="M14 6v12" stroke-dasharray="2 3"></path></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Tiket &amp; BIB Saya</span>
                     </a>
 
-                    <a href="/events" wire:navigate class="w-full flex items-center gap-2.5">
+                    <a href="/events" wire:navigate.hover class="w-full flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M8 3v4M16 3v4M3 11h18"></path></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Jadwal balap</span>
                     </a>
 
-                    <a href="/dashboard" wire:navigate class="w-full flex items-center gap-2.5">
+                    <a href="/dashboard" wire:navigate.hover class="w-full flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1-5 15-5 16 0"></path></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Profil &amp; akun</span>
                     </a>
 
-                    <a href="{{ route('helpdesk.my-tickets', ['from' => 'rider']) }}" wire:navigate class="w-full flex items-center gap-2.5 on">
+                    <a href="{{ route('helpdesk.my-tickets', ['from' => 'rider']) }}" wire:navigate.hover class="w-full flex items-center gap-2.5 on">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"></path></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Tiket Bantuan</span>
                     </a>
 
                     <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 pt-5 pb-1">PUBLIK</div>
 
-                    <a href="/" wire:navigate class="w-full flex items-center gap-2.5">
+                    <a href="/" wire:navigate.hover class="w-full flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Kembali ke website</span>
                     </a>
@@ -99,12 +99,12 @@
                     <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 pt-5 pb-1">PENYELENGGARA</div>
 
                     @if ($canAccessOrganizer && $sidebarOrg)
-                        <a href="{{ route('organizations.show', $sidebarOrg) }}" wire:navigate class="w-full flex items-center gap-2.5">
+                        <a href="{{ route('organizations.show', $sidebarOrg) }}" wire:navigate.hover class="w-full flex items-center gap-2.5">
                             <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                             <span class="whitespace-nowrap font-bold text-sm">Dasbor Penyelenggara</span>
                         </a>
                     @else
-                        <a href="{{ route('packages.index') }}" wire:navigate class="w-full flex items-center gap-2.5 group" title="Beli kuota paket untuk membuka dasbor penyelenggara">
+                        <a href="{{ route('packages.index') }}" wire:navigate.hover class="w-full flex items-center gap-2.5 group" title="Beli kuota paket untuk membuka dasbor penyelenggara">
                             <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#DE7119" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                             <span class="whitespace-nowrap font-bold text-sm text-[var(--ink)]">Penyelenggara</span>
                         </a>
@@ -138,7 +138,7 @@
     <div class="flex-1 min-w-0 flex flex-col min-h-screen" style="flex: 1 1 0%; min-width: 0;">
         <!-- TOP BAR FOR MOBILE -->
         <header class="md:hidden h-16 bg-[#FBF4E6] border-b-[2.5px] border-[#10282E] px-4 flex items-center justify-between sticky top-0 z-20">
-            <a href="{{ $isOrganizerContext ? route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'overview']) : route('dashboard') }}" wire:navigate class="flex items-center gap-1.5 text-xs font-black text-[var(--ink)]">
+            <a href="{{ $isOrganizerContext ? route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'overview']) : route('dashboard') }}" wire:navigate.hover class="flex items-center gap-1.5 text-xs font-black text-[var(--ink)]">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                 <span>Kembali</span>
             </a>
@@ -155,10 +155,10 @@
 
         <!-- SUB NAV FILTER -->
         <div class="flex gap-2.5 mt-5 sm:mt-6 border-b-2 border-[var(--line)] pb-4 flex-wrap">
-            <a href="{{ route('helpdesk.create-ticket') }}" wire:navigate class="btn bg-white hover:bg-[var(--paper2)] text-[var(--ink)] border-2 border-[var(--ink)] px-4 sm:px-5 py-2 font-bold text-xs sm:text-sm shadow-[2px_2px_0_#10282E]">
+            <a href="{{ route('helpdesk.create-ticket') }}" wire:navigate.hover class="btn bg-white hover:bg-[var(--paper2)] text-[var(--ink)] border-2 border-[var(--ink)] px-4 sm:px-5 py-2 font-bold text-xs sm:text-sm shadow-[2px_2px_0_#10282E]">
                 Buat tiket
             </a>
-            <a href="{{ route('helpdesk.my-tickets') }}" wire:navigate class="btn bg-[var(--mustard)] text-[var(--ink)] border-2 border-[var(--ink)] px-4 sm:px-5 py-2 font-bold text-xs sm:text-sm shadow-[3px_3px_0_#10282E]">
+            <a href="{{ route('helpdesk.my-tickets') }}" wire:navigate.hover class="btn bg-[var(--mustard)] text-[var(--ink)] border-2 border-[var(--ink)] px-4 sm:px-5 py-2 font-bold text-xs sm:text-sm shadow-[3px_3px_0_#10282E]">
                 Tiket saya
             </a>
         </div>
@@ -218,7 +218,7 @@
                 @empty
                 <div class="bg-white border-2 border-dashed border-[var(--line)] p-8 rounded-xl text-center">
                     <p class="text-sm font-bold text-[var(--mute)]">Belum ada tiket pada kategori ini.</p>
-                    <a href="{{ route('helpdesk.create-ticket') }}" wire:navigate class="btn bg-[var(--orange)] text-[var(--ink)] border-2 border-[var(--ink)] px-4 py-2 font-bold text-xs mt-3 inline-block">
+                    <a href="{{ route('helpdesk.create-ticket') }}" wire:navigate.hover class="btn bg-[var(--orange)] text-[var(--ink)] border-2 border-[var(--ink)] px-4 py-2 font-bold text-xs mt-3 inline-block">
                         Buat tiket pertama
                     </a>
                 </div>

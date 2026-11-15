@@ -127,12 +127,14 @@
                                 </form>
                             @else
                                 <a href="{{ route('organizations.create', ['package' => $pkg->id]) }}"
+                                   wire:navigate.hover
                                    class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl border-2 border-[var(--ink)] font-black text-xs uppercase tracking-wider {{ $isPopular ? 'bg-[var(--orange)] hover:bg-[var(--orange-l)] text-white shadow-[3px_3px_0_#fff]' : 'bg-[var(--mustard)] hover:bg-[var(--butter)] text-[var(--ink)] shadow-[3px_3px_0_var(--ink)]' }} hover:translate-x-0.5 hover:translate-y-0.5 transition-all text-center">
                                     <span>Daftarkan Komunitas &amp; Beli &rarr;</span>
                                 </a>
                             @endif
                         @else
                             <a href="{{ route('organizations.create', ['package' => $pkg->id]) }}"
+                               wire:navigate.hover
                                class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl border-2 border-[var(--ink)] font-black text-xs uppercase tracking-wider {{ $isPopular ? 'bg-[var(--orange)] hover:bg-[var(--orange-l)] text-white shadow-[3px_3px_0_#fff]' : 'bg-[var(--mustard)] hover:bg-[var(--butter)] text-[var(--ink)] shadow-[3px_3px_0_var(--ink)]' }} hover:translate-x-0.5 hover:translate-y-0.5 transition-all text-center">
                                 <span>Mulai Jadi Penyelenggara &rarr;</span>
                             </a>

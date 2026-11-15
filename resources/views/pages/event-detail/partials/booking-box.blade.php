@@ -111,7 +111,7 @@
         @else
         <a href="/waiting-room?event={{ $event->slug }}"
            id="checkout-cta"
-           wire:navigate
+           wire:navigate.hover
            :href="selected ? '/waiting-room?event={{ $event->slug }}&category=' + selected : '/waiting-room?event={{ $event->slug }}'"
            class="mt-4 w-full flex items-center justify-center gap-2 bg-[var(--orange)] hover:bg-[var(--orange-l)] text-white font-black py-4 text-sm rounded-xl border-2 border-[var(--ink)] shadow-[4px_4px_0_var(--ink)] hover:translate-x-0.5 hover:translate-y-0.5 transition-all text-center cursor-pointer">
             <span>Lanjut ke Formulir Pendaftaran</span>

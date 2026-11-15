@@ -8,7 +8,7 @@
         <div>
             {{-- Brand Logo Header (Official Brand Asset) --}}
             <div class="flex items-center pb-5 mb-4 border-b border-[#10282E]/15">
-                <a href="/" wire:navigate class="flex items-center gap-3 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
+                <a href="/" wire:navigate.hover class="flex items-center gap-3 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
                     <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
                     <span class="font-extrabold text-2xl tracking-tight text-[#10282E]" style="font-family: 'Bricolage Grotesque', sans-serif;">Velosha</span>
                 </a>
@@ -80,12 +80,12 @@
 
                 <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 pt-5 pb-1">BERALIH</div>
 
-                <a href="{{ route('dashboard') }}" wire:navigate class="w-full flex items-center gap-2.5">
+                <a href="{{ route('dashboard') }}" wire:navigate.hover class="w-full flex items-center gap-2.5">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1-5 15-5 16 0"></path></svg>
                     <span class="whitespace-nowrap font-bold text-sm">Dashboard Rider</span>
                 </a>
 
-                <a href="/" wire:navigate class="w-full flex items-center gap-2.5">
+                <a href="/" wire:navigate.hover class="w-full flex items-center gap-2.5">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg>
                     <span class="whitespace-nowrap font-bold text-sm">Kembali ke website</span>
                 </a>
@@ -118,7 +118,7 @@
         <div x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
              class="side relative flex flex-col w-72 max-w-full h-full bg-[#FBF4E6] text-[var(--ink)] border-r-[3px] border-[#10282E] p-6 shadow-2xl overflow-y-auto">
             <div class="flex items-center justify-between pb-6 mb-4 border-b border-[#10282E]/15">
-                <a href="/" wire:navigate class="flex items-center gap-2.5 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
+                <a href="/" wire:navigate.hover class="flex items-center gap-2.5 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
                     <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
                     <span class="font-extrabold text-2xl tracking-tight text-[#10282E]" style="font-family: 'Bricolage Grotesque', sans-serif;">Velosha</span>
                 </a>
@@ -328,6 +328,7 @@
                             </p>
                         </div>
                         <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'create_event']) }}"
+                           wire:navigate.hover
                            class="btn w-fit">
                             <span>+ Buat Event Sekarang</span>
                         </a>
@@ -342,6 +343,7 @@
                             </p>
                         </div>
                         <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'kuota']) }}"
+                           wire:navigate.hover
                            class="btn btn-mustard w-fit">
                             <span>Beli Kuota Event &rarr;</span>
                         </a>
@@ -388,9 +390,9 @@
                                         @csrf
                                         <input type="hidden" name="package_id" value="{{ $pkg->id }}">
                                         <input type="hidden" name="redirect_to" value="events.create">
-                                        <button type="submit" class="btn btn-block {{ $isPop ? '' : 'btn-ghost' }}">
+                                        <x-ui.submit-button :variant="$isPop ? 'orange' : 'mustard'" loadingText="Menghubungkan Midtrans..." :fullWidth="true">
                                             Beli &amp; Buat Event &rarr;
-                                        </button>
+                                        </x-ui.submit-button>
                                     </form>
                                 </div>
                             @endforeach
@@ -579,9 +581,9 @@
                                           class="w-full px-4 py-3 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] font-medium text-sm text-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">{{ old('description') }}</textarea>
                             </div>
 
-                            <button type="submit" class="btn w-full sm:w-auto">
+                            <x-ui.submit-button variant="orange" loadingText="Menyimpan &amp; mempublikasikan..." size="md">
                                 Simpan &amp; Publikasikan Event &rarr;
-                            </button>
+                            </x-ui.submit-button>
                         </form>
                     </div>
                 @endif
@@ -594,7 +596,7 @@
                         <div class="text-[13px] font-bold tracking-[.08em] text-[var(--mute)] uppercase">PORTAL PENYELENGGARA</div>
                         <h1 class="h3 font-heading text-3xl font-black mt-0.5">Daftar Event Dikelola</h1>
                     </div>
-                    <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'create_event']) }}" class="btn btn-sm">
+                    <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'create_event']) }}" wire:navigate.hover class="btn btn-sm">
                         + Buat Event
                     </a>
                 </div>
@@ -608,7 +610,7 @@
                         <p class="text-xs sm:text-sm text-[var(--mute)] font-medium">
                             Komunitas {{ $organization->name }} belum memiliki event balap sepeda. Buat event pertamamu sekarang!
                         </p>
-                        <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'create_event']) }}" class="btn">
+                        <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'create_event']) }}" wire:navigate.hover class="btn">
                             + Buat Event Sekarang
                         </a>
                     </div>
@@ -647,16 +649,18 @@
                                     <span class="text-xs text-[var(--mute)] font-bold">/events/{{ $event->slug }}</span>
                                     <div class="flex items-center gap-2 flex-wrap">
                                         <a href="{{ route('organizations.events.scanner', ['organization' => $organization->slug, 'event' => $event->slug]) }}"
+                                           wire:navigate.hover
                                            class="btn btn-pine btn-sm font-black flex items-center gap-1.5 shadow-[1px_1px_0_var(--ink)]"
                                            title="Buka Gate Scanner Hari-H untuk Check-in Racepack">
                                             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
                                             <span>Gate Scanner</span>
                                         </a>
                                         <a href="{{ route('organizations.events.edit', ['organization' => $organization->slug, 'event' => $event->slug]) }}"
+                                           wire:navigate.hover
                                            class="btn btn-mustard btn-sm">
                                             Edit Event
                                         </a>
-                                        <a href="{{ route('events.show', $event->slug) }}" class="btn btn-ghost btn-sm">
+                                        <a href="{{ route('events.show', $event->slug) }}" wire:navigate.hover class="btn btn-ghost btn-sm">
                                             Lihat Publik &rarr;
                                         </a>
                                     </div>
@@ -681,7 +685,7 @@
                         <div class="disp text-4xl font-black text-[var(--pine)] mt-1">{{ $balance }} Kuota Race</div>
                         <div class="text-xs text-[var(--mute)] font-medium mt-1">1 kuota = 1 publikasi event balap sepeda di Velosha.</div>
                     </div>
-                    <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'create_event']) }}" class="btn">
+                    <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'create_event']) }}" wire:navigate.hover class="btn">
                         + Buat Event Dengan Kuota Ini
                     </a>
                 </div>
@@ -705,9 +709,9 @@
                             <form action="{{ route('organizations.quota.purchase', $organization) }}" method="POST" onsubmit="buyQuotaSnap(event, this)" class="mt-6 pt-2">
                                 @csrf
                                 <input type="hidden" name="package_id" value="{{ $pkg->id }}">
-                                <button type="submit" class="btn btn-block {{ $isPop ? '' : 'btn-ghost' }}">
+                                <x-ui.submit-button :variant="$isPop ? 'orange' : 'mustard'" loadingText="Menghubungkan Midtrans..." :fullWidth="true">
                                     Beli Kuota (Rp {{ number_format($pkg->price, 0, ',', '.') }})
-                                </button>
+                                </x-ui.submit-button>
                             </form>
                         </div>
                     @endforeach
@@ -793,7 +797,7 @@
                         <div class="p-8 text-center bg-[var(--paper)] rounded-xl border-2 border-dashed border-[var(--ink)]/30">
                             <p class="font-heading font-bold text-base text-[var(--ink)]">Belum ada event yang dipublikasikan</p>
                             <p class="text-xs text-[var(--mute)] mt-1">Buat event balap pertamamu untuk mulai menerima pendaftaran peserta.</p>
-                            <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'create_event']) }}" class="btn btn-sm mt-3 inline-flex">
+                            <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'create_event']) }}" wire:navigate.hover class="btn btn-sm mt-3 inline-flex">
                                 + Buat Event Sekarang
                             </a>
                         </div>
@@ -842,6 +846,7 @@
                                             </td>
                                             <td class="py-3.5 px-3 text-center">
                                                 <a href="{{ route('organizations.events.scanner', ['organization' => $organization->slug, 'event' => $ev->slug]) }}"
+                                                   wire:navigate.hover
                                                    class="btn btn-sm btn-ghost text-[11px] py-1 px-2.5 font-bold"
                                                    title="Buka Scanner Check-in">
                                                     Gate Scanner &rarr;
@@ -919,7 +924,9 @@
                 </div>
                 <div class="flex items-center justify-end gap-3 pt-3 border-t-2 border-[var(--ink)]">
                     <button type="button" @click="editOrgModal = false" class="btn btn-sm btn-ghost">Batal</button>
-                    <button type="submit" class="btn btn-sm btn-orange font-black">Simpan Perubahan &rarr;</button>
+                    <x-ui.submit-button variant="orange" loadingText="Menyimpan..." size="sm">
+                        Simpan Perubahan &rarr;
+                    </x-ui.submit-button>
                 </div>
             </form>
         </div>

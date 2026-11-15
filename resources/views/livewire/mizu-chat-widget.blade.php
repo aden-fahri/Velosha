@@ -193,6 +193,8 @@
             <div class="flex flex-wrap gap-1.5">
                 @foreach ($quickPrompts as $prompt)
                 <button type="button" wire:click="askQuick(@js($prompt))"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="text-left text-[11px] font-bold bg-[#FFFDF8] hover:bg-[#F4BE3F] text-[#10282E] border-2 border-[#10282E] rounded-xl px-2.5 py-1.5 shadow-[2px_2px_0_#10282E] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer">
                     {{ $prompt }}
                 </button>
@@ -207,12 +209,19 @@
             <input id="mizu-question" type="text" wire:model="question" maxlength="500"
                    placeholder="Tanya seputar balapan…"
                    class="flex-grow px-3.5 py-2.5 text-xs font-semibold border-2 border-[#10282E] rounded-xl bg-white text-[#10282E] placeholder-[#56666A] focus:outline-none focus:ring-2 focus:ring-[#F4BE3F] shadow-[inset_1.5px_1.5px_0_rgba(16,40,46,0.06)]">
-            <button type="submit" wire:loading.attr="disabled" wire:target="ask"
+            <button type="submit"
+                    wire:loading.attr="disabled"
+                    wire:loading.class="opacity-60 cursor-wait"
+                    wire:target="ask, askQuick"
                     class="bg-[#1F6F4A] hover:bg-[#18593B] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none text-white px-3.5 py-2.5 border-2 border-[#10282E] rounded-xl shadow-[2.5px_2.5px_0_#10282E] disabled:opacity-50 transition-all shrink-0 flex items-center justify-center cursor-pointer"
                     aria-label="Kirim pertanyaan">
-                <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <svg wire:loading.remove wire:target="ask, askQuick" class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="m22 2-7 20-4-9-9-4Z"/>
                     <path d="M22 2 11 13"/>
+                </svg>
+                <svg wire:loading wire:target="ask, askQuick" class="w-4 h-4 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                 </svg>
             </button>
         </form>

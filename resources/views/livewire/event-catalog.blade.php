@@ -272,6 +272,8 @@
                     <div>
                         <button type="button"
                                 wire:click="resetFilters"
+                                wire:loading.attr="disabled"
+                                wire:loading.class="opacity-60 cursor-wait"
                                 class="events-reset-btn"
                                 aria-label="Reset semua filter">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -321,12 +323,18 @@
                         <span>{{ $filter['label'] }}</span>
                         <button type="button"
                                 wire:click="clearFilter('{{ $filter['key'] }}')"
+                                wire:loading.attr="disabled"
+                                wire:loading.class="opacity-60 cursor-wait"
                                 style="color: var(--mute); font-weight: 900; margin-left: 2px; cursor: pointer;"
                                 class="hover:text-red-600"
                                 aria-label="Hapus filter">×</button>
                     </span>
                 @endforeach
-                <button type="button" wire:click="resetFilters" style="font-size: 12px; color: var(--orange); font-weight: 800; margin-left: 6px; cursor: pointer; text-decoration: underline;">Reset Semua</button>
+                <button type="button"
+                        wire:click="resetFilters"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
+                        style="font-size: 12px; color: var(--orange); font-weight: 800; margin-left: 6px; cursor: pointer; text-decoration: underline;">Reset Semua</button>
             </div>
             @endif
 
@@ -420,7 +428,11 @@
                 <div class="col-span-full border-[3px] border-[var(--ink)] shadow-[6px_6px_0_var(--ink)] rounded-xl bg-[var(--card)] p-12 text-center">
                     <h3 class="font-heading font-black text-2xl text-[var(--ink)] mb-2">Tidak ada race yang cocok</h3>
                     <p class="text-sm text-[var(--mute)] max-w-sm mx-auto mb-6">Coba ubah kata kunci atau reset filter untuk melihat seluruh kalender balap.</p>
-                    <button type="button" wire:click="resetFilters" class="btn btn-sm cursor-pointer">
+                    <button type="button"
+                            wire:click="resetFilters"
+                            wire:loading.attr="disabled"
+                            wire:loading.class="opacity-60 cursor-wait"
+                            class="btn btn-sm cursor-pointer">
                         <span>Reset Filter</span>
                     </button>
                 </div>

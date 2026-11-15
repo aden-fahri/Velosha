@@ -42,6 +42,12 @@
     </svg>
 
     <div class="wrap relative z-10">
+        <div class="mb-3">
+            <a href="{{ route('events.index') }}" wire:navigate.hover class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[var(--ink)] hover:text-[var(--orange)] transition-colors">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <span>Kembali ke Kalender Event</span>
+            </a>
+        </div>
         <div class="flex items-center gap-2.5 mb-3.5 flex-wrap">
             <span class="chip font-bold bg-[var(--orange)] text-white border border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
                 {{ $event->type_label }}

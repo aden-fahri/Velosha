@@ -189,7 +189,9 @@
                                     </div>
 
                                     <h3 class="font-heading font-black text-xl text-[var(--ink)] mt-2.5 mb-2 leading-snug line-clamp-2 min-h-[54px] flex items-center">
-                                        {{ $race['title'] }}
+                                        <a href="{{ $race['url'] }}" wire:navigate.hover class="hover:text-[var(--orange)] transition-colors">
+                                            {{ $race['title'] }}
+                                        </a>
                                     </h3>
 
                                     {{-- Stats 3-Col --}}

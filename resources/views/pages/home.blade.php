@@ -93,7 +93,7 @@
                 Daftar Gran Fondo, Medio Fondo, dan Fun Ride di seluruh Indonesia. Tiket dan nomor BIB langsung jadi.
             </p>
             <div class="a-rise" style="animation-delay: .5s; margin-top: 20px">
-                <a href="#event" class="btn">
+                <a href="{{ route('events.index') }}" wire:navigate.hover class="btn">
                     Cari event
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
                 </a>

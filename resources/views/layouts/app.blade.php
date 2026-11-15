@@ -124,7 +124,20 @@
             window.__veloIconObserver.observe(document.body, { childList: true, subtree: true });
         }
 
-        // Global Anti-Double-Submit untuk seluruh Form Standar
+        // Global Anti-Double-Submit Guard - ONLY untuk Form Standar Non-Livewire
+        window.__veloResetFormButtons = function() {
+            document.querySelectorAll('button[data-velo-submitting]').forEach((btn) => {
+                btn.disabled = false;
+                btn.classList.remove('opacity-60', 'cursor-not-allowed');
+                delete btn.dataset.veloSubmitting;
+                if (btn.dataset.veloOriginalText) {
+                    const span = btn.querySelector('span');
+                    if (span) span.textContent = btn.dataset.veloOriginalText;
+                    delete btn.dataset.veloOriginalText;
+                }
+            });
+        };
+
         if (!window.__veloFormSubmitGuard) {
             window.__veloFormSubmitGuard = true;
             document.addEventListener('submit', (e) => {
@@ -132,26 +145,40 @@
                 if (!form || !(form instanceof HTMLFormElement)) return;
                 if (e.defaultPrevented) return;
 
+                // Jangan sentuh form Livewire (wire:submit) karena Livewire 3 mengelola wire:loading secara native
+                const isLivewireForm = form.hasAttribute('wire:submit') ||
+                    Array.from(form.attributes).some(attr => attr.name.startsWith('wire:submit'));
+                if (isLivewireForm) return;
+
                 const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
                 if (!submitBtn || submitBtn.disabled) return;
 
                 setTimeout(() => {
                     submitBtn.disabled = true;
                     submitBtn.classList.add('opacity-60', 'cursor-not-allowed');
+                    submitBtn.dataset.veloSubmitting = 'true';
                     const textSpan = submitBtn.querySelector('span');
                     if (textSpan && !submitBtn.querySelector('.animate-spin')) {
+                        submitBtn.dataset.veloOriginalText = textSpan.textContent;
                         textSpan.textContent = 'Memproses...';
                     }
                 }, 10);
             });
         }
 
-        // Livewire morph hook fallback
+        // Livewire morph hook fallback & reset form guard
         if (!window.__veloLivewireInit) {
             window.__veloLivewireInit = true;
             document.addEventListener('livewire:init', () => {
-                Livewire.hook('morph.updated', () => window.__veloRenderIcons());
+                Livewire.hook('morph.updated', () => {
+                    window.__veloRenderIcons();
+                    window.__veloResetFormButtons();
+                });
                 Livewire.hook('morph.added', () => window.__veloRenderIcons());
+                Livewire.hook('commit', ({ succeed, fail }) => {
+                    succeed(() => window.__veloResetFormButtons());
+                    fail(() => window.__veloResetFormButtons());
+                });
                 Livewire.on('open-midtrans-snap', (data) => window.__veloHandleSnap(data));
             });
         }
@@ -212,6 +239,7 @@
                 }
                 window.__veloRenderIcons();
                 window.__veloInitReveal();
+                if (typeof window.__veloResetFormButtons === 'function') window.__veloResetFormButtons();
                 if (typeof window.initRaceDeck === 'function') window.initRaceDeck();
                 if (typeof window.initInteractiveTicket === 'function') window.initInteractiveTicket();
                 document.body.classList.remove('velo-nav-leaving');
