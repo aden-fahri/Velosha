@@ -35,9 +35,11 @@ class LandingPageDomTest extends TestCase
         $response->assertSee('Cari event');
         $response->assertSee('wire:navigate.hover', false);
 
-        // 4. Ticket slider component
+        // 4. Interactive Cycling Gear Carousel component
         $response->assertSee('hero-ticket-col');
         $response->assertSee('GRAN FONDO');
+        $response->assertSee('Helm Aero Endurance');
+        $response->assertSee('Cycling_helmet_vector_illustration_d67f9022.jpg');
     }
 
     public function test_layout_contains_spa_progress_and_anti_double_click_guard(): void

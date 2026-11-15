@@ -100,141 +100,106 @@
             </div>
         </div>
 
-        <!-- 4. Mockup E-Ticket & BIB Resmi (Order 4 di Mobile, Kiri Bawah di Desktop) -->
+        <!-- 4. Perlengkapan Balap Resmi (Interactive Cycling Gear Carousel - Order 4 di Mobile, Kiri Bawah di Desktop) -->
         <div class="a-rise hero-ticket-col"
              x-data="{
                 activeIdx: 0,
-                tickets: [
+                gears: [
                     {
-                        bib: '0428',
-                        cat: 'GRAN FONDO',
-                        dist: '120K',
-                        rider: 'RAFI M.',
-                        title: 'JAKARTA-BANDUNG',
-                        subtitle: 'GRAN FONDO',
-                        date: '28 FEB 2026',
-                        location: 'Start: Monas, Jakarta'
+                        title: 'Helm Aero Endurance',
+                        tag: 'SAFETY SPEC',
+                        badge: 'STANDAR UCI',
+                        category: 'GRAN FONDO GEAR',
+                        spec: 'Bobot 220g • EPS High-Density',
+                        desc: 'Standar keselamatan Gran Fondo dengan ventilasi optimal dan aerodinamika tinggi.',
+                        img: '{{ asset('images/hero/Cycling_helmet_vector_illustration_d67f9022.jpg') }}',
+                        alt: 'Helm Sepeda Balap Velosha'
                     },
                     {
-                        bib: '0081',
-                        cat: 'GRAN FONDO',
-                        dist: '130K',
-                        rider: 'BUDI P.',
-                        title: 'BOROBUDUR',
-                        subtitle: 'HERITAGE RIDE',
-                        date: '15 MAR 2026',
-                        location: 'Start: Candi Borobudur'
+                        title: 'Kacamata Gowes UV400',
+                        tag: 'OPTICS GEAR',
+                        badge: 'ANTI-GLARE',
+                        category: 'PELINDUNG MATA',
+                        spec: 'Lensa Hidrofobik • Frame TR90',
+                        desc: 'Proteksi sinar UV penuh dan lensa hidrofobik anti-embun di segala kondisi rute.',
+                        img: '{{ asset('images/hero/Illustration_of_cycling_sunglasses_c5a9a6dc.jpg') }}',
+                        alt: 'Kacamata Sepeda Velosha'
                     },
                     {
-                        bib: '0147',
-                        cat: 'MEDIO FONDO',
-                        dist: '80K',
-                        rider: 'SITI A.',
-                        title: 'TOUR DE BROMO',
-                        subtitle: 'KING OF MOUNTAIN',
-                        date: '24 MEI 2026',
-                        location: 'Start: Pasuruan, Jatim'
-                    },
-                    {
-                        bib: '0256',
-                        cat: 'CENTURY RIDE',
-                        dist: '160K',
-                        rider: 'DIAN S.',
-                        title: 'JOGJA CENTURY',
-                        subtitle: 'ENDURANCE RACE',
-                        date: '12 JUL 2026',
-                        location: 'Start: Tugu Yogyakarta'
+                        title: 'Bidon Hidrasi Velosha',
+                        tag: 'OFFICIAL MERCH',
+                        badge: 'BPA FREE',
+                        category: 'HIDRASI RESMI',
+                        spec: 'Kapasitas 650ml • Fast-Flow Valve',
+                        desc: 'Botol hidrasi resmi race dengan katup cepat anti-bocor untuk rehidrasi presisi.',
+                        img: '{{ asset('images/hero/Cycling_water_bottle_illustration_52196d1e.jpg') }}',
+                        alt: 'Bidon Minum Velosha'
                     }
                 ],
-                next() { this.activeIdx = (this.activeIdx + 1) % this.tickets.length },
-                prev() { this.activeIdx = (this.activeIdx - 1 + this.tickets.length) % this.tickets.length },
-                get current() { return this.tickets[this.activeIdx]; }
+                next() { this.activeIdx = (this.activeIdx + 1) % this.gears.length },
+                prev() { this.activeIdx = (this.activeIdx - 1 + this.gears.length) % this.gears.length },
+                get current() { return this.gears[this.activeIdx]; }
              }"
              style="animation-delay: .7s">
 
             <div class="bg-[#FBF4E6] rounded-2xl border-[3px] border-[#10282E] shadow-[5px_5px_0_#10282E] p-3 sm:p-4 select-none">
-                <!-- Inner Ticket Shape (with Left Notch & Center Dashed Divider Sesuai Gambar 2) -->
-                <div class="relative bg-[#FFFDF8] rounded-xl border-[2.5px] border-[#10282E] p-2.5 sm:p-3.5 flex items-stretch gap-2 sm:gap-3 overflow-hidden">
-
-                    <!-- Notches on the seam -->
-                    <div class="absolute -top-3 left-[47%] -translate-x-1/2 w-5 h-5 rounded-full bg-[#FBF4E6] border-2 border-[#10282E] z-10 pointer-events-none"></div>
-                    <div class="absolute -bottom-3 left-[47%] -translate-x-1/2 w-5 h-5 rounded-full bg-[#FBF4E6] border-2 border-[#10282E] z-10 pointer-events-none"></div>
-                    <!-- Left edge notch cutout persis Gambar 2 -->
-                    <div class="absolute top-1/2 -left-3 -translate-y-1/2 w-5 h-5 rounded-full bg-[#FBF4E6] border-2 border-[#10282E] z-10 pointer-events-none"></div>
-
-                    <!-- Left Stub: BIB & Distance (Aksen Kuning Diagonal Persis Gambar 2) -->
-                    <div class="w-[47%] flex flex-col justify-between pr-2 border-r-2 border-dashed border-[#10282E] relative rounded-l-md p-1"
-                         style="background: linear-gradient(135deg, #F8E3B5 0%, #F8E3B5 60%, transparent 60%);">
-                        <div class="text-[10px] sm:text-[11px] font-black uppercase text-[#10282E] tracking-wider pl-1.5"
-                             x-text="'BIB: ' + current.bib">
-                            BIB: 0428
-                        </div>
-
-                        <div class="text-[11px] sm:text-xs font-black uppercase tracking-tight text-[#10282E] mt-0.5 pl-1.5"
-                             x-text="current.cat">
-                            GRAN FONDO
-                        </div>
-
-                        <!-- Big Distance 120K / 130K Persis Gambar 2 -->
-                        <div class="font-heading font-black text-2xl sm:text-4xl leading-none text-[#DE7119] my-0.5 pl-1.5"
-                             style="-webkit-text-stroke: 1.2px #10282E;"
-                             x-text="current.dist">
-                            120K
-                        </div>
-
-                        <div class="font-heading font-black text-[11px] sm:text-xs uppercase text-[#10282E] tracking-wider truncate pl-1.5"
-                             x-text="current.rider">
-                            RAFI M.
-                        </div>
+                <!-- Inner Gear Card -->
+                <div class="relative bg-[#FFFDF8] rounded-xl border-[2.5px] border-[#10282E] p-2.5 sm:p-3 flex items-center gap-3 overflow-hidden">
+                    
+                    <!-- Left: Gear Illustration Thumbnail with Border & Warm Amber Background -->
+                    <div class="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg border-2 border-[#10282E] bg-[#F8E3B5] overflow-hidden shrink-0 shadow-[2px_2px_0_#10282E] flex items-center justify-center p-1">
+                        <img :src="current.img" 
+                             :alt="current.alt" 
+                             class="w-full h-full object-cover rounded transition-transform duration-300 hover:scale-105">
+                        <span class="absolute bottom-1 right-1 px-1 py-0.2 bg-[#10282E] text-[#FFFDF8] text-[8px] font-mono font-bold rounded"
+                              x-text="(activeIdx + 1) + '/3'">
+                            1/3
+                        </span>
                     </div>
 
-                    <!-- Center Mini Bike Icon & QR Code (Tampil di Semua Ukuran Layar Sesuai Gambar 2) -->
-                    <div class="flex flex-col justify-between items-center py-0.5 shrink-0">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-[#10282E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/>
-                        </svg>
-                        <div class="w-7 h-7 sm:w-9 sm:h-9 p-0.5 bg-white border border-[#10282E] rounded">
-                            <img src="{{ \App\Support\QrCodeService::uri('VELOSHA-DEMO-0428') }}" alt="QR" class="w-full h-full object-contain">
-                        </div>
-                    </div>
-
-                    <!-- Right Section: Event Title & Date Badge -->
-                    <div class="flex-1 flex flex-col justify-between pl-1 sm:pl-2 min-w-0">
-                        <div>
-                            <div class="font-heading font-black text-xs sm:text-sm uppercase leading-tight text-[#10282E] truncate"
-                                 x-text="current.title">
-                                JAKARTA-BANDUNG
-                            </div>
-                            <div class="font-heading font-bold text-[10px] sm:text-xs uppercase text-[#10282E]/80 truncate"
-                                 x-text="current.subtitle">
-                                GRAN FONDO
-                            </div>
-                        </div>
-
-                        <div class="my-1">
-                            <span class="inline-block px-2 py-0.5 rounded-md bg-[#DE7119] text-white text-[10px] sm:text-[11px] font-black tracking-wide border-1.5 border-[#10282E] shadow-[1.5px_1.5px_0_#10282E]"
-                                  x-text="current.date">
-                                28 FEB 2026
+                    <!-- Right: Gear Details -->
+                    <div class="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+                        <!-- Top Tag & UCI Badge -->
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <span class="inline-block px-1.5 py-0.5 rounded bg-[#DE7119] text-[#FFFDF8] text-[9px] sm:text-[10px] font-black uppercase tracking-wider border border-[#10282E] shadow-[1px_1px_0_#10282E]"
+                                  x-text="current.tag">
+                                SAFETY SPEC
+                            </span>
+                            <span class="inline-block px-1.5 py-0.5 rounded bg-[#1F6F4A] text-[#FFFDF8] text-[9px] font-black uppercase tracking-wider border border-[#10282E]"
+                                  x-text="current.badge">
+                                STANDAR UCI
                             </span>
                         </div>
 
-                        <div class="text-[9px] sm:text-[11px] font-bold text-[#10282E]/85 truncate"
-                             x-text="current.location">
-                            Start: Monas, Jakarta
+                        <!-- Title -->
+                        <div class="font-heading font-black text-xs sm:text-sm uppercase leading-tight text-[#10282E] truncate mt-1"
+                             x-text="current.title">
+                            Helm Aero Endurance
+                        </div>
+
+                        <!-- Description -->
+                        <p class="text-[10px] sm:text-[11px] font-medium text-[#10282E]/85 line-clamp-2 leading-snug mt-0.5"
+                           x-text="current.desc">
+                            Standar keselamatan Gran Fondo dengan ventilasi optimal dan aerodinamika tinggi.
+                        </p>
+
+                        <!-- Spec Pill / Feature -->
+                        <div class="mt-1 flex items-center gap-1 text-[9px] sm:text-[10px] font-bold text-[#10282E]/70 truncate">
+                            <svg class="w-3 h-3 text-[#DE7119] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span x-text="current.spec" class="truncate">Bobot 220g • EPS High-Density</span>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- BAR BAWAH KONTROL: Dots Carousel di Kiri, Tombol Panah Neobrutalist di Kanan -->
-                <div class="flex items-center justify-between mt-3 pt-1 px-1">
-                    <!-- Dots Indikator (○ ▬ ○ ○) Sesuai Gambar 2 -->
+                <!-- Bottom Bar: Dots indicator & Neobrutalist arrow navigation -->
+                <div class="flex items-center justify-between mt-2.5 pt-1 px-1">
+                    <!-- Dots Indikator (○ ▬ ○) -->
                     <div class="flex items-center gap-1.5 sm:gap-2">
-                        <template x-for="(t, idx) in tickets" :key="idx">
+                        <template x-for="(g, idx) in gears" :key="idx">
                             <button type="button"
                                     @click="activeIdx = idx"
                                     class="transition-all duration-200 cursor-pointer p-0.5 focus:outline-none"
-                                    :aria-label="'Pilih tiket ' + (idx + 1)">
+                                    :aria-label="'Pilih perlengkapan ' + (idx + 1)">
                                 <span class="block border-2 border-[#10282E] transition-all duration-200"
                                       :class="activeIdx === idx 
                                           ? 'w-6 sm:w-7 h-2.5 sm:h-3 rounded-full bg-[#DE7119]' 
@@ -244,18 +209,18 @@
                         </template>
                     </div>
 
-                    <!-- Tombol Panah < dan > Neobrutalist Sesuai Gambar 2 -->
+                    <!-- Tombol Panah < dan > Neobrutalist -->
                     <div class="flex items-center gap-2">
                         <button type="button"
                                 @click="prev()"
                                 class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-[#10282E] bg-white text-[#10282E] shadow-[2px_2px_0_#10282E] flex items-center justify-center font-black text-sm hover:-translate-x-0.5 active:translate-y-0.5 transition-transform cursor-pointer"
-                                aria-label="Tiket sebelumnya">
+                                aria-label="Perlengkapan sebelumnya">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                         </button>
                         <button type="button"
                                 @click="next()"
                                 class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-[#10282E] bg-[#DE7119] text-white shadow-[2px_2px_0_#10282E] flex items-center justify-center font-black text-sm hover:translate-x-0.5 active:translate-y-0.5 transition-transform cursor-pointer"
-                                aria-label="Tiket berikutnya">
+                                aria-label="Perlengkapan berikutnya">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                         </button>
                     </div>
