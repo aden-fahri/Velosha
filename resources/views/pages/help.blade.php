@@ -482,7 +482,7 @@ $hasRiderImage = file_exists(public_path('images/art/rider-standing.png'));
 <div class="sr-only" aria-hidden="true">
     <h2>{{ $content->cta_title ?? 'Masih ada yang mengganjal?' }}</h2>
     <p>{{ $content->cta_desc ?? 'Tim kami siap membantu setiap hari kerja, 09.00–18.00 WIB.' }}</p>
-    <a href="{{ $content->cta_url ?? '/events' }}">{{ $content->cta_label ?? 'Lihat Semua Race' }}</a>
+    <a href="{{ $content->cta_url ?? '/events' }}" wire:navigate.hover>{{ $content->cta_label ?? 'Lihat Semua Race' }}</a>
 </div>
 
 @endsection

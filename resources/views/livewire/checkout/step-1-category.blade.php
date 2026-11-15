@@ -87,7 +87,7 @@
         <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider">
             Kategori Jarak Dipilih
         </h3>
-        <button type="button" wire:click="toStep1" class="text-xs font-bold text-[var(--orange)] hover:underline cursor-pointer">Ubah Kategori</button>
+        <button type="button" wire:click="toStep1" wire:loading.attr="disabled" class="text-xs font-bold text-[var(--orange)] hover:underline cursor-pointer">Ubah Kategori</button>
     </div>
 
     <div class="border-2 border-[var(--ink)] bg-[var(--paper)] p-4 rounded-xl shadow-[2px_2px_0_var(--ink)] flex items-center justify-between">

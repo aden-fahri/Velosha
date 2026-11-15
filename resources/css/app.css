@@ -44,9 +44,11 @@
     --berry: #9B3D5A;
     --berry-l: #F2D3DC;
     --red: #A02F1A;
+    --red-d: #802312;
     --red-l: #F8D9D2;
     --mute: #56666A;
     --line: #E2D3B3;
+    --k: 1;
 
     --livewire-progress-bar-color: #DE7119;
 }
@@ -1597,7 +1599,7 @@ h1, h2, h3, h4, .disp, .font-heading {
 }
 @keyframes draw { 0%, 3% { stroke-dashoffset: 1; } 13%, 100% { stroke-dashoffset: 0; } }
 @keyframes gr { 0% { opacity: 0; transform: translateY(40px); } 6%, 100% { opacity: 1; transform: none; } }
-@keyframes cl { 0%, 8% { transform: translateX(calc(40px * var(--k))); } 68%, 100% { transform: translateX(calc(-90px * var(--k))); } }
+@keyframes cl { 0%, 8% { transform: translateX(calc(40px * var(--k, 1))); } 68%, 100% { transform: translateX(calc(-90px * var(--k, 1))); } }
 @keyframes par { 0%, 8% { transform: none; } 68%, 100% { transform: translate(-14px, 5px); } }
 @keyframes wm { 0%, 8% { clip-path: inset(0 100% 0 0); } 22%, 100% { clip-path: inset(0 0 0 0); } }
 @keyframes rise-intro { 0%, 54% { opacity: 0; transform: translateY(28px); } 68%, 100% { opacity: 1; transform: none; } }

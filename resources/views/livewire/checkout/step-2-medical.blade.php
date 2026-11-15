@@ -106,7 +106,7 @@
 
 {{-- Navigasi langkah 2 --}}
 <div class="mt-6 flex items-center justify-between gap-3">
-    <button type="button" wire:click="toStep1" class="px-5 py-3.5 bg-white hover:bg-[var(--paper)] text-[var(--ink)] border-2 border-[var(--ink)] rounded-xl text-xs font-black shadow-[2px_2px_0_var(--ink)] hover:translate-x-0.5 hover:translate-y-0.5 transition-all cursor-pointer">
+    <button type="button" wire:click="toStep1" wire:loading.attr="disabled" class="px-5 py-3.5 bg-white hover:bg-[var(--paper)] text-[var(--ink)] border-2 border-[var(--ink)] rounded-xl text-xs font-black shadow-[2px_2px_0_var(--ink)] hover:translate-x-0.5 hover:translate-y-0.5 transition-all cursor-pointer">
         <i data-lucide="arrow-left" class="w-3.5 h-3.5 inline mr-1.5"></i>
         <span>Kembali</span>
     </button>

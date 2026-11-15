@@ -135,7 +135,7 @@
 <body>
     <div class="dots"></div>
     <div class="card">
-        <a href="/" class="logo-wrap">
+        <a href="/" wire:navigate.hover class="logo-wrap">
             <img src="/images/logo-velosha.png" alt="Velosha" class="logo-img">
             <span class="logo-txt">Velosha</span>
         </a>
@@ -161,10 +161,10 @@
                         $destLabel = 'Ke Dashboard Saya';
                     }
                 @endphp
-                <a href="{{ $destUrl }}" class="btn btn-primary">
+                <a href="{{ $destUrl }}" wire:navigate.hover class="btn btn-primary">
                     {{ $destLabel }}
                 </a>
-                <a href="/" class="btn btn-secondary" style="width: 100%;">
+                <a href="/" wire:navigate.hover class="btn btn-secondary" style="width: 100%;">
                     Kembali ke Beranda
                 </a>
                 <form method="POST" action="/logout">
@@ -174,10 +174,10 @@
                     </button>
                 </form>
             @else
-                <a href="/" class="btn btn-primary">
+                <a href="/" wire:navigate.hover class="btn btn-primary">
                     &larr; Kembali ke Beranda
                 </a>
-                <a href="/login" class="btn btn-secondary">
+                <a href="/login" wire:navigate.hover class="btn btn-secondary">
                     Masuk ke Akun Lain
                 </a>
             @endauth

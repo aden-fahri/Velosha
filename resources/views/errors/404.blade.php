@@ -133,7 +133,7 @@
 <body>
     <div class="dots"></div>
     <div class="card">
-        <a href="/" class="logo-wrap">
+        <a href="/" wire:navigate.hover class="logo-wrap">
             <img src="/images/logo-velosha.png" alt="Velosha" class="logo-img">
             <span class="logo-txt">Velosha</span>
         </a>
@@ -147,10 +147,10 @@
         </div>
 
         <div class="actions">
-            <a href="/" class="btn btn-primary">
+            <a href="/" wire:navigate.hover class="btn btn-primary">
                 &larr; Kembali ke Beranda
             </a>
-            <a href="/events" class="btn btn-secondary">
+            <a href="/events" wire:navigate.hover class="btn btn-secondary">
                 Jelajahi Kalender Balap
             </a>
         </div>

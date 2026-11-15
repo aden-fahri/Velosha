@@ -49,12 +49,21 @@
                             $homeIcon = 'layout-dashboard';
                         }
                     @endphp
-                    <a href="{{ $homeUrl }}" {{ $u->isAdmin() ? '' : 'wire:navigate.hover' }}
+                    @if ($u->isAdmin())
+                    <a href="{{ $homeUrl }}"
                        class="btn btn-sm btn-ghost px-3 text-sm font-bold items-center gap-1.5"
                        aria-label="{{ $homeLabel }}">
                         <i data-lucide="{{ $homeIcon }}" class="w-4 h-4 text-[var(--ink)] shrink-0"></i>
                         <span>{{ $homeLabel }}</span>
                     </a>
+                    @else
+                    <a href="{{ $homeUrl }}" wire:navigate.hover
+                       class="btn btn-sm btn-ghost px-3 text-sm font-bold items-center gap-1.5"
+                       aria-label="{{ $homeLabel }}">
+                        <i data-lucide="{{ $homeIcon }}" class="w-4 h-4 text-[var(--ink)] shrink-0"></i>
+                        <span>{{ $homeLabel }}</span>
+                    </a>
+                    @endif
 
                     <a href="{{ route('ticket.show') }}" wire:navigate.hover
                        class="btn btn-sm btn-pine px-3 text-sm font-bold items-center gap-1.5"

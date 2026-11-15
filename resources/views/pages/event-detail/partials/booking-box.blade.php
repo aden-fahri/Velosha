@@ -52,7 +52,7 @@
                             <span>COT {{ P::jam((float) $category->cut_off_hours) }}</span>
                         </div>
                         <div class="mt-1">
-                            <span class="inline-flex items-center text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded {{ $category->remaining > 0 ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' : 'bg-red-50 text-red-800 border border-red-300' }}">
+                            <span class="inline-flex items-center text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded {{ $category->remaining > 0 ? 'bg-[#D5EBD9] text-[#1F6F4A] border border-[#1F6F4A]' : 'bg-[#F8D9D2] text-[#A02F1A] border border-[#A02F1A]' }}">
                                 {{ $category->remaining > 0 ? 'Sisa ' . $category->remaining . ' Slot' : 'Slot Penuh' }}
                             </span>
                         </div>

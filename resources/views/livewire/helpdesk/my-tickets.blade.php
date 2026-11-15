@@ -261,7 +261,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                             {{-- Step 1: Dibuat --}}
                             <div class="flex items-start gap-2.5 p-2.5 bg-white border-[1.5px] border-[var(--ink)] rounded-xl shadow-[2px_2px_0_var(--ink)]" data-testid="timeline-step-dibuat">
-                                <div class="w-6 h-6 rounded-full bg-emerald-500 text-white border-[1.5px] border-[var(--ink)] flex items-center justify-center font-bold text-xs shrink-0">
+                                <div class="w-6 h-6 rounded-full bg-[#1F6F4A] text-white border-[1.5px] border-[var(--ink)] flex items-center justify-center font-bold text-xs shrink-0">
                                     ✓
                                 </div>
                                 <div class="min-w-0">
@@ -275,7 +275,7 @@
                             {{-- Step 2: Ditugaskan (Only if assigned) --}}
                             @if ($selectedTicket->operator_id && $selectedTicket->operator)
                                 <div class="flex items-start gap-2.5 p-2.5 bg-white border-[1.5px] border-[var(--ink)] rounded-xl shadow-[2px_2px_0_var(--ink)]" data-testid="timeline-step-ditugaskan">
-                                    <div class="w-6 h-6 rounded-full bg-emerald-500 text-white border-[1.5px] border-[var(--ink)] flex items-center justify-center font-bold text-xs shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-[#1F6F4A] text-white border-[1.5px] border-[var(--ink)] flex items-center justify-center font-bold text-xs shrink-0">
                                         ✓
                                     </div>
                                     <div class="min-w-0">
@@ -316,7 +316,7 @@
                                 $isClosed = $selectedTicket->isClosed();
                             @endphp
                             <div class="flex items-start gap-2.5 p-2.5 {{ $isClosed ? 'bg-white' : 'bg-[#F3E7CF]/50' }} border-[1.5px] border-[var(--ink)] rounded-xl shadow-[2px_2px_0_var(--ink)]" data-testid="timeline-step-selesai">
-                                <div class="w-6 h-6 rounded-full {{ $isClosed ? 'bg-emerald-500 text-white' : 'bg-white text-[var(--mute)] border-dashed' }} border-[1.5px] border-[var(--ink)] flex items-center justify-center font-bold text-xs shrink-0">
+                                <div class="w-6 h-6 rounded-full {{ $isClosed ? 'bg-[#1F6F4A] text-white' : 'bg-white text-[var(--mute)] border-dashed' }} border-[1.5px] border-[var(--ink)] flex items-center justify-center font-bold text-xs shrink-0">
                                     {{ $isClosed ? '✓' : '•' }}
                                 </div>
                                 <div class="min-w-0">

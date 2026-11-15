@@ -92,7 +92,7 @@
 
             <div class="flex items-center gap-3">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border-[2px] border-[var(--ink)] rounded-lg text-xs font-bold shadow-[2px_2px_0_var(--ink)]">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span class="w-2 h-2 rounded-full bg-[#1F6F4A]"></span>
                     {{ auth()->user()->name }} (ADMIN)
                 </span>
 
@@ -140,7 +140,7 @@
                 <div class="bg-white border-[2.5px] border-[var(--ink)] rounded-xl p-4 sm:p-5 shadow-[4px_4px_0_var(--ink)]">
                     <div class="flex items-center justify-between text-xs font-extrabold text-[var(--mute)] uppercase tracking-wider">
                         <span>Selesai (Closed)</span>
-                        <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full border border-[var(--ink)]"></span>
+                        <span class="w-2.5 h-2.5 bg-[#1F6F4A] rounded-full border border-[var(--ink)]"></span>
                     </div>
                     <div class="mt-2 text-3xl sm:text-4xl font-black font-heading">{{ $kpi['closed'] }}</div>
                     <div class="mt-1 text-xs text-[var(--mute)]">Telah terselesaikan</div>

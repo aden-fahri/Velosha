@@ -7,12 +7,12 @@
     <div class="card relative w-full max-w-md bg-[var(--card)] border-[3px] border-[var(--ink)] rounded-2xl p-7 sm:p-9 shadow-[8px_8px_0_var(--ink)] space-y-6 z-10">
 
         <div class="flex items-center justify-between border-b-2 border-[var(--line)] pb-5">
-            <a href="{{ route('home') }}" class="inline-flex items-center gap-2 text-xs font-black text-[var(--ink)] hover:text-[var(--orange)] transition">
+            <a href="{{ route('home') }}" wire:navigate.hover class="inline-flex items-center gap-2 text-xs font-black text-[var(--ink)] hover:text-[var(--orange)] transition">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
                 <span>Beranda</span>
             </a>
 
-            <a href="{{ route('home') }}" class="flex items-center gap-2">
+            <a href="{{ route('home') }}" wire:navigate.hover class="flex items-center gap-2">
                 <img src="/images/logo-velosha.png" alt="Velosha" class="h-6 w-auto object-contain" />
                 <span class="font-heading font-black text-lg text-[var(--ink)]">Velosha</span>
             </a>

@@ -333,7 +333,7 @@
                                 </div>
                             </div>
                             <div class="text-center transform rotate-4 self-center sm:self-auto shrink-0">
-                                <div class="disp px-6 py-3.5 bg-[#DE7119] text-[#10282E] border-[3px] border-[#FBF4E6] rounded-[10px] text-4xl sm:text-[44px] font-extrabold shadow-sm">
+                                <div class="disp px-6 py-3.5 bg-[#DE7119] text-[#10282E] border-[3px] border-[#FBF4E6] rounded-[10px] text-4xl sm:text-[44px] font-extrabold shadow-[3px_3px_0_#10282E]">
                                     {{ $countdown['days'] <= 0 ? 'HARI INI' : 'H-'.$countdown['days'] }}
                                 </div>
                                 <div class="text-xs font-bold tracking-[.08em] text-[#F4BE3F] mt-2.5 uppercase">MENUJU GUN START</div>

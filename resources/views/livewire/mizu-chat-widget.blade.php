@@ -82,7 +82,7 @@
                 <div class="min-w-0">
                     <div class="font-['Bricolage_Grotesque',sans-serif] text-sm font-extrabold tracking-tight text-white leading-tight">Tanya Mizu</div>
                     <div class="flex items-center gap-1.5 text-[11px] text-[#F8E3B5] font-semibold leading-tight mt-0.5 truncate">
-                        <span class="w-2 h-2 rounded-xs bg-emerald-400"></span>
+                        <span class="w-2 h-2 rounded-xs bg-[#1F6F4A]"></span>
                         Asisten Balap Velosha
                     </div>
                 </div>

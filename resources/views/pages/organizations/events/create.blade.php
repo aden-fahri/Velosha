@@ -137,7 +137,7 @@
         <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 bg-[#10282E]/80 backdrop-blur-xs" @click="sidebarOpen = false"></div>
 
         <div x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
-             class="side relative flex flex-col w-72 max-w-full h-full bg-[#FBF4E6] text-[var(--ink)] border-r-[3px] border-[#10282E] p-6 shadow-2xl overflow-y-auto">
+             class="side relative flex flex-col w-72 max-w-full h-full bg-[#FBF4E6] text-[var(--ink)] border-r-[3px] border-[#10282E] p-6 shadow-[6px_0_0_#10282E] overflow-y-auto">
             <div class="flex items-center justify-between pb-6 mb-4 border-b border-[#10282E]/15">
                 <a href="/" wire:navigate class="flex items-center gap-2.5">
                     <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
@@ -292,7 +292,7 @@
                             <h1 class="h3 font-heading text-3xl font-black text-[var(--ink)]">Informasi Balap Sepeda Baru</h1>
                             <p class="text-xs sm:text-sm text-[var(--mute)] mt-1 font-medium">Lengkapi rincian balap, unggah poster resmi, dan tentukan kategori tiket yang dibuka untuk pendaftaran rider.</p>
                         </div>
-                        <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'events']) }}" class="btn btn-secondary btn-sm">
+                        <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'events']) }}" wire:navigate.hover class="btn btn-secondary btn-sm">
                             &larr; Batal &amp; Kembali
                         </a>
                     </div>

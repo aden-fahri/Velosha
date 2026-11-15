@@ -64,6 +64,25 @@
     @include('components.layout.footer')
     @endif
 
+    <!-- Global Universal Midtrans Snap Pop-up Modal (Zero External Redirection) -->
+    <div id="velo-snap-modal" class="fixed inset-0 z-[999999] hidden transition-all duration-300 flex items-center justify-center p-4" style="backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background-color: rgba(16, 40, 46, 0.78);">
+        <div class="relative bg-white rounded-2xl border-[3.5px] border-[#10282E] shadow-[8px_8px_0_#10282E] overflow-hidden max-w-[460px] w-full mx-auto" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between px-5 py-3.5 bg-[#F8E3B5] border-b-[2.5px] border-[#10282E]">
+                <div class="flex items-center space-x-2">
+                    <span class="font-heading font-black text-sm text-[#10282E] tracking-tight">Pembayaran Midtrans Snap</span>
+                    <span class="text-[10px] bg-[#10282E]/10 text-[#10282E] px-2 py-0.5 rounded font-mono font-bold">SECURE</span>
+                </div>
+                <button type="button" id="velo-close-snap-btn" class="w-7 h-7 rounded-lg border-2 border-[#10282E] bg-white hover:bg-red-100 text-[#10282E] flex items-center justify-center text-xs font-black cursor-pointer shadow-[1.5px_1.5px_0_#10282E] transition">✕</button>
+            </div>
+            <div id="velo-snap-container" class="w-full flex items-center justify-center bg-[#FAF9F5]" style="min-height: 540px;">
+                <div id="velo-snap-loading" class="text-xs font-bold text-[#10282E]/70 p-8 text-center flex flex-col items-center gap-2">
+                    <svg class="animate-spin h-6 w-6 text-[#DE7119]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                    <span>Menyiapkan gerbang pembayaran Midtrans...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Reveal on scroll (fade + slide-up) — dijalankan ulang tiap wire:navigate
         window.__veloInitReveal = function() {
@@ -183,32 +202,104 @@
             });
         }
 
-        // Global Midtrans Snap Pop-up Handler (Zero External Redirection)
+        // Global Midtrans Snap Pop-up Handler (Zero External Redirection - 100% In-App)
         window.__veloHandleSnap = function(detail) {
             const payload = Array.isArray(detail) ? detail[0] : detail;
-            const token = payload?.token;
-            const regId = payload?.registrationId;
-            if (!token) return;
+            const token = payload?.token || payload?.snap_token;
+            const regId = payload?.registrationId || payload?.order_id;
+            const redirectUrl = payload?.redirectUrl || payload?.redirect_url;
+            const finishBase = payload?.finish_url || (regId ? ('/ticket/' + regId) : window.location.href);
 
-            if (window.snap && typeof window.snap.pay === 'function') {
-                window.snap.pay(token, {
-                    onSuccess: function(result) {
-                        if (regId) window.location.href = '/ticket/' + regId;
-                        else window.location.reload();
-                    },
-                    onPending: function(result) {
-                        if (regId) window.location.href = '/ticket/' + regId;
-                        else window.location.reload();
-                    },
-                    onError: function(result) {
-                        alert('Pembayaran tidak berhasil atau dibatalkan.');
-                    },
-                    onClose: function() {
-                        console.log('Jendela Snap ditutup.');
+            if (!token && !redirectUrl) return;
+
+            const modal = document.getElementById('velo-snap-modal');
+            const container = document.getElementById('velo-snap-container');
+            const closeBtn = document.getElementById('velo-close-snap-btn');
+
+            const resetUi = () => {
+                if (modal) modal.classList.add('hidden');
+                if (container) container.innerHTML = '';
+                if (typeof window.__veloResetFormButtons === 'function') window.__veloResetFormButtons();
+            };
+
+            if (closeBtn) closeBtn.onclick = resetUi;
+            if (modal) {
+                modal.onclick = (e) => {
+                    if (e.target === modal) resetUi();
+                };
+            }
+
+            if (modal) modal.classList.remove('hidden');
+            if (container) {
+                container.innerHTML = `
+                    <div id="velo-snap-loading" class="text-xs font-bold text-[#10282E]/70 p-8 text-center flex flex-col items-center gap-2">
+                        <svg class="animate-spin h-6 w-6 text-[#DE7119]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                        <span>Menyiapkan gerbang pembayaran Midtrans...</span>
+                    </div>
+                `;
+            }
+
+            let handled = false;
+            if (token && window.snap) {
+                if (typeof window.snap.embed === 'function') {
+                    try {
+                        window.snap.embed(token, {
+                            embedId: 'velo-snap-container',
+                            onSuccess: function(result) {
+                                resetUi();
+                                window.location.href = regId ? ('/ticket/' + regId) : finishBase;
+                            },
+                            onPending: function(result) {
+                                resetUi();
+                                window.location.href = regId ? ('/ticket/' + regId) : finishBase;
+                            },
+                            onError: function(result) {
+                                resetUi();
+                                alert('Pembayaran tidak berhasil atau dibatalkan.');
+                            },
+                            onClose: function() {
+                                resetUi();
+                            }
+                        });
+                        handled = true;
+                    } catch (e) {
+                        console.warn('snap.embed error, falling back', e);
                     }
-                });
-            } else if (payload?.redirectUrl) {
-                window.location.href = payload.redirectUrl;
+                } else if (typeof window.snap.pay === 'function') {
+                    try {
+                        if (modal) modal.classList.add('hidden');
+                        window.snap.pay(token, {
+                            onSuccess: function(result) {
+                                window.location.href = regId ? ('/ticket/' + regId) : finishBase;
+                            },
+                            onPending: function(result) {
+                                window.location.href = regId ? ('/ticket/' + regId) : finishBase;
+                            },
+                            onError: function(result) {
+                                resetUi();
+                                alert('Pembayaran tidak berhasil atau dibatalkan.');
+                            },
+                            onClose: function() {
+                                resetUi();
+                            }
+                        });
+                        handled = true;
+                    } catch (e) {
+                        console.warn('snap.pay error, falling back', e);
+                    }
+                }
+            }
+
+            // Zero External Redirection Fallback:
+            // Jika snap.embed / snap.pay tidak aktif, muat di dalam iframe pop-up ber-backdrop blur agar pengguna 100% tetap di dalam Velosha!
+            if (!handled) {
+                if (modal) modal.classList.remove('hidden');
+                const targetUrl = redirectUrl || (token ? ('https://app.sandbox.midtrans.com/snap/v4/redirection/' + token) : null);
+                if (targetUrl && container) {
+                    container.innerHTML = '<iframe src="' + targetUrl + '" style="width:100%;height:540px;border:none;border-radius:14px;" allow="payment"></iframe>';
+                } else if (container) {
+                    container.innerHTML = '<div class="p-6 text-center text-xs font-bold text-red-600">Gagal memuat sesi pembayaran Midtrans. Silakan coba kembali.</div>';
+                }
             }
         };
         window.addEventListener('open-midtrans-snap', (e) => window.__veloHandleSnap(e.detail));

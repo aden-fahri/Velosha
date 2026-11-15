@@ -349,7 +349,7 @@
     {{-- Control Bar (Web Preview Only) --}}
     <div class="control-bar no-print">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <a href="{{ route('ticket.show', $registration) }}" class="btn btn-ghost">
+            <a href="{{ route('ticket.show', $registration) }}" wire:navigate.hover class="btn btn-ghost">
                 &larr; Kembali ke E-Ticket
             </a>
             <span style="font-size: 12px; font-weight: 700; color: #F4BE3F;">

@@ -12,7 +12,7 @@
                 <p class="text-[11px] text-[#10282E]/80 mt-0.5">Data dari sesi sebelumnya sudah dimuat kembali. Periksa kembali atau mulai dari awal.</p>
             </div>
         </div>
-        <button type="button" wire:click="resetToStart" class="shrink-0 inline-flex items-center justify-center bg-white hover:bg-[#FFFDF8] text-[#10282E] border-2 border-[#10282E] font-black px-3.5 py-2 text-[11px] rounded-lg shadow-[2px_2px_0_#10282E] transition active:translate-y-0.5 cursor-pointer">
+        <button type="button" wire:click="resetToStart" wire:loading.attr="disabled" class="shrink-0 inline-flex items-center justify-center bg-white hover:bg-[#FFFDF8] text-[#10282E] border-2 border-[#10282E] font-black px-3.5 py-2 text-[11px] rounded-lg shadow-[2px_2px_0_#10282E] transition active:translate-y-0.5 cursor-pointer">
             <i data-lucide="rotate-ccw" class="w-3 h-3 mr-1.5"></i>
             <span>Mulai dari Awal</span>
         </button>
@@ -25,7 +25,7 @@
             <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider">
                 Data Peserta
             </h3>
-            <button type="button" wire:click="backToStep2" class="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--orange)] hover:underline border-2 border-[var(--ink)] bg-[var(--paper)] hover:bg-[var(--butter)] px-3 py-1.5 rounded-xl shadow-[2px_2px_0_var(--ink)] transition-all cursor-pointer">
+            <button type="button" wire:click="backToStep2" wire:loading.attr="disabled" class="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--orange)] hover:underline border-2 border-[var(--ink)] bg-[var(--paper)] hover:bg-[var(--butter)] px-3 py-1.5 rounded-xl shadow-[2px_2px_0_var(--ink)] transition-all cursor-pointer">
                 <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                 <span>Edit Data</span>
             </button>

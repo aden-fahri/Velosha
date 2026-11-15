@@ -9,7 +9,7 @@
                 <span class="font-extrabold text-sm tracking-tight text-white">MIDTRANS SNAP</span>
                 <span class="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded border border-white/40 font-mono font-bold">SIMULATION</span>
             </div>
-            <button type="button" wire:click="closePayment" class="text-white/80 hover:text-white cursor-pointer" aria-label="Tutup">
+            <button type="button" wire:click="closePayment" wire:loading.attr="disabled" class="text-white/80 hover:text-white cursor-pointer" aria-label="Tutup">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>

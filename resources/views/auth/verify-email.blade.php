@@ -7,7 +7,7 @@
     <div class="card relative w-full max-w-md bg-[var(--card)] border-[3px] border-[var(--ink)] rounded-2xl p-5 sm:p-9 shadow-[4px_4px_0_var(--ink)] sm:shadow-[8px_8px_0_var(--ink)] space-y-5 sm:space-y-6 z-10 text-center">
 
         <div class="flex items-center justify-center mb-2">
-            <a href="{{ route('home') }}" class="flex items-center gap-2">
+            <a href="{{ route('home') }}" wire:navigate.hover class="flex items-center gap-2">
                 <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
                 <span class="font-heading font-black text-2xl text-[var(--ink)]">Velosha</span>
             </a>

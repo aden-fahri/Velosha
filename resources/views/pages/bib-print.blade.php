@@ -368,7 +368,7 @@
             </span>
         </div>
         <div style="display: flex; gap: 8px;">
-            <a href="{{ route('ticket.show', $registration) }}" class="btn btn-back">
+            <a href="{{ route('ticket.show', $registration) }}" wire:navigate.hover class="btn btn-back">
                 &larr; Kembali ke E-Ticket
             </a>
             <button type="button" onclick="window.print()" class="btn btn-print">

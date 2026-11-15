@@ -131,7 +131,7 @@
 }" class="min-h-screen bg-[#F3E7CF] text-[var(--ink)] flex flex-col">
 
     {{-- ==================== TOP NAVIGATION BAR ==================== --}}
-    <header class="bg-[#10282E] text-white border-b-4 border-[var(--mustard)] px-4 sm:px-6 py-3.5 sticky top-0 z-30 shadow-md">
+    <header class="bg-[#10282E] text-white border-b-4 border-[var(--mustard)] px-4 sm:px-6 py-3.5 sticky top-0 z-30 shadow-[0_4px_0_#10282E]">
         <div class="max-w-6xl mx-auto flex items-center justify-between gap-4">
             <div class="flex items-center gap-3">
                 <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'events']) }}"

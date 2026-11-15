@@ -172,7 +172,7 @@
         <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 bg-[#10282E]/80 backdrop-blur-xs" @click="sidebarOpen = false"></div>
 
         <div x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
-             class="side relative flex flex-col w-72 max-w-full h-full bg-[#FBF4E6] text-[var(--ink)] border-r-[3px] border-[#10282E] p-6 shadow-2xl overflow-y-auto">
+             class="side relative flex flex-col w-72 max-w-full h-full bg-[#FBF4E6] text-[var(--ink)] border-r-[3px] border-[#10282E] p-6 shadow-[6px_0_0_#10282E] overflow-y-auto">
             <div class="flex items-center justify-between pb-6 mb-4 border-b border-[#10282E]/15">
                 <a href="/" wire:navigate class="flex items-center gap-2.5">
                     <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
@@ -195,11 +195,11 @@
             </div>
 
             <nav class="space-y-1 text-sm font-semibold">
-                <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'overview']) }}" class="w-full">Ringkasan EO</a>
-                <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'create_event']) }}" class="w-full">Buat Event</a>
-                <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'events']) }}" class="w-full on">Event Saya</a>
-                <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'kuota']) }}" class="w-full">Paket &amp; Kuota</a>
-                <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'keuangan']) }}" class="w-full">Keuangan &amp; Payout</a>
+                <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'overview']) }}" wire:navigate.hover class="w-full">Ringkasan EO</a>
+                <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'create_event']) }}" wire:navigate.hover class="w-full">Buat Event</a>
+                <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'events']) }}" wire:navigate.hover class="w-full on">Event Saya</a>
+                <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'kuota']) }}" wire:navigate.hover class="w-full">Paket &amp; Kuota</a>
+                <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'keuangan']) }}" wire:navigate.hover class="w-full">Keuangan &amp; Payout</a>
                 <a href="{{ route('helpdesk.create-ticket', ['from' => 'organizer']) }}" wire:navigate class="w-full">Chat / Bantuan</a>
                 <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 pt-5 pb-1">BERALIH</div>
                 <a href="{{ route('dashboard') }}" wire:navigate class="w-full">Dashboard Rider</a>
@@ -436,7 +436,7 @@
                         <button type="submit" class="btn">
                             Simpan Perubahan Event &rarr;
                         </button>
-                        <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'events']) }}" class="btn btn-ghost">
+                        <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'events']) }}" wire:navigate.hover class="btn btn-ghost">
                             Batal
                         </a>
                     </div>

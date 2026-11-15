@@ -83,7 +83,7 @@
         <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 bg-[#10282E]/80 backdrop-blur-xs" @click="sidebarOpen = false"></div>
 
         <div x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
-             class="side relative flex flex-col w-72 max-w-full h-full bg-[#FBF4E6] text-[var(--ink)] border-r-[3px] border-[#10282E] p-6 shadow-2xl overflow-y-auto">
+             class="side relative flex flex-col w-72 max-w-full h-full bg-[#FBF4E6] text-[var(--ink)] border-r-[3px] border-[#10282E] p-6 shadow-[6px_0_0_#10282E] overflow-y-auto">
             <div class="flex items-center justify-between pb-6 mb-4 border-b border-[#10282E]/15">
                 <a href="/" wire:navigate class="flex items-center gap-2.5">
                     <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
@@ -162,7 +162,7 @@
 
         {{-- Flash Messages --}}
         @if (session()->has('success'))
-            <div class="p-4 bg-emerald-100 border-[2.5px] border-emerald-900 text-emerald-950 font-bold rounded-xl shadow-[3px_3px_0_var(--ink)] flex items-center justify-between">
+            <div class="p-4 bg-[#D5EBD9] border-[2.5px] border-[#10282E] text-[#10282E] font-bold rounded-xl shadow-[3px_3px_0_var(--ink)] flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <span class="font-extrabold">✓ Berhasil:</span>
                     <span>{{ session('success') }}</span>
@@ -195,7 +195,7 @@
                             Prioritas: Mid
                         </span>
                     @else
-                        <span class="px-2.5 py-1 rounded-md font-extrabold text-xs bg-emerald-100 text-emerald-800 border-[1.5px] border-emerald-700">
+                        <span class="px-2.5 py-1 rounded-md font-extrabold text-xs bg-[#D5EBD9] text-[#1F6F4A] border-[1.5px] border-[#1F6F4A]">
                             Prioritas: Low
                         </span>
                     @endif
@@ -319,7 +319,7 @@
                                                     Otomatis
                                                 </span>
                                             @elseif ($isStaff)
-                                                <span class="px-1.5 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded border border-emerald-600">
+                                                <span class="px-1.5 py-0.5 text-[10px] font-bold bg-[#D5EBD9] text-[#1F6F4A] rounded border border-[#1F6F4A]">
                                                     Staf
                                                 </span>
                                             @else
@@ -501,9 +501,9 @@
                         </div>
                     @else
                         <div class="space-y-2 text-xs">
-                            <div class="p-3 bg-emerald-50 border border-emerald-700 rounded-lg">
-                                <span class="font-extrabold text-emerald-900 block">Status: Selesai (Closed)</span>
-                                <span class="text-[11px] text-emerald-800">
+                            <div class="p-3 bg-[#D5EBD9] border border-[#10282E] rounded-lg">
+                                <span class="font-extrabold text-[#10282E] block">Status: Selesai (Closed)</span>
+                                <span class="text-[11px] text-[#10282E]/80">
                                     Diselesaikan dalam <strong>{{ $ticket->resolution_time ?? 0 }} menit</strong>.
                                 </span>
                             </div>

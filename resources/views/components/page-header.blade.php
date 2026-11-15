@@ -14,7 +14,7 @@ if ($meta && str_contains($meta, 'Diperbarui')) {
 }
 @endphp
 
-<div class="relative overflow-hidden bg-[#0A353E] text-white border-b border-teal-900 shadow-md">
+<div class="relative overflow-hidden bg-[#10282E] text-white border-b-[3px] border-[#10282E] shadow-[4px_4px_0_#10282E]">
     {{-- HANYA PAKAI GARIS STRIPE PATTERN DI KANAN (TANPA TOPO PATTERN) --}}
     <div class="absolute right-0 top-0 bottom-0 w-1/2 bg-right bg-cover bg-no-repeat opacity-30 pointer-events-none"
          style="background-image: url('/images/dashboard-stripe-pattern.png');"></div>
@@ -35,7 +35,7 @@ if ($meta && str_contains($meta, 'Diperbarui')) {
                 @endif
                 <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-white leading-[1.1]">{{ $title }}</h1>
                 @if ($description)
-                    <p class="text-sm sm:text-base text-teal-100/90 font-medium leading-relaxed mt-4">{{ $description }}</p>
+                    <p class="text-sm sm:text-base text-white/90 font-medium leading-relaxed mt-4">{{ $description }}</p>
                 @endif
 
                 @if (! empty($chips))

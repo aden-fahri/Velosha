@@ -32,7 +32,7 @@
                                 <span class="text-xs text-gray-400">({{ $reg->category?->name ?? '-' }})</span>
                             </td>
                             <td class="py-2.5 px-3">
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold {{ $reg->status === 'paid' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300' }}">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold {{ $reg->status === 'paid' ? 'bg-[#D5EBD9] text-[#1F6F4A]' : 'bg-amber-100 text-amber-800' }}">
                                     {{ strtoupper($reg->status) }}
                                 </span>
                             </td>

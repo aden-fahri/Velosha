@@ -96,7 +96,7 @@
         <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 bg-[#10282E]/80 backdrop-blur-xs" @click="sidebarOpen = false"></div>
 
         <div x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
-             class="side relative flex flex-col w-72 max-w-full h-full bg-[#FBF4E6] text-[var(--ink)] border-r-[3px] border-[#10282E] p-6 shadow-2xl overflow-y-auto">
+             class="side relative flex flex-col w-72 max-w-full h-full bg-[#FBF4E6] text-[var(--ink)] border-r-[3px] border-[#10282E] p-6 shadow-[6px_0_0_#10282E] overflow-y-auto">
             <div class="flex items-center justify-between pb-6 mb-4 border-b border-[#10282E]/15">
                 <a href="/" wire:navigate class="flex items-center gap-2.5 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
                     <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
@@ -278,7 +278,7 @@
                             <span class="text-[10px] font-black uppercase tracking-wider text-[var(--mute)]">PRIORITAS TINGGI</span>
                             <h3 class="font-heading font-black text-xl text-[var(--ink)]">Tiket Mendesak yang Membutuhkan Tindakan</h3>
                         </div>
-                        <button type="button" wire:click="setTab('queue')" class="px-4 py-2 rounded-xl border-2 border-[var(--ink)] bg-white hover:bg-[var(--paper)] font-black text-xs shadow-[2px_2px_0_var(--ink)] transition-all">
+                        <button type="button" wire:click="setTab('queue')" wire:loading.attr="disabled" class="px-4 py-2 rounded-xl border-2 border-[var(--ink)] bg-white hover:bg-[var(--paper)] font-black text-xs shadow-[2px_2px_0_var(--ink)] transition-all">
                             Lihat Semua Antrian &rarr;
                         </button>
                     </div>
@@ -489,7 +489,7 @@
                                    placeholder="Cari subjek, #ID, atau nama..."
                                    class="w-full pl-3.5 pr-8 py-2 text-xs font-bold border-2 border-[var(--ink)] rounded-xl bg-[var(--paper)] focus:outline-none focus:bg-white shadow-[2px_2px_0_var(--ink)]">
                             @if ($search !== '')
-                                <button type="button" wire:click="$set('search', '')" class="absolute right-2.5 top-2.5 text-xs text-[var(--mute)] hover:text-[var(--ink)] font-black">
+                                <button type="button" wire:click="$set('search', '')" wire:loading.attr="disabled" class="absolute right-2.5 top-2.5 text-xs text-[var(--mute)] hover:text-[var(--ink)] font-black">
                                     ✕
                                 </button>
                             @endif
@@ -643,7 +643,7 @@
                                                         Overdue SLA
                                                     </span>
                                                 @else
-                                                    <span class="text-[11px] text-emerald-700 font-bold">
+                                                    <span class="text-[11px] text-[#1F6F4A] font-bold">
                                                         Target: {{ $t->resolution_due_at ? $t->resolution_due_at->timezone('Asia/Jakarta')->format('H:i d/m') : '-' }}
                                                     </span>
                                                 @endif
