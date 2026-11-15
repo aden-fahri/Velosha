@@ -411,15 +411,27 @@
                         <form action="{{ route('organizations.events.store', $organization) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                             @csrf
 
-                            <div>
-                                <label for="title" class="label block font-bold text-xs uppercase tracking-wider text-[var(--ink)] mb-1.5">
-                                    Judul / Nama Event <span class="text-[var(--red)]">*</span>
-                                </label>
-                                <input type="text" id="title" name="title" value="{{ old('title') }}" required autofocus
-                                       placeholder="Contoh: Tour de Merapi 2026"
-                                       class="w-full px-4 py-3 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] font-bold text-sm text-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
+                            {{-- Judul & Slug --}}
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" x-data="{ title: '{{ old('title', '') }}', slug: '{{ old('slug', '') }}' }">
+                                <div class="sm:col-span-2">
+                                    <label for="title" class="label block font-bold text-xs uppercase tracking-wider text-[var(--ink)] mb-1.5">
+                                        Judul / Nama Event <span class="text-[var(--red)]">*</span>
+                                    </label>
+                                    <input type="text" id="title" name="title" x-model="title" required autofocus
+                                           placeholder="Contoh: Tour de Merapi 2026"
+                                           class="w-full px-4 py-3 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] font-bold text-sm text-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
+                                </div>
+                                <div>
+                                    <label for="slug" class="label block font-bold text-xs uppercase tracking-wider text-[var(--ink)] mb-1.5">
+                                        Slug URL (Opsional)
+                                    </label>
+                                    <input type="text" id="slug" name="slug" x-model="slug"
+                                           placeholder="Otomatis jika kosong"
+                                           class="w-full px-4 py-3 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] font-medium text-sm text-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
+                                </div>
                             </div>
 
+                            {{-- Waktu & Tipe --}}
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div>
                                     <label for="type" class="label block font-bold text-xs uppercase tracking-wider text-[var(--ink)] mb-1.5">
@@ -450,34 +462,77 @@
                                 </div>
                             </div>
 
-                            <div>
-                                <label for="location_name" class="label block font-bold text-xs uppercase tracking-wider text-[var(--ink)] mb-1.5">
-                                    Lokasi Start / Kota <span class="text-[var(--red)]">*</span>
-                                </label>
-                                <input type="text" id="location_name" name="location_name" value="{{ old('location_name') }}" required
-                                       placeholder="Contoh: Alun-alun Kota Magelang, Jawa Tengah"
-                                       class="w-full px-4 py-3 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] font-bold text-sm text-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
-                            </div>
-
-                            <div>
-                                <label for="poster" class="label block font-bold text-xs uppercase tracking-wider text-[var(--ink)] mb-1.5">
-                                    Foto / Poster Resmi Event (Tampil di Beranda &amp; Katalog)
-                                </label>
-                                <div class="p-4 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)]">
-                                    <input type="file" id="poster" name="poster" accept="image/*"
-                                           class="block w-full text-xs font-bold text-[var(--ink)] file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-2 file:border-[var(--ink)] file:text-xs file:font-black file:bg-[var(--mustard)] file:text-[var(--ink)] file:shadow-[2px_2px_0_var(--ink)] file:cursor-pointer hover:file:bg-[var(--butter)]">
-                                    <span class="text-[11px] text-[var(--mute)] font-medium mt-1.5 block">Format: JPG, PNG, atau WEBP (Maksimal 3 MB). Gambar ini akan otomatis muncul sebagai cover balap di landing page Velosha.</span>
+                            {{-- Lokasi & YouTube Video --}}
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="sm:col-span-2">
+                                    <label for="location_name" class="label block font-bold text-xs uppercase tracking-wider text-[var(--ink)] mb-1.5">
+                                        Lokasi Start / Kota <span class="text-[var(--red)]">*</span>
+                                    </label>
+                                    <input type="text" id="location_name" name="location_name" value="{{ old('location_name') }}" required
+                                           placeholder="Contoh: Alun-alun Kota Magelang, Jawa Tengah"
+                                           class="w-full px-4 py-3 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] font-bold text-sm text-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
+                                </div>
+                                <div>
+                                    <label for="youtube_video_id" class="label block font-bold text-xs uppercase tracking-wider text-[var(--ink)] mb-1.5">
+                                        YouTube Video ID (Opsional)
+                                    </label>
+                                    <input type="text" id="youtube_video_id" name="youtube_video_id" value="{{ old('youtube_video_id') }}"
+                                           placeholder="Contoh: dQw4w9WgXcQ"
+                                           class="w-full px-4 py-3 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] font-medium text-sm text-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
                                 </div>
                             </div>
 
-                            {{-- Kategori Tiket Balap (Utama & Tambahan) --}}
+                            {{-- Media & Rute (Poster, Peta Rute, GPX File) --}}
+                            <div class="p-5 rounded-2xl border-2 border-[var(--ink)] bg-[var(--paper)]/50 space-y-4">
+                                <div class="border-b border-[var(--ink)]/15 pb-2">
+                                    <h3 class="font-heading font-black text-sm text-[var(--ink)] uppercase tracking-wider flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[var(--orange)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                                        Media &amp; Navigasi Rute Balap
+                                    </h3>
+                                    <p class="text-xs text-[var(--mute)]">Upload poster resmi acara, peta sirkuit, dan file rute GPX untuk para rider.</p>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    {{-- Poster Resmi --}}
+                                    <div class="p-3.5 rounded-xl border-2 border-[var(--ink)] bg-white space-y-1.5">
+                                        <label for="poster" class="block font-bold text-xs text-[var(--ink)]">
+                                            Poster Resmi Cover <span class="text-red-500">*</span>
+                                        </label>
+                                        <input type="file" id="poster" name="poster" accept="image/*"
+                                               class="block w-full text-[11px] font-bold text-[var(--ink)] file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border file:border-[var(--ink)] file:text-[10px] file:font-black file:bg-[var(--mustard)] file:text-[var(--ink)] file:cursor-pointer hover:file:bg-[var(--butter)]">
+                                        <span class="text-[10px] text-[var(--mute)] block">Tampil di beranda &amp; katalog event (Maks 3 MB).</span>
+                                    </div>
+
+                                    {{-- Peta Rute --}}
+                                    <div class="p-3.5 rounded-xl border-2 border-[var(--ink)] bg-white space-y-1.5">
+                                        <label for="map_image" class="block font-bold text-xs text-[var(--ink)]">
+                                            Gambar Peta Sirkuit
+                                        </label>
+                                        <input type="file" id="map_image" name="map_image" accept="image/*"
+                                               class="block w-full text-[11px] font-bold text-[var(--ink)] file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border file:border-[var(--ink)] file:text-[10px] file:font-black file:bg-[var(--paper)] file:text-[var(--ink)] file:cursor-pointer hover:file:bg-[var(--butter)]">
+                                        <span class="text-[10px] text-[var(--mute)] block">Gambar jalur balap di halaman detail (Maks 5 MB).</span>
+                                    </div>
+
+                                    {{-- File GPX --}}
+                                    <div class="p-3.5 rounded-xl border-2 border-[var(--ink)] bg-white space-y-1.5">
+                                        <label for="gpx_file" class="block font-bold text-xs text-[var(--ink)]">
+                                            File Rute GPX (Bike Computer)
+                                        </label>
+                                        <input type="file" id="gpx_file" name="gpx_file" accept=".gpx,.xml"
+                                               class="block w-full text-[11px] font-bold text-[var(--ink)] file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border file:border-[var(--ink)] file:text-[10px] file:font-black file:bg-[var(--paper)] file:text-[var(--ink)] file:cursor-pointer hover:file:bg-[var(--butter)]">
+                                        <span class="text-[10px] text-[var(--mute)] block">Format file .gpx untuk Garmin/Wahoo (Maks 10 MB).</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Kategori Tiket Balap (Utama & Tambahan - Alpine.js Sesuai Skema Admin) --}}
                             <div x-data="{
                                 categories: [
-                                    { name: 'Gran Fondo 120 KM', distance_km: 120, price: 250000, quota: 500 }
+                                    { name: 'Gran Fondo 120 KM', code: 'GF', distance_km: 120, elevation_gain_m: 850, price: 250000, quota: 500, wave_start_time: 'Wave 1 - 05:45 WIB', cut_off_hours: 6.5 }
                                 ],
                                 primaryIndex: 0,
                                 addCategory() {
-                                    this.categories.push({ name: '', distance_km: 60, price: 150000, quota: 200 });
+                                    this.categories.push({ name: '', code: '', distance_km: 60, elevation_gain_m: 350, price: 150000, quota: 200, wave_start_time: 'Wave 2 - 06:15 WIB', cut_off_hours: 4.0 });
                                 },
                                 removeCategory(idx) {
                                     if (this.categories.length > 1) {
@@ -494,8 +549,8 @@
                             }" class="space-y-4">
                                 <div class="flex items-center justify-between pb-2 border-b border-[var(--ink)]/15">
                                     <div>
-                                        <h3 class="font-heading font-black text-base text-[var(--ink)]">Kategori Tiket Balap</h3>
-                                        <p class="text-xs text-[var(--mute)] font-medium">Tentukan kategori tiket utama dan Anda dapat menambahkan beberapa kategori jarak/kelas balap lainnya.</p>
+                                        <h3 class="font-heading font-black text-base text-[var(--ink)]">Kategori Tiket Balap (Sesuai Standar Race)</h3>
+                                        <p class="text-xs text-[var(--mute)] font-medium">Atur kategori jarak, kode BIB peserta, elevasi, wave start, dan tentukan kategori tiket utama.</p>
                                     </div>
                                     <button type="button" @click="addCategory()" class="btn btn-sm btn-mustard">
                                         <span>+ Tambah Kategori Tiket</span>
@@ -546,10 +601,25 @@
                                                        class="w-full px-3 py-2 text-xs font-bold rounded-lg border-2 border-[var(--ink)] bg-white text-[var(--ink)]">
                                             </div>
                                             <div>
-                                                <label class="block text-xs font-bold text-[var(--ink)] mb-1">Jarak Tempuh (KM)</label>
-                                                <input type="number" step="0.1" :name="'categories[' + idx + '][distance_km]'" x-model="cat.distance_km"
+                                                <label class="block text-xs font-bold text-[var(--ink)] mb-1">Kode BIB (Cth: GF, KOM)</label>
+                                                <input type="text" :name="'categories[' + idx + '][code]'" x-model="cat.code" maxlength="10"
+                                                       placeholder="GF"
+                                                       class="w-full px-3 py-2 text-xs font-bold rounded-lg border-2 border-[var(--ink)] bg-white text-[var(--ink)] uppercase">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-bold text-[var(--ink)] mb-1">Jarak Tempuh (KM) <span class="text-red-600">*</span></label>
+                                                <input type="number" step="0.1" :name="'categories[' + idx + '][distance_km]'" x-model="cat.distance_km" required
                                                        class="w-full px-3 py-2 text-xs font-bold rounded-lg border-2 border-[var(--ink)] bg-white text-[var(--ink)]">
                                             </div>
+                                            <div>
+                                                <label class="block text-xs font-bold text-[var(--ink)] mb-1">Elevasi (+m)</label>
+                                                <input type="number" :name="'categories[' + idx + '][elevation_gain_m]'" x-model="cat.elevation_gain_m"
+                                                       placeholder="Contoh: 850"
+                                                       class="w-full px-3 py-2 text-xs font-bold rounded-lg border-2 border-[var(--ink)] bg-white text-[var(--ink)]">
+                                            </div>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                                             <div>
                                                 <label class="block text-xs font-bold text-[var(--ink)] mb-1">Harga Tiket (Rp) <span class="text-red-600">*</span></label>
                                                 <input type="number" :name="'categories[' + idx + '][price]'" x-model="cat.price" required min="0"
@@ -558,6 +628,17 @@
                                             <div>
                                                 <label class="block text-xs font-bold text-[var(--ink)] mb-1">Kuota Peserta <span class="text-red-600">*</span></label>
                                                 <input type="number" :name="'categories[' + idx + '][quota]'" x-model="cat.quota" required min="1"
+                                                       class="w-full px-3 py-2 text-xs font-bold rounded-lg border-2 border-[var(--ink)] bg-white text-[var(--ink)]">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-bold text-[var(--ink)] mb-1">Wave Start</label>
+                                                <input type="text" :name="'categories[' + idx + '][wave_start_time]'" x-model="cat.wave_start_time"
+                                                       placeholder="Wave 1 - 05:45 WIB"
+                                                       class="w-full px-3 py-2 text-xs font-bold rounded-lg border-2 border-[var(--ink)] bg-white text-[var(--ink)]">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-bold text-[var(--ink)] mb-1">Cut-Off Time (Jam) <span class="text-red-600">*</span></label>
+                                                <input type="number" step="0.5" :name="'categories[' + idx + '][cut_off_hours]'" x-model="cat.cut_off_hours" required min="1"
                                                        class="w-full px-3 py-2 text-xs font-bold rounded-lg border-2 border-[var(--ink)] bg-white text-[var(--ink)]">
                                             </div>
                                         </div>
@@ -571,11 +652,12 @@
                                 </div>
                             </div>
 
+                            {{-- Deskripsi Event & Fasilitas --}}
                             <div>
                                 <label for="description" class="label block font-bold text-xs uppercase tracking-wider text-[var(--ink)] mb-1.5">
                                     Deskripsi Event &amp; Fasilitas Race <span class="text-[var(--red)]">*</span>
                                 </label>
-                                <textarea id="description" name="description" rows="3" required
+                                <textarea id="description" name="description" rows="4" required
                                           placeholder="Tuliskan gambaran rute, water station, jersey finisher, dan regulasi balap..."
                                           class="w-full px-4 py-3 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] font-medium text-sm text-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">{{ old('description') }}</textarea>
                             </div>

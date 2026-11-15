@@ -238,18 +238,24 @@ class OrganizationController extends Controller
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:200'],
+            'slug' => ['nullable', 'string', 'max:200'],
             'type' => ['required', 'in:gran_fondo,medio_fondo,fun_ride,climb'],
             'event_date' => ['required', 'date', 'after_or_equal:today'],
             'start_time' => ['required'],
             'location_name' => ['required', 'string', 'max:200'],
+            'youtube_video_id' => ['nullable', 'string', 'max:50'],
             'description' => ['required', 'string'],
             'poster' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:3072'],
             'map_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
+            'gpx_file' => ['nullable', 'file', 'max:10240'],
             'categories' => ['nullable', 'array', 'min:1'],
             'categories.*.name' => ['required_with:categories', 'string', 'max:100'],
+            'categories.*.code' => ['nullable', 'string', 'max:10'],
             'categories.*.price' => ['required_with:categories', 'numeric', 'min:0'],
             'categories.*.quota' => ['required_with:categories', 'integer', 'min:1'],
             'categories.*.distance_km' => ['nullable', 'numeric', 'min:0'],
+            'categories.*.elevation_gain_m' => ['nullable', 'numeric', 'min:0'],
+            'categories.*.wave_start_time' => ['nullable', 'string', 'max:50'],
             'categories.*.cut_off_hours' => ['nullable', 'numeric', 'min:0'],
             'category_name' => ['nullable', 'string', 'max:100'],
             'category_price' => ['nullable', 'numeric', 'min:0'],
@@ -258,7 +264,7 @@ class OrganizationController extends Controller
             'category_cut_off' => ['nullable', 'numeric', 'min:0'],
         ]);
 
-        $slug = Event::generateUniqueSlug($validated['title']);
+        $slug = ! empty($validated['slug']) ? Str::slug($validated['slug']) : Event::generateUniqueSlug($validated['title']);
         $status = Event::STATUS_PUBLISHED;
 
         $event = Event::create([
@@ -272,6 +278,7 @@ class OrganizationController extends Controller
             'start_time' => $validated['start_time'],
             'type' => $validated['type'],
             'status' => $status,
+            'youtube_video_id' => $validated['youtube_video_id'] ?? null,
         ]);
 
         if ($request->hasFile('poster')) {
@@ -287,6 +294,11 @@ class OrganizationController extends Controller
             $event->update(['map_image_path' => $mapPath]);
         }
 
+        if ($request->hasFile('gpx_file')) {
+            $gpxPath = $request->file('gpx_file')->store('gpx', 'public');
+            $event->update(['gpx_file_path' => $gpxPath]);
+        }
+
         // Simpan kategori-kategori tiket balap
         $primaryIndex = (int) $request->input('primary_category_index', 0);
         $categoriesInput = $request->input('categories');
@@ -296,7 +308,9 @@ class OrganizationController extends Controller
                     continue;
                 }
                 $catName = trim($catData['name']);
-                $catCode = Str::upper(substr(preg_replace('/[^A-Za-z0-9]/', '', $catName), 0, 6)) ?: 'CAT';
+                $catCode = ! empty($catData['code']) 
+                    ? Str::upper(substr(preg_replace('/[^A-Za-z0-9]/', '', $catData['code']), 0, 10))
+                    : (Str::upper(substr(preg_replace('/[^A-Za-z0-9]/', '', $catName), 0, 6)) ?: 'CAT');
                 $isPrimary = $request->has('primary_category_index')
                     ? ($idx === $primaryIndex)
                     : (! empty($catData['is_primary']) && filter_var($catData['is_primary'], FILTER_VALIDATE_BOOLEAN));
@@ -306,10 +320,10 @@ class OrganizationController extends Controller
                     'code' => $catCode,
                     'is_primary' => $isPrimary,
                     'distance_km' => ! empty($catData['distance_km']) ? (float) $catData['distance_km'] : 100.00,
-                    'elevation_gain_m' => 450.00,
+                    'elevation_gain_m' => ! empty($catData['elevation_gain_m']) ? (float) $catData['elevation_gain_m'] : 450.00,
                     'price' => (float) ($catData['price'] ?? 0),
                     'quota' => (int) ($catData['quota'] ?? 100),
-                    'wave_start_time' => $validated['start_time'],
+                    'wave_start_time' => ! empty($catData['wave_start_time']) ? trim($catData['wave_start_time']) : $validated['start_time'],
                     'cut_off_hours' => ! empty($catData['cut_off_hours']) ? (float) $catData['cut_off_hours'] : 6.0,
                 ]);
             }
