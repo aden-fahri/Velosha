@@ -96,10 +96,6 @@ class AdminPanelProvider extends PanelProvider
                 HTML,
             )
             ->renderHook(
-                PanelsRenderHook::HEAD_END,
-                fn (): string => \Illuminate\Support\Facades\Blade::render("@vite(['resources/css/app.css', 'resources/js/app.js'])"),
-            )
-            ->renderHook(
                 PanelsRenderHook::BODY_END,
                 fn (): string => self::gridAddCardStyle(),
             )
