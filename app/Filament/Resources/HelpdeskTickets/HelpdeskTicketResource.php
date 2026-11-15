@@ -79,6 +79,14 @@ class HelpdeskTicketResource extends Resource
                 TextColumn::make('operator.name')->label('Operator')->placeholder('Belum Ditugaskan'),
                 TextColumn::make('created_at')->label('Waktu')->dateTime('d M Y H:i')->sortable(),
             ])
+            ->filters([
+                \Filament\Tables\Filters\SelectFilter::make('status')
+                    ->label('Filter Status')
+                    ->options(\App\Enums\TicketStatus::class),
+                \Filament\Tables\Filters\SelectFilter::make('priority')
+                    ->label('Filter Prioritas')
+                    ->options(\App\Enums\TicketPriority::class),
+            ])
             ->defaultSort('created_at', 'desc');
     }
 

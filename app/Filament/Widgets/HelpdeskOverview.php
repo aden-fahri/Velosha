@@ -40,30 +40,32 @@ class HelpdeskOverview extends StatsOverviewWidget
 
         $overallRating = $satisfaction['overall']['formatted_average'] ?? '-';
 
+        $analyticsUrl = \App\Filament\Pages\HelpdeskAnalytics::getUrl();
+
         return [
             Stat::make('Tiket Terbuka', (string) $kpis['open'])
                 ->description('Menunggu penanganan')
                 ->descriptionIcon('heroicon-m-inbox')
                 ->color($kpis['open'] > 0 ? 'warning' : 'gray')
-                ->url('/helpdesk/analitik'),
+                ->url($analyticsUrl),
 
             Stat::make('Sedang Diproses', (string) $kpis['in_progress'])
                 ->description('Dalam penanganan operator')
                 ->descriptionIcon('heroicon-m-arrow-path')
                 ->color($kpis['in_progress'] > 0 ? 'info' : 'gray')
-                ->url('/helpdesk/analitik'),
+                ->url($analyticsUrl),
 
             Stat::make('Rata-rata Respons', $formattedAvgResponse)
                 ->description('Waktu respons pertama')
                 ->descriptionIcon('heroicon-m-clock')
                 ->color($formattedAvgResponse !== '-' ? 'success' : 'gray')
-                ->url('/helpdesk/analitik'),
+                ->url($analyticsUrl),
 
             Stat::make('Rating Kepuasan', $overallRating)
                 ->description('Buka analitik lengkap')
                 ->descriptionIcon('heroicon-m-star')
                 ->color($overallRating !== '-' ? 'success' : 'gray')
-                ->url('/helpdesk/analitik'),
+                ->url($analyticsUrl),
         ];
     }
 }
