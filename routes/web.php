@@ -83,14 +83,14 @@ Route::view('/dashboard', 'pages.dashboard')
     ->middleware(['auth', 'role:peserta,penyelenggara'])
     ->name('dashboard');
 
-// 7b. Helpdesk Pelapor (Peserta & Penyelenggara di Portal Rider)
+// 7b. Helpdesk Pelapor (Peserta, Penyelenggara, Operator, Admin)
 Route::view('/dashboard/bantuan/buat', 'pages.helpdesk.create')
-    ->middleware(['auth', 'role:peserta,penyelenggara'])
+    ->middleware(['auth', 'role:peserta,penyelenggara,operator,admin'])
     ->name('helpdesk.create-ticket');
 
 Route::get('/dashboard/bantuan/{ticket?}', function ($ticket = null) {
     return view('pages.helpdesk.my-tickets', ['ticket' => $ticket]);
-})->middleware(['auth', 'role:peserta,penyelenggara'])->name('helpdesk.my-tickets');
+})->middleware(['auth', 'role:peserta,penyelenggara,operator,admin'])->name('helpdesk.my-tickets');
 
 // 8. Helpdesk Operator & Admin (Antrian Tiket & Detail Khusus Operator/Admin)
 Route::view('/helpdesk', 'pages.helpdesk.index')

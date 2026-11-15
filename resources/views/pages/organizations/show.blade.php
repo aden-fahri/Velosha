@@ -151,7 +151,7 @@
                 <a href="{{ route('organizations.show', ['organization' => $organization->slug, 'tab' => 'keuangan']) }}"
                    wire:navigate.hover
                    class="w-full {{ $activeTab === 'keuangan' ? 'on' : '' }}">
-                    Keuangan &amp; Payout
+                    Ringkasan Kuota &amp; Penjualan
                 </a>
                 <a href="{{ route('helpdesk.create-ticket', ['from' => 'organizer']) }}" wire:navigate.hover class="w-full">
                     Chat / Bantuan CS
@@ -184,7 +184,7 @@
         </header>
 
         {{-- Main Workspace Content --}}
-        <main class="p-6 sm:p-10 lg:p-12 flex-grow space-y-6 max-w-7xl">
+        <main class="p-4 sm:p-8 lg:p-12 flex-grow space-y-6 max-w-7xl">
 
             {{-- Flash Messages --}}
             @if (session('status'))
@@ -209,7 +209,7 @@
                 </div>
 
                 {{-- Sapaan Kartun Screen-Print Oranye Solid (#DE7119) Sesuai Desain Asli --}}
-                <section class="card bg-[#DE7119] p-8 sm:p-9 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6 min-h-[190px]">
+                <section class="card bg-[#DE7119] p-5 sm:p-8 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-5 sm:gap-6 min-h-[170px]">
                     <div class="dots absolute inset-0 opacity-40 pointer-events-none"></div>
 
                     <div class="relative z-10">
@@ -221,73 +221,73 @@
                                 <span>Edit Komunitas</span>
                             </button>
                         </div>
-                        <h2 class="h2 text-3xl sm:text-[44px] mt-3.5 text-[var(--ink)]">
+                        <h2 class="h2 text-2xl sm:text-[44px] mt-2 sm:mt-3.5 text-[var(--ink)]">
                             Halo, {{ Auth::user()->name }}!
                         </h2>
-                        <p class="mt-2.5 max-w-[500px] text-base font-medium text-[var(--ink)] leading-relaxed">
-                            Kelola jadwal balap sepeda komunitasmu, pantau kuota aktif, dan ajukan pencairan dana tiket langsung.
+                        <p class="mt-2 max-w-[500px] text-sm sm:text-base font-medium text-[var(--ink)] leading-relaxed">
+                            Kelola jadwal balap sepeda komunitasmu, pantau kuota aktif, dan pantau penjualan tiket resmi.
                         </p>
                     </div>
 
                     {{-- Jam Real-Time --}}
                     <div x-data="{ clock: '' }"
                          x-init="const updateClock = () => { const now = new Date(); clock = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB'; }; updateClock(); setInterval(updateClock, 1000);"
-                         class="relative z-10 px-5 py-3.5 border-[2.5px] border-[#10282E] rounded-[10px] bg-[#10282E] text-[#FBF4E6] text-center shrink-0 shadow-[3px_3px_0_#10282E]">
-                        <div class="text-[11px] font-bold tracking-[.1em] text-[#F4BE3F] uppercase">JAM REAL-TIME</div>
-                        <div class="mono text-2xl sm:text-[28px] font-bold mt-1 text-[#FBF4E6]" x-text="clock">07.00.00 WIB</div>
+                         class="relative z-10 px-4 py-2.5 sm:px-5 sm:py-3.5 border-[2.5px] border-[#10282E] rounded-[10px] bg-[#10282E] text-[#FBF4E6] text-center shrink-0 shadow-[3px_3px_0_#10282E]">
+                        <div class="text-[10px] sm:text-[11px] font-bold tracking-[.1em] text-[#F4BE3F] uppercase">JAM REAL-TIME</div>
+                        <div class="mono text-xl sm:text-[28px] font-bold mt-0.5 sm:mt-1 text-[#FBF4E6]" x-text="clock">07.00.00 WIB</div>
                     </div>
                 </section>
 
-                {{-- Statistik 4 Box Utama Penyelenggara (Redesain Bersih & Tegas Neobrutalism) --}}
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {{-- Statistik 4 Box Utama Penyelenggara (Bento 2-Kolom di Mobile) --}}
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
                     {{-- 1. Total Event --}}
-                    <div class="p-6 bg-white border-[3px] border-[var(--ink)] shadow-[5px_5px_0_var(--ink)] rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition-all">
+                    <div class="p-3.5 sm:p-6 bg-white border-[3px] border-[var(--ink)] shadow-[3px_3px_0_var(--ink)] sm:shadow-[5px_5px_0_var(--ink)] rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition-all">
                         <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-black tracking-wider text-[var(--mute)] uppercase">TOTAL EVENT</span>
-                            <div class="w-10 h-10 rounded-xl bg-[var(--butter)] border-2 border-[var(--ink)] flex items-center justify-center text-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
-                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+                            <span class="text-[10px] sm:text-[11px] font-black tracking-wider text-[var(--mute)] uppercase">TOTAL EVENT</span>
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[var(--butter)] border-2 border-[var(--ink)] flex items-center justify-center text-[var(--ink)] shadow-[2px_2px_0_var(--ink)] shrink-0">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
                             </div>
                         </div>
-                        <div class="mt-4">
-                            <div class="font-heading font-black text-4xl text-[var(--ink)] tracking-tight">{{ $events->count() }}</div>
-                            <div class="text-xs text-[var(--mute)] font-bold mt-1.5">
-                                Balap dikelola komunitas
+                        <div class="mt-3 sm:mt-4">
+                            <div class="font-heading font-black text-2xl sm:text-4xl text-[var(--ink)] tracking-tight">{{ $events->count() }}</div>
+                            <div class="text-[11px] sm:text-xs text-[var(--mute)] font-bold mt-1">
+                                Balap komunitas
                             </div>
                         </div>
                     </div>
 
                     {{-- 2. Sisa Kuota --}}
-                    <div class="p-6 bg-white border-[3px] border-[var(--ink)] shadow-[5px_5px_0_var(--ink)] rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition-all">
+                    <div class="p-3.5 sm:p-6 bg-white border-[3px] border-[var(--ink)] shadow-[3px_3px_0_var(--ink)] sm:shadow-[5px_5px_0_var(--ink)] rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition-all">
                         <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-black tracking-wider text-[var(--mute)] uppercase">SISA KUOTA</span>
-                            <div class="w-10 h-10 rounded-xl bg-[var(--mustard)] border-2 border-[var(--ink)] flex items-center justify-center text-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
-                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8M8 12h8"></path></svg>
+                            <span class="text-[10px] sm:text-[11px] font-black tracking-wider text-[var(--mute)] uppercase">SISA KUOTA</span>
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[var(--mustard)] border-2 border-[var(--ink)] flex items-center justify-center text-[var(--ink)] shadow-[2px_2px_0_var(--ink)] shrink-0">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8M8 12h8"></path></svg>
                             </div>
                         </div>
-                        <div class="mt-4">
-                            <div class="font-heading font-black text-4xl {{ $balance > 0 ? 'text-[var(--pine)]' : 'text-red-600' }} tracking-tight">
+                        <div class="mt-3 sm:mt-4">
+                            <div class="font-heading font-black text-2xl sm:text-4xl {{ $balance > 0 ? 'text-[var(--pine)]' : 'text-red-600' }} tracking-tight">
                                 {{ $balance }}
                             </div>
-                            <div class="text-xs text-[var(--mute)] font-bold mt-1.5">
-                                Race siap dipublikasikan
+                            <div class="text-[11px] sm:text-xs text-[var(--mute)] font-bold mt-1">
+                                Slot publikasi
                             </div>
                         </div>
                     </div>
 
                     {{-- 3. Penjualan Kotor --}}
-                    <div class="p-6 bg-white border-[3px] border-[var(--ink)] shadow-[5px_5px_0_var(--ink)] rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition-all">
+                    <div class="p-3.5 sm:p-6 bg-white border-[3px] border-[var(--ink)] shadow-[3px_3px_0_var(--ink)] sm:shadow-[5px_5px_0_var(--ink)] rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition-all">
                         <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-black tracking-wider text-[var(--mute)] uppercase">PENJUALAN KOTOR</span>
-                            <div class="w-10 h-10 rounded-xl bg-[var(--orange)] border-2 border-[var(--ink)] flex items-center justify-center text-white shadow-[2px_2px_0_var(--ink)]">
-                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                            <span class="text-[10px] sm:text-[11px] font-black tracking-wider text-[var(--mute)] uppercase">PENJUALAN</span>
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[var(--orange)] border-2 border-[var(--ink)] flex items-center justify-center text-white shadow-[2px_2px_0_var(--ink)] shrink-0">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
                             </div>
                         </div>
-                        <div class="mt-4">
-                            <div class="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)] tracking-tight">
+                        <div class="mt-3 sm:mt-4">
+                            <div class="font-heading font-black text-lg sm:text-3xl text-[var(--ink)] tracking-tight truncate">
                                 Rp {{ number_format($totalSales, 0, ',', '.') }}
                             </div>
-                            <div class="text-xs text-[var(--mute)] font-bold mt-1.5">
-                                Total transaksi tiket
+                            <div class="text-[11px] sm:text-xs text-[var(--mute)] font-bold mt-1">
+                                Total tiket
                             </div>
                         </div>
                     </div>
@@ -298,22 +298,23 @@
                             return $ev->registrations()->whereIn('status', ['paid', 'checked_in'])->count();
                         });
                     @endphp
-                    <div class="p-6 bg-white border-[3px] border-[var(--ink)] shadow-[5px_5px_0_var(--ink)] rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition-all">
+                    <div class="p-3.5 sm:p-6 bg-white border-[3px] border-[var(--ink)] shadow-[3px_3px_0_var(--ink)] sm:shadow-[5px_5px_0_var(--ink)] rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition-all">
                         <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-black tracking-wider text-[var(--mute)] uppercase">TIKET TERJUAL</span>
-                            <div class="w-10 h-10 rounded-xl bg-[#E6F4EA] border-2 border-[var(--ink)] flex items-center justify-center text-[var(--pine)] shadow-[2px_2px_0_var(--ink)]">
-                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path><path d="M13 5v2"></path><path d="M13 17v2"></path><path d="M13 11v2"></path></svg>
+                            <span class="text-[10px] sm:text-[11px] font-black tracking-wider text-[var(--mute)] uppercase">TERJUAL</span>
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#E6F4EA] border-2 border-[var(--ink)] flex items-center justify-center text-[var(--pine)] shadow-[2px_2px_0_var(--ink)] shrink-0">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path><path d="M13 5v2"></path><path d="M13 17v2"></path><path d="M13 11v2"></path></svg>
                             </div>
                         </div>
-                        <div class="mt-4">
-                            <div class="font-heading font-black text-2xl sm:text-3xl text-[var(--pine)] tracking-tight">
-                                {{ number_format($totalTicketsSold, 0, ',', '.') }} Peserta
+                        <div class="mt-3 sm:mt-4">
+                            <div class="font-heading font-black text-lg sm:text-3xl text-[var(--pine)] tracking-tight">
+                                {{ number_format($totalTicketsSold, 0, ',', '.') }}
                             </div>
-                            <div class="text-xs text-[var(--mute)] font-bold mt-1.5">
-                                Tiket terkonfirmasi di semua event
+                            <div class="text-[11px] sm:text-xs text-[var(--mute)] font-bold mt-1">
+                                Peserta
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
 
                 {{-- Action Quick Links --}}

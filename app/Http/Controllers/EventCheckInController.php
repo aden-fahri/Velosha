@@ -9,6 +9,7 @@ use App\Models\Ticket;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class EventCheckInController extends Controller
@@ -105,56 +106,67 @@ class EventCheckInController extends Controller
             ], 400);
         }
 
-        $ticket = $registration->ticket;
-
-        // Cek apakah tiket sudah pernah di-check in sebelumnya
-        if ($registration->status === Registration::STATUS_CHECKED_IN || ($ticket && $ticket->is_checked_in)) {
-            $time = $ticket?->checked_in_at?->translatedFormat('d M Y, H:i') ?? $registration->updated_at?->translatedFormat('d M Y, H:i');
-
-            return response()->json([
-                'success' => false,
-                'status' => 'already_checked_in',
-                'message' => "PERINGATAN: Tiket ini SUDAH CHECK-IN pada {$time} WIB!",
-                'data' => [
-                    'bib_number' => $registration->bib_number,
-                    'participant_name' => $registration->participant_name,
-                    'category_name' => $registration->category?->name,
-                    'blood_type' => $registration->blood_type ?? '-',
-                    'club' => $registration->club ?: 'Independen',
-                    'emergency_contact' => $registration->emergency_contact_name . ' (' . ($registration->emergency_contact_phone ?? '-') . ')',
-                    'checked_in_at' => $time,
-                ],
-            ], 409);
-        }
-
-        // Lakukan eksekusi check-in jika diminta atau mode auto-confirm
         $confirm = $request->boolean('confirm', true);
 
-        if ($confirm) {
-            $registration->update(['status' => Registration::STATUS_CHECKED_IN]);
-            if ($ticket) {
-                $ticket->update([
-                    'is_checked_in' => true,
-                    'checked_in_at' => now(),
-                    'checked_in_by_admin' => Auth::id(),
-                ]);
+        return DB::transaction(function () use ($registration, $confirm) {
+            $lockedReg = Registration::where('id', $registration->id)->lockForUpdate()->first();
+            if (! $lockedReg) {
+                return response()->json([
+                    'success' => false,
+                    'status' => 'not_found',
+                    'message' => 'Data pendaftaran tidak ditemukan.',
+                ], 404);
             }
-        }
 
-        return response()->json([
-            'success' => true,
-            'status' => 'checked_in_now',
-            'message' => "BERHASIL CHECK-IN! Silakan serahkan nomor BIB & racepack.",
-            'data' => [
-                'bib_number' => $registration->bib_number,
-                'participant_name' => $registration->participant_name,
-                'category_name' => $registration->category?->name,
-                'blood_type' => $registration->blood_type ?? '-',
-                'club' => $registration->club ?: 'Independen',
-                'emergency_contact' => $registration->emergency_contact_name . ' (' . ($registration->emergency_contact_phone ?? '-') . ')',
-                'checked_in_at' => now()->translatedFormat('H:i:s'),
-            ],
-        ]);
+            $lockedTicket = $lockedReg->ticket;
+
+            // Cek apakah tiket sudah pernah di-check in sebelumnya (dengan row lock)
+            if ($lockedReg->status === Registration::STATUS_CHECKED_IN || ($lockedTicket && $lockedTicket->is_checked_in)) {
+                $time = $lockedTicket?->checked_in_at?->translatedFormat('d M Y, H:i') ?? $lockedReg->updated_at?->translatedFormat('d M Y, H:i');
+
+                return response()->json([
+                    'success' => false,
+                    'status' => 'already_checked_in',
+                    'message' => "PERINGATAN: Tiket ini SUDAH CHECK-IN pada {$time} WIB!",
+                    'data' => [
+                        'bib_number' => $lockedReg->bib_number,
+                        'participant_name' => $lockedReg->participant_name,
+                        'category_name' => $lockedReg->category?->name,
+                        'blood_type' => $lockedReg->blood_type ?? '-',
+                        'club' => $lockedReg->club ?: 'Independen',
+                        'emergency_contact' => $lockedReg->emergency_contact_name . ' (' . ($lockedReg->emergency_contact_phone ?? '-') . ')',
+                        'checked_in_at' => $time,
+                    ],
+                ], 409);
+            }
+
+            // Lakukan eksekusi check-in jika diminta atau mode auto-confirm
+            if ($confirm) {
+                $lockedReg->update(['status' => Registration::STATUS_CHECKED_IN]);
+                if ($lockedTicket) {
+                    $lockedTicket->update([
+                        'is_checked_in' => true,
+                        'checked_in_at' => now(),
+                        'checked_in_by_admin' => Auth::id(),
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'status' => 'checked_in_now',
+                'message' => "BERHASIL CHECK-IN! Silakan serahkan nomor BIB & racepack.",
+                'data' => [
+                    'bib_number' => $lockedReg->bib_number,
+                    'participant_name' => $lockedReg->participant_name,
+                    'category_name' => $lockedReg->category?->name,
+                    'blood_type' => $lockedReg->blood_type ?? '-',
+                    'club' => $lockedReg->club ?: 'Independen',
+                    'emergency_contact' => $lockedReg->emergency_contact_name . ' (' . ($lockedReg->emergency_contact_phone ?? '-') . ')',
+                    'checked_in_at' => now()->translatedFormat('H:i:s'),
+                ],
+            ]);
+        });
     }
 
     /**

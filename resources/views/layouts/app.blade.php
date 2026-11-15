@@ -12,6 +12,9 @@
     <!-- Lucide Icons -->
     <script src="{{ asset('js/lucide.min.js') }}"></script>
 
+    <!-- Midtrans Snap SDK (Pop-up Payment Gateway) -->
+    <script src="{{ config('services.midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ config('services.midtrans.client_key') }}" data-navigate-track></script>
+
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
@@ -31,7 +34,7 @@
              x-init="setTimeout(() => show = false, 4000)"
              x-transition.opacity
              class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-            <div class="px-3 py-2 text-xs bg-red-50 border border-red-200 text-red-700 velo-box-1" role="alert">
+            <div class="px-3.5 py-2.5 text-xs font-bold bg-red-100 border-2 border-red-500 text-red-900 rounded-lg shadow-[2px_2px_0_#991b1b]" role="alert">
                 {{ session('error') }}
             </div>
         </div>
@@ -46,7 +49,9 @@
     @if (app(\App\Support\MizuAiService::class)->isConfigured()
          && ! request()->is('helpdesk*')
          && ! (auth()->check() && (auth()->user()->isOperator() || auth()->user()->isAdmin())))
-        @livewire('mizu-chat-widget')
+        @persist('mizu-chat')
+            @livewire('mizu-chat-widget')
+        @endpersist
     @endif
 
     <!-- Neo-Brutalist Top Navigation Progress Bar -->
@@ -81,33 +86,105 @@
         };
         window.__veloInitReveal();
 
-        // Lucide Icons init dengan throttling & scoping agar tidak membebani main thread
-        window.__veloRenderIcons = function(rootEl = document) {
+        // Global Lucide Icon MutationObserver (Single Source of Truth)
+        let __veloIconDebounce = null;
+        window.__veloRenderIcons = function() {
             if (!window.lucide || typeof window.lucide.createIcons !== 'function') return;
-            window.requestAnimationFrame(() => {
+            clearTimeout(__veloIconDebounce);
+            __veloIconDebounce = setTimeout(() => {
                 try {
-                    window.lucide.createIcons({
-                        root: rootEl instanceof HTMLElement ? rootEl : document
-                    });
+                    window.lucide.createIcons();
                 } catch (e) {}
-            });
+            }, 30);
         };
 
         try { window.__veloRenderIcons(); } catch (e) {}
 
-        // Re-render Lucide icons inside regions morphed by Livewire
+        // Pasang MutationObserver di document.body untuk deteksi otomatis ikon baru
+        if (!window.__veloIconObserver && typeof MutationObserver !== 'undefined') {
+            window.__veloIconObserver = new MutationObserver((mutations) => {
+                let hasIcons = false;
+                for (let i = 0; i < mutations.length; i++) {
+                    const m = mutations[i];
+                    if (m.addedNodes.length > 0) {
+                        for (let j = 0; j < m.addedNodes.length; j++) {
+                            const node = m.addedNodes[j];
+                            if (node.nodeType === 1) {
+                                if (node.hasAttribute && node.hasAttribute('data-lucide')) { hasIcons = true; break; }
+                                if (node.firstElementChild && node.querySelector('[data-lucide]')) { hasIcons = true; break; }
+                            }
+                        }
+                    }
+                    if (hasIcons) break;
+                }
+                if (hasIcons) {
+                    window.__veloRenderIcons();
+                }
+            });
+            window.__veloIconObserver.observe(document.body, { childList: true, subtree: true });
+        }
+
+        // Global Anti-Double-Submit untuk seluruh Form Standar
+        if (!window.__veloFormSubmitGuard) {
+            window.__veloFormSubmitGuard = true;
+            document.addEventListener('submit', (e) => {
+                const form = e.target;
+                if (!form || !(form instanceof HTMLFormElement)) return;
+                if (e.defaultPrevented) return;
+
+                const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+                if (!submitBtn || submitBtn.disabled) return;
+
+                setTimeout(() => {
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-60', 'cursor-not-allowed');
+                    const textSpan = submitBtn.querySelector('span');
+                    if (textSpan && !submitBtn.querySelector('.animate-spin')) {
+                        textSpan.textContent = 'Memproses...';
+                    }
+                }, 10);
+            });
+        }
+
+        // Livewire morph hook fallback
         if (!window.__veloLivewireInit) {
             window.__veloLivewireInit = true;
             document.addEventListener('livewire:init', () => {
-                let rerenderTimer;
-                Livewire.hook('morph.added', ({ el }) => {
-                    clearTimeout(rerenderTimer);
-                    rerenderTimer = setTimeout(() => {
-                        window.__veloRenderIcons(el);
-                    }, 16);
-                });
+                Livewire.hook('morph.updated', () => window.__veloRenderIcons());
+                Livewire.hook('morph.added', () => window.__veloRenderIcons());
+                Livewire.on('open-midtrans-snap', (data) => window.__veloHandleSnap(data));
             });
         }
+
+        // Global Midtrans Snap Pop-up Handler (Zero External Redirection)
+        window.__veloHandleSnap = function(detail) {
+            const payload = Array.isArray(detail) ? detail[0] : detail;
+            const token = payload?.token;
+            const regId = payload?.registrationId;
+            if (!token) return;
+
+            if (window.snap && typeof window.snap.pay === 'function') {
+                window.snap.pay(token, {
+                    onSuccess: function(result) {
+                        if (regId) window.location.href = '/ticket/' + regId;
+                        else window.location.reload();
+                    },
+                    onPending: function(result) {
+                        if (regId) window.location.href = '/ticket/' + regId;
+                        else window.location.reload();
+                    },
+                    onError: function(result) {
+                        alert('Pembayaran tidak berhasil atau dibatalkan.');
+                    },
+                    onClose: function() {
+                        console.log('Jendela Snap ditutup.');
+                    }
+                });
+            } else if (payload?.redirectUrl) {
+                window.location.href = payload.redirectUrl;
+            }
+        };
+        window.addEventListener('open-midtrans-snap', (e) => window.__veloHandleSnap(e.detail));
 
         // Top progress bar & transisi halaman wire:navigate instan
         if (!window.__veloNavFx) {
@@ -135,6 +212,8 @@
                 }
                 window.__veloRenderIcons();
                 window.__veloInitReveal();
+                if (typeof window.initRaceDeck === 'function') window.initRaceDeck();
+                if (typeof window.initInteractiveTicket === 'function') window.initInteractiveTicket();
                 document.body.classList.remove('velo-nav-leaving');
                 document.body.classList.add('velo-nav-entering');
                 clearTimeout(enterTimer);

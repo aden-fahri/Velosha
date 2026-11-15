@@ -359,12 +359,6 @@ class Checkout extends Component
                 return;
             }
 
-            if (! empty($result['redirect_url'])) {
-                $this->redirect($result['redirect_url'], navigate: false);
-
-                return;
-            }
-
             $this->redirect('/ticket/'.$registration->id);
         } catch (\Throwable $exception) {
             \Illuminate\Support\Facades\Log::error('Midtrans Checkout Exception: ' . $exception->getMessage());
@@ -454,8 +448,13 @@ class Checkout extends Component
             return;
         }
 
-        if (! empty($result['redirect_url'])) {
-            $this->redirect($result['redirect_url']);
+        if (! empty($result['snap_token'])) {
+            $this->showPaymentModal = false;
+            $this->dispatch('open-midtrans-snap', [
+                'token' => $result['snap_token'],
+                'registrationId' => $registration->id,
+                'redirectUrl' => $result['redirect_url'] ?? null,
+            ]);
 
             return;
         }

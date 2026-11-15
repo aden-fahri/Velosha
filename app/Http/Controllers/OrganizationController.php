@@ -149,17 +149,31 @@ class OrganizationController extends Controller
         }
 
         // Pastikan setiap event yang dibuat organisasi telah memotong kuota di ledger
-        foreach ($organization->events()->get() as $ev) {
-            $hasDeduction = $organization->quotaLedger()->where('event_id', $ev->id)->exists();
-            if (! $hasDeduction && $organization->quotaBalance() > 0) {
-                $organization->deductQuotaForEvent($ev);
+        $eventsForQuota = $organization->events()->get();
+        if ($eventsForQuota->isNotEmpty() && $organization->quotaBalance() > 0) {
+            $deductedEventIds = $organization->quotaLedger()
+                ->whereIn('event_id', $eventsForQuota->pluck('id'))
+                ->where('delta', '<', 0)
+                ->pluck('event_id')
+                ->all();
+
+            foreach ($eventsForQuota as $ev) {
+                if (! in_array($ev->id, $deductedEventIds, true) && $organization->quotaBalance() > 0) {
+                    $organization->deductQuotaForEvent($ev);
+                }
             }
         }
 
         $balance = $organization->quotaBalance();
 
         $tab = $request->query('tab', 'overview');
-        $events = $organization->events()->with('categories')->latest('event_date')->get();
+        $events = $organization->events()
+            ->with([
+                'categories',
+                'registrations' => fn ($q) => $q->whereIn('status', ['paid', 'checked_in']),
+            ])
+            ->latest('event_date')
+            ->get();
         $packages = QuotaPackage::active()->orderBy('price')->get();
         $ledger = $organization->quotaLedger()->with(['purchase.package', 'event'])->latest('id')->take(10)->get();
 

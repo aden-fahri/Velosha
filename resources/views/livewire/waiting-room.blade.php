@@ -1,7 +1,7 @@
 <div class="bg-[var(--paper)] min-h-[calc(100vh-140px)] py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center"
      @if (! $isSoldOut && ! $slotSecured) wire:poll.3s="processQueue" @endif>
 
-    <div class="max-w-lg w-full bg-[var(--card)] border-[3px] border-[var(--ink)] rounded-2xl p-7 sm:p-9 shadow-[6px_6px_0_var(--ink)] text-center space-y-6">
+    <div class="max-w-lg w-full bg-[var(--card)] border-[3px] border-[var(--ink)] rounded-2xl p-5 sm:p-9 shadow-[4px_4px_0_var(--ink)] sm:shadow-[6px_6px_0_var(--ink)] text-center space-y-5 sm:space-y-6">
 
         @if ($isSoldOut)
             {{-- Status: Sold Out --}}

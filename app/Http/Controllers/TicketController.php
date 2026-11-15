@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\CompleteRegistrationAction;
 use App\Models\Payment;
 use App\Models\Registration;
+use App\Models\User;
 use App\Services\MidtransService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -21,12 +22,7 @@ class TicketController extends Controller
         $user = auth()->user();
 
         if ($registration instanceof Registration && $registration->exists) {
-            abort_unless(
-                $registration->user_id === $user->id
-                || $user->isAdmin()
-                || ($user->isPenyelenggara() && $registration->category?->event?->user_id === $user->id),
-                403
-            );
+            abort_unless($this->canAccessRegistration($user, $registration), 403);
             $registration->loadMissing(['category.event.photos', 'ticket', 'user', 'payment']);
         } elseif ($request->filled('order_id')) {
             $paymentByOrder = Payment::where('order_id', (string) $request->query('order_id'))->first();
@@ -102,12 +98,7 @@ class TicketController extends Controller
         $user = auth()->user();
 
         if ($registration instanceof Registration && $registration->exists) {
-            abort_unless(
-                $registration->user_id === $user->id
-                || $user->isAdmin()
-                || ($user->isPenyelenggara() && $registration->category?->event?->user_id === $user->id),
-                403
-            );
+            abort_unless($this->canAccessRegistration($user, $registration), 403);
             $registration->loadMissing(['category.event', 'ticket', 'user', 'payment']);
         } else {
             $registration = $user->registrations()
@@ -130,12 +121,7 @@ class TicketController extends Controller
         $user = auth()->user();
 
         if ($registration instanceof Registration && $registration->exists) {
-            abort_unless(
-                $registration->user_id === $user->id
-                || $user->isAdmin()
-                || ($user->isPenyelenggara() && $registration->category?->event?->user_id === $user->id),
-                403
-            );
+            abort_unless($this->canAccessRegistration($user, $registration), 403);
             $registration->loadMissing(['category.event', 'ticket', 'user', 'payment']);
         } else {
             $registration = $user->registrations()
@@ -148,5 +134,30 @@ class TicketController extends Controller
         abort_if(! $registration || ! $registration->isPaid(), 404, 'Nomor BIB belum diterbitkan atau pembayaran belum lunas.');
 
         return response()->view('pages.bib-print', ['registration' => $registration]);
+    }
+
+    /**
+     * Cek otorisasi akses tiket: pemilik, admin, atau anggota/pemilik EO event terkait.
+     */
+    protected function canAccessRegistration(User $user, Registration $registration): bool
+    {
+        if ($registration->user_id === $user->id || $user->isAdmin()) {
+            return true;
+        }
+
+        if ($user->isPenyelenggara()) {
+            $event = $registration->category?->event;
+            if ($event) {
+                if ($event->user_id === $user->id) {
+                    return true;
+                }
+
+                if ($event->organization_id && $user->organizations()->where('organizations.id', $event->organization_id)->exists()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

@@ -50,7 +50,7 @@ class HelpdeskTicketPolicy
      */
     public function create(User $user): bool
     {
-        return $user->isPeserta() || $user->isPenyelenggara() || $user->isAdmin();
+        return $user->isPeserta() || $user->isPenyelenggara() || $user->isOperator() || $user->isAdmin();
     }
 
     /**

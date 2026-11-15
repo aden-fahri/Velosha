@@ -170,7 +170,7 @@
             </span>
         </header>
 
-        <main class="p-6 sm:p-10 min-w-0 flex-grow space-y-8">
+        <main class="p-4 sm:p-8 md:p-10 min-w-0 flex-grow space-y-6 sm:space-y-8">
 
             {{-- Flash Notification Messages --}}
             @if (session()->has('success'))
@@ -194,18 +194,18 @@
 
                 <div>
                     <div class="text-[13px] font-bold tracking-[.08em] text-[var(--mute)] uppercase">DASHBOARD OPERATOR</div>
-                    <h1 class="h3 font-heading text-3xl sm:text-4xl font-black mt-1 text-[var(--ink)]">Ringkasan Penanganan Bantuan</h1>
+                    <h1 class="h3 font-heading text-2xl sm:text-4xl font-black mt-1 text-[var(--ink)]">Ringkasan Penanganan Bantuan</h1>
                 </div>
 
                 {{-- Sapaan Screen-Print Oranye Solid (#DE7119) Sesuai Dashboard Peserta & EO --}}
-                <section class="card bg-[#DE7119] p-8 sm:p-9 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6 min-h-[170px] border-[3px] border-[var(--ink)] rounded-2xl shadow-[6px_6px_0_var(--ink)]">
+                <section class="card bg-[#DE7119] p-5 sm:p-8 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-5 sm:gap-6 min-h-[160px] border-[3px] border-[var(--ink)] rounded-2xl shadow-[4px_4px_0_var(--ink)] sm:shadow-[6px_6px_0_var(--ink)]">
                     <div class="dots absolute inset-0 opacity-40 pointer-events-none"></div>
 
                     <div class="relative z-10">
-                        <h2 class="h2 text-3xl sm:text-[40px] text-[var(--ink)] font-black" style="font-family: 'Bricolage Grotesque', sans-serif;">
+                        <h2 class="h2 text-2xl sm:text-[40px] text-[var(--ink)] font-black" style="font-family: 'Bricolage Grotesque', sans-serif;">
                             Halo, Petugas {{ Auth::user()->name }}!
                         </h2>
-                        <p class="mt-2 max-w-[520px] text-sm sm:text-base font-medium text-[var(--ink)]/90 leading-relaxed">
+                        <p class="mt-2 max-w-[520px] text-xs sm:text-base font-medium text-[var(--ink)]/90 leading-relaxed">
                             Pantau antrian aduan peserta, SLA respon awal, dan tiket kendala pembayaran yang memerlukan tindakan segera.
                         </p>
                     </div>
@@ -213,48 +213,48 @@
                     {{-- Jam Real-Time Box Hitam Sesuai Portal Peserta --}}
                     <div x-data="{ clock: '' }"
                          x-init="const updateClock = () => { const now = new Date(); clock = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Asia/Jakarta' }) + ' WIB'; }; updateClock(); setInterval(updateClock, 1000);"
-                         class="relative z-10 px-5 py-3.5 border-[2.5px] border-[#10282E] rounded-[10px] bg-[#10282E] text-[#FBF4E6] text-center shrink-0 shadow-[3px_3px_0_#10282E]">
-                        <div class="text-[11px] font-bold tracking-[.1em] text-[#F4BE3F] uppercase">WAKTU OPERASIONAL (WIB)</div>
-                        <div class="mono text-2xl sm:text-[28px] font-bold mt-1 text-[#FBF4E6]" x-text="clock">--:--:-- WIB</div>
-                        <div class="text-[11px] font-semibold text-[#D5EBD9] mt-0.5">SLA Monitoring Aktif</div>
+                         class="relative z-10 px-4 py-2.5 sm:px-5 sm:py-3.5 border-[2.5px] border-[#10282E] rounded-[10px] bg-[#10282E] text-[#FBF4E6] text-center shrink-0 shadow-[3px_3px_0_#10282E]">
+                        <div class="text-[10px] sm:text-[11px] font-bold tracking-[.1em] text-[#F4BE3F] uppercase">WAKTU OPERASIONAL (WIB)</div>
+                        <div class="mono text-xl sm:text-[28px] font-bold mt-0.5 sm:mt-1 text-[#FBF4E6]" x-text="clock">--:--:-- WIB</div>
+                        <div class="text-[10px] sm:text-[11px] font-semibold text-[#D5EBD9] mt-0.5">SLA Monitoring Aktif</div>
                     </div>
                 </section>
 
-                {{-- 4 KPI Counter Cards (Sesuai Gaya Peserta & EO) --}}
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {{-- 4 KPI Counter Cards (Bento 2-Kolom di Mobile) --}}
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
                     <!-- Menunggu Respons -->
-                    <div wire:click="setFilter('open')" class="card p-5 flex justify-between shadow-[4px_4px_0_#10282E] bg-white cursor-pointer hover:-translate-y-0.5 transition-transform">
+                    <div wire:click="setFilter('open')" class="card p-3.5 sm:p-5 flex flex-col sm:flex-row justify-between gap-2 shadow-[3px_3px_0_#10282E] sm:shadow-[4px_4px_0_#10282E] bg-white cursor-pointer hover:-translate-y-0.5 transition-transform">
                         <div>
-                            <div class="text-xs font-bold tracking-[.06em] text-[var(--mute)] uppercase">MENUNGGU RESPONS</div>
-                            <div class="disp text-[40px] font-extrabold leading-[1.1] text-[var(--ink)] mt-1">{{ $kpiOpen }}</div>
-                            <div class="text-[13px] text-[var(--mute)] font-medium mt-1">Tiket baru antrian</div>
+                            <div class="text-[10px] sm:text-xs font-bold tracking-[.06em] text-[var(--mute)] uppercase">MENUNGGU RESPONS</div>
+                            <div class="disp text-3xl sm:text-[40px] font-extrabold leading-[1.1] text-[var(--ink)] mt-1">{{ $kpiOpen }}</div>
+                            <div class="text-xs sm:text-[13px] text-[var(--mute)] font-medium mt-0.5 sm:mt-1">Tiket baru antrian</div>
                         </div>
-                        <div class="ico bg-[#F3E7CF] w-12 h-12 flex items-center justify-center border-2 border-[#10282E] rounded-xl shrink-0">
-                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>
+                        <div class="ico bg-[#F3E7CF] w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center border-2 border-[#10282E] rounded-xl shrink-0 self-end sm:self-start">
+                            <svg class="w-4 h-4 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>
                         </div>
                     </div>
 
                     <!-- Dalam Proses -->
-                    <div wire:click="setFilter('in_progress')" class="card p-5 flex justify-between shadow-[4px_4px_0_#10282E] bg-white cursor-pointer hover:-translate-y-0.5 transition-transform">
+                    <div wire:click="setFilter('in_progress')" class="card p-3.5 sm:p-5 flex flex-col sm:flex-row justify-between gap-2 shadow-[3px_3px_0_#10282E] sm:shadow-[4px_4px_0_#10282E] bg-white cursor-pointer hover:-translate-y-0.5 transition-transform">
                         <div>
-                            <div class="text-xs font-bold tracking-[.06em] text-[var(--mute)] uppercase">DALAM PROSES</div>
-                            <div class="disp text-[40px] font-extrabold leading-[1.1] text-[var(--ink)] mt-1">{{ $kpiInProgress }}</div>
-                            <div class="text-[13px] text-[var(--mute)] font-medium mt-1">Sedang ditangani</div>
+                            <div class="text-[10px] sm:text-xs font-bold tracking-[.06em] text-[var(--mute)] uppercase">DALAM PROSES</div>
+                            <div class="disp text-3xl sm:text-[40px] font-extrabold leading-[1.1] text-[var(--ink)] mt-1">{{ $kpiInProgress }}</div>
+                            <div class="text-xs sm:text-[13px] text-[var(--mute)] font-medium mt-0.5 sm:mt-1">Sedang ditangani</div>
                         </div>
-                        <div class="ico bg-[#F8E3B5] w-12 h-12 flex items-center justify-center border-2 border-[#10282E] rounded-xl shrink-0">
-                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <div class="ico bg-[#F8E3B5] w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center border-2 border-[#10282E] rounded-xl shrink-0 self-end sm:self-start">
+                            <svg class="w-4 h-4 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                         </div>
                     </div>
 
                     <!-- Mendesak / Overdue SLA -->
-                    <div wire:click="setFilter('open')" class="card p-5 flex justify-between shadow-[4px_4px_0_#10282E] {{ $kpiBreached > 0 ? 'bg-red-50' : 'bg-white' }} cursor-pointer hover:-translate-y-0.5 transition-transform">
+                    <div wire:click="setFilter('open')" class="card p-3.5 sm:p-5 flex flex-col sm:flex-row justify-between gap-2 shadow-[3px_3px_0_#10282E] sm:shadow-[4px_4px_0_#10282E] {{ $kpiBreached > 0 ? 'bg-red-50' : 'bg-white' }} cursor-pointer hover:-translate-y-0.5 transition-transform">
                         <div>
-                            <div class="text-xs font-bold tracking-[.06em] {{ $kpiBreached > 0 ? 'text-red-700 font-black' : 'text-[var(--mute)]' }} uppercase">MENDESAK / SLA</div>
-                            <div class="disp text-[40px] font-extrabold leading-[1.1] {{ $kpiBreached > 0 ? 'text-red-700' : 'text-[var(--ink)]' }} mt-1">{{ $kpiBreached }}</div>
-                            <div class="text-[13px] {{ $kpiBreached > 0 ? 'text-red-700 font-bold' : 'text-[var(--mute)] font-medium' }} mt-1">Perlu eskalasi cepat</div>
+                            <div class="text-[10px] sm:text-xs font-bold tracking-[.06em] {{ $kpiBreached > 0 ? 'text-red-700 font-black' : 'text-[var(--mute)]' }} uppercase">MENDESAK / SLA</div>
+                            <div class="disp text-3xl sm:text-[40px] font-extrabold leading-[1.1] {{ $kpiBreached > 0 ? 'text-red-700' : 'text-[var(--ink)]' }} mt-1">{{ $kpiBreached }}</div>
+                            <div class="text-xs sm:text-[13px] {{ $kpiBreached > 0 ? 'text-red-700 font-bold' : 'text-[var(--mute)] font-medium' }} mt-0.5 sm:mt-1">Eskalasi cepat</div>
                         </div>
-                        <div class="ico {{ $kpiBreached > 0 ? 'bg-red-200 text-red-900' : 'bg-[#F2D3DC] text-[var(--ink)]' }} w-12 h-12 flex items-center justify-center border-2 border-[#10282E] rounded-xl shrink-0">
-                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        <div class="ico {{ $kpiBreached > 0 ? 'bg-red-200 text-red-900' : 'bg-[#F2D3DC] text-[var(--ink)]' }} w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center border-2 border-[#10282E] rounded-xl shrink-0 self-end sm:self-start">
+                            <svg class="w-4 h-4 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                         </div>
                     </div>
 

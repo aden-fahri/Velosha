@@ -129,7 +129,7 @@
                     </svg>
                 </div>
                 <div class="max-w-[85%] bg-white border-[2px] border-[#10282E] rounded-2xl rounded-tl-sm p-3.5 shadow-[2.5px_2.5px_0_#10282E] text-xs text-[#10282E] font-medium leading-relaxed">
-                    Halo! Aku <strong>Mizu</strong>, asisten Velosha 🚴‍♂️. Tanya saja soal pendaftaran, Race Pack, regulasi, atau istilah balap yang bikin bingung.
+                    Halo! Aku <strong>Mizu</strong>, asisten cerdas Velosha. Tanya saja soal pendaftaran, Race Pack, regulasi, atau istilah balap yang bikin bingung.
                 </div>
             </div>
 

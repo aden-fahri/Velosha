@@ -1,66 +1,66 @@
 @use('App\Support\EventCardPresenter', 'P')
 {{-- Sticky booking box: pilihan kategori, inklusi paket, CTA checkout (Neobrutalisme Velosha) --}}
 <div id="daftar" class="lg:col-span-4 sticky top-24" x-data="{ selected: '{{ ($categories->firstWhere('is_primary', true) ?? $categories->first())?->id }}' }">
-    <div class="bg-white border-[3px] border-[var(--ink)] rounded-2xl p-6 sm:p-7 shadow-[6px_6px_0_var(--ink)]">
+    <div class="bg-white border-[2.5px] sm:border-[3px] border-[var(--ink)] rounded-2xl p-4 sm:p-7 shadow-[4px_4px_0_var(--ink)] sm:shadow-[6px_6px_0_var(--ink)]">
 
-        <div class="pb-4 border-b-2 border-[var(--ink)] flex justify-between items-start gap-3">
+        <div class="pb-3 sm:pb-4 border-b-2 border-[var(--ink)] flex justify-between items-start gap-2.5 sm:gap-3">
             <div>
-                <span class="text-[11px] uppercase font-black tracking-wider text-[var(--mute)]">Pilih Kategori Jarak</span>
-                <div class="font-heading text-3xl font-black text-[var(--ink)] mt-0.5 tracking-tight">Rp {{ $lowestPrice === null ? '—' : P::angka((float) $lowestPrice) }}</div>
-                <div class="flex items-center gap-1.5 text-xs font-bold text-[#1F6F4A] mt-1">
+                <span class="text-[10px] sm:text-[11px] uppercase font-black tracking-wider text-[var(--mute)]">Pilih Kategori Jarak</span>
+                <div class="font-heading text-2xl sm:text-3xl font-black text-[var(--ink)] mt-0.5 tracking-tight">Rp {{ $lowestPrice === null ? '—' : P::angka((float) $lowestPrice) }}</div>
+                <div class="flex items-center gap-1 text-[11px] sm:text-xs font-bold text-[#1F6F4A] mt-0.5 sm:mt-1">
                     <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                     <span>{{ P::tanggalLengkap($eventDate) }}</span>
                 </div>
             </div>
-            <span class="text-xs font-black px-3 py-1.5 rounded-lg border-2 border-[var(--ink)] shadow-[2px_2px_0_var(--ink)] shrink-0 {{ $totalRemaining > 0 ? 'bg-[#1F6F4A] text-white' : 'bg-[#A02F1A] text-white' }}"
+            <span class="text-[10px] sm:text-xs font-black px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg border-2 border-[var(--ink)] shadow-[1.5px_1.5px_0_var(--ink)] sm:shadow-[2px_2px_0_var(--ink)] shrink-0 {{ $totalRemaining > 0 ? 'bg-[#1F6F4A] text-white' : 'bg-[#A02F1A] text-white' }}"
                   style="background-color: {{ $totalRemaining > 0 ? '#1F6F4A' : '#A02F1A' }} !important; color: #ffffff !important;">
                 {{ $totalRemaining > 0 ? 'Sisa '.$totalRemaining.' Slot' : 'Slot Penuh' }}
             </span>
         </div>
 
         <!-- Select Category Radios -->
-        <div class="my-5 space-y-3">
+        <div class="my-4 sm:my-5 space-y-2.5 sm:space-y-3">
             @forelse ($categories as $category)
             @php
                 $catDist = P::distance($category->distance_km);
                 $hasDist = \Illuminate\Support\Str::contains(strtolower($category->name), [strtolower($catDist), (string)(int)$category->distance_km . 'km', (string)(int)$category->distance_km . ' km']);
                 $displayName = $hasDist ? $category->name : "{$category->name} ({$catDist})";
             @endphp
-            <label class="group relative flex items-center justify-between p-4 rounded-xl border-2 transition-all cursor-pointer"
+            <label class="group relative flex items-center justify-between p-3 sm:p-4 rounded-xl border-2 transition-all cursor-pointer"
                    :class="selected == '{{ $category->id }}'
-                       ? 'bg-white border-[var(--ink)] shadow-[3.5px_3.5px_0_var(--ink)] ring-2 ring-[var(--mustard)]/40'
+                       ? 'bg-white border-[var(--ink)] shadow-[3px_3px_0_var(--ink)] ring-2 ring-[var(--mustard)]/40'
                        : 'bg-white/80 border-[var(--line)] hover:border-[var(--ink)] hover:bg-white shadow-[1px_1px_0_var(--line)]'">
-                <div class="flex items-start gap-3.5 min-w-0">
+                <div class="flex items-start gap-2.5 sm:gap-3.5 min-w-0">
                     <div class="pt-0.5">
                         <input type="radio" name="race_category" x-model="selected" value="{{ $category->id }}"
                                class="w-4 h-4 text-[var(--orange)] focus:ring-[var(--orange)] border-2 border-[var(--ink)] cursor-pointer">
                     </div>
                     <div class="min-w-0">
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <span class="font-heading font-black text-sm text-[var(--ink)] leading-snug">
+                        <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                            <span class="font-heading font-black text-xs sm:text-sm text-[var(--ink)] leading-snug">
                                 {{ $displayName }}
                             </span>
                             @if ($category->is_primary)
-                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)] shadow-[1px_1px_0_var(--ink)]">
-                                ★ Kategori Utama
+                            <span class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-[var(--mustard)] text-[var(--ink)] border border-[var(--ink)] shadow-[1px_1px_0_var(--ink)]">
+                                ★ Utama
                             </span>
                             @endif
                         </div>
-                        <div class="text-[11px] text-[var(--mute)] font-medium mt-1 flex items-center gap-1.5 flex-wrap">
+                        <div class="text-[10px] sm:text-[11px] text-[var(--mute)] font-medium mt-0.5 sm:mt-1 flex items-center gap-1.5 flex-wrap">
                             <span>Elevasi +{{ P::angka((float) $category->elevation_gain_m) }}m</span>
                             <span>&bull;</span>
                             <span>COT {{ P::jam((float) $category->cut_off_hours) }}</span>
                         </div>
-                        <div class="mt-1.5">
-                            <span class="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded {{ $category->remaining > 0 ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' : 'bg-red-50 text-red-800 border border-red-300' }}">
+                        <div class="mt-1">
+                            <span class="inline-flex items-center text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded {{ $category->remaining > 0 ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' : 'bg-red-50 text-red-800 border border-red-300' }}">
                                 {{ $category->remaining > 0 ? 'Sisa ' . $category->remaining . ' Slot' : 'Slot Penuh' }}
                             </span>
                         </div>
                     </div>
                 </div>
-                <div class="text-right shrink-0 pl-3">
-                    <div class="text-[10px] uppercase font-bold text-[var(--mute)] tracking-wider">Harga</div>
-                    <div class="font-heading font-black text-base text-[var(--ink)]">Rp {{ P::angka((float) $category->price) }}</div>
+                <div class="text-right shrink-0 pl-2 sm:pl-3">
+                    <div class="text-[9px] sm:text-[10px] uppercase font-bold text-[var(--mute)] tracking-wider">Harga</div>
+                    <div class="font-heading font-black text-sm sm:text-base text-[var(--ink)]">Rp {{ P::angka((float) $category->price) }}</div>
                 </div>
             </label>
             @empty

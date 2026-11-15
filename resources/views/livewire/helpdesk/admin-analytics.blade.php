@@ -75,7 +75,7 @@
     </aside>
 
     {{-- ==================== MAIN CONTENT AREA ==================== --}}
-    <main class="flex-1 p-6 md:p-8 space-y-8 min-w-0">
+    <main class="flex-1 p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8 min-w-0">
 
         {{-- Top Header --}}
         <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-[3px] border-[var(--ink)] pb-5">

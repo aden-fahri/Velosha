@@ -5,7 +5,7 @@
         <div>
             <!-- Brand Logo Header (Official Brand Asset) -->
             <div class="flex items-center pb-5 mb-4 border-b border-[#10282E]/15">
-                <a href="/" wire:navigate class="flex items-center gap-3 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
+                <a href="/" wire:navigate.hover class="flex items-center gap-3 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
                     <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
                     <span class="font-extrabold text-2xl tracking-tight text-[#10282E]" style="font-family: 'Bricolage Grotesque', sans-serif;">Velosha</span>
                 </a>
@@ -49,7 +49,7 @@
                     <span class="whitespace-nowrap font-bold text-sm">Pusat bantuan</span>
                 </button>
 
-                <a href="{{ route('helpdesk.my-tickets') }}" wire:navigate class="w-full flex items-center justify-between">
+                <a href="{{ route('helpdesk.my-tickets') }}" wire:navigate.hover class="w-full flex items-center justify-between">
                     <div class="flex items-center gap-2.5 min-w-0">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"></path></svg>
                         <span class="whitespace-nowrap font-bold text-sm">Tiket Bantuan</span>
@@ -66,7 +66,7 @@
 
                 <div class="text-[11px] font-bold tracking-wider text-[var(--mute)] uppercase px-3 pt-5 pb-1">PUBLIK</div>
 
-                <a href="/" wire:navigate class="w-full flex items-center gap-2.5">
+                <a href="/" wire:navigate.hover class="w-full flex items-center gap-2.5">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
                     <span class="whitespace-nowrap font-bold text-sm">Kembali ke website</span>
                 </a>
@@ -78,7 +78,7 @@
                 @endphp
 
                 @if ($sidebarOrg)
-                    <a href="{{ route('organizations.show', $sidebarOrg) }}" wire:navigate class="w-full flex items-center justify-between">
+                    <a href="{{ route('organizations.show', $sidebarOrg) }}" wire:navigate.hover class="w-full flex items-center justify-between">
                         <div class="flex items-center gap-2.5 min-w-0">
                             <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                             <span class="whitespace-nowrap font-bold text-sm">Dasbor Penyelenggara</span>
@@ -91,7 +91,7 @@
                         @endif
                     </a>
                 @else
-                    <a href="{{ route('packages.index') }}" wire:navigate class="w-full flex items-center gap-2.5 group" title="Beli paket kuota untuk membuka dasbor penyelenggara">
+                    <a href="{{ route('packages.index') }}" wire:navigate.hover class="w-full flex items-center gap-2.5 group" title="Beli paket kuota untuk membuka dasbor penyelenggara">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                         <span class="whitespace-nowrap font-bold text-sm text-[var(--ink)]">Mulai Jadi Penyelenggara</span>
                     </a>
@@ -100,7 +100,7 @@
                 @if(Auth::user()->isAdmin())
                 <a href="/admin" class="w-full flex items-center gap-2.5">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    <span class="whitespace-nowrap font-bold text-sm">Panel Admin</span>
+                    <span class="whitespace-nowrap font-bold text-sm">Dashboard Admin</span>
                 </a>
                 @endif
             </nav>
@@ -130,9 +130,9 @@
         <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 bg-[#10282E]/80 backdrop-blur-xs" @click="sidebarOpen = false"></div>
 
         <div x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
-             class="side relative flex flex-col w-72 max-w-full h-full bg-[#FBF4E6] text-[var(--ink)] border-r-[3px] border-[#10282E] p-6 shadow-2xl overflow-y-auto">
+             class="side relative flex flex-col w-72 max-w-full h-full bg-[#FBF4E6] text-[var(--ink)] border-r-[3px] border-[#10282E] p-6 shadow-[6px_0_0_#10282E] overflow-y-auto">
             <div class="flex items-center justify-between pb-6 mb-4 border-b border-[#10282E]/15">
-                <a href="/" wire:navigate class="flex items-center gap-2.5 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
+                <a href="/" wire:navigate.hover class="flex items-center gap-2.5 transition-transform duration-150 hover:-translate-y-0.5" style="text-decoration: none" aria-label="Velosha — Beranda">
                     <img src="/images/logo-velosha.png" alt="Velosha" class="h-8 w-auto object-contain" />
                 </a>
                 <button type="button" @click="sidebarOpen = false" class="p-1.5 text-[var(--ink)]">
@@ -161,22 +161,22 @@
                         class="w-full {{ $activeTab === 'help' ? 'on' : '' }}">
                     Pusat bantuan
                 </button>
-                <a href="{{ route('helpdesk.my-tickets') }}" wire:navigate class="w-full flex items-center justify-between">
+                <a href="{{ route('helpdesk.my-tickets') }}" wire:navigate.hover class="w-full flex items-center justify-between">
                     <span>Tiket Bantuan</span>
                     @if(isset($userTicketCount) && $userTicketCount > 0)
                     <span class="chip p ml-auto">{{ $userTicketCount }}</span>
                     @endif
                 </a>
-                <a href="/" wire:navigate class="w-full mt-4">
+                <a href="/" wire:navigate.hover class="w-full mt-4">
                     Kembali ke website
                 </a>
 
                 @if ($sidebarOrg)
-                    <a href="{{ route('organizations.show', $sidebarOrg) }}" wire:navigate class="w-full flex items-center gap-2 mt-2">
+                    <a href="{{ route('organizations.show', $sidebarOrg) }}" wire:navigate.hover class="w-full flex items-center gap-2 mt-2">
                         <span>Dasbor Penyelenggara</span>
                     </a>
                 @else
-                    <a href="{{ route('packages.index') }}" wire:navigate class="w-full flex items-center gap-2 mt-2">
+                    <a href="{{ route('packages.index') }}" wire:navigate.hover class="w-full flex items-center gap-2 mt-2">
                         <span>Mulai Jadi Penyelenggara</span>
                     </a>
                 @endif
@@ -205,7 +205,7 @@
         </header>
 
         <!-- MAIN WORKSPACE CONTENT -->
-        <main class="p-6 sm:p-10 lg:p-12 flex-grow space-y-6 max-w-7xl">
+        <main class="p-4 sm:p-8 lg:p-12 flex-grow space-y-6 max-w-7xl">
 
             <!-- ================= TAB 1: OVERVIEW ================= -->
             @if($activeTab === 'overview')
@@ -216,14 +216,14 @@
                 </div>
 
                 <!-- Sapaan Kartun Screen-Print Oranye Solid (#DE7119) Sesuai Portal.dc.html -->
-                <section class="card bg-[#DE7119] p-8 sm:p-9 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6 min-h-[170px]">
+                <section class="card bg-[#DE7119] p-5 sm:p-8 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-5 sm:gap-6 min-h-[160px]">
                     <div class="dots absolute inset-0 opacity-40 pointer-events-none"></div>
 
                     <div class="relative z-10">
-                        <h2 class="h2 text-3xl sm:text-[40px] mt-1 text-[var(--ink)] font-black">
+                        <h2 class="h2 text-2xl sm:text-[40px] mt-1 text-[var(--ink)] font-black">
                             Halo, {{ Auth::user()->name }}!
                         </h2>
-                        <p class="mt-2.5 max-w-[480px] text-base font-medium text-[var(--ink)] leading-relaxed">
+                        <p class="mt-2 max-w-[480px] text-sm sm:text-base font-medium text-[var(--ink)] leading-relaxed">
                             Pantau status tiket balap, nomor BIB RFID, dan jadwal race terdekatmu di sini.
                         </p>
                     </div>
@@ -231,59 +231,59 @@
                     <!-- Jam Real-Time Box Hitam Sesuai Portal.dc.html -->
                     <div x-data="{ clock: '' }"
                          x-init="const updateClock = () => { const now = new Date(); clock = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB'; }; updateClock(); setInterval(updateClock, 1000);"
-                         class="relative z-10 px-5 py-3.5 border-[2.5px] border-[#10282E] rounded-[10px] bg-[#10282E] text-[#FBF4E6] text-center shrink-0 shadow-[3px_3px_0_#10282E]">
-                        <div class="text-[11px] font-bold tracking-[.1em] text-[#F4BE3F] uppercase">JAM REAL-TIME</div>
-                        <div class="mono text-2xl sm:text-[28px] font-bold mt-1 text-[#FBF4E6]" x-text="clock">06.13.30 WIB</div>
+                         class="relative z-10 px-4 py-2.5 sm:px-5 sm:py-3.5 border-[2.5px] border-[#10282E] rounded-[10px] bg-[#10282E] text-[#FBF4E6] text-center shrink-0 shadow-[3px_3px_0_#10282E]">
+                        <div class="text-[10px] sm:text-[11px] font-bold tracking-[.1em] text-[#F4BE3F] uppercase">JAM REAL-TIME</div>
+                        <div class="mono text-xl sm:text-[28px] font-bold mt-0.5 sm:mt-1 text-[#FBF4E6]" x-text="clock">06.13.30 WIB</div>
                     </div>
                 </section>
 
-                <!-- Statistik 4 Box Sesuai Portal.dc.html -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Statistik 4 Box Sesuai Portal.dc.html (Bento 2 Kolom di Mobile) -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
                     <!-- Total Pendaftaran -->
-                    <div class="card p-5 flex justify-between shadow-[4px_4px_0_#10282E] bg-white">
+                    <div class="card p-3.5 sm:p-5 flex flex-col sm:flex-row justify-between gap-2 shadow-[3px_3px_0_#10282E] sm:shadow-[4px_4px_0_#10282E] bg-white">
                         <div>
-                            <div class="text-xs font-bold tracking-[.06em] text-[var(--mute)] uppercase">TOTAL PENDAFTARAN</div>
-                            <div class="disp text-[44px] font-extrabold leading-[1.1] text-[var(--ink)] mt-1">{{ $statTotal }}</div>
-                            <div class="text-[13px] text-[var(--mute)] font-medium mt-1">Balap terdaftar</div>
+                            <div class="text-[10px] sm:text-xs font-bold tracking-[.06em] text-[var(--mute)] uppercase">TOTAL PENDAFTARAN</div>
+                            <div class="disp text-3xl sm:text-[44px] font-extrabold leading-[1.1] text-[var(--ink)] mt-1">{{ $statTotal }}</div>
+                            <div class="text-xs sm:text-[13px] text-[var(--mute)] font-medium mt-1">Balap terdaftar</div>
                         </div>
-                        <div class="ico bg-[#F3E7CF] w-12 h-12 flex items-center justify-center">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a3 3 0 0 0 0 6v3h18v-3a3 3 0 0 1 0-6V6H3z"></path><path d="M14 6v12" stroke-dasharray="2 3"></path></svg>
+                        <div class="ico bg-[#F3E7CF] w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center shrink-0 self-end sm:self-start">
+                            <svg class="w-4 h-4 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a3 3 0 0 0 0 6v3h18v-3a3 3 0 0 1 0-6V6H3z"></path><path d="M14 6v12" stroke-dasharray="2 3"></path></svg>
                         </div>
                     </div>
 
                     <!-- Lunas & Aktif -->
-                    <div class="card p-5 flex justify-between shadow-[4px_4px_0_#10282E] bg-white">
+                    <div class="card p-3.5 sm:p-5 flex flex-col sm:flex-row justify-between gap-2 shadow-[3px_3px_0_#10282E] sm:shadow-[4px_4px_0_#10282E] bg-white">
                         <div>
-                            <div class="text-xs font-bold tracking-[.06em] text-[var(--mute)] uppercase">Lunas &amp; Aktif</div>
-                            <div class="disp text-[44px] font-extrabold leading-[1.1] text-[#1F6F4A] mt-1">{{ $statPaid }}</div>
-                            <div class="text-[13px] font-semibold text-[#1F6F4A] mt-1">E-ticket terbit</div>
+                            <div class="text-[10px] sm:text-xs font-bold tracking-[.06em] text-[var(--mute)] uppercase">LUNAS &amp; AKTIF</div>
+                            <div class="disp text-3xl sm:text-[44px] font-extrabold leading-[1.1] text-[#1F6F4A] mt-1">{{ $statPaid }}</div>
+                            <div class="text-xs sm:text-[13px] font-semibold text-[#1F6F4A] mt-1">E-ticket terbit</div>
                         </div>
-                        <div class="ico bg-[#D5EBD9] w-12 h-12 flex items-center justify-center">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        <div class="ico bg-[#D5EBD9] w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center shrink-0 self-end sm:self-start">
+                            <svg class="w-4 h-4 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                         </div>
                     </div>
 
                     <!-- Menunggu Bayar -->
-                    <div class="card p-5 flex justify-between shadow-[4px_4px_0_#10282E] bg-white">
+                    <div class="card p-3.5 sm:p-5 flex flex-col sm:flex-row justify-between gap-2 shadow-[3px_3px_0_#10282E] sm:shadow-[4px_4px_0_#10282E] bg-white">
                         <div>
-                            <div class="text-xs font-bold tracking-[.06em] text-[var(--mute)] uppercase">MENUNGGU BAYAR</div>
-                            <div class="disp text-[44px] font-extrabold leading-[1.1] text-[#B2590F] mt-1">{{ $statPending }}</div>
-                            <div class="text-[13px] font-semibold text-[#B2590F] mt-1">Segera selesaikan</div>
+                            <div class="text-[10px] sm:text-xs font-bold tracking-[.06em] text-[var(--mute)] uppercase">MENUNGGU BAYAR</div>
+                            <div class="disp text-3xl sm:text-[44px] font-extrabold leading-[1.1] text-[#B2590F] mt-1">{{ $statPending }}</div>
+                            <div class="text-xs sm:text-[13px] font-semibold text-[#B2590F] mt-1">Segera selesaikan</div>
                         </div>
-                        <div class="ico bg-[#F6B777] w-12 h-12 flex items-center justify-center">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <div class="ico bg-[#F6B777] w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center shrink-0 self-end sm:self-start">
+                            <svg class="w-4 h-4 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                         </div>
                     </div>
 
                     <!-- BIB RFID Terbit -->
-                    <div class="card p-5 flex justify-between shadow-[4px_4px_0_#10282E] bg-white">
+                    <div class="card p-3.5 sm:p-5 flex flex-col sm:flex-row justify-between gap-2 shadow-[3px_3px_0_#10282E] sm:shadow-[4px_4px_0_#10282E] bg-white">
                         <div>
-                            <div class="text-xs font-bold tracking-[.06em] text-[var(--mute)] uppercase">BIB RFID TERBIT</div>
-                            <div class="disp text-[44px] font-extrabold leading-[1.1] text-[#9B3D5A] mt-1">{{ $statBibs }}</div>
-                            <div class="text-[13px] font-semibold text-[#9B3D5A] mt-1">Nomor dada resmi</div>
+                            <div class="text-[10px] sm:text-xs font-bold tracking-[.06em] text-[var(--mute)] uppercase">BIB RFID TERBIT</div>
+                            <div class="disp text-3xl sm:text-[44px] font-extrabold leading-[1.1] text-[#9B3D5A] mt-1">{{ $statBibs }}</div>
+                            <div class="text-xs sm:text-[13px] font-semibold text-[#9B3D5A] mt-1">Nomor dada resmi</div>
                         </div>
-                        <div class="ico bg-[#F2D3DC] w-12 h-12 flex items-center justify-center">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                        <div class="ico bg-[#F2D3DC] w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center shrink-0 self-end sm:self-start">
+                            <svg class="w-4 h-4 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
                         </div>
                     </div>
                 </div>
@@ -336,7 +336,7 @@
                             @if($registrations->isEmpty())
                             <div class="p-10 text-center space-y-3">
                                 <p class="text-sm text-[var(--mute)]">Kamu belum memiliki pendaftaran balap musim ini.</p>
-                                <a href="{{ route('events.index') }}" wire:navigate class="btn btn-sm">
+                                <a href="{{ route('events.index') }}" wire:navigate.hover class="btn btn-sm">
                                     Cari Balap Terbuka
                                 </a>
                             </div>
@@ -354,7 +354,7 @@
                                     <!-- Nama Event & Info -->
                                     <div class="flex-1 min-w-0">
                                         <div class="flex gap-2.5 items-center flex-wrap">
-                                            <b class="text-base sm:text-[17px] text-[var(--ink)] truncate">{{ $regEvent?->title }}</b>
+                                             <b class="text-base sm:text-[17px] text-[var(--ink)] truncate">{{ $regEvent?->title }}</b>
                                             <span class="chip {{ $reg->isPaid() ? 'o' : 'b' }}">{{ $reg->category?->name }}</span>
                                         </div>
                                         <div class="text-sm text-[var(--mute)] mt-1 truncate">
@@ -368,11 +368,11 @@
                                     <!-- Status & CTA Sesuai Portal.dc.html -->
                                     <div class="flex items-center gap-3 self-end sm:self-center shrink-0">
                                         @if($reg->isPaid())
-                                            <span class="chip g">Lunas</span>
-                                            <a href="{{ route('ticket.show', $reg) }}" class="btn btn-sm btn-ghost">E-ticket</a>
+                                            <span class="chip g">Lunas &amp; Aktif</span>
+                                            <a href="{{ route('ticket.show', $reg) }}" wire:navigate.hover class="btn btn-sm btn-ghost">E-ticket</a>
                                         @elseif($reg->status === \App\Models\Registration::STATUS_PENDING)
                                             <span class="chip m">Menunggu bayar</span>
-                                            <a href="{{ route('checkout', ['event' => $regEvent?->slug, 'category' => $reg->event_category_id]) }}" wire:navigate class="btn btn-sm">Bayar sekarang</a>
+                                            <a href="{{ route('checkout', ['event' => $regEvent?->slug, 'category' => $reg->event_category_id]) }}" wire:navigate.hover class="btn btn-sm">Bayar sekarang</a>
                                         @else
                                             <span class="chip r">Dibatalkan</span>
                                         @endif
@@ -508,11 +508,11 @@
 
                                     <div>
                                         @if($reg->isPaid())
-                                            <a href="{{ route('ticket.show', $reg) }}" class="btn btn-sm btn-ghost">
+                                            <a href="{{ route('ticket.show', $reg) }}" wire:navigate.hover class="btn btn-sm btn-ghost">
                                                 Lihat E-Ticket
                                             </a>
                                         @elseif($reg->status === \App\Models\Registration::STATUS_PENDING)
-                                            <a href="{{ route('checkout', ['event' => $regEvent?->slug, 'category' => $reg->event_category_id]) }}" wire:navigate class="btn btn-sm">
+                                            <a href="{{ route('checkout', ['event' => $regEvent?->slug, 'category' => $reg->event_category_id]) }}" wire:navigate.hover class="btn btn-sm">
                                                 Bayar Sekarang
                                             </a>
                                         @endif
@@ -534,7 +534,7 @@
                             <h3 class="h3 font-heading text-2xl font-black">Kalender Balap Velosha</h3>
                             <p class="text-sm text-[var(--mute)]">Daftar event terbuka untuk musim balap endurance 2026/2027.</p>
                         </div>
-                        <a href="{{ route('events.index') }}" wire:navigate class="font-bold text-sm text-[#B2590F] hover:underline">
+                        <a href="{{ route('events.index') }}" wire:navigate.hover class="font-bold text-sm text-[#B2590F] hover:underline">
                             Lihat Katalog Lengkap &rarr;
                         </a>
                     </div>
@@ -556,7 +556,7 @@
                                 <div class="text-xs font-bold text-[var(--ink)]">
                                     {{ $event->categories->count() }} Kategori Jarak
                                 </div>
-                                <a href="{{ route('events.show', $event->slug) }}" wire:navigate class="btn btn-sm">
+                                <a href="{{ route('events.show', $event->slug) }}" wire:navigate.hover class="btn btn-sm">
                                     Daftar Race
                                 </a>
                             </div>

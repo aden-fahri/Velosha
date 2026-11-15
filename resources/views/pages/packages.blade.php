@@ -30,16 +30,16 @@
 </section>
 
 {{-- KONTEN UTAMA: 3 KARTU HARGA & FAQ DENGAN JARAK LEGA --}}
-<section class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[var(--paper)] min-h-[calc(100vh-280px)]">
-    <div class="max-w-6xl mx-auto space-y-20">
+<section class="py-8 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-[var(--paper)] min-h-[calc(100vh-280px)]">
+    <div class="max-w-6xl mx-auto space-y-10 sm:space-y-16 lg:space-y-20">
 
         {{-- 3 Kartu Paket Kuota --}}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-stretch">
             @foreach ($packages as $pkg)
                 @php
                     $isPopular = $pkg->events_count === 3;
                 @endphp
-                <div class="flex flex-col justify-between rounded-2xl border-[3px] border-[var(--ink)] {{ $isPopular ? 'bg-[#10282E] text-white shadow-[8px_8px_0_#F4BE3F] ring-2 ring-[var(--ink)] md:-translate-y-3' : 'bg-white text-[var(--ink)] shadow-[5px_5px_0_var(--ink)]' }} p-7 sm:p-8 transition-transform duration-200">
+                <div class="flex flex-col justify-between rounded-2xl border-[2.5px] sm:border-[3px] border-[var(--ink)] {{ $isPopular ? 'bg-[#10282E] text-white shadow-[6px_6px_0_#F4BE3F] ring-2 ring-[var(--ink)] md:-translate-y-3' : 'bg-white text-[var(--ink)] shadow-[4px_4px_0_var(--ink)] sm:shadow-[5px_5px_0_var(--ink)]' }} p-5 sm:p-7 md:p-8 transition-transform duration-200">
                     
                     <div class="space-y-6">
                         {{-- Top Badge / Label Row --}}
@@ -118,10 +118,12 @@
                                 <form action="{{ route('organizations.quota.purchase', $userOrg) }}" method="POST" onsubmit="buyQuotaSnap(event, this)">
                                     @csrf
                                     <input type="hidden" name="package_id" value="{{ $pkg->id }}">
-                                    <button type="submit"
-                                            class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl border-2 border-[var(--ink)] font-black text-xs uppercase tracking-wider {{ $isPopular ? 'bg-[var(--orange)] hover:bg-[var(--orange-l)] text-white shadow-[3px_3px_0_#fff]' : 'bg-[var(--mustard)] hover:bg-[var(--butter)] text-[var(--ink)] shadow-[3px_3px_0_var(--ink)]' }} hover:translate-x-0.5 hover:translate-y-0.5 transition-all cursor-pointer">
-                                        <span>Beli Kuota ({{ $userOrg->name }}) &rarr;</span>
-                                    </button>
+                                    <x-ui.submit-button
+                                        :variant="$isPopular ? 'orange' : 'mustard'"
+                                        loadingText="Menghubungkan Midtrans..."
+                                        :fullWidth="true">
+                                        Beli Kuota ({{ $userOrg->name }}) &rarr;
+                                    </x-ui.submit-button>
                                 </form>
                             @else
                                 <a href="{{ route('organizations.create', ['package' => $pkg->id]) }}"
@@ -141,15 +143,15 @@
         </div>
 
         {{-- FAQ Penyelenggara (Berjarak Lega dengan Kontras Neobrutalism) --}}
-        <div class="mt-20 bg-white border-[3px] border-[var(--ink)] rounded-2xl p-8 sm:p-12 shadow-[6px_6px_0_var(--ink)] max-w-4xl mx-auto space-y-8">
-            <div class="border-b-2 border-[var(--ink)] pb-4">
-                <span class="text-[11px] font-black uppercase tracking-wider text-[var(--orange)]">Pusat Informasi</span>
-                <h3 class="text-2xl sm:text-3xl font-black text-[var(--ink)] mt-1" style="font-family: 'Bricolage Grotesque', sans-serif">
+        <div class="mt-12 sm:mt-20 bg-white border-[2.5px] sm:border-[3px] border-[var(--ink)] rounded-2xl p-5 sm:p-8 md:p-12 shadow-[4px_4px_0_var(--ink)] sm:shadow-[6px_6px_0_var(--ink)] max-w-4xl mx-auto space-y-6 sm:space-y-8">
+            <div class="border-b-2 border-[var(--ink)] pb-3 sm:pb-4">
+                <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-[var(--orange)]">Pusat Informasi</span>
+                <h3 class="text-xl sm:text-2xl md:text-3xl font-black text-[var(--ink)] mt-1" style="font-family: 'Bricolage Grotesque', sans-serif">
                     Pertanyaan Umum Penyelenggara Velosha
                 </h3>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-xs leading-relaxed text-[var(--ink)]">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 text-xs leading-relaxed text-[var(--ink)]">
                 <div class="space-y-2 p-4 rounded-xl bg-[var(--paper)] border-2 border-[var(--ink)] shadow-[2px_2px_0_var(--ink)]">
                     <h4 class="font-black text-sm text-[var(--ink)]">Kapan kuota event saya terpotong?</h4>
                     <p class="text-[var(--mute)] font-medium">
@@ -263,65 +265,32 @@
                     return;
                 }
 
-                if (data.snap_token && window.snap) {
-                    try {
-                        if (typeof window.snap.embed === 'function') {
-                            container.innerHTML = '';
-                            window.snap.embed(data.snap_token, {
-                                embedId: 'snap-container',
-                                onSuccess: function(result) {
-                                    const finishBase = data.finish_url || window.location.href;
-                                    const sep = finishBase.includes('?') ? '&' : '?';
-                                    window.location.href = finishBase + sep +
-                                        'order_id=' + (result.order_id || data.order_id) +
-                                        '&transaction_status=' + (result.transaction_status || 'settlement');
-                                },
-                                onPending: function(result) {
-                                    const finishBase = data.finish_url || window.location.href;
-                                    const sep = finishBase.includes('?') ? '&' : '?';
-                                    window.location.href = finishBase + sep +
-                                        'order_id=' + (result.order_id || data.order_id) +
-                                        '&transaction_status=' + (result.transaction_status || 'pending');
-                                },
-                                onError: function(result) {
-                                    resetUi();
-                                    alert('Pembayaran Midtrans tidak berhasil atau dibatalkan.');
-                                },
-                                onClose: function() {
-                                    resetUi();
-                                }
-                            });
-                            return;
-                        } else if (typeof window.snap.pay === 'function') {
-                            if (modal) modal.classList.add('hidden');
-                            window.snap.pay(data.snap_token, {
-                                onSuccess: function(result) {
-                                    const finishBase = data.finish_url || window.location.href;
-                                    const sep = finishBase.includes('?') ? '&' : '?';
-                                    window.location.href = finishBase + sep +
-                                        'order_id=' + (result.order_id || data.order_id) +
-                                        '&transaction_status=' + (result.transaction_status || 'settlement');
-                                },
-                                onPending: function(result) {
-                                    const finishBase = data.finish_url || window.location.href;
-                                    const sep = finishBase.includes('?') ? '&' : '?';
-                                    window.location.href = finishBase + sep +
-                                        'order_id=' + (result.order_id || data.order_id) +
-                                        '&transaction_status=' + (result.transaction_status || 'pending');
-                                },
-                                onError: function() {
-                                    resetUi();
-                                    alert('Pembayaran Midtrans tidak berhasil atau dibatalkan.');
-                                },
-                                onClose: function() {
-                                    resetUi();
-                                }
-                            });
-                            return;
+                if (data.snap_token && window.snap && typeof window.snap.pay === 'function') {
+                    if (modal) modal.classList.add('hidden');
+                    window.snap.pay(data.snap_token, {
+                        onSuccess: function(result) {
+                            const finishBase = data.finish_url || window.location.href;
+                            const sep = finishBase.includes('?') ? '&' : '?';
+                            window.location.href = finishBase + sep +
+                                'order_id=' + (result.order_id || data.order_id) +
+                                '&transaction_status=' + (result.transaction_status || 'settlement');
+                        },
+                        onPending: function(result) {
+                            const finishBase = data.finish_url || window.location.href;
+                            const sep = finishBase.includes('?') ? '&' : '?';
+                            window.location.href = finishBase + sep +
+                                'order_id=' + (result.order_id || data.order_id) +
+                                '&transaction_status=' + (result.transaction_status || 'pending');
+                        },
+                        onError: function(result) {
+                            resetUi();
+                            alert('Pembayaran Midtrans tidak berhasil atau dibatalkan.');
+                        },
+                        onClose: function() {
+                            resetUi();
                         }
-                    } catch (err) {
-                        console.warn('snap.embed/pay failed, falling back to iframe', err);
-                    }
+                    });
+                    return;
                 }
 
                 // If snap.embed could not be run, load in iframe inside the blur modal!

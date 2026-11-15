@@ -6,6 +6,8 @@
 export function initIntroHero() {
     const hero = document.getElementById('hero-section') || document.getElementById('hero');
     if (!hero) return null;
+    if (window.__veloIntroInitialized) return null;
+    window.__veloIntroInitialized = true;
 
     const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -37,12 +39,16 @@ export function initIntroHero() {
     // Preload hero rider image so it never flashes or stutters
     let heroImageLoaded = false;
     const preloadImg = new Image();
+    preloadImg.onload = () => { heroImageLoaded = true; };
+    preloadImg.onerror = () => { heroImageLoaded = true; };
     preloadImg.src = '/images/hero/rider_final.png';
     if (preloadImg.complete) {
         heroImageLoaded = true;
-    } else {
-        preloadImg.onload = () => { heroImageLoaded = true; };
     }
+    // Fail-safe: even on very slow connections/tunnels, never hold the intro past 1.8 seconds
+    setTimeout(() => { heroImageLoaded = true; }, 1800);
+
+    let safetyTimer = null;
 
     function reset() {
         if (idle) {
@@ -77,6 +83,10 @@ export function initIntroHero() {
 
     function finish() {
         run++;
+        if (safetyTimer) {
+            clearTimeout(safetyTimer);
+            safetyTimer = null;
+        }
         if (idle) {
             cancelAnimationFrame(idle);
             idle = null;
@@ -130,6 +140,13 @@ export function initIntroHero() {
         document.body.style.overflow = 'hidden';
         window.scrollTo(0, 0);
 
+        if (safetyTimer) clearTimeout(safetyTimer);
+        safetyTimer = setTimeout(() => {
+            if (intro && intro.style.display !== 'none') {
+                finish();
+            }
+        }, 4200);
+
         if (!road || !ib) {
             return finish();
         }
@@ -137,10 +154,12 @@ export function initIntroHero() {
         const H = hero.getBoundingClientRect();
         const R = road.getBoundingClientRect();
 
-        /* 1 · Logo dan badge stempel (0 – 0.6s) */
-        A(badge, [{ opacity: 0, translate: '0 -24px', scale: 0.8 }, { opacity: 1, translate: '0 0', scale: 1 }], { duration: 480, easing: 'cubic-bezier(.2,.9,.2,1)' });
-        await wait(140);
-        if (!live()) return;
+        /* 1 · Logo dan stempel (0 – 0.6s) */
+        if (badge) {
+            A(badge, [{ opacity: 0, translate: '0 -24px', scale: 0.8 }, { opacity: 1, translate: '0 0', scale: 1 }], { duration: 480, easing: 'cubic-bezier(.2,.9,.2,1)' });
+            await wait(140);
+            if (!live()) return;
+        }
 
         A(logo, [{ opacity: 0, scale: 1.7, rotate: '-3deg' }, { opacity: 1, scale: 1, rotate: '0deg' }], { duration: 560, easing: 'cubic-bezier(.16,1.4,.4,1)' });
         await wait(420);
@@ -170,8 +189,8 @@ export function initIntroHero() {
             const f = t => {
                 if (!live()) return;
                 let simP = clamp((t - s) / T, 0, 1);
-                // Tunggu decode gambar hero bila masih proses
-                if (!heroImageLoaded && simP > 0.94) {
+                // Tunggu decode gambar hero bila masih proses (maksimal 2.2 detik agar tidak pernah stuck di tunnel/mobile)
+                if (!heroImageLoaded && simP > 0.94 && (t - s) < 2200) {
                     simP = 0.94;
                 }
                 const e = 0.15 * simP + 0.85 * ease.io(simP);

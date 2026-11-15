@@ -628,59 +628,244 @@ h1, h2, h3, h4, .disp, .font-heading {
     .stage .a-trail { opacity: 0 !important; }
 }
 
+/* Desktop Hero Elements (2 Kolom Bersih & Bebas Konflik Inline) */
+.stage {
+    position: relative;
+    width: 1200px;
+    height: 680px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+.hero-title-block {
+    position: absolute;
+    left: 0;
+    top: 40px;
+    width: 500px;
+    z-index: 5;
+    text-align: left;
+}
+.hero-cta-block {
+    position: absolute;
+    left: 0;
+    top: 220px;
+    width: 440px;
+    z-index: 5;
+    text-align: left;
+}
+.hero-ticket-col {
+    position: absolute;
+    left: 0;
+    top: 415px;
+    width: 480px;
+    z-index: 5;
+}
+.hero-rider-col {
+    position: absolute;
+    left: 550px;
+    top: 0;
+    width: 650px;
+    height: 680px;
+    z-index: 2;
+    pointer-events: none;
+}
+.hero-rider-col .a-amber {
+    position: absolute;
+    left: 16px;
+    top: 56px;
+    width: 580px;
+    height: 445px;
+    z-index: 1;
+    overflow: visible;
+}
+.hero-rider-col .a-panel {
+    position: absolute;
+    left: 2px;
+    top: 42px;
+    width: 580px;
+    height: 445px;
+    z-index: 2;
+    overflow: visible;
+}
+.hero-rider-col .a-trail.trail-1 {
+    position: absolute;
+    left: -30px;
+    top: 250px;
+    width: 140px;
+    height: 6px;
+    border-radius: 3px;
+    background: #F4BE3F;
+    border: 2px solid #10282E;
+    z-index: 3;
+}
+.hero-rider-col .a-trail.trail-2 {
+    position: absolute;
+    left: 0px;
+    top: 278px;
+    width: 100px;
+    height: 6px;
+    border-radius: 3px;
+    background: #1F6F4A;
+    border: 2px solid #10282E;
+    z-index: 3;
+}
+.hero-rider-col .a-trail.trail-3 {
+    position: absolute;
+    left: -50px;
+    top: 306px;
+    width: 160px;
+    height: 6px;
+    border-radius: 3px;
+    background: #DE7119;
+    border: 2px solid #10282E;
+    z-index: 3;
+}
+.hero-rider-col .hero-rider-graphic {
+    position: absolute;
+    left: 60px;
+    top: -40px;
+    width: 640px;
+    height: 640px;
+    z-index: 10;
+    pointer-events: none;
+}
+
 /* Responsif Layar Tablet & Mobile untuk Hero Neobrutalist Stage */
-@media (max-width: 1199px) {
+@media (max-width: 1023px) {
     #hero-section {
         min-height: auto !important;
-        padding-bottom: 48px;
+        padding-bottom: 44px !important;
     }
     .stage {
         width: 100% !important;
-        max-width: 720px !important;
+        max-width: 600px !important;
         height: auto !important;
-        padding: 32px 16px !important;
+        padding: 24px 16px 36px !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        gap: 28px !important;
+        gap: 16px !important;
+        position: relative !important;
     }
-    .stage .hero-left-col {
+    /* Flow Mobile Sesuai Permintaan:
+       1. Judul "Siap gowes sampai finis?"
+       2. Sepeda di Tengah (dengan background panel yang sama)
+       3. Deskripsi & Tombol "Cari event"
+       4. Tiket Karcis Carousel
+    */
+    .stage .hero-title-block {
+        order: 1 !important;
+        position: static !important;
+        width: 100% !important;
+        max-width: 520px !important;
+        text-align: center !important;
+        margin: 0 auto !important;
+    }
+    .stage .hero-title-block h1 {
+        font-size: clamp(34px, 8.5vw, 54px) !important;
+        line-height: 1.04 !important;
+    }
+
+    /* 2. Sepeda di Tengah dengan background panel yang sama seperti desktop */
+    .stage .hero-rider-col {
+        order: 2 !important;
         position: relative !important;
         left: auto !important;
         top: auto !important;
         width: 100% !important;
-        max-width: 600px !important;
-        text-align: center;
-        margin: 0 auto;
+        max-width: 380px !important;
+        height: 290px !important;
+        margin: 4px auto 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
-    .stage .hero-left-col h1 {
-        font-size: clamp(38px, 9vw, 64px) !important;
-        line-height: 1.02 !important;
+    .stage .hero-rider-col .a-amber {
+        display: block !important;
+        position: absolute !important;
+        width: 90% !important;
+        max-width: 340px !important;
+        height: auto !important;
+        left: 52% !important;
+        top: 52% !important;
+        transform: translate(-50%, -50%) !important;
+        animation: none !important;
+        opacity: 1 !important;
+        z-index: 1 !important;
     }
-    .stage .hero-left-col p {
-        margin: 16px auto 0 !important;
+    .stage .hero-rider-col .a-panel {
+        display: block !important;
+        position: absolute !important;
+        width: 90% !important;
+        max-width: 340px !important;
+        height: auto !important;
+        left: 48% !important;
+        top: 48% !important;
+        transform: translate(-50%, -50%) !important;
+        clip-path: none !important;
+        animation: none !important;
+        opacity: 1 !important;
+        z-index: 2 !important;
     }
-    .stage .hero-rider-col {
+    .stage .hero-rider-col .a-trail {
+        display: none !important;
+    }
+    .stage .hero-rider-col .hero-rider-graphic {
         position: relative !important;
         left: auto !important;
         top: auto !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 10 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        pointer-events: none !important;
+        animation: rise 0.65s cubic-bezier(.2, .8, .2, 1) both !important;
+    }
+    .stage .hero-rider-col .hero-rider-graphic .a-bob {
+        width: 100% !important;
+        height: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    .stage .hero-rider-col .hero-rider-graphic img {
+        width: auto !important;
+        max-width: 92% !important;
+        max-height: 270px !important;
+        object-fit: contain !important;
+        margin: 0 auto !important;
+        filter: drop-shadow(4px 4px 0 rgba(16, 40, 46, 0.15)) !important;
+    }
+
+    /* 3. Deskripsi & Tombol Cari Event di Bawah Sepeda */
+    .stage .hero-cta-block {
+        order: 3 !important;
+        position: static !important;
         width: 100% !important;
         max-width: 440px !important;
-        height: 340px !important;
-        margin: 0 auto;
+        text-align: center !important;
+        margin: 0 auto !important;
     }
+    .stage .hero-cta-block p {
+        margin: 0 auto !important;
+        font-size: 15px !important;
+        line-height: 1.5 !important;
+        max-width: 380px !important;
+    }
+    .stage .hero-cta-block .btn {
+        margin-top: 16px !important;
+    }
+
+    /* 4. Tiket Karcis Carousel di Bawah */
     .stage .hero-ticket-col {
+        order: 4 !important;
         position: relative !important;
         left: auto !important;
         top: auto !important;
         width: 100% !important;
-        max-width: 480px !important;
-        margin: 0 auto;
-    }
-    .stage .a-amber,
-    .stage .a-panel,
-    .stage .a-trail {
-        display: none !important;
+        max-width: 460px !important;
+        margin: 4px auto 0 !important;
     }
 }
 
@@ -1102,11 +1287,11 @@ h1, h2, h3, h4, .disp, .font-heading {
 }
 .race-card {
     position: relative;
-    will-change: translate, rotate, scale;
     perspective: 900px;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
+    scroll-snap-align: start;
 }
 .race-card.off {
     display: none !important;
@@ -1155,6 +1340,7 @@ h1, h2, h3, h4, .disp, .font-heading {
     width: 100%;
 }
 .ticket {
+    --stub-width: min(170px, 34%);
     position: relative;
     width: min(540px, 100%);
     min-height: 250px;
@@ -1177,7 +1363,7 @@ h1, h2, h3, h4, .disp, .font-heading {
 }
 .stub {
     position: relative;
-    width: min(170px, 34%);
+    width: var(--stub-width, min(170px, 34%));
     background: #FFFDF8;
     border: 3px solid var(--ink);
     border-radius: 0 16px 16px 0;
@@ -1203,7 +1389,7 @@ h1, h2, h3, h4, .disp, .font-heading {
     border-radius: 50%;
     background: var(--butter, #FBF4E6);
     border: 3px solid var(--ink);
-    right: calc(min(170px, 34%) - 12px);
+    right: calc(var(--stub-width, min(170px, 34%)) - 12px);
     z-index: 5;
     pointer-events: none;
 }
@@ -1329,9 +1515,10 @@ h1, h2, h3, h4, .disp, .font-heading {
     font-weight: 600;
 }
 @media (max-width: 640px) {
-    .ticket { height: auto; min-height: 280px; }
+    .ticket { --stub-width: 42%; height: auto; min-height: 280px; }
     .ticket .main { padding: 16px; }
-    .stub { width: 42%; padding: 10px; }
+    .stub { width: var(--stub-width); padding: 10px; }
+    .ticket-notch { right: calc(var(--stub-width) - 12px); }
     .qr { width: 96px; height: 96px; }
 }
 
@@ -1494,17 +1681,16 @@ h1, h2, h3, h4, .disp, .font-heading {
     perspective: 1200px;
 }
 .deck.stacked {
-    grid-template-columns: minmax(0, 360px);
-    justify-content: center;
+    display: flex;
+    overflow-x: auto;
 }
 .deck.stacked .card {
-    grid-area: 1 / 1;
-    left: calc(var(--k, 0) * 14px);
-    top: calc(var(--k, 0) * -8px);
-    rotate: calc((var(--k, 0) - var(--m, 0)) * 6.5deg);
-    scale: 0.94;
-    transition: none;
-    cursor: grab;
+    grid-area: auto !important;
+    left: 0 !important;
+    top: 0 !important;
+    rotate: 0deg !important;
+    scale: 1 !important;
+    cursor: default;
 }
 .deck.spread {
     grid-template-columns: repeat(3, minmax(0, 1fr));

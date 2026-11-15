@@ -69,7 +69,7 @@ class OrganizationQuotaController extends Controller
 
             $redirectRoute = $request->input('redirect_to') === 'events.create'
                 ? route('organizations.events.create', ['organization' => $organization->slug])
-                : route('organizations.show', ['organization' => $organization->slug, 'tab' => 'kuota']);
+                : route('organizations.quota', ['organization' => $organization->slug]);
 
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
@@ -138,9 +138,11 @@ class OrganizationQuotaController extends Controller
                     ]);
                 }
 
-                if (! empty($data['redirect_url'])) {
-                    return redirect()->away($data['redirect_url']);
-                }
+                return redirect()->route('organizations.show', [
+                    'organization' => $organization->slug,
+                    'tab' => 'kuota',
+                    'snap_token' => $data['token'] ?? null,
+                ]);
             } else {
                 Log::error('Midtrans Quota Purchase Error: ' . $response->body());
 

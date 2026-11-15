@@ -100,54 +100,68 @@
                 </div>
             </div>
 
-            <!-- Kartu Event (1 Card Slider di Mobile, Grid 3 Kolom di Desktop) -->
+            <!-- Kontrol Navigasi Horizontal (< - >) Sesuai Permintaan User -->
             <div x-data="{
-                    scrollNext() {
-                        const slider = this.$refs.slider;
-                        if (!slider) return;
-                        slider.scrollBy({ left: slider.clientWidth * 0.88, behavior: 'smooth' });
-                    },
                     scrollPrev() {
-                        const slider = this.$refs.slider;
-                        if (!slider) return;
-                        slider.scrollBy({ left: -slider.clientWidth * 0.88, behavior: 'smooth' });
+                        const el = this.$refs.slider;
+                        if (!el) return;
+                        const card = el.querySelector('.race-card');
+                        const cardWidth = card ? card.offsetWidth : 320;
+                        const gap = 24;
+                        el.scrollBy({ left: -(cardWidth + gap), behavior: 'smooth' });
+                    },
+                    scrollNext() {
+                        const el = this.$refs.slider;
+                        if (!el) return;
+                        const card = el.querySelector('.race-card');
+                        const cardWidth = card ? card.offsetWidth : 320;
+                        const gap = 24;
+                        el.scrollBy({ left: (cardWidth + gap), behavior: 'smooth' });
                     }
-                 }"
-                 class="relative">
+                 }">
 
-                <!-- Header Navigasi Slider Mobile (Hanya tampil di layar kecil < md) -->
-                <div class="flex md:hidden items-center justify-between mb-4 px-1">
-                    <span class="font-heading font-black text-xs uppercase tracking-wider text-[var(--ink)]">
-                        Pilihan Event Balap
-                    </span>
-                    <div class="flex items-center gap-2">
+                <div class="flex items-center justify-between mb-5 px-1 gap-3">
+                    <div class="flex items-center gap-2.5 sm:gap-3">
+                        <h2 class="font-heading font-black text-lg sm:text-2xl text-[var(--ink)] tracking-tight m-0">
+                            Pilihan Race Musim Ini
+                        </h2>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-md bg-[var(--mustard)] border-[1.5px] border-[var(--ink)] font-heading font-black text-[10px] sm:text-[11px] uppercase tracking-wider text-[var(--ink)] shadow-[1.5px_1.5px_0_var(--ink)]">
+                            Registrasi Buka
+                        </span>
+                    </div>
+
+                    <!-- Tombol Panah < dan > Neobrutalist (Hanya Mobile/Tablet, Tersembunyi di Desktop) -->
+                    <div class="flex lg:hidden items-center gap-2">
                         <button type="button"
                                 @click="scrollPrev()"
-                                aria-label="Event sebelumnya"
-                                class="w-8 h-8 rounded-lg border-2 border-[var(--ink)] bg-white hover:bg-[var(--butter)] text-[var(--ink)] flex items-center justify-center font-black text-sm shadow-[1.5px_1.5px_0_var(--ink)] active:translate-x-0.5 active:translate-y-0.5 transition cursor-pointer">
-                            &larr;
+                                class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border-[2.5px] border-[var(--ink)] bg-white text-[var(--ink)] shadow-[2.5px_2.5px_0_var(--ink)] flex items-center justify-center font-black hover:-translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+                                aria-label="Event sebelumnya">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                         </button>
                         <button type="button"
                                 @click="scrollNext()"
-                                aria-label="Event berikutnya"
-                                class="w-8 h-8 rounded-lg border-2 border-[var(--ink)] bg-[var(--orange)] hover:bg-[var(--orange-l)] text-white flex items-center justify-center font-black text-sm shadow-[1.5px_1.5px_0_var(--ink)] active:translate-x-0.5 active:translate-y-0.5 transition cursor-pointer">
-                            &rarr;
+                                class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border-[2.5px] border-[var(--ink)] bg-[var(--orange)] text-white shadow-[2.5px_2.5px_0_var(--ink)] flex items-center justify-center font-black hover:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+                                aria-label="Event berikutnya">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                         </button>
                     </div>
                 </div>
 
+                <!-- Kartu Event Track Horizontal (< - >) Bebas Tabrakan & Snap Mulus -->
                 <div x-ref="slider"
-                     class="race-cards-grid flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scrollbar-none pb-4 px-1 -mx-1"
+                     class="flex items-stretch gap-6 overflow-x-auto pb-6 pt-2 scroll-smooth scrollbar-none"
                      id="race-cards-grid"
+                     style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none;"
                      wire:loading.class="opacity-60"
                      wire:target="filter">
 
                     @forelse($races as $race)
                     <article wire:key="race-{{ $loop->index }}"
-                             class="race-card group w-[85vw] sm:w-[380px] md:w-auto shrink-0 snap-center"
-                             data-c="{{ $race['cat'] }}">
+                             class="shrink-0 w-[290px] sm:w-[330px] md:w-[360px] snap-start race-card group"
+                             data-c="{{ $race['cat'] }}"
+                             style="scroll-snap-align: start;">
 
-                        <div class="race-card-inner c flex flex-col h-full bg-[var(--card)] rounded-[18px] border-[3px] border-[var(--ink)] shadow-[6px_6px_0_var(--ink)] overflow-hidden">
+                        <div class="race-card-inner c flex flex-col h-full bg-[var(--card)] rounded-[14px] border-[3px] border-[var(--ink)] shadow-[6px_6px_0_var(--ink)] overflow-hidden transition-all duration-200">
                             {{-- Header Poster Image / Art --}}
                             <div class="race-card-thumb relative overflow-hidden border-b-[3px] border-[var(--ink)] bg-[var(--paper2)]"
                                  style="height: 200px; min-height: 200px; max-height: 200px; width: 100%; position: relative;">
@@ -200,7 +214,7 @@
                                             </span>
                                         </div>
                                         <div class="w-full h-3 bg-[#FAF8F3] border-2 border-[var(--ink)] rounded-lg overflow-hidden p-0.5 shadow-[1.5px_1.5px_0_var(--ink)]">
-                                            <div class="h-full bg-gradient-to-r from-[#F4BE3F] to-[#DE7119] rounded-[4px] border-r-2 border-[var(--ink)] transition-all duration-500"
+                                            <div class="h-full bg-[var(--orange)] rounded-[4px] border-r-2 border-[var(--ink)] transition-all duration-500"
                                                  style="width: {{ max(4, min(100, $race['percentBooked'] ?? 0)) }}%"></div>
                                         </div>
                                     </div>
@@ -222,110 +236,15 @@
                         </div>
                     </article>
                     @empty
-                    <div class="col-span-full py-16 text-center card bg-[var(--paper2)] p-8">
+                    <div class="col-span-full py-16 text-center card bg-[var(--paper2)] p-8 w-full">
                         <p class="font-heading font-extrabold text-xl text-[var(--ink)]">Belum ada race pada kategori ini</p>
                         <p class="text-sm text-[var(--mute)] mt-1">Coba pilih kategori balap lainnya di atas.</p>
                     </div>
                     @endforelse
 
                 </div>
-
-                <!-- Petunjuk Geser di Layar Mobile -->
-                <div class="md:hidden flex items-center justify-center gap-1.5 mt-2 text-xs font-bold text-[var(--mute)]">
-                    <span>Geser kartu untuk melihat event lainnya</span>
-                    <span>&rarr;</span>
-                </div>
             </div>
 
         </div>
     </section>
-
-    <!-- Script Tumpuk Lalu Menyebar Mengikuti Scroll (Deck Stack -> Fan Out) -->
-    <script>
-    (function() {
-        const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-        const easeIo = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-        let lastE = 0;
-        let tick = 0;
-
-        function scrubDeck() {
-            const deck = document.getElementById('race-cards-grid');
-            if (!deck) return;
-
-            const r = deck.getBoundingClientRect();
-            // e = 0 saat di atas layar (tertumpuk) -> e = 1 saat masuk layar (menyebar penuh)
-            const e = easeIo(clamp((window.innerHeight * 0.84 - r.top) / (window.innerHeight * 0.48), 0, 1));
-            lastE = e;
-
-            const cards = [...deck.querySelectorAll('.race-card:not(.off)')];
-            if (!cards.length) return;
-
-            const m = (cards.length - 1) / 2;
-            const W = deck.offsetWidth;
-            const c0 = cards[0];
-            if (!c0) return;
-            const y0 = c0.offsetTop + c0.offsetHeight / 2;
-
-            cards.forEach((c, k) => {
-                const cx = c.offsetLeft + c.offsetWidth / 2;
-                const cy = c.offsetTop + c.offsetHeight / 2;
-                const s = 1 - e; // 1 = bertumpuk, 0 = menyebar ke kolom grid
-
-                c.style.translate = `${(W / 2 - cx) * s + (k - m) * 16 * s}px ${(y0 - cy) * s + (k - m) * -8 * s}px`;
-                c.style.rotate = `${(k - m) * 7.5 * s}deg`;
-                c.style.scale = 1 - 0.07 * s;
-                c.style.zIndex = k + 1;
-            });
-        }
-
-        const reqScrub = () => {
-            if (!tick) {
-                tick = requestAnimationFrame(() => {
-                    tick = 0;
-                    scrubDeck();
-                });
-            }
-        };
-
-        window.addEventListener('scroll', reqScrub, { passive: true });
-        window.addEventListener('resize', reqScrub, { passive: true });
-
-        // Efek Hover 3D Tactile saat kartu sudah menyebar
-        document.addEventListener('pointermove', (ev) => {
-            const deck = document.getElementById('race-cards-grid');
-            if (!deck || lastE < 0.92 || ev.pointerType === 'touch') return;
-            const c = ev.target.closest('.race-card');
-            if (!c || !deck.contains(c)) return;
-
-            const inner = c.querySelector('.race-card-inner') || c;
-            const r = c.getBoundingClientRect();
-            const x = (ev.clientX - r.left) / r.width - 0.5;
-            const y = (ev.clientY - r.top) / r.height - 0.5;
-            inner.style.transform = `rotateY(${x * 14}deg) rotateX(${-y * 12}deg) translateY(-8px)`;
-            inner.style.boxShadow = '12px 12px 0 #10282E';
-        });
-
-        document.addEventListener('pointerout', (ev) => {
-            const deck = document.getElementById('race-cards-grid');
-            if (!deck) return;
-            const c = ev.target.closest('.race-card');
-            if (c && deck.contains(c)) {
-                const inner = c.querySelector('.race-card-inner') || c;
-                inner.style.transform = '';
-                inner.style.boxShadow = '';
-            }
-        });
-
-        // Jalankan saat halaman siap dan setelah Livewire morph
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', scrubDeck);
-        } else {
-            scrubDeck();
-        }
-        document.addEventListener('livewire:navigated', scrubDeck);
-        if (window.Livewire) {
-            window.Livewire.hook('morph.updated', () => setTimeout(scrubDeck, 50));
-        }
-    })();
-    </script>
 </div>

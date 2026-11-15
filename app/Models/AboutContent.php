@@ -47,10 +47,10 @@ class AboutContent extends Model
                 ['icon' => 'users', 'title' => 'Inklusif', 'desc' => 'Kategori mulai Fun Ride 25KM hingga Gran Fondo 180KM untuk semua level.'],
                 ['icon' => 'heart-pulse', 'title' => 'Terawat', 'desc' => 'Tim medis dan ambulans di setiap feed zone, bukan opsional.'],
             ],
-            'cta_title' => null,
-            'cta_desc' => null,
-            'cta_label' => null,
-            'cta_url' => null,
+            'cta_title' => 'Siap Bersepeda Bersama Kami?',
+            'cta_desc' => 'Daftar sekarang untuk Gran Fondo mendatang di seluruh Indonesia.',
+            'cta_label' => 'Jelajahi Kalender',
+            'cta_url' => '/events',
         ];
     }
 }

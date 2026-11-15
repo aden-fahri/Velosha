@@ -44,7 +44,7 @@
                     </a>
                     <a href="{{ route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'keuangan']) }}" wire:navigate class="w-full flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-                        <span class="whitespace-nowrap font-bold text-sm">Keuangan &amp; Payout</span>
+                        <span class="whitespace-nowrap font-bold text-sm">Ringkasan Kuota &amp; Penjualan</span>
                     </a>
                     <a href="{{ route('helpdesk.create-ticket', ['from' => 'organizer']) }}" wire:navigate class="w-full flex items-center gap-2.5 on">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>
@@ -136,31 +136,43 @@
 
     <!-- KONTEN UTAMA -->
     <div class="flex-1 min-w-0 flex flex-col min-h-screen" style="flex: 1 1 0%; min-width: 0;">
-        <main class="p-6 sm:p-10 min-w-0 flex-grow">
+        <!-- TOP BAR FOR MOBILE -->
+        <header class="md:hidden h-16 bg-[#FBF4E6] border-b-[2.5px] border-[#10282E] px-4 flex items-center justify-between sticky top-0 z-20">
+            <a href="{{ $isOrganizerContext ? route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'overview']) : route('dashboard') }}" wire:navigate class="flex items-center gap-1.5 text-xs font-black text-[var(--ink)]">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                <span>Kembali</span>
+            </a>
+            <span class="font-heading font-black text-sm">Tiket Bantuan</span>
+            <span class="disp w-7 h-7 border-2 border-[#10282E] rounded-md bg-[var(--orange)] flex items-center justify-center font-bold text-xs text-[var(--ink)]">
+                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+            </span>
+        </header>
+
+        <main class="p-4 sm:p-8 md:p-10 min-w-0 flex-grow">
         <div class="text-xs font-extrabold tracking-wider text-[var(--mute)] uppercase">DASHBOARD RIDER</div>
-        <h1 class="font-heading font-black text-3xl sm:text-4xl text-[var(--ink)] mt-1">Tiket bantuan</h1>
-        <p class="text-[var(--mute)] text-sm sm:text-base mt-1">Laporkan kendala dan pantau penanganannya di sini.</p>
+        <h1 class="font-heading font-black text-2xl sm:text-4xl text-[var(--ink)] mt-1">Tiket bantuan</h1>
+        <p class="text-[var(--mute)] text-xs sm:text-base mt-1">Laporkan kendala dan pantau penanganannya di sini.</p>
 
         <!-- SUB NAV FILTER -->
-        <div class="flex gap-2.5 mt-6 border-b-2 border-[var(--line)] pb-4">
-            <a href="{{ route('helpdesk.create-ticket') }}" wire:navigate class="btn bg-[var(--mustard)] text-[var(--ink)] border-2 border-[var(--ink)] px-5 py-2 font-bold text-sm shadow-[3px_3px_0_#10282E]">
+        <div class="flex gap-2.5 mt-5 sm:mt-6 border-b-2 border-[var(--line)] pb-4 flex-wrap">
+            <a href="{{ route('helpdesk.create-ticket') }}" wire:navigate class="btn bg-[var(--mustard)] text-[var(--ink)] border-2 border-[var(--ink)] px-4 sm:px-5 py-2 font-bold text-xs sm:text-sm shadow-[3px_3px_0_#10282E]">
                 Buat tiket
             </a>
-            <a href="{{ route('helpdesk.my-tickets') }}" wire:navigate class="btn bg-white hover:bg-[var(--paper2)] text-[var(--ink)] border-2 border-[var(--ink)] px-5 py-2 font-bold text-sm shadow-[2px_2px_0_#10282E]">
+            <a href="{{ route('helpdesk.my-tickets') }}" wire:navigate class="btn bg-white hover:bg-[var(--paper2)] text-[var(--ink)] border-2 border-[var(--ink)] px-4 sm:px-5 py-2 font-bold text-xs sm:text-sm shadow-[2px_2px_0_#10282E]">
                 Tiket saya
             </a>
         </div>
 
         <!-- GRID DUA KOLOM: FORM KIRI, ADUAN SERUPA KANAN -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mt-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start mt-6 sm:mt-8">
             <!-- FORMULIR -->
-            <form wire:submit="submit" class="lg:col-span-7 bg-white border-[2.5px] border-[var(--ink)] p-6 sm:p-8 rounded-2xl shadow-[4px_4px_0_#10282E]">
-                <h2 class="font-heading font-extrabold text-2xl text-[var(--ink)]">Ceritakan kendalamu</h2>
+            <form wire:submit="submit" class="lg:col-span-7 bg-white border-[2.5px] border-[var(--ink)] p-4 sm:p-8 rounded-2xl shadow-[4px_4px_0_#10282E]">
+                <h2 class="font-heading font-extrabold text-xl sm:text-2xl text-[var(--ink)]">Ceritakan kendalamu</h2>
 
-                <div class="mt-5">
-                    <label for="cat" class="block font-bold text-sm text-[var(--ink)] mb-1.5">Kategori Kendala</label>
+                <div class="mt-4 sm:mt-5">
+                    <label for="cat" class="block font-bold text-xs sm:text-sm text-[var(--ink)] mb-1.5">Kategori Kendala</label>
                     <select id="cat" wire:model="category"
-                            class="w-full bg-[var(--paper)] border-2 border-[var(--ink)] p-3 rounded-lg text-sm font-semibold text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--mustard)]">
+                            class="w-full bg-[var(--paper)] border-2 border-[var(--ink)] p-3 rounded-lg text-base sm:text-sm min-h-[46px] font-semibold text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--mustard)]">
                         @foreach(\App\Enums\Helpdesk\TicketCategory::cases() as $cat)
                             <option value="{{ $cat->value }}">{{ $cat->value }}</option>
                         @endforeach
@@ -168,20 +180,22 @@
                     @error('category') <span class="text-red-700 text-xs font-bold mt-1 block">{{ $message }}</span> @enderror
                 </div>
 
-                <div class="mt-5">
-                    <label for="sub" class="block font-bold text-sm text-[var(--ink)] mb-1.5">Subjek</label>
+                <div class="mt-4 sm:mt-5">
+                    <label for="sub" class="block font-bold text-xs sm:text-sm text-[var(--ink)] mb-1.5">Subjek</label>
                     <input id="sub" type="text" wire:model.live.debounce.400ms="subject"
                            placeholder="Contoh: E-ticket belum muncul setelah bayar"
-                           class="w-full bg-[var(--paper)] border-2 border-[var(--ink)] p-3 rounded-lg text-sm font-semibold text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--mustard)]">
+                           class="w-full bg-[var(--paper)] border-2 border-[var(--ink)] p-3 rounded-lg text-base sm:text-sm min-h-[46px] font-semibold text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--mustard)]">
                     @error('subject') <span class="text-red-700 text-xs font-bold mt-1 block">{{ $message }}</span> @enderror
-                    <div class="text-xs text-[var(--mute)] mt-1.5">Saat kamu mengetik, sistem mencari aduan serupa di samping.</div>
+                    <div class="text-[11px] sm:text-xs text-[var(--mute)] mt-1.5">Saat kamu mengetik, sistem mencari aduan serupa di samping.</div>
                 </div>
 
-                <div class="mt-5">
-                    <label for="desc" class="block font-bold text-sm text-[var(--ink)] mb-1.5">Deskripsi</label>
+                <div class="mt-4 sm:mt-5">
+                    <label for="desc" class="block font-bold text-xs sm:text-sm text-[var(--ink)] mb-1.5">Deskripsi</label>
                     <textarea id="desc" wire:model.blur="description" rows="5"
                               placeholder="Jelaskan detail kendala, nomor invoice/BIB, atau kendala transaksi..."
-                              class="w-full bg-[var(--paper)] border-2 border-[var(--ink)] p-3.5 rounded-lg text-sm font-semibold text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--mustard)] resize-none"></textarea>
+                              class="w-full bg-[var(--paper)] border-2 border-[var(--ink)] p-3.5 rounded-lg text-base sm:text-sm font-semibold text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--mustard)] resize-none"></textarea>
+                    @error('description') <span class="text-red-700 text-xs font-bold mt-1 block">{{ $message }}</span> @enderror
+                </div>
                     @error('description') <span class="text-red-700 text-xs font-bold mt-1 block">{{ $message }}</span> @enderror
                 </div>
 
@@ -207,11 +221,14 @@
                 </div>
 
                 <div class="mt-8">
-                    <button type="submit" wire:loading.attr="disabled"
-                            class="btn bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] border-2 border-[var(--ink)] px-6 py-3 font-heading font-black text-base shadow-[3px_3px_0_#10282E] flex items-center gap-2">
+                    <x-ui.submit-button
+                        type="submit"
+                        variant="orange"
+                        loadingText="Mengirimkan tiket..."
+                        size="md">
                         <span>Kirim tiket</span>
-                        <i data-lucide="send" class="w-4 h-4"></i>
-                    </button>
+                        <i data-lucide="send" class="w-4 h-4 ml-1"></i>
+                    </x-ui.submit-button>
                 </div>
             </form>
 

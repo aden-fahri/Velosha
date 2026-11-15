@@ -63,29 +63,30 @@
         </div>
         @endif
 
-        <button type="button" wire:click="openPayment" wire:loading.attr="disabled"
-                class="mt-4 w-full flex items-center justify-center gap-2 bg-[var(--orange)] hover:bg-[var(--orange-l)] disabled:opacity-60 text-[var(--ink)] font-black py-3.5 text-xs rounded-xl border-2 border-[var(--ink)] shadow-[3px_3px_0_var(--ink)] hover:translate-x-0.5 hover:translate-y-0.5 transition-all cursor-pointer">
-            <span wire:loading.remove wire:target="openPayment" class="inline-flex items-center gap-2">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <div class="mt-4">
+            <x-ui.submit-button
+                type="button"
+                wire:click="openPayment"
+                target="openPayment"
+                variant="orange"
+                loadingText="Menghubungkan ke Midtrans..."
+                :fullWidth="true">
+                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                 <span>Lanjutkan Pembayaran Midtrans</span>
-            </span>
-            <span wire:loading wire:target="openPayment" class="inline-flex items-center gap-2">
-                <svg class="animate-spin h-4 w-4 text-[var(--ink)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
-                <span>Menghubungkan ke Midtrans...</span>
-            </span>
-        </button>
-        <p class="text-[10px] text-velomuted text-center mt-2">Pembayaran diproses melalui Midtrans Snap.</p>
+            </x-ui.submit-button>
+        </div>
+        <p class="text-[10px] text-[var(--mute)] text-center mt-2 font-medium">Pembayaran diproses melalui Midtrans Snap.</p>
         @elseif ($step === 2)
-        <p class="text-center text-[10px] text-velomutedlight border border-dashed border-veloborderstrong velo-box-3 p-3 mt-4">
+        <p class="text-center text-xs text-[var(--mute)] border-2 border-dashed border-[var(--ink)]/30 rounded-xl p-3 mt-4 font-semibold">
             Selesaikan data diri pada langkah 2 untuk membuka pembayaran.
         </p>
         @else
-        <p class="text-center text-[10px] text-velomutedlight border border-dashed border-veloborderstrong velo-box-3 p-3 mt-4">
+        <p class="text-center text-xs text-[var(--mute)] border-2 border-dashed border-[var(--ink)]/30 rounded-xl p-3 mt-4 font-semibold">
             Langkah 1 dari 3 — pilih kategori jarak untuk melanjutkan.
         </p>
         @endif
 
-        <p class="text-[10px] text-velomuted text-center mt-3">
+        <p class="text-[10px] text-[var(--mute)] text-center mt-3 font-medium">
             Enkripsi TLS 1.3 &middot; Tiket &amp; BIB diterbitkan seketika setelah pembayaran berhasil
         </p>
     </div>

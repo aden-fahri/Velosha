@@ -209,7 +209,7 @@
     </div>
 
     {{-- ==================== MAIN CONTENT AREA ==================== --}}
-    <main class="flex-1 p-6 sm:p-8 lg:p-10 max-w-6xl w-full">
+    <main class="flex-1 p-4 sm:p-8 lg:p-10 max-w-6xl w-full">
         <div class="space-y-6">
 
             {{-- Header Breadcrumb & Navigasi --}}

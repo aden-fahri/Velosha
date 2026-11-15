@@ -45,9 +45,31 @@
 
         /* Mobile (< 600px) */
         @media (max-width: 599.98px) {
+            .events-filter-card {
+                padding: 14px;
+                box-shadow: 3px 3px 0 #10282E;
+            }
             .events-filter-grid {
                 grid-template-columns: 1fr;
                 gap: 10px;
+            }
+            .search-wrap, .search-wrap input, .events-select, .events-reset-btn {
+                height: 48px;
+                font-size: 16px;
+                border-radius: 10px;
+            }
+            .events-result-bar {
+                margin: 20px 0 16px;
+                gap: 10px;
+            }
+            .events-sort-wrapper {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .events-sort-dropdown {
+                flex: 1;
+                min-width: 0;
+                height: 42px;
             }
         }
 
@@ -209,9 +231,9 @@
         $hasActiveFilter = ($search !== '' || $type !== 'all' || $month !== '' || $sort !== 'date-asc');
     @endphp
 
-    <!-- Floating Search & Advanced Filters Bar (PROBLEM 1: ONE ROW) -->
-    <div style="margin-top: -52px; position: relative; z-index: 20; margin-bottom: 24px;">
-        <div class="wrap">
+    <!-- Floating Search & Advanced Filters Bar -->
+    <div class="-mt-8 sm:-mt-13 relative z-20 mb-6 sm:mb-8">
+        <div class="wrap px-4 sm:px-6">
             <div class="events-filter-card">
                 <div class="events-filter-grid {{ $hasActiveFilter ? 'has-reset' : '' }}">
 
@@ -266,9 +288,9 @@
         </div>
     </div>
 
-    <!-- Main Content Area: Catalog Grid (padding-bottom: 110px per PROBLEM 2) -->
-    <div style="padding-bottom: 110px;">
-        <div class="wrap">
+    <!-- Main Content Area: Catalog Grid -->
+    <div class="pb-24">
+        <div class="wrap px-4 sm:px-6">
 
             <!-- PROBLEM 2: Result Bar + Sort Dropdown on ONE row -->
             <div class="events-result-bar">
@@ -315,27 +337,26 @@
 
                 @forelse ($cards as $card)
                 <article wire:key="event-{{ $card['slug'] }}"
-                         style="background-color: var(--card); border: 3px solid var(--ink); border-radius: 20px; box-shadow: 6px 6px 0 var(--ink); overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;"
-                         class="hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[8px_8px_0_var(--ink)] transition-all group">
+                         class="bg-[var(--card)] border-[2.5px] sm:border-[3px] border-[var(--ink)] rounded-xl sm:rounded-2xl shadow-[4px_4px_0_var(--ink)] sm:shadow-[6px_6px_0_var(--ink)] overflow-hidden flex flex-col justify-between hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0_var(--ink)] transition-all group">
 
                     {{-- Thumbnail & Badges --}}
-                    <div class="relative h-52 overflow-hidden border-b-[3px] border-[var(--ink)] bg-[var(--paper2)]">
+                    <div class="relative h-44 sm:h-52 overflow-hidden border-b-[2.5px] sm:border-b-[3px] border-[var(--ink)] bg-[var(--paper2)]">
                         <img src="{{ $card['img'] }}"
                              alt="{{ $card['title'] }}"
                              class="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105">
                         <div class="absolute top-3 left-3 flex gap-2 z-10">
-                            <span class="chip chip-orange">{{ $card['cat'] }}</span>
-                            <span class="chip bg-[var(--card)]">{{ $card['dist'] }}</span>
+                            <span class="chip chip-orange text-[10px] sm:text-xs">{{ $card['cat'] }}</span>
+                            <span class="chip bg-[var(--card)] text-[10px] sm:text-xs">{{ $card['dist'] }}</span>
                         </div>
                         @if($card['slotsFull'])
-                            <div class="absolute bottom-3 right-3 bg-red-100 text-red-900 border-2 border-[var(--ink)] text-[11px] font-black px-2.5 py-0.5 rounded-md shadow-[2px_2px_0_var(--ink)]">
+                            <div class="absolute bottom-3 right-3 bg-red-100 text-red-900 border-2 border-[var(--ink)] text-[10px] sm:text-[11px] font-black px-2 py-0.5 rounded-md shadow-[1.5px_1.5px_0_var(--ink)]">
                                 Penuh
                             </div>
                         @endif
                     </div>
 
                     {{-- Card Body --}}
-                    <div class="p-5 flex flex-col flex-grow justify-between bg-[var(--card)]">
+                    <div class="p-4 sm:p-5 flex flex-col flex-grow justify-between bg-[var(--card)]">
                         <div>
                             <div class="flex items-center text-xs font-bold gap-2 text-[var(--mute)]">
                                 <span class="flex items-center">
@@ -373,7 +394,7 @@
                                     </span>
                                 </div>
                                 <div class="w-full h-3 bg-[#FAF8F3] border-2 border-[var(--ink)] rounded-lg overflow-hidden p-0.5 shadow-[1.5px_1.5px_0_var(--ink)]">
-                                    <div class="h-full bg-gradient-to-r from-[#F4BE3F] to-[#DE7119] rounded-[4px] border-r-2 border-[var(--ink)] transition-all duration-500"
+                                    <div class="h-full bg-[#DE7119] rounded-[4px] border-r-2 border-[var(--ink)] transition-all duration-500"
                                          style="width: {{ max(4, min(100, $card['percentBooked'] ?? 0)) }}%"></div>
                                 </div>
                             </div>
@@ -386,7 +407,7 @@
                                 <div class="text-[10px] uppercase tracking-wider text-[var(--mute)] font-bold">Mulai dari</div>
                                 <b class="font-heading font-black text-xl text-[var(--ink)]">Rp {{ $card['price'] }}</b>
                             </div>
-                            <a href="{{ $card['url'] }}" wire:navigate
+                            <a href="{{ $card['url'] }}" wire:navigate.hover
                                style="height: 40px; padding: 0 18px; border: 2px solid var(--ink); border-radius: 10px; background: var(--orange); color: var(--ink); box-shadow: 2.5px 2.5px 0 var(--ink); font-weight: 800; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;"
                                class="hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all">
                                 <span>Daftar</span>
@@ -396,7 +417,7 @@
                     </div>
                 </article>
                 @empty
-                <div class="col-span-full border-[3px] border-[var(--ink)] shadow-[6px_6px_0_var(--ink)] rounded-[20px] bg-[var(--card)] p-12 text-center">
+                <div class="col-span-full border-[3px] border-[var(--ink)] shadow-[6px_6px_0_var(--ink)] rounded-xl bg-[var(--card)] p-12 text-center">
                     <h3 class="font-heading font-black text-2xl text-[var(--ink)] mb-2">Tidak ada race yang cocok</h3>
                     <p class="text-sm text-[var(--mute)] max-w-sm mx-auto mb-6">Coba ubah kata kunci atau reset filter untuk melihat seluruh kalender balap.</p>
                     <button type="button" wire:click="resetFilters" class="btn btn-sm cursor-pointer">
@@ -407,8 +428,8 @@
 
                 {{-- SAAS PROMO CARD 2-KOLOM (Left: Teks & Info, Right: Gambar Pesepeda & Dashboard) --}}
                 @if ($cards->currentPage() === 1)
-                <div class="lg:col-span-2 col-span-1 md:col-span-2"
-                     style="background-color: #DE7119; background-image: radial-gradient(rgba(16, 40, 46, 0.08) 1.5px, transparent 1.5px); background-size: 14px 14px; border: 3.5px solid #10282E; border-radius: 22px; box-shadow: 6px 6px 0 #10282E; padding: 32px 32px 46px; position: relative; overflow: hidden; box-sizing: border-box;">
+                <div class="lg:col-span-2 col-span-1 md:col-span-2 rounded-xl sm:rounded-2xl border-[3px] sm:border-[3.5px] border-[#10282E] shadow-[4px_4px_0_#10282E] sm:shadow-[6px_6px_0_#10282E] p-5 sm:p-8 pb-10 sm:pb-12 relative overflow-hidden"
+                     style="background-color: #DE7119; background-image: radial-gradient(rgba(16, 40, 46, 0.08) 1.5px, transparent 1.5px); background-size: 14px 14px; box-sizing: border-box;">
 
                     <style>
                         .promo-two-columns-layout {
@@ -422,7 +443,7 @@
                         @media (max-width: 680px) {
                             .promo-two-columns-layout {
                                 grid-template-columns: 1fr !important;
-                                gap: 24px !important;
+                                gap: 20px !important;
                             }
                         }
                     </style>
@@ -433,7 +454,7 @@
                         <!-- KOLOM KIRI: Teks, Fitur, & Tombol -->
                         <div style="display: flex; flex-direction: column; justify-content: center; z-index: 10;">
                             <!-- Headline Sesuai Gambar 1 -->
-                            <h3 style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 900; line-height: 1.15; color: #10282E; margin: 0 0 10px 0; letter-spacing: -0.02em;">
+                            <h3 style="font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(22px, 5vw, 28px); font-weight: 900; line-height: 1.15; color: #10282E; margin: 0 0 10px 0; letter-spacing: -0.02em;">
                                 Punya event sepeda?<br>
                                 Buka pendaftarannya di <span style="display: inline-block; background: #10282E; color: #FFFDF8; padding: 2px 9px; border-radius: 8px; box-shadow: 2px 2px 0 rgba(16,40,46,0.3); transform: rotate(-1deg);">Velosha.</span>
                             </h3>
@@ -443,8 +464,8 @@
                                 Pendaftaran online, timing chip, dan race village dalam satu platform. Siap dipakai untuk Gran Fondo sampai Fun Ride.
                             </p>
 
-                            <!-- 3 Mini Feature Pills Sesuai Gambar 1 (Rapi & Tidak Terlalu Ramai) -->
-                            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 20px;">
+                            <!-- 3 Mini Feature Pills Sesuai Gambar 1 (Responsive 1 Col on Mobile, 3 Col on Desktop) -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2.5 mb-5">
                                 <!-- Feature 1: Pendaftaran online -->
                                 <div style="background: #FFFDF8; border: 2px solid #10282E; border-radius: 10px; padding: 8px 10px; box-shadow: 2px 2px 0 #10282E;">
                                     <div style="display: flex; align-items: center; gap: 4px; font-weight: 800; font-size: 11.5px; color: #10282E; margin-bottom: 2px; white-space: nowrap;">
@@ -479,23 +500,23 @@
                                 </div>
                             </div>
 
-                            <!-- Buttons (Daftar & Lihat Paket) -->
-                            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;">
+                            <!-- Buttons (Daftar & Lihat Paket - Responsive Column on Mobile) -->
+                            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
                                 @php
                                     $currentUser = auth()->user();
                                     $userOrg = $currentUser?->organizations()->first() ?? $currentUser?->ownedOrganizations()->first();
-                                    $targetDaftar = $userOrg ? route('organizations.finance', $userOrg) : route('organizations.create');
+                                    $targetDaftar = $userOrg ? route('organizations.show', $userOrg) : route('organizations.create');
                                     $targetPaket = $userOrg ? route('organizations.quota', $userOrg) : route('packages.index');
                                 @endphp
-                                <a href="{{ $targetDaftar }}" wire:navigate
-                                   style="display: inline-flex; align-items: center; gap: 7px; background-color: #10282E; color: #FFFDF8; border: 2px solid #10282E; border-radius: 10px; box-shadow: 2.5px 2.5px 0 rgba(16,40,46,0.35); padding: 11px 18px; font-weight: 800; font-size: 13px; text-decoration: none;"
+                                <a href="{{ $targetDaftar }}" wire:navigate.hover
+                                   style="display: inline-flex; align-items: center; justify-content: center; gap: 7px; background-color: #10282E; color: #FFFDF8; border: 2px solid #10282E; border-radius: 10px; box-shadow: 2.5px 2.5px 0 rgba(16,40,46,0.35); padding: 11px 18px; font-weight: 800; font-size: 13px; text-decoration: none;"
                                    class="hover:translate-x-[-1px] hover:translate-y-[-1px] hover:bg-[#1F6F4A] transition-all">
                                     <span>{{ $userOrg ? 'Buka Dasbor EO' : 'Daftar jadi penyelenggara' }}</span>
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                                 </a>
 
-                                <a href="{{ $targetPaket }}" wire:navigate
-                                   style="display: inline-flex; align-items: center; gap: 5px; background-color: #FFFDF8; color: #10282E; border: 2px solid #10282E; border-radius: 10px; box-shadow: 2.5px 2.5px 0 #10282E; padding: 11px 16px; font-weight: 800; font-size: 13px; text-decoration: none;"
+                                <a href="{{ $targetPaket }}" wire:navigate.hover
+                                   style="display: inline-flex; align-items: center; justify-content: center; gap: 5px; background-color: #FFFDF8; color: #10282E; border: 2px solid #10282E; border-radius: 10px; box-shadow: 2.5px 2.5px 0 #10282E; padding: 11px 16px; font-weight: 800; font-size: 13px; text-decoration: none;"
                                    class="hover:translate-x-[-1px] hover:translate-y-[-1px] hover:bg-[#FBF4E6] transition-all">
                                     <span>Lihat paket & harga</span>
                                 </a>
@@ -514,7 +535,7 @@
                             @endphp
 
                             <!-- Floating Stat Card (Dashboard Penyelenggara) di Kanan Atas Pesepeda -->
-                            <a href="{{ $targetDaftar }}" wire:navigate
+                            <a href="{{ $targetDaftar }}" wire:navigate.hover
                                style="position: absolute; top: -6px; right: 0; background: #FFFDF8; border: 2.5px solid #10282E; border-radius: 12px; box-shadow: 3px 3px 0 #10282E; padding: 8px 12px; z-index: 20; min-width: 150px; text-decoration: none; color: inherit;"
                                class="hidden sm:block hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all">
                                 <div style="font-size: 8.5px; font-weight: 900; letter-spacing: 0.05em; color: #56666A; text-transform: uppercase;">

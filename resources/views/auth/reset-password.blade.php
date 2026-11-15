@@ -4,7 +4,7 @@
 <div class="min-h-screen flex items-center justify-center bg-[var(--paper2)] relative overflow-hidden px-4 py-12">
     <div class="dots absolute inset-0 opacity-40 pointer-events-none"></div>
 
-    <div class="card relative w-full max-w-md bg-[var(--card)] border-[3px] border-[var(--ink)] rounded-2xl p-7 sm:p-9 shadow-[8px_8px_0_var(--ink)] space-y-6 z-10">
+    <div class="card relative w-full max-w-md bg-[var(--card)] border-[3px] border-[var(--ink)] rounded-2xl p-5 sm:p-9 shadow-[4px_4px_0_var(--ink)] sm:shadow-[8px_8px_0_var(--ink)] space-y-5 sm:space-y-6 z-10">
 
         <div class="flex items-center justify-between border-b-2 border-[var(--line)] pb-5">
             <a href="{{ route('login') }}" class="inline-flex items-center gap-2 text-xs font-black text-[var(--ink)] hover:text-[var(--orange)] transition">
@@ -41,7 +41,7 @@
                 </label>
                 <input id="password" type="password" name="password" required autofocus
                        placeholder="Minimal 8 karakter"
-                       class="w-full px-4 py-3 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] font-bold text-sm text-[var(--ink)] shadow-[2px_2px_0_var(--ink)] focus:outline-none focus:border-[var(--orange)] @error('password') !border-[var(--red)] @enderror">
+                       class="w-full px-4 py-3 min-h-[46px] rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] font-bold text-base sm:text-sm text-[var(--ink)] shadow-[2px_2px_0_var(--ink)] focus:outline-none focus:border-[var(--orange)] @error('password') !border-[var(--red)] @enderror">
                 @error('password')
                     <p class="text-[var(--red)] text-xs font-bold">{{ $message }}</p>
                 @enderror
@@ -53,7 +53,7 @@
                 </label>
                 <input id="password_confirmation" type="password" name="password_confirmation" required
                        placeholder="Konfirmasi sandi baru"
-                       class="w-full px-4 py-3 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] font-bold text-sm text-[var(--ink)] shadow-[2px_2px_0_var(--ink)] focus:outline-none focus:border-[var(--orange)]">
+                       class="w-full px-4 py-3 min-h-[46px] rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] font-bold text-base sm:text-sm text-[var(--ink)] shadow-[2px_2px_0_var(--ink)] focus:outline-none focus:border-[var(--orange)]">
             </div>
 
             <button type="submit"

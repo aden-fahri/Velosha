@@ -131,12 +131,12 @@
 </section>
 
 <!-- Sticky CTA (HP only) -->
-<div class="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-veloborder px-4 py-3 flex items-center justify-between gap-3" style="padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));">
+<div class="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-[#FFFDF8] border-t-[2.5px] border-[#10282E] px-4 py-3 flex items-center justify-between gap-3 shadow-[0_-3px_0_#10282E]" style="padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));">
     <div>
-        <div class="text-[10px] uppercase font-bold tracking-wider text-velomuted">Harga mulai</div>
-        <div class="text-lg font-extrabold text-teal-900">Rp {{ $lowestPrice === null ? '—' : \App\Support\EventCardPresenter::angka((float) $lowestPrice) }}</div>
+        <div class="text-[10px] uppercase font-bold tracking-wider text-[var(--mute)]">Harga mulai</div>
+        <div class="text-lg font-black text-[#10282E]">Rp {{ $lowestPrice === null ? '—' : \App\Support\EventCardPresenter::angka((float) $lowestPrice) }}</div>
     </div>
-    <a href="#daftar" class="inline-flex items-center justify-center bg-[var(--orange)] hover:bg-[var(--orange-l)] text-[var(--ink)] font-semibold px-5 py-3 text-xs tracking-wider uppercase velo-box-1 shadow-sm transition min-h-[44px]">
+    <a href="#daftar" class="inline-flex items-center justify-center bg-[#DE7119] hover:bg-[#c86212] text-white font-black px-5 py-2.5 text-xs tracking-wider uppercase rounded-lg border-2 border-[#10282E] shadow-[2.5px_2.5px_0_#10282E] transition active:translate-y-0.5 min-h-[44px]">
         Daftar Sekarang
     </a>
 </div>

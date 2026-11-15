@@ -190,7 +190,7 @@
             </span>
         </header>
 
-        <main class="p-6 sm:p-10 min-w-0 flex-grow space-y-8 max-w-5xl mx-auto w-full">
+        <main class="p-4 sm:p-8 md:p-10 min-w-0 flex-grow space-y-6 sm:space-y-8 max-w-5xl mx-auto w-full">
 
             {{-- Flash Messages --}}
             @if (session('status'))
@@ -284,7 +284,7 @@
                 </div>
             @else
                 {{-- JIKA KUOTA > 0: FORMULIR INPUT EVENT LENGKAP --}}
-                <div class="card p-8 sm:p-10 space-y-8 bg-white border-[3px] border-[var(--ink)] rounded-2xl shadow-[6px_6px_0_var(--ink)]">
+                <div class="card p-5 sm:p-8 md:p-10 space-y-6 sm:space-y-8 bg-white border-[3px] border-[var(--ink)] rounded-2xl shadow-[4px_4px_0_var(--ink)] sm:shadow-[6px_6px_0_var(--ink)]">
 
                     <div class="flex items-start justify-between flex-wrap gap-4 border-b-2 border-[var(--ink)]/15 pb-6">
                         <div>

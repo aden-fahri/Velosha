@@ -16,9 +16,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Ticket — {{ $registration->bib_number }} — {{ $event->title }}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;800;900&family=JetBrains+Mono:wght@700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -27,7 +24,7 @@
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #EFE6D5;
             color: #10282E;
             padding: 24px;
@@ -263,6 +260,62 @@
             font-weight: 700;
         }
 
+        /* Mobile Screen Preview Rules */
+        @media screen and (max-width: 640px) {
+            body {
+                padding: 12px;
+            }
+            .control-bar {
+                flex-direction: column;
+                gap: 12px;
+                padding: 12px 14px;
+                text-align: center;
+            }
+            .control-bar > div {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .control-bar .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .sheet-header {
+                padding: 14px 18px;
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            .sheet-body {
+                grid-template-columns: 1fr;
+            }
+            .sheet-left {
+                padding: 20px 18px;
+                border-right: none;
+                border-bottom: 3px dashed #10282E;
+            }
+            .event-title {
+                font-size: 24px;
+                margin-bottom: 16px;
+            }
+            .specs-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .sheet-right {
+                padding: 24px 18px;
+            }
+            .bib-number {
+                font-size: 48px;
+            }
+            .sheet-footer {
+                padding: 12px 16px;
+                flex-direction: column;
+                gap: 6px;
+                text-align: center;
+            }
+        }
+
         /* Print CSS Rules */
         @media print {
             @page {
@@ -285,6 +338,8 @@
                 border: 2.5px solid #10282E !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
         }
     </style>

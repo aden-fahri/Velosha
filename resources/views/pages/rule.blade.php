@@ -119,8 +119,10 @@ $statusLabels = [
 }
 @media (max-width: 639.98px) {
     .rules-category-card {
-        padding: 18px;
-        margin-bottom: 40px;
+        padding: 16px;
+        margin-bottom: 24px;
+        border-radius: 14px;
+        box-shadow: 4px 4px 0 #10282E;
     }
 }
 
@@ -279,7 +281,7 @@ $statusLabels = [
      }">
 
     <!-- 1. PAGE HEADER (Konsisten dengan Event, About & Bantuan) -->
-    <section class="relative overflow-hidden" style="background: var(--butter, #F8E3B5); border-bottom: 3.5px solid var(--ink, #10282E); padding: 52px 0;">
+    <section class="relative overflow-hidden py-10 sm:py-14" style="background: var(--butter, #F8E3B5); border-bottom: 3.5px solid var(--ink, #10282E);">
         {{-- Elemen Dekorasi Geometris Neobrutalism di Sisi Kanan --}}
         <svg aria-hidden="true" style="position:absolute; top:0; right:0; width:520px; max-width:45%; height:100%; z-index:1; pointer-events:none;" viewBox="0 0 520 280">
             <g stroke="#10282E" stroke-width="3" stroke-linejoin="round">
@@ -293,11 +295,11 @@ $statusLabels = [
             </g>
         </svg>
 
-        <div class="wrap relative z-10" style="max-width: 1200px;">
-            <h1 class="h2" style="font-size: 48px !important; line-height: 1.05 !important; margin-top: 0 !important; max-width: 680px;">
+        <div class="wrap relative z-10 px-4 sm:px-6" style="max-width: 1200px;">
+            <h1 class="h2" style="font-size: clamp(30px, 6.5vw, 48px) !important; line-height: 1.05 !important; margin-top: 0 !important; max-width: 680px;">
                 {{ $content->header_title ?? 'Aturan balap & kode etik' }}
             </h1>
-            <p class="lead" style="margin-top: 14px !important; max-width: 640px;">
+            <p class="lead" style="margin-top: 14px !important; max-width: 640px; font-size: clamp(15px, 3.5vw, 18px);">
                 {{ $content->header_description ?? 'Standar keselamatan, perlengkapan, etika peloton, dan tata tertib resmi musim balap Velosha.' }}
             </p>
         </div>

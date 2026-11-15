@@ -17,16 +17,16 @@
             $displayName = $hasDist ? $cat->name : "{$cat->name} ({$catDist})";
         @endphp
         @if ($this->isCategoryPaid((int) $cat->id))
-        <div class="w-full p-4 sm:p-5 rounded-2xl flex items-center justify-between gap-4 border-2 border-emerald-300 bg-emerald-50/50 shadow-[2px_2px_0_var(--ink)]">
+        <div class="w-full p-4 sm:p-5 rounded-2xl flex items-center justify-between gap-4 border-[2.5px] border-[#10282E] bg-[#E7F8EE] shadow-[3px_3px_0_var(--ink)]">
             <div class="flex items-center gap-3.5 min-w-0">
-                <div class="px-3 py-1.5 min-w-[52px] max-w-[120px] h-9 flex items-center justify-center font-black text-xs rounded-lg shrink-0 border-2 border-emerald-800 bg-emerald-700 text-white shadow-[2px_2px_0_var(--ink)] truncate">{{ $cat->code }}</div>
+                <div class="px-3 py-1.5 min-w-[52px] max-w-[120px] h-9 flex items-center justify-center font-black text-xs rounded-lg shrink-0 border-2 border-[#10282E] bg-[#1F6F4A] text-white shadow-[2px_2px_0_var(--ink)] truncate">{{ $cat->code }}</div>
                 <div class="min-w-0">
-                    <div class="text-sm font-black text-teal-900 truncate">{{ $displayName }}</div>
-                    <div class="text-xs text-emerald-800 font-semibold mt-0.5">Anda sudah terdaftar di kategori ini</div>
+                    <div class="text-sm font-black text-[#10282E] truncate">{{ $displayName }}</div>
+                    <div class="text-xs text-[#1F6F4A] font-bold mt-0.5">Anda sudah terdaftar di kategori ini</div>
                 </div>
             </div>
             <div class="text-right shrink-0">
-                <a href="/ticket/{{ $paidTicketMap[$cat->id] }}" wire:navigate class="inline-flex items-center bg-white hover:bg-emerald-50 text-emerald-800 border-2 border-emerald-400 font-black px-3.5 py-2 text-xs rounded-xl shadow-[2px_2px_0_var(--ink)] transition">
+                <a href="/ticket/{{ $paidTicketMap[$cat->id] }}" wire:navigate class="inline-flex items-center bg-white hover:bg-[#F8E3B5] text-[#10282E] border-2 border-[#10282E] font-black px-3.5 py-2 text-xs rounded-lg shadow-[2px_2px_0_var(--ink)] transition">
                     <i data-lucide="ticket" class="w-3.5 h-3.5 mr-1.5"></i>
                     <span>Lihat E-Ticket</span>
                 </a>
@@ -58,17 +58,25 @@
         </button>
         @endif
         @empty
-        <div class="p-4 border border-veloborder bg-velosurfacealt velo-box-3 text-xs text-velomutedlight text-center">
+        <div class="p-4 border-2 border-dashed border-[var(--ink)]/30 bg-[var(--paper)] rounded-xl text-xs text-[var(--mute)] font-semibold text-center">
             Kategori jarak belum tersedia untuk event ini.
         </div>
         @endforelse
     </div>
 
     @if ($event->categories->isNotEmpty())
-    <button type="button" wire:click="toStep2" class="mt-5 w-full flex items-center justify-center gap-2 bg-[var(--orange)] hover:bg-[var(--orange-l)] text-white font-black py-3.5 text-xs rounded-xl border-2 border-[var(--ink)] shadow-[3px_3px_0_var(--ink)] hover:translate-x-0.5 hover:translate-y-0.5 transition-all cursor-pointer">
-        <span>Lanjutkan ke Data Diri</span>
-        <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
-    </button>
+    <div class="mt-5">
+        <x-ui.submit-button
+            type="button"
+            wire:click="toStep2"
+            target="toStep2"
+            variant="orange"
+            loadingText="Memuat data diri..."
+            :fullWidth="true">
+            <span>Lanjutkan ke Data Diri</span>
+            <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+        </x-ui.submit-button>
+    </div>
     @endif
 </div>
 @endif

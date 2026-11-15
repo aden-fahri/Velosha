@@ -16,7 +16,7 @@ Untuk view saja tanpa backend, `php artisan serve` sudah cukup — layout memuat
 
 ## Testing
 
-PHPUnit dengan SQLite in-memory — bukan MySQL. `phpunit.xml` meng-override `DB_CONNECTION`, jadi test tidak pernah menyentuh database `velosha`.
+PHPUnit menggunakan database **MySQL** (`velosha_test` via XAMPP port 3306). `phpunit.xml` mengatur `DB_CONNECTION=mysql` dan `DB_DATABASE=velosha_test`.
 
 - Semua test: `composer test`
 - Satu file test: `php artisan test --filter=ExampleTest`
@@ -26,12 +26,15 @@ Test otomatis saat ini mencakup 121 feature test komprehensif (398 assertions) d
 
 ## Database
 
-**MySQL** (bukan SQLite) untuk dev dan production. Kredensial ada di `.env`: database `velosha`, user `root`, password kosong (default XAMPP).
+**MySQL 100% (XAMPP Port 3306)** untuk dev, testing, dan production. Proyek ini tidak menggunakan SQLite.
+Kredensial ada di `.env` (dan `phpunit.xml` untuk testing):
+- Database aplikasi: `velosha`, user `root`, password kosong (default XAMPP).
+- Database testing: `velosha_test`, user `root`, password kosong.
 
 - Server MySQL XAMPP dijalankan sebagai proses `mysqld`, bukan Windows service — cek dengan `Get-Process mysqld`. Jika tidak jalan, MySQL harus dinyalakan lewat XAMPP Control Panel.
-- Buat database dari CLI: `& "C:\xampp\mysql\bin\mysql.exe" -u root -e "CREATE DATABASE IF NOT EXISTS velosha CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"`
-- `phpunit.xml` **tetap** memakai SQLite in-memory. Jangan ubah ke MySQL — test harus tetap cepat dan tidak bergantung pada server DB yang jalan.
-- Karena `phpunit.xml` meng-override `DB_CONNECTION`, test tidak pernah menyentuh database `velosha`.
+- Buat database aplikasi dari CLI: `& "C:\xampp\mysql\bin\mysql.exe" -u root -e "CREATE DATABASE IF NOT EXISTS velosha CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"`
+- Buat database testing dari CLI: `& "C:\xampp\mysql\bin\mysql.exe" -u root -e "CREATE DATABASE IF NOT EXISTS velosha_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"`
+- `phpunit.xml` menggunakan koneksi MySQL ke `velosha_test`.
 
 ## Konvensi Kode
 

@@ -42,15 +42,15 @@ if ($meta && str_contains($meta, 'Diperbarui')) {
                     <div class="flex flex-wrap gap-2 mt-5">
                         @foreach ($chips as $chip)
                             @if (is_array($chip))
-                                <span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold bg-[#051C22]/80 text-teal-100 px-3 py-1.5 velo-box-3 border border-teal-700/60 shadow-xs">
+                                <span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold bg-[#051C22]/80 text-white px-3 py-1.5 rounded-md border border-[#10282E] shadow-[1.5px_1.5px_0_#10282E]">
                                     @if (! empty($chip['icon']))
-                                        <i data-lucide="{{ $chip['icon'] }}" class="w-3.5 h-3.5 text-[#EFA96A] shrink-0"></i>
+                                        <i data-lucide="{{ $chip['icon'] }}" class="w-3.5 h-3.5 text-[#DE7119] shrink-0"></i>
                                     @endif
                                     {{ $chip['label'] }}
                                 </span>
                             @else
-                                <span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold bg-[#051C22]/80 text-teal-100 px-3 py-1.5 velo-box-3 border border-teal-700/60 shadow-xs">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-race-400 shrink-0" aria-hidden="true"></span>
+                                <span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold bg-[#051C22]/80 text-white px-3 py-1.5 rounded-md border border-[#10282E] shadow-[1.5px_1.5px_0_#10282E]">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-[var(--orange)] shrink-0" aria-hidden="true"></span>
                                     {{ $chip }}
                                 </span>
                             @endif
@@ -60,7 +60,7 @@ if ($meta && str_contains($meta, 'Diperbarui')) {
             </div>
 
             @if ($meta)
-                <div class="text-xs font-mono font-extrabold text-teal-300 md:text-right shrink-0 bg-[#051C22]/80 border border-teal-800 px-3.5 py-2 velo-box-3">{{ $meta }}</div>
+                <div class="text-xs font-mono font-extrabold text-[var(--mustard)] md:text-right shrink-0 bg-[#051C22]/80 border border-[#10282E] px-3.5 py-2 rounded-lg shadow-[2px_2px_0_#10282E]">{{ $meta }}</div>
             @endif
         </div>
     </div>

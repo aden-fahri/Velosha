@@ -214,7 +214,7 @@ $hasRiderImage = file_exists(public_path('images/art/rider-standing.png'));
      }">
 
     <!-- 1. PAGE HEADER -->
-    <header class="relative overflow-hidden" style="background-color: #F8E3B5; border-bottom: 3.5px solid #10282E; padding: 48px 0 44px 0;">
+    <header class="relative overflow-hidden py-10 sm:py-14" style="background-color: #F8E3B5; border-bottom: 3.5px solid #10282E;">
         {{-- Neobrutalist Geometric Background Ornaments --}}
         <svg aria-hidden="true" style="position:absolute; top:0; right:0; width:520px; max-width:45%; height:100%; z-index:1; pointer-events:none;" viewBox="0 0 520 280">
             <g stroke="#10282E" stroke-width="3" stroke-linejoin="round">
@@ -228,7 +228,7 @@ $hasRiderImage = file_exists(public_path('images/art/rider-standing.png'));
             </g>
         </svg>
 
-        <div class="wrap relative z-10">
+        <div class="wrap relative z-10 px-4 sm:px-6">
             <div style="max-width: 720px; width: 100%;">
                 @if(!empty($content->header_eyebrow))
                 <div class="inline-block px-3 py-1 bg-[#F4BE3F] text-[#10282E] font-extrabold text-xs uppercase tracking-wider border-2 border-[#10282E] rounded-md mb-3 shadow-[2px_2px_0_#10282E]">
@@ -276,7 +276,7 @@ $hasRiderImage = file_exists(public_path('images/art/rider-standing.png'));
         </div>
     </header>
 
-    <main class="wrap">
+    <main class="wrap px-4 sm:px-6">
         <!-- B. CONTACT CARDS -->
         <section class="help-section" aria-label="Kontak Bantuan">
             <div class="contact-grid">

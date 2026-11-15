@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 
 class Organization extends Model
 {
@@ -210,27 +211,34 @@ class Organization extends Model
             return false;
         }
 
-        $currentlyDeducted = (int) $this->quotaLedger()
-            ->where('event_id', $event->id)
-            ->sum('delta') < 0;
+        return DB::transaction(function () use ($event) {
+            $lockedOrg = self::where('id', $this->id)->lockForUpdate()->first();
+            if (! $lockedOrg) {
+                return false;
+            }
 
-        if ($currentlyDeducted) {
+            $currentlyDeducted = (int) $lockedOrg->quotaLedger()
+                ->where('event_id', $event->id)
+                ->sum('delta') < 0;
+
+            if ($currentlyDeducted) {
+                return true;
+            }
+
+            if (! $lockedOrg->hasQuota()) {
+                return false;
+            }
+
+            QuotaLedger::create([
+                'organization_id' => $lockedOrg->id,
+                'delta' => -1,
+                'reason' => 'publish_event',
+                'event_id' => $event->id,
+                'created_at' => now(),
+            ]);
+
             return true;
-        }
-
-        if (! $this->hasQuota()) {
-            return false;
-        }
-
-        QuotaLedger::create([
-            'organization_id' => $this->id,
-            'delta' => -1,
-            'reason' => 'publish_event',
-            'event_id' => $event->id,
-            'created_at' => now(),
-        ]);
-
-        return true;
+        });
     }
 
     /**

@@ -209,7 +209,7 @@
                            id="manual-bib-input"
                            x-model="code"
                            placeholder="Contoh: VLS-GF-0001"
-                           class="flex-1 px-3.5 py-2.5 rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] font-mono font-bold text-xs uppercase focus:bg-white focus:outline-none focus:ring-2 focus:ring-[var(--mustard)]">
+                           class="flex-1 px-3.5 py-2.5 min-h-[46px] rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] font-mono font-bold text-base sm:text-xs uppercase focus:bg-white focus:outline-none focus:ring-2 focus:ring-[var(--mustard)]">
                     <button type="submit"
                             :disabled="loading"
                             class="btn btn-mustard btn-sm font-black shrink-0 px-4">

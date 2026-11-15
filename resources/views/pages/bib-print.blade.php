@@ -16,9 +16,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nomor Dada (BIB) — {{ $registration->bib_number }} — {{ $registration->participant_name }}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;800;900&family=JetBrains+Mono:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -27,7 +24,7 @@
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #EDE6D8;
             color: #10282E;
             padding: 24px;
@@ -102,29 +99,31 @@
             overflow: hidden;
         }
 
-        /* Tanda Lubang Peniti Presisi (Crosshair Pin Marks) */
-        .pin-cross {
+        /* 4 Tanda Lubang Peniti Presisi (Cycling Race Pin Holes) */
+        .pin-hole {
             position: absolute;
-            width: 14px;
-            height: 14px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px dashed #10282E;
+            background: #EDE6D8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             pointer-events: none;
-            opacity: 0.35;
+            opacity: 0.55;
         }
-        .pin-cross::before, .pin-cross::after {
+        .pin-hole::after {
             content: '';
-            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
             background: #10282E;
         }
-        .pin-cross::before {
-            left: 6px; top: 0; width: 2px; height: 14px;
-        }
-        .pin-cross::after {
-            top: 6px; left: 0; width: 14px; height: 2px;
-        }
-        .pin-tl { top: 12px; left: 14px; }
-        .pin-tr { top: 12px; right: 14px; }
-        .pin-bl { bottom: 12px; left: 14px; }
-        .pin-br { bottom: 12px; right: 14px; }
+        .pin-tl { top: 14px; left: 16px; }
+        .pin-tr { top: 14px; right: 16px; }
+        .pin-bl { bottom: 14px; left: 16px; }
+        .pin-br { bottom: 14px; right: 16px; }
 
         /* Header Plat Balap */
         .plate-header {
@@ -317,6 +316,18 @@
             object-fit: contain;
         }
 
+        /* Konfigurasi Responsif Layar Mobile (< 640px) */
+        @media (max-width: 640px) {
+            body { padding: 12px; }
+            .control-bar { flex-direction: column; gap: 10px; align-items: stretch; text-align: center; }
+            .bib-plate { width: 100%; padding: 16px; border-radius: 14px; min-height: auto; }
+            .bib-number { font-size: clamp(52px, 16vw, 84px); }
+            .rider-name { font-size: 18px; }
+            .info-table { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .plate-footer { grid-template-columns: 1fr; gap: 12px; }
+            .qr-block { justify-content: space-between; }
+        }
+
         /* Konfigurasi Cetak Bersih & Otomatis Pas A5 */
         @media print {
             body {
@@ -370,10 +381,10 @@
     <!-- Plat Nomor BIB Resmi -->
     <div class="bib-plate">
         <!-- 4 Tanda Lubang Peniti Presisi -->
-        <div class="pin-cross pin-tl" aria-hidden="true"></div>
-        <div class="pin-cross pin-tr" aria-hidden="true"></div>
-        <div class="pin-cross pin-bl" aria-hidden="true"></div>
-        <div class="pin-cross pin-br" aria-hidden="true"></div>
+        <div class="pin-hole pin-tl" aria-hidden="true"></div>
+        <div class="pin-hole pin-tr" aria-hidden="true"></div>
+        <div class="pin-hole pin-bl" aria-hidden="true"></div>
+        <div class="pin-hole pin-br" aria-hidden="true"></div>
 
         <!-- Header -->
         <div class="plate-header">

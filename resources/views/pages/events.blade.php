@@ -3,8 +3,8 @@
 @section('content')
 
 <!-- HEADER / BANNER KALENDER RACE (Simple, Clean, Menggunakan var(--butter) Sesuai /about) -->
-<section class="relative overflow-hidden"
-         style="background-color: var(--butter, #F8E3B5); border-bottom: 3.5px solid var(--ink); padding-top: 64px; padding-bottom: 112px;">
+<section class="relative overflow-hidden pt-10 pb-20 sm:pt-16 sm:pb-28"
+         style="background-color: var(--butter, #F8E3B5); border-bottom: 3.5px solid var(--ink);">
     {{-- Elemen Dekorasi Geometris Neobrutalism di Sisi Kanan (Preserve Aspect Ratio agar tidak gepeng & tidak menimpa teks) --}}
     <svg aria-hidden="true" style="position:absolute; top:0; right:0; width:520px; max-width:45%; height:100%; z-index:1; pointer-events:none;" viewBox="0 0 520 280">
         <g stroke="#10282E" stroke-width="3" stroke-linejoin="round">
@@ -18,12 +18,12 @@
         </g>
     </svg>
 
-    <div class="wrap relative z-10">
+    <div class="wrap relative z-10 px-4 sm:px-6">
         <div class="max-w-3xl">
-            <h1 class="font-heading font-black text-4xl sm:text-5xl md:text-6xl text-[var(--ink)] leading-[1.08] tracking-tight mb-5">
+            <h1 class="font-heading font-black text-3xl sm:text-5xl md:text-6xl text-[var(--ink)] leading-[1.08] tracking-tight mb-3 sm:mb-5">
                 Platform Registrasi Balap<br>Sepeda Indonesia
             </h1>
-            <p class="text-base sm:text-lg text-[var(--ink)]/85 leading-relaxed font-medium max-w-2xl">
+            <p class="text-sm sm:text-lg text-[var(--ink)]/85 leading-relaxed font-medium max-w-2xl">
                 Kami membangun infrastruktur terpadu untuk endurance ride di Indonesia — mulai dari kurasi rute, timing chip RFID, hingga Race Village hari-H.
             </p>
         </div>

@@ -44,7 +44,7 @@
                     </a>
                     <a href="{{ route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'keuangan']) }}" wire:navigate class="w-full flex items-center gap-2.5">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-                        <span class="whitespace-nowrap font-bold text-sm">Keuangan &amp; Payout</span>
+                        <span class="whitespace-nowrap font-bold text-sm">Ringkasan Kuota &amp; Penjualan</span>
                     </a>
                     <a href="{{ route('helpdesk.my-tickets', ['from' => 'organizer']) }}" wire:navigate class="w-full flex items-center gap-2.5 on">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>
@@ -136,17 +136,29 @@
 
     <!-- KONTEN UTAMA -->
     <div class="flex-1 min-w-0 flex flex-col min-h-screen" style="flex: 1 1 0%; min-width: 0;">
-        <main class="p-6 sm:p-10 min-w-0 flex-grow">
+        <!-- TOP BAR FOR MOBILE -->
+        <header class="md:hidden h-16 bg-[#FBF4E6] border-b-[2.5px] border-[#10282E] px-4 flex items-center justify-between sticky top-0 z-20">
+            <a href="{{ $isOrganizerContext ? route('organizations.show', ['organization' => $sidebarOrg->slug, 'tab' => 'overview']) : route('dashboard') }}" wire:navigate class="flex items-center gap-1.5 text-xs font-black text-[var(--ink)]">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                <span>Kembali</span>
+            </a>
+            <span class="font-heading font-black text-sm">Tiket Saya</span>
+            <span class="disp w-7 h-7 border-2 border-[#10282E] rounded-md bg-[var(--orange)] flex items-center justify-center font-bold text-xs text-[var(--ink)]">
+                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+            </span>
+        </header>
+
+        <main class="p-4 sm:p-8 md:p-10 min-w-0 flex-grow">
         <div class="text-xs font-extrabold tracking-wider text-[var(--mute)] uppercase">DASHBOARD RIDER</div>
-        <h1 class="font-heading font-black text-3xl sm:text-4xl text-[var(--ink)] mt-1">Tiket bantuan</h1>
-        <p class="text-[var(--mute)] text-sm sm:text-base mt-1">Laporkan kendala dan pantau penanganannya di sini.</p>
+        <h1 class="font-heading font-black text-2xl sm:text-4xl text-[var(--ink)] mt-1">Tiket bantuan</h1>
+        <p class="text-[var(--mute)] text-xs sm:text-base mt-1">Laporkan kendala dan pantau penanganannya di sini.</p>
 
         <!-- SUB NAV FILTER -->
-        <div class="flex gap-2.5 mt-6 border-b-2 border-[var(--line)] pb-4">
-            <a href="{{ route('helpdesk.create-ticket') }}" wire:navigate class="btn bg-white hover:bg-[var(--paper2)] text-[var(--ink)] border-2 border-[var(--ink)] px-5 py-2 font-bold text-sm shadow-[2px_2px_0_#10282E]">
+        <div class="flex gap-2.5 mt-5 sm:mt-6 border-b-2 border-[var(--line)] pb-4 flex-wrap">
+            <a href="{{ route('helpdesk.create-ticket') }}" wire:navigate class="btn bg-white hover:bg-[var(--paper2)] text-[var(--ink)] border-2 border-[var(--ink)] px-4 sm:px-5 py-2 font-bold text-xs sm:text-sm shadow-[2px_2px_0_#10282E]">
                 Buat tiket
             </a>
-            <a href="{{ route('helpdesk.my-tickets') }}" wire:navigate class="btn bg-[var(--mustard)] text-[var(--ink)] border-2 border-[var(--ink)] px-5 py-2 font-bold text-sm shadow-[3px_3px_0_#10282E]">
+            <a href="{{ route('helpdesk.my-tickets') }}" wire:navigate class="btn bg-[var(--mustard)] text-[var(--ink)] border-2 border-[var(--ink)] px-4 sm:px-5 py-2 font-bold text-xs sm:text-sm shadow-[3px_3px_0_#10282E]">
                 Tiket saya
             </a>
         </div>
