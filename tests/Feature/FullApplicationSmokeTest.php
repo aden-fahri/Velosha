@@ -106,6 +106,8 @@ class FullApplicationSmokeTest extends TestCase
         $admin = $this->makeUser(User::ROLE_ADMIN);
 
         $routes = [
+            '/admin/helpdesk-analytics',
+            '/admin/helpdesk-tickets',
             '/helpdesk/analitik',
             '/helpdesk',
             '/dashboard',

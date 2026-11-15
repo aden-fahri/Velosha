@@ -118,14 +118,14 @@
                                     {{ $op->operator_name }}
                                 </td>
                                 <td class="py-3 px-4 text-center font-medium text-gray-600 dark:text-gray-300">
-                                    {{ $op->total_assigned }}
+                                    {{ $op->total_tickets ?? 0 }}
                                 </td>
                                 <td class="py-3 px-4 text-center font-medium text-gray-600 dark:text-gray-300">
-                                    {{ $op->response_count }}
+                                    {{ $op->response_count ?? 0 }}
                                 </td>
                                 <td class="py-3 px-4 text-center">
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
-                                        {{ $op->formatted_time ?? '-' }}
+                                        {{ $op->formatted_response_time ?? '-' }}
                                     </span>
                                 </td>
                                 <td class="py-3 px-4">
@@ -184,7 +184,11 @@
                 Rating bintang yang diatribusikan ke masing-masing petugas.
             </x-slot>
 
-            @if (empty($satisfaction['per_operator']) || count($satisfaction['per_operator']) === 0)
+            @php
+                $byOperator = $satisfaction['by_operator'] ?? collect();
+            @endphp
+
+            @if ($byOperator->isEmpty())
                 <div class="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
                     Belum ada ulasan rating per operator.
                 </div>
@@ -195,22 +199,22 @@
                             <tr class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                 <th class="py-2.5 px-3">Operator</th>
                                 <th class="py-2.5 px-3 text-center">Rata-rata</th>
-                                <th class="py-2.5 px-3 text-center">Total</th>
+                                <th class="py-2.5 px-3 text-center">Total Ulasan</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                            @foreach ($satisfaction['per_operator'] as $opSat)
+                            @foreach ($byOperator as $opSat)
                                 <tr>
                                     <td class="py-2.5 px-3 font-semibold text-gray-900 dark:text-white">
-                                        {{ $opSat['operator_name'] }}
+                                        {{ $opSat->operator_name }}
                                     </td>
                                     <td class="py-2.5 px-3 text-center">
                                         <span class="inline-flex items-center gap-1 font-bold text-amber-600 dark:text-amber-400 text-xs">
-                                            ★ {{ $opSat['formatted_average'] }}
+                                            ★ {{ $opSat->formatted_average ?? '-' }}
                                         </span>
                                     </td>
                                     <td class="py-2.5 px-3 text-center text-xs text-gray-500">
-                                        {{ $opSat['total_ratings'] }}
+                                        {{ $opSat->total_ratings ?? 0 }}
                                     </td>
                                 </tr>
                             @endforeach
