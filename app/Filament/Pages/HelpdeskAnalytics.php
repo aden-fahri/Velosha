@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Widgets\HelpdeskKpiOverview;
 use App\Services\Helpdesk\HelpdeskAnalytics as AnalyticsService;
 use BackedEnum;
 use Filament\Pages\Page;
@@ -21,6 +22,13 @@ class HelpdeskAnalytics extends Page
     protected static ?int $navigationSort = 2;
 
     protected string $view = 'filament.pages.helpdesk-analytics';
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            HelpdeskKpiOverview::class,
+        ];
+    }
 
     public static function canAccess(): bool
     {
