@@ -17,6 +17,8 @@
             <nav class="space-y-1 text-sm font-semibold">
                 {{-- 1. Dasbor Operator (Statistik Pribadi & Ringkasan) --}}
                 <button type="button" wire:click="setTab('overview')"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="w-full flex items-center gap-2.5 {{ $tab === 'overview' ? 'on' : '' }}">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"></rect><rect x="14" y="3" width="7" height="7" rx="2"></rect><rect x="3" y="14" width="7" height="7" rx="2"></rect><rect x="14" y="14" width="7" height="7" rx="2"></rect></svg>
                     <span class="whitespace-nowrap font-bold text-sm">Dasbor Operator</span>
@@ -24,6 +26,8 @@
 
                 {{-- 2. Antrian Semua Tiket --}}
                 <button type="button" wire:click="setFilter('all')"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="w-full flex items-center justify-between {{ $tab === 'queue' && $filter === 'all' ? 'on' : '' }}">
                     <div class="flex items-center gap-2.5 min-w-0">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>
@@ -38,6 +42,8 @@
 
                 {{-- 3. Tiket Selesai --}}
                 <button type="button" wire:click="setFilter('closed')"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="w-full flex items-center gap-2.5 {{ $tab === 'queue' && $filter === 'closed' ? 'on' : '' }}">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     <span class="whitespace-nowrap font-bold text-sm">Tiket Selesai</span>
@@ -45,6 +51,8 @@
 
                 {{-- 4. Profil & Akun Petugas --}}
                 <button type="button" wire:click="setTab('profile')"
+                        wire:loading.attr="disabled"
+                        wire:loading.class="opacity-60 cursor-wait"
                         class="w-full flex items-center gap-2.5 {{ $tab === 'profile' ? 'on' : '' }}">
                     <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1-5 15-5 16 0"></path></svg>
                     <span class="whitespace-nowrap font-bold text-sm">Profil &amp; Akun</span>
@@ -358,6 +366,8 @@
                                                 <div class="inline-flex items-center gap-2">
                                                     @if (! $ut->operator_id)
                                                         <button type="button" wire:click="claimTicket({{ $ut->id }})"
+                                                                wire:loading.attr="disabled"
+                                                                wire:loading.class="opacity-60 cursor-wait"
                                                                 class="px-3 py-1 bg-[var(--orange)] text-white hover:bg-[var(--orange-l)] border-2 border-[var(--ink)] rounded-lg text-xs font-black shadow-[2px_2px_0_var(--ink)] transition-all">
                                                             Klaim
                                                         </button>

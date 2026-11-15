@@ -15,6 +15,12 @@ use Illuminate\Support\Facades\Auth;
 
 class PayoutRequestResource extends Resource
 {
+    // ponytail: dinonaktifkan sementara dari navigasi sesuai permintaan pengguna
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     protected static ?string $model = PayoutRequest::class;
 
     protected static ?string $navigationLabel = 'Pencairan Dana (Payout)';

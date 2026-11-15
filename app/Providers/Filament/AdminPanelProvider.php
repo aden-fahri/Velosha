@@ -54,20 +54,6 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
-            ->navigationItems([
-                NavigationItem::make('Antrian tiket')
-                    ->url('/helpdesk')
-                    ->icon('heroicon-o-ticket')
-                    ->group('Helpdesk')
-                    ->sort(1)
-                    ->visible(fn (): bool => auth()->user()?->isAdmin() ?? false),
-                NavigationItem::make('Analitik helpdesk')
-                    ->url('/helpdesk/analitik')
-                    ->icon('heroicon-o-chart-bar')
-                    ->group('Helpdesk')
-                    ->sort(2)
-                    ->visible(fn (): bool => auth()->user()?->isAdmin() ?? false),
-            ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 VeloshaStatsOverview::class,

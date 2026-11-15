@@ -196,8 +196,6 @@
                               class="w-full bg-[var(--paper)] border-2 border-[var(--ink)] p-3.5 rounded-lg text-base sm:text-sm font-semibold text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--mustard)] resize-none"></textarea>
                     @error('description') <span class="text-red-700 text-xs font-bold mt-1 block">{{ $message }}</span> @enderror
                 </div>
-                    @error('description') <span class="text-red-700 text-xs font-bold mt-1 block">{{ $message }}</span> @enderror
-                </div>
 
                 <div class="mt-5">
                     <label class="block font-bold text-sm text-[var(--ink)] mb-2">Tingkat Prioritas</label>

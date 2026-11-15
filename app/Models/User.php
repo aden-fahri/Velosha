@@ -221,12 +221,20 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * URL tujuan setelah auth: hormati intended bila role-nya valid,
+     * URL tujuan setelah auth: hormati intended bila role-nya valid dan bukan checkout tanpa reservasi,
      * selain itu jatuhkan ke home() role.
      */
     public function landingUrl(): string
     {
         $intended = session()->pull('url.intended');
+
+        if ($this->isAdmin()) {
+            return '/admin';
+        }
+
+        if ($this->isOperator()) {
+            return '/helpdesk';
+        }
 
         if ($this->isPenyelenggara()) {
             $intendedPath = $intended ? (parse_url($intended, PHP_URL_PATH) ?: '/') : null;
@@ -235,6 +243,14 @@ class User extends Authenticatable implements FilamentUser
             }
 
             return $this->home();
+        }
+
+        // Untuk peserta: Jangan lempar ke /checkout jika klik login biasa
+        if ($intended) {
+            $path = parse_url($intended, PHP_URL_PATH) ?: '/';
+            if ($path === '/checkout' || str_starts_with($path, '/checkout')) {
+                return '/dashboard';
+            }
         }
 
         return $this->canVisit($intended) ? $intended : $this->home();

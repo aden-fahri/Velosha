@@ -49,10 +49,6 @@ class TicketService
             throw new DomainException('akun sistem tidak dapat membuat tiket bantuan.');
         }
 
-        if ($reporter->role !== User::ROLE_PESERTA) {
-            throw new DomainException('Hanya peserta yang dapat membuat tiket bantuan.');
-        }
-
         $current = $now ? Carbon::instance($now) : Carbon::now();
 
         $priority = $data['priority'] instanceof TicketPriority

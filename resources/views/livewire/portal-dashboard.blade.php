@@ -51,14 +51,6 @@
                     <span class="whitespace-nowrap font-bold text-sm">Profil &amp; akun</span>
                 </button>
 
-                <button type="button" wire:click="setTab('help')"
-                        wire:loading.attr="disabled"
-                        wire:loading.class="opacity-60 cursor-wait"
-                        class="w-full flex items-center gap-2.5 {{ $activeTab === 'help' ? 'on' : '' }}">
-                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.500 9.500a2.500 2.500 0 1 1 3.500 2.300c-.7.4-1 .9-1 1.700M12 17v.01"></path></svg>
-                    <span class="whitespace-nowrap font-bold text-sm">Pusat bantuan</span>
-                </button>
-
                 <a href="{{ route('helpdesk.my-tickets') }}" wire:navigate.hover class="w-full flex items-center justify-between">
                     <div class="flex items-center gap-2.5 min-w-0">
                         <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="#10282E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"></path></svg>
@@ -174,12 +166,6 @@
                         wire:loading.class="opacity-60 cursor-wait"
                         class="w-full {{ $activeTab === 'profile' ? 'on' : '' }}">
                     Profil &amp; akun
-                </button>
-                <button type="button" wire:click="setTab('help')" @click="sidebarOpen = false"
-                        wire:loading.attr="disabled"
-                        wire:loading.class="opacity-60 cursor-wait"
-                        class="w-full {{ $activeTab === 'help' ? 'on' : '' }}">
-                    Pusat bantuan
                 </button>
                 <a href="{{ route('helpdesk.my-tickets') }}" wire:navigate.hover class="w-full flex items-center justify-between">
                     <span>Tiket Bantuan</span>
